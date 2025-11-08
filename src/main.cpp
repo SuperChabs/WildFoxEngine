@@ -15,6 +15,8 @@
 
 #include <filesystem>
 
+//#define STBI_NO_FAILURE_STRINGS
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -22,6 +24,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void APIENTRY openglDebugCallback(GLenum source, GLenum type, GLuint id,
                                   GLenum severity, GLsizei length,
                                   const GLchar* message, const void* userParam);
+unsigned int loadTexture(const char* path);
 
 float mixValue = 0.2f;
 
@@ -78,112 +81,63 @@ int main()
 
     glEnable(GL_DEPTH_TEST);
 
-    if (GL_KHR_debug) 
-    {
-        glEnable(GL_DEBUG_OUTPUT);
-        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    //glEnable(GL_DEBUG_OUTPUT);
+    //glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 
-        glDebugMessageCallback(openglDebugCallback, nullptr);
+    //glDebugMessageCallback(openglDebugCallback, nullptr);
 
-        glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
-    } else {
-        std::cerr << "GL_KHR_debug не підтримується драйвером\n";
-    }
-//
+    //glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+
     Shader lampShader ("shaders/vertex/lamp.vs",  "shaders/fragment/lamp.fs");
     Shader lightShader("shaders/vertex/light.vs", "shaders/fragment/light.fs");
 
     // Указывание вершин (и буферов) и настройка вершинных атрибутов
  
     // Добавляем новый набор вершин для формирования второго треугольника (всего 6 вершин)
-    // float firstTriangle[] = 
-    // {   
-    //   // координаты    // текстурные координаты
-    // -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-    //  0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-    //  0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    //  0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    // -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-    // -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-    //
-    // -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    //  0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-    //  0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-    //  0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-    // -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-    // -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    //
-    // -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    // -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    // -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    // -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    // -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    // -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    //
-    //  0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    //  0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    //  0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    //  0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    //  0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    //  0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    //
-    // -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    //  0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-    //  0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-    //  0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-    // -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    // -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    //
-    // -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-    //  0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    //  0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    //  0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    // -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-    // -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-    // };
+    float vertices[] = 
+    {
+      // координаты        // нормали           // текстурные координаты
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 
-    float vertices[] = {
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
-        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
-    
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-    
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-    
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-    
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-    
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
+
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f, // ліво-зад
+         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f, // право-зад
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f, // право-перед
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f, // право-перед
+        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f, // ліво-перед
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f  // ліво-зад
     };
 
     // unsigned int indices[] = 
@@ -194,16 +148,16 @@ int main()
 
     glm::vec3 cubePositions[] = 
     {
-        glm::vec3( 0.0f,  0.0f,  0.0f), 
-        glm::vec3( 2.0f,  5.0f, -15.0f), 
-        glm::vec3(-1.5f, -2.2f, -2.5f),  
-        glm::vec3(-3.8f, -2.0f, -12.3f),  
-        glm::vec3( 2.4f, -0.4f, -3.5f),  
-        glm::vec3(-1.7f,  3.0f, -7.5f),  
-        glm::vec3( 1.3f, -2.0f, -2.5f),  
-        glm::vec3( 1.5f,  2.0f, -2.5f), 
-        glm::vec3( 1.5f,  0.2f, -1.5f), 
-        glm::vec3(-1.3f,  1.0f, -1.5f)  
+        glm::vec3( 0.0f,  0.0f,  0.0f),
+        glm::vec3( 2.0f,  5.0f, -15.0f),
+        glm::vec3(-1.5f, -2.2f, -2.5f),
+        glm::vec3(-3.8f, -2.0f, -12.3f),
+        glm::vec3( 2.4f, -0.4f, -3.5f),
+        glm::vec3(-1.7f,  3.0f, -7.5f),
+        glm::vec3( 1.3f, -2.0f, -2.5f),
+        glm::vec3( 1.5f,  2.0f, -2.5f),
+        glm::vec3( 1.5f,  0.2f, -1.5f),
+        glm::vec3(-1.3f,  1.0f, -1.5f)
     };
 
     unsigned int VBO, EBO; 
@@ -216,10 +170,12 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     unsigned int lightVAO;       
     glGenVertexArrays(1, &lightVAO);
@@ -227,7 +183,7 @@ int main()
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -235,71 +191,12 @@ int main()
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    // Загрузка и создание текстур
-    unsigned int texture1, texture2;
-	
-    // // Текстура №1 - Деревянный ящик
-    // glGenTextures(1, &texture1);
-    // glBindTexture(GL_TEXTURE_2D, texture1);
-	//
-    // // Установка параметров наложения текстуры
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	//
-    // // Установка параметров фильтрации текстуры
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    //
-    // int width1, height1, nrChannels1;
-    // const char* texturePath1 = "assets/textures/nogfy.jpeg";
-    // stbi_set_flip_vertically_on_load(true);
-    // unsigned char* data = stbi_load(texturePath1, &width1, &height1, &nrChannels1, 0);
-    // if (data) 
-    // {
-    //     std::cout << "Texture1: " << width1 << "x" << height1 << " channels: " << nrChannels1 << "\n";
-    //     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width1, height1, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-    //     glGenerateMipmap(GL_TEXTURE_2D);
-    // }
-    // else
-    // {
-    //     std::cout << "Failed to load Texture2 from: " << texturePath1 << std::endl;
-    //     std::cout << "Current path: " << std::filesystem::current_path() << "\n";
-    // }
-    // stbi_image_free(data);
-    //
-    // // Текстура №2 - Смайлик
-    // glGenTextures(1, &texture2);
-    // glBindTexture(GL_TEXTURE_2D, texture2);
-	//
-    // // Установка параметров наложения текстуры
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	//
-    // // Установка параметров фильтрации текстуры
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    //
-    // int width2, height2, nrChannels2;
-    // const char* texturePath2 = "assets/textures/awesomeface.png";
-    // stbi_set_flip_vertically_on_load(true);
-    // data = stbi_load(texturePath2, &width2, &height2, &nrChannels2, 0);
-    // if (data)
-    // {
-    //     std::cout << "Texture2: " << width2 << "x" << height2 << " channels: " << nrChannels2 << "\n";
-    //     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width2, height2, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    //     glGenerateMipmap(GL_TEXTURE_2D);
-    // }
-    // else
-    // {
-    //     std::cout << "Failed to load Texture2 from: " << texturePath2 << std::endl;
-    //     std::cout << "Current path: " << std::filesystem::current_path() << "\n";
-    // }
-    // stbi_image_free(data);
-    //
-    // GLint loc1 = glGetUniformLocation(ourShader.ID, "texture1");
-    // GLint loc2 = glGetUniformLocation(ourShader.ID, "texture2");
-    // std::cout << "texture1 location: " << loc1 << " (should be >= 0)\n";
-    // std::cout << "texture2 location: " << loc2 << " (should be >= 0)\n";
+    unsigned int diffuseMap = loadTexture("assets/textures/wooden_container.png");
+    unsigned int specularMap = loadTexture("assets/textures/wooden_container_specular.png");
+
+    lightShader.use();
+    lightShader.setInt("material.diffuse", 0);
+    lightShader.setInt("material.specular", 1);
 
     while (!glfwWindowShouldClose(window)) 
     {
@@ -313,31 +210,23 @@ int main()
         int fbWidth, fbHeight;
         glfwGetFramebufferSize(window, &fbWidth, &fbHeight);
         framebuffer_size_callback(window, fbWidth, fbHeight);
-        //
+        
         // Рендеринг
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // glActiveTexture(GL_TEXTURE0);
-        // glBindTexture(GL_TEXTURE_2D, texture1);
-        // glActiveTexture(GL_TEXTURE1);
-        // glBindTexture(GL_TEXTURE_2D, texture2);
+        float time = glfwGetTime();
 
         // Рендеринг основного куба
-        lightShader.use();
-        lightShader.setVec3("light.position", lightPos);      
+        lightShader.use();     
         lightShader.setVec3("viewPos", camera.GetPosition());
 
-        lightShader.setVec3 ("material.ambient",   1.0f, 0.5f, 0.31f);
-        lightShader.setVec3 ("material.diffuse",   1.0f, 0.5f, 0.31f);
-        lightShader.setVec3 ("material.specular",  0.5f, 0.5f, 0.5f);
-        lightShader.setFloat("material.shininess", 32.0f);
-        
+        lightShader.setVec3("light.direction", -0.2f, -1.0f, -0.3f);
         lightShader.setVec3("light.ambient",  0.2f, 0.2f, 0.2f);
         lightShader.setVec3("light.diffuse",  0.5f, 0.5f, 0.5f);
         lightShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
-        float time = glfwGetTime(); //
+        lightShader.setFloat("material.shininess", 32.0f); 
 
         glm::mat4 projection = glm::perspective(glm::radians(camera.GetZoom()), (float)fbWidth / (float)fbHeight, 0.1f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
@@ -347,35 +236,38 @@ int main()
         glm::mat4 model = glm::mat4(1.0f);
         lightShader.setMat4("model", model);
 
-        glBindVertexArray(cubeVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, diffuseMap);
+        
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, specularMap);
 
-        // Рендеринг джерела світла (лампи)
-        lampShader.use();
-        lampShader.setMat4("projection", projection);
-        lampShader.setMat4("view", view);
+        for (unsigned int i = 0; i < 10; i++) 
+        {
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, cubePositions[i]);
+            float angle = (20.0f * i + 1) * time;
+            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 3.0f, 0.5f));
+            lightShader.setMat4("model", model);
 
-        //lightPos = glm::vec3(sin(time+2), 1.0f, cos(time+2));
+            glBindVertexArray(cubeVAO);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
 
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, lightPos);
-        model = glm::scale(model, glm::vec3(0.2f));
-        lampShader.setMat4("model", model);
+        // // Рендеринг джерела світла (лампи)
+        // lampShader.use();
+        // lampShader.setMat4("projection", projection);
+        // lampShader.setMat4("view", view);
+
+        // //lightPos = glm::vec3(0.0f, sin(time)+3, 0.0f);
+
+        // glm::mat4 model = glm::mat4(1.0f);
+        // model = glm::translate(model, lightPos);
+        // model = glm::scale(model, glm::vec3(0.2f));
+        // lampShader.setMat4("model", model);
 
         glBindVertexArray(lightVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
-
-        // glBindVertexArray(VAO);
-        // for (unsigned int i = 0; i < 10; i++) 
-        // {
-        //     glm::mat4 model = glm::mat4(1.0f);
-        //     model = glm::translate(model, cubePositions[i]);
-		// 	// float angle = 20.0f * i;
-		// 	// model = glm::rotate(model, glm::radians(angle * time), glm::vec3(1.0f, 0.3f, 0.5f));
-        //     normShader.setMat4("model", model);
-        //
-        //     glDrawArrays(GL_TRIANGLES, 0, 36);
-        // }
 
         // glfw: обмен содержимым front- и back-буферов. Отслеживание событий ввода/вывода (была ли нажата/отпущена кнопка, перемещен курсор мыши и т.п.)
         glfwSwapBuffers(window);
@@ -444,6 +336,44 @@ void APIENTRY openglDebugCallback(GLenum source, GLenum type, GLuint id,
                                   GLenum severity, GLsizei length,
                                   const GLchar* message, const void* userParam)
 {
-    std::cerr << "GL DEBUG [" << id << "]: " << message << std::endl;
+    std::cerr << "GL DEBUG [" << id << "]: " << message << std::endl; //
     std::cerr << "Type: " << type << ", Severity: " << severity << ", Source: " << source << std::endl;
+}
+
+unsigned int loadTexture(const char* path)
+{
+    unsigned int textureID;
+    glGenTextures(1, &textureID);
+
+    int width, height, nrComponents;
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 0);
+    if (data)
+    {
+        GLenum format;
+        if (nrComponents == 1)
+            format = GL_RED;
+        else if (nrComponents == 3)
+            format = GL_RGB;
+        else if (nrComponents == 4)
+            format = GL_RGBA;
+
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        stbi_image_free(data);
+    }
+    else
+    {
+        std::cout << "Texture failed to load at path: " << path << std::endl;
+        stbi_image_free(data);
+    }
+
+    return textureID;
 }
