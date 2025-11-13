@@ -18,7 +18,7 @@ using namespace std;
 struct Vertex
 {
     vec3 Position;
-    vec2 Normal;
+    vec3 Normal;
     vec2 TexCoords;
     
     vec3 Tangent;

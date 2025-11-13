@@ -23,7 +23,7 @@ private:
     string          directory;
 
 public:
-    Model(char* path) {loadModel(path);}
+    Model(const char* path) {loadModel(path);}
     void Draw(Shader &shader);
 
 private:
