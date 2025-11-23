@@ -88,8 +88,8 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     Shader shader("assets/shaders/vertex/depth.vs", "assets/shaders/fragment/depth.fs"); 
-    Shader normalShader("assets/shaders/vertex/normalDisplay.vs", "assets/shaders/fragment/depth.fs", "assets/shaders/geometry/normalDisplay.gs");
     Shader skyboxShader("assets/shaders/vertex/skybox.vs", "assets/shaders/fragment/skybox.fs");
+    Shader instanceShader("assets/shaders/vertex/instance.vs", "assets/shaders/fragment/depth.fs");
 
     float vCubeTextures[] = 
     {
@@ -366,14 +366,82 @@ int main()
 
     // Настройка шейдера
     shader.use();
-    shader.setInt("texture1", 0);
 
     skyboxShader.use();
     skyboxShader.setInt("skybox", 0); 
 
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    Model nanosuit("assets/objects/backpack/backpack.obj");
+    unsigned int defaultWhiteTexture;
+    glGenTextures(1, &defaultWhiteTexture);
+    glBindTexture(GL_TEXTURE_2D, defaultWhiteTexture);
+    unsigned char whitePixel[] = {255, 255, 255, 255};
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, whitePixel);
+
+    Model backpack("assets/objects/backpack/backpack.obj");
+    Model planet("assets/objects/planet/planet.obj");
+    Model rock("assets/objects/rock/rock.obj");
+
+    unsigned int amount = 1000;
+    mat4 *modelMatrices;
+    modelMatrices = new glm::mat4[amount];
+    srand(glfwGetTime()); // инициализируем начальное рандомное значение
+    float radius = 50.0;
+    float offset = 2.5f;
+    for(unsigned int i = 0; i < amount; i++)
+    {
+        mat4 model = glm::mat4(1.0f);
+    
+        // 1. Трансляция: смещение вдоль окружности со значением радиуса в пределах отрезка [-offset, offset]
+        float angle = (float)i / (float)amount * 360.0f;
+        float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+        float x = sin(angle) * radius + displacement;
+        displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+        float y = displacement * 0.4f; // уменьшаем высоту пояса астероидов
+        displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+        float z = cos(angle) * radius + displacement;
+        model = glm::translate(model, glm::vec3(x, y, z));
+    
+        // 2. Масштабирование: коэффициент масштабирования от 0.05 до 0.25f
+        float scale = (rand() % 20) / 100.0f + 0.05;
+        model = glm::scale(model, glm::vec3(scale));
+    
+        // 3. Поворот: добавляем рандомный поворот вокруг случайно выбранного вектора оси
+        float rotAngle = (rand() % 360);
+        model = rotate(model, rotAngle, glm::vec3(0.4f, 0.6f, 0.8f));
+    
+        // 4. Теперь добавляем к списку матриц
+        modelMatrices[i] = model;
+    }
+
+    unsigned int buffer;
+    glGenBuffers(1, &buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER, amount * sizeof(glm::mat4), &modelMatrices[0], GL_STATIC_DRAW);
+    
+    for(unsigned int i = 0; i < rock.meshes.size(); i++)
+    {
+        unsigned int VAO = rock.meshes[i].VAO;
+        glBindVertexArray(VAO);
+    
+        // Вершинные атрибуты
+        std::size_t vec4Size = sizeof(glm::vec4);
+        glEnableVertexAttribArray(3); 
+        glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)0);
+        glEnableVertexAttribArray(4); 
+        glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(1 * vec4Size));
+        glEnableVertexAttribArray(5); 
+        glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(2 * vec4Size));
+        glEnableVertexAttribArray(6); 
+        glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(3 * vec4Size));
+    
+        glVertexAttribDivisor(3, 1);
+        glVertexAttribDivisor(4, 1);
+        glVertexAttribDivisor(5, 1);
+        glVertexAttribDivisor(6, 1);
+    
+        glBindVertexArray(0);
+    } 
 
     while (!glfwWindowShouldClose(window)) 
     {
@@ -404,9 +472,32 @@ int main()
         shader.use();
         shader.setMat4("view", view);
         shader.setMat4("projection", projection);
-        shader.setMat4("model", model);
 
-        nanosuit.Draw(shader);
+        instanceShader.use();
+        instanceShader.setMat4("projection", projection);
+        instanceShader.setMat4("view", view);
+
+        // Отрисовка планеты
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, -3.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+        shader.setMat4("model", model);
+        planet.Draw(shader);
+
+        // Отрисовка астероидов
+        instanceShader.use();
+        instanceShader.setInt("texture1", 0);
+        glActiveTexture(GL_TEXTURE0);
+        if (!rock.textures_loaded.empty()) 
+            glBindTexture(GL_TEXTURE_2D, rock.textures_loaded[0].id);
+        else
+            glBindTexture(GL_TEXTURE_2D, defaultWhiteTexture);
+        for (unsigned int i = 0; i < rock.meshes.size(); i++)
+        {
+            glBindVertexArray(rock.meshes[i].VAO);
+            glDrawElementsInstanced(GL_TRIANGLES, rock.meshes[i].indices.size(), GL_UNSIGNED_INT, 0, amount);
+            glBindVertexArray(0);
+        }
 
         // Куб
         // glBindVertexArray(cubeVAO);

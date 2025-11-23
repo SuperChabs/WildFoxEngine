@@ -34,16 +34,16 @@ struct Texture
 
 class Mesh 
 {
-private:
+public:
     // Mesh-данні
     vector<Vertex>       vertices;
     vector<unsigned int> indices;
     vector<Texture>      textures;
 
+
     // Ренденг данні
     unsigned int VAO, VBO, EBO;
 
-public:
     Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures);
     void Draw(Shader shader);
 

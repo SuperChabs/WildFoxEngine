@@ -21,7 +21,7 @@ void Mesh::Draw(Shader shader)
 
         string number;
         string name = textures[i].type;
-        if (name == "textures_diffuse")
+        if (name == "texture_diffuse")
             number = to_string(diffuseNr++);
         else if (name == "texture_specular")
             number = to_string(specularNr++);
@@ -30,7 +30,7 @@ void Mesh::Draw(Shader shader)
         else if (name == "texture_height")
             number = to_string(heightNr++);
 
-        shader.setFloat(("material." + name + number).c_str(), i);
+        shader.setInt(("material." + name + number).c_str(), i);
         glBindTexture(GL_TEXTURE_2D, textures[i].id);
     }
     glActiveTexture(GL_TEXTURE0);

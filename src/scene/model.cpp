@@ -23,6 +23,7 @@ void Model::loadModel(string path)
         std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
         return;
     }
+    std::cout << "Model loaded: " << path << " - Meshes: " << scene->mNumMeshes << std::endl;
     directory = path.substr(0, path.find_last_of('/'));
 
     processNode(scene->mRootNode, scene);
@@ -93,6 +94,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     }
+    std::cout << "  Mesh: Vertices=" << vertices.size() << ", Indices=" << indices.size() << ", Textures=" << textures.size() << std::endl;
     return Mesh(vertices, indices, textures);
 }
 

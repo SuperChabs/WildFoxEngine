@@ -16,13 +16,13 @@ using namespace std;
 
 class Model 
 {
-private:
+public:
     //
     vector<Mesh>    meshes;
     vector<Texture> textures_loaded;
     string          directory;
 
-public:
+
     Model(const char* path) {loadModel(path);}
     void Draw(Shader &shader);
 
