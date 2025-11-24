@@ -35,7 +35,7 @@ float mixValue = 0.2f;
 const int width = 800;
 const int height = 600;
 
-Camera camera = vec3(0.0f, 0.0f, 3.0f);
+Camera camera = vec3(0.0f, 0.0f, 45.0f);
 float lastX = (float)width / 2.0;
 float lastY = (float)height / 2.0;
 bool firstMouse = true;
@@ -89,7 +89,7 @@ int main()
 
     Shader shader("assets/shaders/vertex/depth.vs", "assets/shaders/fragment/depth.fs"); 
     Shader skyboxShader("assets/shaders/vertex/skybox.vs", "assets/shaders/fragment/skybox.fs");
-    Shader instanceShader("assets/shaders/vertex/instance.vs", "assets/shaders/fragment/depth.fs");
+    Shader instanceShader("assets/shaders/vertex/instance.vs", "assets/shaders/fragment/instance.fs");
 
     float vCubeTextures[] = 
     {
@@ -352,6 +352,7 @@ int main()
     // Загрузка текстур
     unsigned int cubeTexture  = loadTexture("assets/textures/wooden_container.png");
     unsigned int floorTexture = loadTexture("assets/textures/metal.jpg");
+    unsigned int errorTexture = loadTexture("assets/textures/error.png");
 
     std::vector<std::string> faces = 
     {
@@ -372,19 +373,13 @@ int main()
 
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    unsigned int defaultWhiteTexture;
-    glGenTextures(1, &defaultWhiteTexture);
-    glBindTexture(GL_TEXTURE_2D, defaultWhiteTexture);
-    unsigned char whitePixel[] = {255, 255, 255, 255};
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, whitePixel);
-
-    Model backpack("assets/objects/backpack/backpack.obj");
+    //Model backpack("assets/objects/backpack/backpack.obj");
     Model planet("assets/objects/planet/planet.obj");
     Model rock("assets/objects/rock/rock.obj");
 
-    unsigned int amount = 1000;
+    unsigned int amount = 10000;
     mat4 *modelMatrices;
-    modelMatrices = new glm::mat4[amount];
+    modelMatrices = new mat4[amount];
     srand(glfwGetTime()); // инициализируем начальное рандомное значение
     float radius = 50.0;
     float offset = 2.5f;
@@ -400,7 +395,7 @@ int main()
         float y = displacement * 0.4f; // уменьшаем высоту пояса астероидов
         displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
         float z = cos(angle) * radius + displacement;
-        model = glm::translate(model, glm::vec3(x, y, z));
+        model = translate(model, glm::vec3(x, y, z));
     
         // 2. Масштабирование: коэффициент масштабирования от 0.05 до 0.25f
         float scale = (rand() % 20) / 100.0f + 0.05;
@@ -417,31 +412,37 @@ int main()
     unsigned int buffer;
     glGenBuffers(1, &buffer);
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, amount * sizeof(glm::mat4), &modelMatrices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, amount * sizeof(mat4), &modelMatrices[0], GL_STATIC_DRAW);
     
     for(unsigned int i = 0; i < rock.meshes.size(); i++)
     {
         unsigned int VAO = rock.meshes[i].VAO;
         glBindVertexArray(VAO);
     
+        //glBindBuffer(GL_ARRAY_BUFFER, buffer);
+
         // Вершинные атрибуты
-        std::size_t vec4Size = sizeof(glm::vec4);
-        glEnableVertexAttribArray(3); 
-        glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)0);
-        glEnableVertexAttribArray(4); 
-        glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(1 * vec4Size));
-        glEnableVertexAttribArray(5); 
-        glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(2 * vec4Size));
-        glEnableVertexAttribArray(6); 
-        glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(3 * vec4Size));
-    
-        glVertexAttribDivisor(3, 1);
-        glVertexAttribDivisor(4, 1);
-        glVertexAttribDivisor(5, 1);
-        glVertexAttribDivisor(6, 1);
+        std::size_t vec4Size = sizeof(vec4);
+        
+        glEnableVertexAttribArray(5);  
+        glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)0);
+        glEnableVertexAttribArray(6);  
+        glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(1 * vec4Size));
+        glEnableVertexAttribArray(7);  
+        glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(2 * vec4Size));
+        glEnableVertexAttribArray(8);  
+        glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(3 * vec4Size));
+
+        glVertexAttribDivisor(5, 1);  
+        glVertexAttribDivisor(6, 1);  
+        glVertexAttribDivisor(7, 1);  
+        glVertexAttribDivisor(8, 1);
     
         glBindVertexArray(0);
     } 
+
+    // instanceShader.use();
+    // instanceShader.setInt("texture1", 0);
 
     while (!glfwWindowShouldClose(window)) 
     {
@@ -467,37 +468,41 @@ int main()
         
         mat4 model = mat4(1.0f);
         mat4 view = camera.GetViewMatrix();
-        mat4 projection = perspective(radians(camera.GetZoom()), (float)fbWidth / (float)fbHeight, 0.1f, 100.0f);
+        mat4 projection = perspective(radians(camera.GetZoom()), (float)fbWidth / (float)fbHeight, 0.1f, 1000.0f);
 
         shader.use();
         shader.setMat4("view", view);
         shader.setMat4("projection", projection);
 
+        // Отрисовка планеты
+        model = mat4(1.0f);
+        model = translate(model, vec3(0.0f, -3.0f, 0.0f));
+        model = scale(model, vec3(4.0f, 4.0f, 4.0f));
+        shader.setMat4("model", model);
+        planet.Draw(shader);
+
         instanceShader.use();
         instanceShader.setMat4("projection", projection);
         instanceShader.setMat4("view", view);
 
-        // Отрисовка планеты
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, -3.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
-        shader.setMat4("model", model);
-        planet.Draw(shader);
-
         // Отрисовка астероидов
-        instanceShader.use();
-        instanceShader.setInt("texture1", 0);
         glActiveTexture(GL_TEXTURE0);
         if (!rock.textures_loaded.empty()) 
-            glBindTexture(GL_TEXTURE_2D, rock.textures_loaded[0].id);
+            glBindTexture(GL_TEXTURE_2D, rock.textures_loaded[1].id);
         else
-            glBindTexture(GL_TEXTURE_2D, defaultWhiteTexture);
+           glBindTexture(GL_TEXTURE_2D, errorTexture);
         for (unsigned int i = 0; i < rock.meshes.size(); i++)
         {
             glBindVertexArray(rock.meshes[i].VAO);
             glDrawElementsInstanced(GL_TRIANGLES, rock.meshes[i].indices.size(), GL_UNSIGNED_INT, 0, amount);
             glBindVertexArray(0);
         }
+
+        // for (unsigned int i = 0; i < amount; i++) 
+        // {
+        //     shader.setMat4("model", modelMatrices[i]);
+        //     rock.Draw(shader);
+        // }
 
         // Куб
         // glBindVertexArray(cubeVAO);
