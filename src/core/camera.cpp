@@ -25,16 +25,30 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float u
 void Camera::ProcessKeyboard(CameraMovement direction, float deltaTime)
 {
     float velocity = movementSpeed * deltaTime;
+    // При движении вперед/назад игнорируем вертикальную компоненту front,
+    // чтобы не подниматься/опускаться при взгляде вверх/вниз
     if (direction == FORWARD)
-        position += front * velocity;
+    {
+        vec3 flatFront = vec3(front.x, 0.0f, front.z);
+        float len = sqrt(flatFront.x * flatFront.x + flatFront.z * flatFront.z);
+        if (len > 1e-6f)
+            position += normalize(flatFront) * velocity;
+    }
     if (direction == BACKWARD)
-        position -= front * velocity;
+    {
+        vec3 flatFront = vec3(front.x, 0.0f, front.z);
+        float len = sqrt(flatFront.x * flatFront.x + flatFront.z * flatFront.z);
+        if (len > 1e-6f)
+            position -= normalize(flatFront) * velocity;
+    }
     if (direction == LEFT)
         position -= right * velocity;
     if (direction == RIGHT)
         position += right * velocity;
-
-    //position.y = 0.0f;
+    if (direction == UP)
+        position += worldUp * velocity;
+    if (direction == DOWN)
+        position -= worldUp * velocity;
 }
 
 void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch)

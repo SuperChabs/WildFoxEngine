@@ -102,11 +102,18 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
 {
     vector<Texture> textures;
     int value = mat->GetTextureCount(type);
+
+    std::cout << "Loading " << typeName << " textures, count: " << value << std::endl;
+
     for(unsigned int i = 0; i < value; i++)
     {
         aiString str;
         mat->GetTexture(type, i, &str);
         bool skip = false;
+
+        std::cout << "  Texture path from material: " << str.C_Str() << std::endl;
+        std::cout << "  Full path will be: " << directory << "/" << str.C_Str() << std::endl;
+        
         for(unsigned int j = 0; j < textures_loaded.size(); j++)
         {
             if(std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0)
@@ -126,6 +133,11 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
             textures_loaded.push_back(texture); 
         }
     }
+
+    if (value == 0) {
+        std::cout << "  WARNING: No " << typeName << " textures found in material!" << std::endl;
+    }
+
     return textures;
 }
 
