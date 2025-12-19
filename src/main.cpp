@@ -35,12 +35,14 @@ void renderScene(Shader& shader, unsigned int cubeVAO, unsigned int planeVAO);
 
 float mixValue = 0.2f;
 
-const int width = 800;
-const int height = 600;
+const int SCR_WIDTH = 800;
+const int SCR_HEIGHT = 600;
+bool shadows = true;
+bool shadowsKeyPressed = false;
 
 Camera camera = vec3(0.0f, 0.0f, 3.0f);
-float lastX = (float)width / 2.0;
-float lastY = (float)height / 2.0;
+float lastX = (float)SCR_WIDTH / 2.0;
+float lastY = (float)SCR_HEIGHT / 2.0;
 bool firstMouse = true;
 
 float deltaTime = 0.0f;
@@ -58,7 +60,7 @@ int main()
     glfwWindowHint(GLFW_SAMPLES, 4);
 
     // glfw: создание окна
-    GLFWwindow* window = glfwCreateWindow(width, height, "Hello!", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Hello!", nullptr, nullptr);
     if (window == nullptr)
     {
         std::cout << "Failed to create GLFW window\n";
@@ -83,172 +85,72 @@ int main()
         std::cout << "Successful initialize GLAD\n";
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); 
-
+    
     glEnable(GL_DEBUG_OUTPUT);
-    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); 
     glDebugMessageCallback(openglDebugCallback, nullptr);
     glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
 
     glEnable(GL_DEPTH_TEST);
-    // glEnable(GL_MULTISAMPLE);
-    // glEnable(GL_FRAMEBUFFER_SRGB);
+    glEnable(GL_CULL_FACE);
 
-    Shader shader("assets/shaders/vertex/shadow_mapping.vs", "assets/shaders/fragment/shadow_mapping.fs"); 
-    // Shader lampShader("assets/shaders/vertex/lamp.vs", "assets/shaders/fragment/lamp.fs");
     Shader skyboxShader("assets/shaders/vertex/skybox.vs", "assets/shaders/fragment/skybox.fs");
-    Shader simpleDepthShader("assets/shaders/vertex/shadow_mapping_depth.vs", "assets/shaders/fragment/shadow_mapping_depth.fs");
-    Shader debugDepthQuad("assets/shaders/vertex/debug_quad.vs", "assets/shaders/fragment/debug_quad.fs");
+    Shader shader("assets/shaders/vertex/normal_mapping.vs", "assets/shaders/fragment/normal_mapping.fs"); //
 
-    float vCubeVertexes[] = 
+    float cubeVertices[] = 
     {
-        // Задняя грань
-        -0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-        -0.5f,  0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
+        // задняя грань
+        -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // нижняя-левая
+         1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // верхняя-правая
+         1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 0.0f, // нижняя-правая         
+         1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // верхняя-правая
+        -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // нижняя-левая
+        -1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f, // верхняя-левая
 
-        // Передняя грань
-        -0.5f, -0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-        -0.5f, -0.5f,  0.5f, 
-        -0.5f,  0.5f,  0.5f,
+        // передняя грань
+        -1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // нижняя-левая
+         1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 0.0f, // нижняя-правая
+         1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, // верхняя-правая
+         1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, // верхняя-правая
+        -1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 1.0f, // верхняя-левая
+        -1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // нижняя-левая
 
-        // Грань слева
-        -0.5f,  0.5f,  0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f,  0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f,  0.5f,  0.5f, 
-        -0.5f, -0.5f,  0.5f,
+        // грань слева
+        -1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // верхняя-правая
+        -1.0f,  1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // верхняя-левая
+        -1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // нижняя-левая
+        -1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // нижняя-левая
+        -1.0f, -1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // нижняя-правая
+        -1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // верхняя-правая
 
-        // Грань справа
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
+        // грань справа
+         1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // верхняя-левая
+         1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // нижняя-правая
+         1.0f,  1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // верхняя-правая         
+         1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // нижняя-правая
+         1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // верхняя-левая
+         1.0f, -1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // нижняя-левая     
 
-        // Нижняя грань 
-        -0.5f, -0.5f, -0.5f,  
-         0.5f, -0.5f,  0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f,  0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f,  0.5f,
+        // нижняя грань
+        -1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f, // верхняя-правая
+         1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f, // верхняя-левая
+         1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f, // нижняя-левая
+         1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f, // нижняя-левая
+        -1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f, // нижняя-правая
+        -1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f, // верхняя-правая
 
-        // Верхняя грань
-        -0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f, -0.5f
-    };
-
-    float vCubeNormales[] = 
-    {
-         0.0f,  0.0f, -1.0f,
-         0.0f,  0.0f, -1.0f, 
-         0.0f,  0.0f, -1.0f, 
-         0.0f,  0.0f, -1.0f, 
-         0.0f,  0.0f, -1.0f, 
-         0.0f,  0.0f, -1.0f, 
-    
-         0.0f,  0.0f,  1.0f,
-         0.0f,  0.0f,  1.0f,
-         0.0f,  0.0f,  1.0f,
-         0.0f,  0.0f,  1.0f,
-         0.0f,  0.0f,  1.0f,
-         0.0f,  0.0f,  1.0f,
-    
-        -1.0f,  0.0f,  0.0f,
-        -1.0f,  0.0f,  0.0f, 
-        -1.0f,  0.0f,  0.0f,
-        -1.0f,  0.0f,  0.0f,
-        -1.0f,  0.0f,  0.0f,
-        -1.0f,  0.0f,  0.0f,
-    
-         1.0f,  0.0f,  0.0f,
-         1.0f,  0.0f,  0.0f,
-         1.0f,  0.0f,  0.0f,
-         1.0f,  0.0f,  0.0f,
-         1.0f,  0.0f,  0.0f,
-         1.0f,  0.0f,  0.0f,
-    
-         0.0f, -1.0f,  0.0f,
-         0.0f, -1.0f,  0.0f,
-         0.0f, -1.0f,  0.0f,
-         0.0f, -1.0f,  0.0f,
-         0.0f, -1.0f,  0.0f,
-         0.0f, -1.0f,  0.0f,
-    
-         0.0f,  1.0f,  0.0f,
-         0.0f,  1.0f,  0.0f,
-         0.0f,  1.0f,  0.0f,
-         0.0f,  1.0f,  0.0f,
-         0.0f,  1.0f,  0.0f,
-         0.0f,  1.0f,  0.0f
-    };
-
-    float vCubeTextures[] = 
-    {
-        // Задняя грань
-        0.0f, 0.0f, // нижняя-левая
-        1.0f, 0.0f, // нижняя-правая    
-        1.0f, 1.0f, // верхняя-правая              
-        1.0f, 1.0f, // верхняя-правая
-        0.0f, 1.0f, // верхняя-левая
-        0.0f, 0.0f, // нижняя-левая   
-                
-        // Передняя грань
-        0.0f, 0.0f, // нижняя-левая
-        1.0f, 1.0f, // верхняя-правая
-        1.0f, 0.0f, // нижняя-правая        
-        1.0f, 1.0f, // верхняя-правая
-        0.0f, 0.0f, // нижняя-левая
-        0.0f, 1.0f, // верхняя-левая  
-        
-        // Грань слева
-        1.0f, 0.0f, // верхняя-правая
-        0.0f, 1.0f, // нижняя-левая
-        1.0f, 1.0f, // верхняя-левая       
-        0.0f, 1.0f, // нижняя-левая
-        1.0f, 0.0f, // верхняя-правая
-        0.0f, 0.0f, // нижняя-правая
-    
-        // Грань справа
-        1.0f, 0.0f, // верхняя-левая
-        1.0f, 1.0f, // верхняя-правая      
-        0.0f, 1.0f, // нижняя-правая          
-        0.0f, 1.0f, // нижняя-правая
-        0.0f, 0.0f, // нижняя-левая
-        1.0f, 0.0f, // верхняя-левая
-    
-        // Нижняя грань          
-        0.0f, 1.0f, // верхняя-правая
-        1.0f, 0.0f, // нижняя-левая
-        1.0f, 1.0f, // верхняя-левая        
-        1.0f, 0.0f, // нижняя-левая
-        0.0f, 1.0f, // верхняя-правая
-        0.0f, 0.0f, // нижняя-правая
-    
-        // Верхняя грань
-        0.0f, 1.0f, // верхняя-левая
-        1.0f, 1.0f, // верхняя-правая
-        1.0f, 0.0f, // нижняя-правая                 
-        1.0f, 0.0f, // нижняя-правая
-        0.0f, 0.0f, // нижняя-левая  
-        0.0f, 1.0f  // верхняя-левая  
+        // верхняя грань
+        -1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f, // верхняя-левая
+         1.0f,  1.0f , 1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f, // нижняя-правая
+         1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, // верхняя-правая     
+         1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f, // нижняя-правая
+        -1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f, // верхняя-левая
+        -1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f  // нижняя-левая        
     };
 
     float planeVertices[] = 
     {
-      // координаты          // нормали         // текстурные координати 
+        // координаты          // нормали         // текстурні координати 
          50.0f, -0.5f,  50.0f,  0.0f, 1.0f, 0.0f,  20.0f, 0.0f,
         -50.0f, -0.5f,  50.0f,  0.0f, 1.0f, 0.0f,  0.0f,  0.0f,
         -50.0f, -0.5f, -50.0f,  0.0f, 1.0f, 0.0f,  0.0f,  20.0f,
@@ -303,25 +205,22 @@ int main()
          1.0f, -1.0f,  1.0f
     };
 
+    // VAO куба 
     unsigned int cubeVBO;
     glGenBuffers(1, &cubeVBO);
     glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vCubeVertexes) + sizeof(vCubeNormales) + sizeof(vCubeTextures), nullptr, GL_STATIC_DRAW);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vCubeVertexes), &vCubeVertexes); //вершины
-    glBufferSubData(GL_ARRAY_BUFFER, sizeof(vCubeVertexes), sizeof(vCubeNormales), &vCubeNormales); //нормали
-    glBufferSubData(GL_ARRAY_BUFFER, sizeof(vCubeVertexes) + sizeof(vCubeNormales), sizeof(vCubeTextures), &vCubeTextures); // текстуры
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
 
-    // VAO куба
     unsigned int cubeVAO;
     glGenVertexArrays(1, &cubeVAO);
     glBindVertexArray(cubeVAO);
     glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)sizeof(vCubeVertexes));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)(sizeof(vCubeVertexes) + sizeof(vCubeNormales)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glBindVertexArray(0);
 	
     // VAO пола
@@ -347,58 +246,33 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-
-    // Настраиваем карту глубины FBO
-    const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
-    unsigned int depthMapFBO;
-    glGenFramebuffers(1, &depthMapFBO);
-	
-    // Создаем текстуры глубины
-    unsigned int depthMap;
-    glGenTextures(1, &depthMap);
-    glBindTexture(GL_TEXTURE_2D, depthMap);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	
-    // Прикрепляем текстуру глубины в качестве буфера глубины для FBO
-    glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
-    glDrawBuffer(GL_NONE);
-    glReadBuffer(GL_NONE);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);	
 
     // Загрузка текстур
-    unsigned int cubeTexture  = loadTexture("assets/textures/wooden_container.png");
-    unsigned int floorTexture = loadTexture("assets/textures/wood.png");
-    unsigned int errorTexture = loadTexture("assets/textures/error.png");
+    unsigned int diffuseMap = loadTexture("assets/textures/brickwall.jpg");
+    unsigned int normalMap  = loadTexture("assets/textures/brickwall_normal.jpg");
 
     std::vector<std::string> faces = 
     {
-        "assets/textures/skybox2/right.png",
-        "assets/textures/skybox2/left.png",
-        "assets/textures/skybox2/top.png",
-        "assets/textures/skybox2/bottom.png",
-        "assets/textures/skybox2/front.png",
-        "assets/textures/skybox2/back.png"
+        "assets/textures/skybox3/right.png",
+        "assets/textures/skybox3/left.png",
+        "assets/textures/skybox3/top.png",
+        "assets/textures/skybox3/bottom.png",
+        "assets/textures/skybox3/front.png",
+        "assets/textures/skybox3/back.png"
     };
     unsigned int cubemapTexture = loadCubemap(faces);
-    // Конфигурация шейдеров
-    debugDepthQuad.use();
-    debugDepthQuad.setInt("depthMap", 0);
 
-    shader.use();
-    shader.setInt("texture1", 0);
+    shader.use(); 
+    shader.setInt("diffuseMap", 0);
+    shader.setInt("normalMap", 1);
 
     skyboxShader.use();
     skyboxShader.setInt("skybox", 0); 
 
-    vec3 lightPos = vec3(3.0f, 2.0f, 1.0f);
-
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+    vec3 lightPos(0.5f, 1.0f, 0.3f);
 
     while (!glfwWindowShouldClose(window)) 
     {
@@ -407,71 +281,35 @@ int main()
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        int fbWidth, fbHeight;
-        glfwGetFramebufferSize(window, &fbWidth, &fbHeight);
-        framebuffer_size_callback(window, fbWidth, fbHeight);
-
         // Обработка ввода
-        processInput(window); 
+        processInput(window);
 
-        // glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LESS);        
-
-        // Рендеринг
+        // Рендер
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // 1. Рендеринг глубины сцены в текстуру (вид - с позиции источника света)
-        glm::mat4 lightProjection, lightView;
-        glm::mat4 lightSpaceMatrix;
-        float near_plane = 1.0f, far_plane = 7.5f;
-        lightProjection = ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-        lightView = lookAt(lightPos, vec3(0.0f), vec3(0.0, 1.0, 0.0));
-        lightSpaceMatrix = lightProjection * lightView;
-		
-        // Рендеринг сцены глазами источника света
-        simpleDepthShader.use();
-        simpleDepthShader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
-
-        glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-        glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-            glClear(GL_DEPTH_BUFFER_BIT);
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, floorTexture);
-            renderScene(simpleDepthShader, cubeVAO, planeVAO);
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-        // Сброс настроек области просмотра
-        glViewport(0, 0, fbWidth, fbHeight);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        // 2. Рендерим сцену как обычно, но используем при этом сгенерированную карту глубины/тени 
-        glViewport(0, 0, fbWidth, fbHeight);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        mat4 projection = perspective(radians(camera.GetZoom()), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        mat4 view = camera.GetViewMatrix();
         shader.use();
-        glm::mat4 projection = glm::perspective(glm::radians(camera.GetZoom()), (float)fbWidth / (float)fbHeight, 0.1f, 100.0f);
-        glm::mat4 view = camera.GetViewMatrix();
         shader.setMat4("projection", projection);
         shader.setMat4("view", view);
-		
-        // Устанавливаем uniform-переменные освещения
+
+        mat4 model = mat4(1.0f);
+        model = rotate(model, radians((float)glfwGetTime() * -10.0f), normalize(vec3(1.0f, 0.0f, 1.0f)));
+        shader.setMat4("model", model);
         shader.setVec3("viewPos", camera.GetPosition());
         shader.setVec3("lightPos", lightPos);
-        shader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, floorTexture);
+        glBindTexture(GL_TEXTURE_2D, diffuseMap);
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, depthMap);
-        renderScene(shader, cubeVAO, planeVAO);
+        glBindTexture(GL_TEXTURE_2D, normalMap);
+        renderQuad();
 
-        // Рендеринг на плоскости карты глубины для наглядной отладки
-        debugDepthQuad.use();
-        debugDepthQuad.setFloat("near_plane", near_plane);
-        debugDepthQuad.setFloat("far_plane", far_plane);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, depthMap);
-        //renderQuad();
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, lightPos);
+        model = glm::scale(model, glm::vec3(0.1f));
+        shader.setMat4("model", model);
+        renderQuad();
 
         // SkyBox
         skyboxShader.use();
@@ -485,7 +323,7 @@ int main()
         glfwPollEvents();
     }
 
-    std::cout << "End \n";
+    std::cout << "End\n";
     std::cout << glGetString(GL_VERSION) << std::endl;
 
     glDeleteVertexArrays(1, &skyboxVAO);
@@ -501,25 +339,41 @@ int main()
 
 void renderScene(Shader& shader, unsigned int cubeVAO, unsigned int planeVAO) 
 {
+    // Комната
     mat4 model = mat4(1.0f);
+    model = scale(model, vec3(5.0f));
     shader.setMat4("model", model);
-    renderPlane(planeVAO);
+    glDisable(GL_CULL_FACE); // обратите внимание, что здесь мы отключаем отсечение граней, т.к. рендерим "внутри" комнаты, а не "снаружи" (в обычном варианте)
+    shader.setInt("reverse_normals", 1); // небольшой трюк для инвертирования нормалей при отрисовке изнутри комнаты, иначе освещение не будет работать
+    renderCube(cubeVAO);
+    shader.setInt("reverse_normals", 0); // ну а теперь отключаем инвертирование нормалей
+    glEnable(GL_CULL_FACE);
 	
     // Ящики
     model = mat4(1.0f);
-    model = translate(model, vec3(0.0f, 1.5f, 0.0));
+    model = translate(model, vec3(4.0f, -3.5f, 0.0));
     model = scale(model, vec3(0.5f));
     shader.setMat4("model", model);
     renderCube(cubeVAO);
     model = mat4(1.0f);
-    model = translate(model, vec3(2.0f, 0.0f, 1.0));
+    model = translate(model, vec3(2.0f, 3.0f, 1.0));
+    model = scale(model, vec3(0.75f));
+    shader.setMat4("model", model);
+    renderCube(cubeVAO);
+    model = mat4(1.0f);
+    model = translate(model, vec3(-3.0f, -1.0f, 0.0));
     model = scale(model, vec3(0.5f));
     shader.setMat4("model", model);
     renderCube(cubeVAO);
     model = mat4(1.0f);
-    model = translate(model, vec3(-1.0f, 0.0f, 2.0));
+    model = translate(model, vec3(-1.5f, 1.0f, 1.5));
+    model = scale(model, vec3(0.5f));
+    shader.setMat4("model", model);
+    renderCube(cubeVAO);
+    model = mat4(1.0f);
+    model = translate(model, vec3(-1.5f, 2.0f, -3.0));
     model = rotate(model, radians(60.0f), normalize(vec3(1.0, 0.0, 1.0)));
-    model = scale(model, vec3(0.25));
+    model = scale(model, vec3(0.75f));
     shader.setMat4("model", model);
     renderCube(cubeVAO);
 }
@@ -537,27 +391,89 @@ void renderQuad()
 {
     if (quadVAO == 0)
     {
+        // Координаты
+        vec3 pos1(-1.0f,  1.0f, 0.0f);
+        vec3 pos2(-1.0f, -1.0f, 0.0f);
+        vec3 pos3( 1.0f, -1.0f, 0.0f);
+        vec3 pos4( 1.0f,  1.0f, 0.0f);
+		
+        // Текстурные координаты
+        vec2 uv1(0.0f, 1.0f);
+        vec2 uv2(0.0f, 0.0f);
+        vec2 uv3(1.0f, 0.0f);  
+        vec2 uv4(1.0f, 1.0f);
+		
+        // Вектор нормали
+        vec3 nm(0.0f, 0.0f, 1.0f);
+
+        // Вычисляем касательные/бикасательные векторы обоих треугольников
+        vec3 tangent1, bitangent1;
+        vec3 tangent2, bitangent2;
+		
+        // Треугольник №1
+        vec3 edge1 = pos2 - pos1;
+        vec3 edge2 = pos3 - pos1;
+        vec2 deltaUV1 = uv2 - uv1;
+        vec2 deltaUV2 = uv3 - uv1;
+
+        float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+        tangent1.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+        tangent1.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+        tangent1.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+        bitangent1.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+        bitangent1.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+        bitangent1.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+
+        // Треугольник №2
+        edge1 = pos3 - pos1;
+        edge2 = pos4 - pos1;
+        deltaUV1 = uv3 - uv1;
+        deltaUV2 = uv4 - uv1;
+
+        f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+        tangent2.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+        tangent2.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+        tangent2.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+
+        bitangent2.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+        bitangent2.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+        bitangent2.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+
+
         float quadVertices[] = {
-             // координаты      // текстурные координаты
-            -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
-            -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-             1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
-             1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+            // координаты           // нормали        // текст. координаты      // касательные          // бикасательные
+            pos1.x, pos1.y, pos1.z, nm.x, nm.y, nm.z, uv1.x, uv1.y, tangent1.x, tangent1.y, tangent1.z, bitangent1.x, bitangent1.y, bitangent1.z,
+            pos2.x, pos2.y, pos2.z, nm.x, nm.y, nm.z, uv2.x, uv2.y, tangent1.x, tangent1.y, tangent1.z, bitangent1.x, bitangent1.y, bitangent1.z,
+            pos3.x, pos3.y, pos3.z, nm.x, nm.y, nm.z, uv3.x, uv3.y, tangent1.x, tangent1.y, tangent1.z, bitangent1.x, bitangent1.y, bitangent1.z,
+
+            pos1.x, pos1.y, pos1.z, nm.x, nm.y, nm.z, uv1.x, uv1.y, tangent2.x, tangent2.y, tangent2.z, bitangent2.x, bitangent2.y, bitangent2.z,
+            pos3.x, pos3.y, pos3.z, nm.x, nm.y, nm.z, uv3.x, uv3.y, tangent2.x, tangent2.y, tangent2.z, bitangent2.x, bitangent2.y, bitangent2.z,
+            pos4.x, pos4.y, pos4.z, nm.x, nm.y, nm.z, uv4.x, uv4.y, tangent2.x, tangent2.y, tangent2.z, bitangent2.x, bitangent2.y, bitangent2.z
         };
 		
-        // Установка VAO пола
+        // Конфигурируем VAO плоскости
         glGenVertexArrays(1, &quadVAO);
         glGenBuffers(1, &quadVBO);
         glBindVertexArray(quadVAO);
         glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
         glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)(6 * sizeof(float)));
+        glEnableVertexAttribArray(3);
+        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)(8 * sizeof(float)));
+        glEnableVertexAttribArray(4);
+        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(float), (void*)(11 * sizeof(float)));
     }
     glBindVertexArray(quadVAO);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);
 }
 
@@ -602,8 +518,18 @@ void processInput(GLFWwindow *window)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS)
 		camera.ProcessKeyboard(DOWN, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) 
 		camera.ProcessKeyboard(UP, deltaTime);
+
+    if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS && !shadowsKeyPressed)
+    {
+        shadows = !shadows;
+        shadowsKeyPressed = true;
+    }
+    if (glfwGetKey(window, GLFW_KEY_B) == GLFW_RELEASE)
+    {
+        shadowsKeyPressed = false;
+    }
 }
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos)
