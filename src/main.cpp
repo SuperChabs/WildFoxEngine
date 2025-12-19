@@ -48,6 +48,8 @@ bool firstMouse = true;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
+float heightScale = 0.1;
+
 int main()
 {
     // glfw: инициализация и конфигурирование
@@ -95,7 +97,7 @@ int main()
     glEnable(GL_CULL_FACE);
 
     Shader skyboxShader("assets/shaders/vertex/skybox.vs", "assets/shaders/fragment/skybox.fs");
-    Shader shader("assets/shaders/vertex/normal_mapping.vs", "assets/shaders/fragment/normal_mapping.fs"); //
+    Shader shader("assets/shaders/vertex/parallax.vs", "assets/shaders/fragment/parallax.fs"); //
 
     float cubeVertices[] = 
     {
@@ -249,8 +251,9 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);	
 
     // Загрузка текстур
-    unsigned int diffuseMap = loadTexture("assets/textures/brickwall.jpg");
-    unsigned int normalMap  = loadTexture("assets/textures/brickwall_normal.jpg");
+    unsigned int diffuseMap = loadTexture("assets/textures/bricks2.jpg");
+    unsigned int normalMap  = loadTexture("assets/textures/bricks2_normal.jpg");
+    unsigned int depthMap   = loadTexture("assets/textures/bricks2_disp.jpg");
 
     std::vector<std::string> faces = 
     {
@@ -266,6 +269,7 @@ int main()
     shader.use(); 
     shader.setInt("diffuseMap", 0);
     shader.setInt("normalMap", 1);
+    shader.setInt("depthMap", 2);
 
     skyboxShader.use();
     skyboxShader.setInt("skybox", 0); 
@@ -295,14 +299,17 @@ int main()
         shader.setMat4("view", view);
 
         mat4 model = mat4(1.0f);
-        model = rotate(model, radians((float)glfwGetTime() * -10.0f), normalize(vec3(1.0f, 0.0f, 1.0f)));
+        // model = rotate(model, radians((float)glfwGetTime() * -10.0f), normalize(vec3(1.0f, 0.0f, 1.0f)));
         shader.setMat4("model", model);
-        shader.setVec3("viewPos", camera.GetPosition());
+        shader.setVec3("viewPos", camera.GetPosition()); //-
         shader.setVec3("lightPos", lightPos);
+        shader.setFloat("height_scale", heightScale);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, diffuseMap);
+        glBindTexture(GL_TEXTURE_2D, diffuseMap); 
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, normalMap);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, depthMap);
         renderQuad();
 
         model = glm::mat4(1.0f);
@@ -521,14 +528,19 @@ void processInput(GLFWwindow *window)
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) 
 		camera.ProcessKeyboard(UP, deltaTime);
 
-    if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS && !shadowsKeyPressed)
+    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) 
     {
-        shadows = !shadows;
-        shadowsKeyPressed = true;
+        if (heightScale > 0.0f) 
+            heightScale -= 0.0005f;
+        else 
+            heightScale = 0.0f;
     }
-    if (glfwGetKey(window, GLFW_KEY_B) == GLFW_RELEASE)
+    else if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) 
     {
-        shadowsKeyPressed = false;
+        if (heightScale < 1.0f) 
+            heightScale += 0.0005f;
+        else 
+            heightScale = 1.0f;
     }
 }
 
