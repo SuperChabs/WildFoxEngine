@@ -2,8 +2,9 @@ cmake_minimum_required(VERSION 3.16)
 
 project(XEngine LANGUAGES C CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
@@ -16,14 +17,35 @@ target_include_directories(glad PUBLIC vendor/glad/include)
 add_library(stb_image STATIC vendor/stb_image/stb_image.cpp)
 target_include_directories(stb_image PUBLIC vendor/stb_image)
 
+# ========== ImGui ==========
+set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/vendor/imgui)
+
+set(IMGUI_SOURCES
+    ${IMGUI_DIR}/imgui.cpp
+    ${IMGUI_DIR}/imgui_draw.cpp
+    ${IMGUI_DIR}/imgui_tables.cpp
+    ${IMGUI_DIR}/imgui_widgets.cpp
+    ${IMGUI_DIR}/imgui_demo.cpp
+    # Backend GLFW + OpenGL3
+    ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+)
+
+set(IMGUI_INCLUDE_DIRS
+    ${IMGUI_DIR}
+    ${IMGUI_DIR}/backends
+)
+
 include_directories(${CMAKE_SOURCE_DIR}/includes)
+include_directories(${IMGUI_INCLUDE_DIRS})
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 # Ensure top-level main.cpp (project entry) is included
 # list(APPEND SOURCES ${CMAKE_SOURCE_DIR}/main.cpp)
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME}  ${SOURCES} 
+                                ${IMGUI_SOURCES})
 
 target_link_libraries(${PROJECT_NAME}
     OpenGL::GL
@@ -38,13 +60,16 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
             ${CMAKE_SOURCE_DIR}/assets
             ${CMAKE_BINARY_DIR}/assets
+    COMMENT "Copying assets to build directory"
 )
 
-add_compile_definitions(ASSETS_PATH="${CMAKE_BINARY_DIR}/assets")
-
-# Встановлення робочої директорії для виконання
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+    VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+)
+
+add_compile_definitions(
+    ASSETS_PATH="${CMAKE_BINARY_DIR}/assets"
+    PROJECT_ROOT="${CMAKE_SOURCE_DIR}"
 )
 
 include(GNUInstallDirs)

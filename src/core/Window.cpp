@@ -1,13 +1,9 @@
 #include "core/Window.h"
+#include "utils/Logger.h"
 #include <iostream>
 
-Window* Window::instance = nullptr;
-
 Window::Window(int w, int h, const std::string& t)
-    : window(nullptr), width(w), height(h), title(t)
-{
-    instance = this;
-}
+    : window(nullptr), width(w), height(h), title(t) {}
 
 Window::~Window()
 {
@@ -16,14 +12,13 @@ Window::~Window()
 
 bool Window::Initialize()
 {
-    // Don't force a specific platform; only hint X11 on Linux builds
 #if defined(__linux__)
     glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
 #endif
 
     if (!glfwInit())
     {
-        std::cerr << "Failed to initialize GLFW\n";
+        Logger::Error("Failed to initialize GLFW");
         return false;
     }
     
@@ -36,23 +31,23 @@ bool Window::Initialize()
     window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
     if (!window)
     {
-        std::cerr << "Failed to create GLFW window\n";
+        Logger::Error("Failed to create GLFW window");
         glfwTerminate();
         return false;
     }
     
-    std::cout << "Successful created GLFW window\n";
+    Logger::Info("GLFW window created: " + title + " (" + std::to_string(width) + "x" + std::to_string(height) + ")");
     
     glfwMakeContextCurrent(window);
     
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        std::cerr << "Failed to initialize GLAD\n";
+        Logger::Error("Failed to initialize GLAD");
         return false;
     }
     
-    std::cout << "Successful initialize GLAD\n";
-    std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
+    Logger::Info("GLAD initialized successfully");
+    Logger::Info("OpenGL version: " + std::string((const char*)glGetString(GL_VERSION)));
     
     return true;
 }
@@ -65,6 +60,9 @@ void Window::Terminate()
         window = nullptr;
     }
     glfwTerminate();
+
+    Logger::Info("GLFW terminated");
+    Logger::Info("Window destroyed: " + title);
 }
 
 bool Window::ShouldClose() const

@@ -1,4 +1,6 @@
 #include "rendering/TextureManager.h"
+#include "utils/Logger.h"
+
 #include <stb_image.h>
 #include <iostream>
 
@@ -18,6 +20,11 @@ unsigned int TextureManager::LoadTexture(const std::string& path, bool gamma)
     if (textureID != 0)
     {
         loadedTextures[path] = textureID;
+        Logger::Info("Texture loaded: " + path + " with ID: " + std::to_string(textureID));
+    }
+    else
+    {
+        Logger::Error("Failed to load texture: " + path);
     }
     
     return textureID;
@@ -38,8 +45,13 @@ unsigned int TextureManager::LoadCubemap(const std::vector<std::string>& faces)
     if (textureID != 0)
     {
         loadedTextures[key] = textureID;
+        Logger::Info("Cubemap loaded with ID: " + std::to_string(textureID));
     }
-    
+    else
+    {
+        Logger::Error("Failed to load cubemap.");
+    }
+
     return textureID;
 }
 
@@ -50,42 +62,39 @@ unsigned int TextureManager::LoadTextureFromFile(const char* path, bool gamma)
 
     int width, height, nrComponents;
     unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 0);
-    if (data)
+    if (!data)
     {
-        GLenum format, texWrap;
-        if (nrComponents == 1)
-        {    
-            format = GL_RED;
-            texWrap = GL_REPEAT;
-        }
-        else if (nrComponents == 3)
-        {
-            format = GL_RGB;
-            texWrap = GL_REPEAT;
-        }   
-        else if (nrComponents == 4) 
-        {
-            format = GL_RGBA;
-            texWrap = GL_CLAMP_TO_EDGE;
-        }
-        
-        glBindTexture(GL_TEXTURE_2D, textureID);
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texWrap);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texWrap);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        stbi_image_free(data);
-    }
-    else
-    {
-        std::cout << "Texture failed to load at path: " << path << std::endl;
-        stbi_image_free(data);
+        Logger::Error("Texture failed to load at path: " + std::string(path));
         return 0;
     }
+
+    GLenum format, texWrap;
+    if (nrComponents == 1)
+    {    
+        format = GL_RED;
+        texWrap = GL_REPEAT;
+    }
+    else if (nrComponents == 3)
+    {
+        format = GL_RGB;
+        texWrap = GL_REPEAT;
+    }   
+    else // nrComponents == 4
+    {
+        format = GL_RGBA;
+        texWrap = GL_CLAMP_TO_EDGE;
+    }
+    
+    glBindTexture(GL_TEXTURE_2D, textureID);
+    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, texWrap);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, texWrap);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    stbi_image_free(data);
 
     return textureID;
 }
@@ -109,8 +118,7 @@ unsigned int TextureManager::LoadCubemapFromFiles(const std::vector<std::string>
         }
         else
         {
-            std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
-            stbi_image_free(data);
+            Logger::Error("Cubemap texture failed to load at path: " + faces[i]);
             return 0;
         } 
     }

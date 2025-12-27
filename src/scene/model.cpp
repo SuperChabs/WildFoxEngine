@@ -1,7 +1,7 @@
 #include "scene/Model.h"
+#include "utils/Logger.h"
 
 #include <glm/glm.hpp>
-
 #include <stb_image.h>
 
 using namespace glm;
@@ -20,10 +20,10 @@ void Model::loadModel(string path)
     
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) 
     {
-        std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
+        Logger::Error("ASSIMP:: " + string(import.GetErrorString()));
         return;
     }
-    std::cout << "Model loaded: " << path << " - Meshes: " << scene->mNumMeshes << std::endl;
+    Logger::Info("Model loaded: " + path + " - Meshes: " + std::to_string(scene->mNumMeshes));
     directory = path.substr(0, path.find_last_of('/'));
 
     processNode(scene->mRootNode, scene);
@@ -94,7 +94,9 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     }
-    std::cout << "  Mesh: Vertices=" << vertices.size() << ", Indices=" << indices.size() << ", Textures=" << textures.size() << std::endl;
+    Logger::Info("Mesh processed: Vertices=" + std::to_string(vertices.size()) + 
+                 ", Indices=" + std::to_string(indices.size()) + 
+                 ", Textures=" + std::to_string(textures.size()));
     return Mesh(vertices, indices, textures);
 }
 
@@ -103,7 +105,7 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
     vector<Texture> textures;
     int value = mat->GetTextureCount(type);
 
-    std::cout << "Loading " << typeName << " textures, count: " << value << std::endl;
+    Logger::Info("Loading " + std::to_string(value) + " textures of type: " + typeName);
 
     for(unsigned int i = 0; i < value; i++)
     {
@@ -111,8 +113,8 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
         mat->GetTexture(type, i, &str);
         bool skip = false;
 
-        std::cout << "  Texture path from material: " << str.C_Str() << std::endl;
-        std::cout << "  Full path will be: " << directory << "/" << str.C_Str() << std::endl;
+        Logger::Info("  Found texture from path: " + std::string(str.C_Str()));
+        Logger::Info("  Full path will be: " + directory + "/" + std::string(str.C_Str()));
         
         for(unsigned int j = 0; j < textures_loaded.size(); j++)
         {
@@ -135,7 +137,7 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
     }
 
     if (value == 0) {
-        std::cout << "  WARNING: No " << typeName << " textures found in material!" << std::endl;
+        Logger::Info("  WARNING: No " + typeName + " textures found in material!");
     }
 
     return textures;
@@ -174,7 +176,7 @@ unsigned int TextureFromFile(const char *path, const string &directory, bool gam
     }
     else
     {
-        std::cout << "Texture failed to load at path: " << path << std::endl;
+        Logger::Error("Texture failed to load at path: " + std::string(path));
         stbi_image_free(data);
     }
  

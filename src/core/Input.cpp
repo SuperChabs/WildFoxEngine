@@ -1,4 +1,5 @@
 #include "core/Input.h"
+#include "utils/Logger.h"
 
 float Input::scrollOffsetX = 0.0f;
 float Input::scrollOffsetY = 0.0f;
@@ -12,16 +13,35 @@ Input::Input(GLFWwindow* win)
 bool Input::IsKeyPressed(int key) const
 {
     return glfwGetKey(window, key) == GLFW_PRESS;
+
+    Logger::Info("Key " + std::to_string(key) + " pressed");
 }
 
 bool Input::IsKeyReleased(int key) const
 {
     return glfwGetKey(window, key) == GLFW_RELEASE;
+
+    Logger::Info("Key " + std::to_string(key) + " released");
 }
 
 bool Input::IsKeyDown(int key) const
 {
     return glfwGetKey(window, key) == GLFW_PRESS;
+
+    Logger::Info("Key " + std::to_string(key) + " is down");
+}
+
+bool Input::IsKeyJustPressed(int key) const
+{
+    bool currentState = IsKeyPressed(key);
+    bool previousState = keyStates[key];
+
+    if (keyStates.contains(key)) 
+        previousState = keyStates.at(key);
+
+    keyStates[key] = currentState;
+
+    return currentState && !previousState;
 }
 
 void Input::UpdateMousePosition(double xpos, double ypos)

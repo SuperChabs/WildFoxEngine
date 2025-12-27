@@ -5,6 +5,9 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
+#include <memory>
+#include <unordered_map>
+
 class Input 
 {
 private:
@@ -17,6 +20,8 @@ private:
     float mouseDeltaX;
     float mouseDeltaY;
 
+    mutable std::unordered_map<int, bool> keyStates;
+
 public:
     static float scrollOffsetX;
     static float scrollOffsetY;
@@ -26,6 +31,7 @@ public:
     bool IsKeyPressed(int key) const;
     bool IsKeyReleased(int key) const;
     bool IsKeyDown(int key) const;
+    bool IsKeyJustPressed(int key) const;
     
     void UpdateMousePosition(double xpos, double ypos);
     glm::vec2 GetMouseDelta();

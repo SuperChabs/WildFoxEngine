@@ -1,13 +1,15 @@
 #include "application/Application.h"
 #include "core/Shader.h"
 #include "rendering/Skybox.h"
-#include <iostream>
+#include "utils/Logger.h"
+
+#include <memory>
 
 class MyGame : public Application 
 {
 private:
-    Shader* mainShader;
-    Shader* skyboxShader;
+    std::unique_ptr<Shader> mainShader;
+    std::unique_ptr<Shader> skyboxShader;
     Skybox* skybox;
     
     unsigned int diffuseMap;
@@ -20,18 +22,11 @@ private:
 protected:
     void OnInitialize() override 
     {
-        std::cout << "Initializing game...\n";
+        Logger::Info("Initializing game...");
         
         // Завантаження шейдерів
-        mainShader = new Shader(
-            "assets/shaders/vertex/parallax.vs", 
-            "assets/shaders/fragment/parallax.fs"
-        );
-        
-        skyboxShader = new Shader(
-            "assets/shaders/vertex/skybox.vs", 
-            "assets/shaders/fragment/skybox.fs"
-        );
+        mainShader = std::make_unique<Shader>("parallax");
+        skyboxShader = std::make_unique<Shader>("skybox");
         
         // Завантаження текстур
         diffuseMap = GetTextureManager()->LoadTexture("assets/textures/bricks2.jpg");
@@ -39,7 +34,8 @@ protected:
         depthMap = GetTextureManager()->LoadTexture("assets/textures/bricks2_disp.jpg");
         
         // Створення скайбоксу
-        std::vector<std::string> faces = {
+        std::vector<std::string> faces = 
+        {
             "assets/textures/skybox3/right.png",
             "assets/textures/skybox3/left.png",
             "assets/textures/skybox3/top.png",
@@ -49,7 +45,7 @@ protected:
         };
         
         unsigned int cubemapTexture = GetTextureManager()->LoadCubemap(faces);
-        skybox = new Skybox(cubemapTexture, skyboxShader);
+        skybox = new Skybox(cubemapTexture, skyboxShader.get());
         
         // Налаштування шейдерів
         mainShader->use();
@@ -64,12 +60,11 @@ protected:
         lightPos = glm::vec3(0.5f, 1.0f, 0.3f);
         heightScale = 0.1f;
         
-        std::cout << "Game initialized!\n";
+        Logger::Info("Game initialized successfully");
     }
     
     void OnUpdate(float deltaTime) override 
     {
-        // Управління heightScale
         if (GetInput()->IsKeyPressed(GLFW_KEY_Q))
         {
             if (heightScale > 0.0f)
@@ -84,15 +79,6 @@ protected:
             else
                 heightScale = 1.0f;
         }
-        
-        // Вивід FPS
-        static float fpsTimer = 0.0f;
-        fpsTimer += deltaTime;
-        if (fpsTimer >= 1.0f)
-        {
-            std::cout << "FPS: " << GetTime()->GetFPS() << "\n";
-            fpsTimer = 0.0f;
-        }
     }
     
     void OnRender() override 
@@ -101,14 +87,9 @@ protected:
         int height = GetWindow()->GetHeight();
         
         // Матриці
-        glm::mat4 projection = glm::perspective(
-            glm::radians(GetCamera()->GetZoom()),
-            GetWindow()->GetAspectRatio(),
-            0.1f, 100.0f
-        );
+        glm::mat4 projection = glm::perspective(glm::radians(GetCamera()->GetZoom()), GetWindow()->GetAspectRatio(), 0.1f, 100.0f);
         glm::mat4 view = GetCamera()->GetViewMatrix();
         
-        // Рендеринг quad з parallax mapping
         mainShader->use();
         mainShader->setMat4("projection", projection);
         mainShader->setMat4("view", view);
@@ -139,17 +120,15 @@ protected:
     
     void OnShutdown() override 
     {
-        std::cout << "Shutting down game...\n";
+        Logger::Info("Shutting down game...");
         
         delete skybox;
-        delete skyboxShader;
-        delete mainShader;
         
-        std::cout << "Game shutdown complete!\n";
+        Logger::Info("Game shutdown complete!");
     }
 
 public:
-    MyGame() : Application(800, 600, "Parallax Mapping Demo") {}
+    MyGame() : Application(1024, 720, "Parallax Mapping Demo") {}
 };
 
 int main() 
@@ -158,7 +137,7 @@ int main()
     
     if (!game.Initialize()) 
     {
-        std::cerr << "Failed to initialize game\n";
+        Logger::Error("Failed to initialize game");
         return -1;
     }
     

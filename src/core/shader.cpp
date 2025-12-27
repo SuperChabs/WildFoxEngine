@@ -1,110 +1,29 @@
 #include "core/Shader.h"
+#include "utils/Logger.h"
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath)
 {
-    // Етап №1: Отримання вихідного коду вершинного/фрагментного шейдеру з змінної filePath  
-    std::string vertexCode;
-    std::string fragmentCode;
-    std::string geometryCode;
-    std::ifstream vShaderFile;
-    std::ifstream fShaderFile;
-    std::ifstream gShaderFile;
+    CompileShader(vertexPath, fragmentPath, geometryPath);
+}
 
-    // Переконуємося, що об'єкти ifstream можуть викинути виключення
-    vShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
-    fShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
-    gShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
-    try 
+Shader::Shader(const char *shaderName, bool isGeometry)
+{
+
+    if (isGeometry)
     {
-        // Відкриваємо файли
-        vShaderFile.open(vertexPath);
-        fShaderFile.open(fragmentPath);
-        std::stringstream vShaderStream, fShaderStream;
+        std::string vertexPath = "assets/shaders/vertex/" + std::string(shaderName) + ".vs";
+        std::string fragmentPath = "assets/shaders/fragment/" + std::string(shaderName) + ".fs";
+        std::string geometryPath = "assets/shaders/geometry/" + std::string(shaderName) + ".gs";
 
-        // Зчитуємо вміст файлових буферів в потоки
-        vShaderStream << vShaderFile.rdbuf();
-        fShaderStream << fShaderFile.rdbuf();
-
-        // Зачиняємо файли
-        vShaderFile.close();
-        fShaderFile.close();
-
-        // Конвертуємо данні з потоку в рядкові змінні
-        vertexCode   = vShaderStream.str();
-        fragmentCode = fShaderStream.str();
-
-        if (geometryPath != nullptr) 
-        {
-            gShaderFile.open(geometryPath);
-            std::stringstream gShaderStream;
-            gShaderStream << gShaderFile.rdbuf();
-            gShaderFile.close();
-            geometryCode = gShaderStream.str();
-        }
-    }
-    catch (std::ifstream::failure e)
+        CompileShader(vertexPath.c_str(), fragmentPath.c_str(), geometryPath.c_str());
+    }    
+    else
     {
-        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
-        std::cout << "Cannot open vertex shader at " << vertexPath << std::endl;
-        std::cout << "Cannot open fragment shader at " << fragmentPath << std::endl;
-        if (geometryPath != nullptr) 
-            std::cout << "Cannot open geometry shader at " << geometryPath << std::endl;
-        return;
+        std::string vertexPath = "assets/shaders/vertex/" + std::string(shaderName) + ".vs";
+        std::string fragmentPath = "assets/shaders/fragment/" + std::string(shaderName) + ".fs";
+
+        CompileShader(vertexPath.c_str(), fragmentPath.c_str());
     }
-    const char* vShaderCode = vertexCode.c_str();
-    const char* fShaderCode = fragmentCode.c_str();
-
-    // Етап №2: Компілюємо шейдери
-    unsigned int vertex, fragment;
-
-    // Вершиний шейдер
-    vertex = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertex, 1, &vShaderCode, NULL);
-    glCompileShader(vertex);
-    checkCompileErrors(vertex, "VERTEX");
-
-    // Фрагментний шейдер
-    fragment = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment, 1, &fShaderCode, NULL);
-    glCompileShader(fragment);
-    checkCompileErrors(fragment, "FRAGMENT");
-
-    unsigned int geometry;
-    if (geometryPath != nullptr)
-    {
-        const char* gShaderCode = geometryCode.c_str();
-        geometry = glCreateShader(GL_GEOMETRY_SHADER);
-        glShaderSource(geometry, 1, &gShaderCode, NULL);
-        glCompileShader(geometry);
-        checkCompileErrors(geometry, "GEOMETRY");
-    }
-
-    if (vertex == 0 || fragment == 0) 
-    {
-        std::cerr << "Shader compilation failed, skipping program link.\n";
-        ID = 0;
-        return;
-    }
-
-    // Шейдерна программа
-    ID = glCreateProgram();
-    glAttachShader(ID, vertex);
-    glAttachShader(ID, fragment);
-    if (geometryPath != nullptr)
-        glAttachShader(ID, geometry);
-    glLinkProgram(ID);
-    checkCompileErrors(ID, "PROGRAM");
-    if (ID == 0) 
-    { 
-        std::cerr << "Shader program invalid after linking, skipping uniforms\n";
-        return;
-    }
-
-    // Після того, як ми связали шейдери з нашою программою, видаляємо їх, так як вони нам більше не потрібні
-    glDeleteShader(vertex);
-    glDeleteShader(fragment);
-    if (geometryPath != nullptr) 
-        glDeleteShader(geometry);
 }
 
 // Активація шейдера
@@ -185,7 +104,7 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
         if (!success) 
         {
             glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-            std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+            Logger::Error("SHADER_COMPILATION_ERROR of type: " + type + "\n" + std::string(infoLog) + "\n -- --------------------------------------------------- -- ");
         }
     }
     else
@@ -194,7 +113,116 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
         if(!success)
         {
             glGetProgramInfoLog(ID, 1024, NULL, infoLog);
-            std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+            Logger::Error("PROGRAM_LINKING_ERROR of type: " + type + "\n" + std::string(infoLog) + "\n -- --------------------------------------------------- -- ");
         }
     }
+}
+
+void Shader::CompileShader(const char *vertexPath, const char *fragmentPath, const char *geometryPath)
+{
+    // Етап №1: Отримання вихідного коду вершинного/фрагментного шейдеру з змінної filePath  
+    std::string vertexCode;
+    std::string fragmentCode;
+    std::string geometryCode;
+    std::ifstream vShaderFile;
+    std::ifstream fShaderFile;
+    std::ifstream gShaderFile;
+
+    // Переконуємося, що об'єкти ifstream можуть викинути виключення
+    vShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
+    fShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
+    gShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
+    try 
+    {
+        // Відкриваємо файли
+        vShaderFile.open(vertexPath);
+        fShaderFile.open(fragmentPath);
+        std::stringstream vShaderStream, fShaderStream;
+
+        // Зчитуємо вміст файлових буферів в потоки
+        vShaderStream << vShaderFile.rdbuf();
+        fShaderStream << fShaderFile.rdbuf();
+
+        // Зачиняємо файли
+        vShaderFile.close();
+        fShaderFile.close();
+
+        // Конвертуємо данні з потоку в рядкові змінні
+        vertexCode   = vShaderStream.str();
+        fragmentCode = fShaderStream.str();
+
+        if (geometryPath != nullptr) 
+        {
+            gShaderFile.open(geometryPath);
+            std::stringstream gShaderStream;
+            gShaderStream << gShaderFile.rdbuf();
+            gShaderFile.close();
+            geometryCode = gShaderStream.str();
+        }
+    }
+    catch (std::ifstream::failure e)
+    {
+        Logger::Error("SHADER::FILE_NOT_SUCCESFULLY_READ");
+        Logger::Error("Cannot open vertex shader at " + std::string(vertexPath));
+        Logger::Error("Cannot open fragment shader at " + std::string(fragmentPath));   
+        if (geometryPath != nullptr) 
+            Logger::Error("Cannot open geometry shader at " + std::string(geometryPath));
+        return;
+    }
+    const char* vShaderCode = vertexCode.c_str();
+    const char* fShaderCode = fragmentCode.c_str();
+
+    // Етап №2: Компілюємо шейдери
+    unsigned int vertex, fragment;
+
+    // Вершиний шейдер
+    vertex = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertex, 1, &vShaderCode, NULL);
+    glCompileShader(vertex);
+    checkCompileErrors(vertex, "VERTEX");
+
+    // Фрагментний шейдер
+    fragment = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragment, 1, &fShaderCode, NULL);
+    glCompileShader(fragment);
+    checkCompileErrors(fragment, "FRAGMENT");
+
+    unsigned int geometry;
+    if (geometryPath != nullptr)
+    {
+        const char* gShaderCode = geometryCode.c_str();
+        geometry = glCreateShader(GL_GEOMETRY_SHADER);
+        glShaderSource(geometry, 1, &gShaderCode, NULL);
+        glCompileShader(geometry);
+        checkCompileErrors(geometry, "GEOMETRY");
+    }
+
+    if (vertex == 0 || fragment == 0) 
+    {
+        Logger::Error("Shader compilation failed, skipping program linking");
+        ID = 0;
+        return;
+    }
+
+    // Шейдерна программа
+    ID = glCreateProgram();
+    glAttachShader(ID, vertex);
+    glAttachShader(ID, fragment);
+    if (geometryPath != nullptr)
+        glAttachShader(ID, geometry);
+    glLinkProgram(ID);
+    checkCompileErrors(ID, "PROGRAM");
+    if (ID == 0) 
+    { 
+        Logger::Error("Shader program linking failed");
+        return;
+    }
+
+    // Після того, як ми связали шейдери з нашою программою, видаляємо їх, так як вони нам більше не потрібні
+    glDeleteShader(vertex);
+    glDeleteShader(fragment);
+    if (geometryPath != nullptr) 
+        glDeleteShader(geometry);
+
+    Logger::Info("Shader program created with ID: " + std::to_string(ID));    
 }

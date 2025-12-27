@@ -1,4 +1,6 @@
 #include "rendering/Renderer.h"
+#include "utils/Logger.h"
+
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -19,6 +21,8 @@ void Renderer::Initialize()
     primitives->Initialize();
     
     ApplySettings();
+
+    Logger::Info("Renderer system initialized");
 }
 
 void Renderer::ApplySettings()
@@ -63,7 +67,6 @@ void Renderer::BeginFrame()
 
 void Renderer::EndFrame()
 {
-    // Тут можна додати post-processing або інші завершальні дії
 }
 
 void Renderer::RenderScene(SceneManager& scene, Camera& camera, Shader& shader,

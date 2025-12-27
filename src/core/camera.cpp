@@ -1,4 +1,5 @@
 #include "core/Camera.h"
+#include "utils/Logger.h"
 
 using namespace glm;
 
@@ -10,6 +11,8 @@ Camera::Camera(vec3 position, vec3 up, float yaw, float pitch)
     this->yaw = yaw;
     this->pitch = pitch;
     UpdateCameraVectors();
+
+    Logger::Info("Camera created at position (" + std::to_string(position.x) + ", " + std::to_string(position.y) + ", " + std::to_string(position.z) + ")");
 }
 
 Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
@@ -20,6 +23,8 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float u
     this->yaw = yaw;
     this->pitch = pitch;
     UpdateCameraVectors();
+
+    Logger::Info("Camera created at position (" + std::to_string(posX) + ", " + std::to_string(posY) + ", " + std::to_string(posZ) + ")"); 
 }
 
 void Camera::ProcessKeyboard(CameraMovement direction, float deltaTime)

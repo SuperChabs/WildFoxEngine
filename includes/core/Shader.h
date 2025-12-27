@@ -22,6 +22,7 @@ public:
 
     // Конструктор зчитує данні й виконує будову шейдера
     Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr);
+    Shader(const char* shaderName, bool isGeometry = false);
 
     // Використання/активація шейдера
     void use();
@@ -46,7 +47,9 @@ public:
 
 private:
     // Корисні мктоди для перевірки помилок компіляції/зв'язування шейдерів
-    void checkCompileErrors(unsigned int shader, std::string type);    
+    void checkCompileErrors(unsigned int shader, std::string type);   
+    
+    void CompileShader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr);
 };
 
 #endif
