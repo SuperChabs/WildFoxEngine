@@ -1,4 +1,4 @@
-#include "scene/mesh.hpp"
+#include "scene/Mesh.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>

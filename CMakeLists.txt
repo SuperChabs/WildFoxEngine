@@ -20,6 +20,9 @@ include_directories(${CMAKE_SOURCE_DIR}/includes)
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
+# Ensure top-level main.cpp (project entry) is included
+# list(APPEND SOURCES ${CMAKE_SOURCE_DIR}/main.cpp)
+
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 target_link_libraries(${PROJECT_NAME}

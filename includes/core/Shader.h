@@ -1,7 +1,7 @@
 #pragma once 
 
-#ifndef SHADER_HPP
-#define SHADER_HPP
+#ifndef SHADER_H
+#define SHADER_H
 
 #include <glad/glad.h> // підключаємо glad для активації всіх заголовкових файлів OpenGL
 

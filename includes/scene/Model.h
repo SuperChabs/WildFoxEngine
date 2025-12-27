@@ -1,14 +1,14 @@
 #pragma once
 
-#ifndef MODEL_HPP
-#define MODEL_HPP
+#ifndef MODEL_H
+#define MODEL_H
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include "scene/mesh.hpp"
-#include "core/shader.hpp"
+#include "scene/Mesh.h"
+#include "core/Shader.h"
 
 #include <vector>
 

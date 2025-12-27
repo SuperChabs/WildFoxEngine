@@ -1,8 +1,8 @@
-#include "scene/model.hpp"
+#include "scene/Model.h"
 
 #include <glm/glm.hpp>
 
-#include "stb_image.h"
+#include <stb_image.h>
 
 using namespace glm;
 

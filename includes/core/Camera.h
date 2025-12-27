@@ -1,5 +1,5 @@
-#ifndef CAMERA_HPP
-#define CAMERA_HPP
+#ifndef CAMERA_H
+#define CAMERA_H
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -49,7 +49,7 @@ public:
     void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
     void ProcessScrool(float yoffset);
 
-    mat4 GetViewMatrix() {return glm::lookAt(position, position + front, up);}
+    mat4 GetViewMatrix() const {return glm::lookAt(position, position + front, up);}
 
     // Getteri blyat
     vec3 GetPosition() {return position;}

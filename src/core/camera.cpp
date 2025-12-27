@@ -1,4 +1,4 @@
-#include "core/camera.hpp"
+#include "core/Camera.h"
 
 using namespace glm;
 
