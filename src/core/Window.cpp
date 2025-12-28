@@ -18,7 +18,7 @@ bool Window::Initialize()
 
     if (!glfwInit())
     {
-        Logger::Error("Failed to initialize GLFW");
+        Logger::Log(LogLevel::ERROR, "Failed to initialize GLFW");
         return false;
     }
     
@@ -31,23 +31,23 @@ bool Window::Initialize()
     window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
     if (!window)
     {
-        Logger::Error("Failed to create GLFW window");
+        Logger::Log(LogLevel::ERROR, "Failed to create GLFW window");
         glfwTerminate();
         return false;
     }
     
-    Logger::Info("GLFW window created: " + title + " (" + std::to_string(width) + "x" + std::to_string(height) + ")");
+    Logger::Log(LogLevel::INFO, "GLFW window created: " + title + " (" + std::to_string(width) + "x" + std::to_string(height) + ")");
     
     glfwMakeContextCurrent(window);
     
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        Logger::Error("Failed to initialize GLAD");
+        Logger::Log(LogLevel::ERROR, "Failed to initialize GLAD");
         return false;
     }
     
-    Logger::Info("GLAD initialized successfully");
-    Logger::Info("OpenGL version: " + std::string((const char*)glGetString(GL_VERSION)));
+    Logger::Log(LogLevel::INFO, "GLAD initialized successfully");
+    Logger::Log(LogLevel::INFO, "OpenGL version: " + std::string((const char*)glGetString(GL_VERSION)));
     
     return true;
 }
@@ -61,8 +61,8 @@ void Window::Terminate()
     }
     glfwTerminate();
 
-    Logger::Info("GLFW terminated");
-    Logger::Info("Window destroyed: " + title);
+    Logger::Log(LogLevel::INFO, "GLFW terminated");
+    Logger::Log(LogLevel::INFO, "Window destroyed: " + title);
 }
 
 bool Window::ShouldClose() const

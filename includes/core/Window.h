@@ -42,11 +42,6 @@ public:
     int GetHeight() const { return height; }
     float GetAspectRatio() const { return static_cast<float>(width) / static_cast<float>(height); }
     
-    // static Window& GetInstance(int width, int height, const std::string& title) 
-    // {
-    //     static Window instance(width, height, title);
-    //     return instance;
-    // }
 };
 
 #endif

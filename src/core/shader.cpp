@@ -104,7 +104,7 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
         if (!success) 
         {
             glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-            Logger::Error("SHADER_COMPILATION_ERROR of type: " + type + "\n" + std::string(infoLog) + "\n -- --------------------------------------------------- -- ");
+            Logger::Log(LogLevel::ERROR, "SHADER_COMPILATION_ERROR of type: " + type + "\n" + std::string(infoLog) + "\n -- --------------------------------------------------- -- ");
         }
     }
     else
@@ -113,7 +113,7 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
         if(!success)
         {
             glGetProgramInfoLog(ID, 1024, NULL, infoLog);
-            Logger::Error("PROGRAM_LINKING_ERROR of type: " + type + "\n" + std::string(infoLog) + "\n -- --------------------------------------------------- -- ");
+            Logger::Log(LogLevel::ERROR, "PROGRAM_LINKING_ERROR of type: " + type + "\n" + std::string(infoLog) + "\n -- --------------------------------------------------- -- ");
         }
     }
 }
@@ -162,11 +162,11 @@ void Shader::CompileShader(const char *vertexPath, const char *fragmentPath, con
     }
     catch (std::ifstream::failure e)
     {
-        Logger::Error("SHADER::FILE_NOT_SUCCESFULLY_READ");
-        Logger::Error("Cannot open vertex shader at " + std::string(vertexPath));
-        Logger::Error("Cannot open fragment shader at " + std::string(fragmentPath));   
+        Logger::Log(LogLevel::ERROR, "SHADER::FILE_NOT_SUCCESFULLY_READ");
+        Logger::Log(LogLevel::ERROR, "Cannot open vertex shader at " + std::string(vertexPath));
+        Logger::Log(LogLevel::ERROR, "Cannot open fragment shader at " + std::string(fragmentPath));   
         if (geometryPath != nullptr) 
-            Logger::Error("Cannot open geometry shader at " + std::string(geometryPath));
+            Logger::Log(LogLevel::ERROR, "Cannot open geometry shader at " + std::string(geometryPath));
         return;
     }
     const char* vShaderCode = vertexCode.c_str();
@@ -199,7 +199,7 @@ void Shader::CompileShader(const char *vertexPath, const char *fragmentPath, con
 
     if (vertex == 0 || fragment == 0) 
     {
-        Logger::Error("Shader compilation failed, skipping program linking");
+        Logger::Log(LogLevel::ERROR, "Shader compilation failed, skipping program linking");
         ID = 0;
         return;
     }
@@ -214,7 +214,7 @@ void Shader::CompileShader(const char *vertexPath, const char *fragmentPath, con
     checkCompileErrors(ID, "PROGRAM");
     if (ID == 0) 
     { 
-        Logger::Error("Shader program linking failed");
+        Logger::Log(LogLevel::ERROR, "Shader program linking failed");
         return;
     }
 
@@ -224,5 +224,5 @@ void Shader::CompileShader(const char *vertexPath, const char *fragmentPath, con
     if (geometryPath != nullptr) 
         glDeleteShader(geometry);
 
-    Logger::Info("Shader program created with ID: " + std::to_string(ID));    
+    Logger::Log(LogLevel::INFO, "Shader program created with ID: " + std::to_string(ID));    
 }

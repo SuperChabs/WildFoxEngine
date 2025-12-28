@@ -11,9 +11,11 @@ find_package(glfw3 REQUIRED)
 find_package(glm REQUIRED)
 find_package(assimp REQUIRED)
 
+# ========== Glad =============
 add_library(glad STATIC vendor/glad/src/glad.c)
 target_include_directories(glad PUBLIC vendor/glad/include)
 
+# ========== Stb_image =============
 add_library(stb_image STATIC vendor/stb_image/stb_image.cpp)
 target_include_directories(stb_image PUBLIC vendor/stb_image)
 
@@ -36,6 +38,19 @@ set(IMGUI_INCLUDE_DIRS
     ${IMGUI_DIR}/backends
 )
 
+
+add_library(imgui STATIC ${IMGUI_SOURCES})
+target_include_directories(imgui PUBLIC ${IMGUI_INCLUDE_DIRS})
+
+target_link_libraries(imgui PUBLIC glad)
+target_compile_definitions(imgui PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLAD)
+
+# ========== Magic_enum =============
+# magic_enum is header-only; provide an INTERFACE target exposing the include dir
+add_library(magic_enum INTERFACE)
+target_include_directories(magic_enum INTERFACE ${CMAKE_SOURCE_DIR}/vendor/magic_enum/include)
+
+# ========== XEngine =============
 include_directories(${CMAKE_SOURCE_DIR}/includes)
 include_directories(${IMGUI_INCLUDE_DIRS})
 
@@ -44,7 +59,7 @@ file(GLOB_RECURSE SOURCES "src/*.cpp")
 # Ensure top-level main.cpp (project entry) is included
 # list(APPEND SOURCES ${CMAKE_SOURCE_DIR}/main.cpp)
 
-add_executable(${PROJECT_NAME}  ${SOURCES} 
+add_executable(${PROJECT_NAME}  ${SOURCES}
                                 ${IMGUI_SOURCES})
 
 target_link_libraries(${PROJECT_NAME}
@@ -54,6 +69,8 @@ target_link_libraries(${PROJECT_NAME}
     glm::glm
     stb_image
     assimp
+    imgui
+    magic_enum
 )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

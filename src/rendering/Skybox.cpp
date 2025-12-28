@@ -10,7 +10,7 @@ Skybox::Skybox(unsigned int cubemapTex, Shader* skyboxShader)
 {
     SetupSkybox();
 
-    Logger::Info("Skybox created with cubemap texture ID: " + std::to_string(cubemapTexture));
+    Logger::Log(LogLevel::INFO, "Skybox created with cubemap texture ID: " + std::to_string(cubemapTexture));
 }
 
 Skybox::~Skybox()
@@ -76,7 +76,7 @@ void Skybox::SetupSkybox()
     skyboxVAO->AddAttribute(0, 3, GL_FLOAT, false, 3 * sizeof(float), 0);
     skyboxVAO->Unbind();
 
-    Logger::Info("Skybox geometry setup completed");
+    Logger::Log(LogLevel::INFO, "Skybox geometry setup completed");
 }
 
 void Skybox::Render(const Camera& camera, const glm::mat4& projection)

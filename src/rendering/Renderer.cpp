@@ -22,7 +22,7 @@ void Renderer::Initialize()
     
     ApplySettings();
 
-    Logger::Info("Renderer system initialized");
+    Logger::Log(LogLevel::INFO, "Renderer system initialized");
 }
 
 void Renderer::ApplySettings()

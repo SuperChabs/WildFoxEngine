@@ -53,31 +53,47 @@ public:
 
     // Getteri blyat
     vec3 GetPosition() {return position;}
-    vec3 GetFront() {return front;}
-    vec3 GetUp() {return up;}
-    vec3 GetRight() {return right;}
-    vec3 GetWorldUp() {return worldUp;}
+    vec3 GetFront()    {return front;}
+    vec3 GetUp()       {return up;}
+    vec3 GetRight()    {return right;}
+    vec3 GetWorldUp()  {return worldUp;}
 
-    float GetYaw() { return yaw; }
+    float GetYaw()   { return yaw; }
     float GetPitch() { return pitch; }
 
-    float GetMovementSpeed() { return movementSpeed; }
+    float GetMovementSpeed()    { return movementSpeed; }
     float GetMouseSensitivity() { return mouseSensitivity; }
-    float GetZoom() { return zoom; }
+    float GetZoom()             { return zoom; }
 
     // Setteri nahui
     void SetPosition(glm::vec3 newValue) { position = newValue; }
-    void SetFront(glm::vec3 newValue) { front = newValue; }
-    void SetUp(glm::vec3 newValue) { up = newValue; }
-    void SetRight(glm::vec3 newValue) { right = newValue; }
-    void SetWorldUp(glm::vec3 newValue) { worldUp = newValue; }
+    void SetFront(glm::vec3 newValue)    { front = newValue; }
+    void SetUp(glm::vec3 newValue)       { up = newValue; }
+    void SetRight(glm::vec3 newValue)    { right = newValue; }
+    void SetWorldUp(glm::vec3 newValue)  { worldUp = newValue; }
 
-    void SetYaw(float newValue) { yaw = newValue; }
-    void SetPitch(float newValue) { pitch = newValue; }
+    void SetYaw(float newValue)   
+    { 
+        yaw = newValue; 
+        if (yaw > 360.0f || yaw < -360.0f) 
+            yaw = 0.0f; 
+            
+        UpdateCameraVectors();   
+    }
+    void SetPitch(float newValue) 
+    { 
+        pitch = newValue; 
+        if (pitch > 89.0f) 
+            pitch = 89.0f; 
+        if (pitch < -89.0f) 
+            pitch = -89.0f; 
 
-    void SetMovementSpeed(float newValue) { movementSpeed = newValue; }
+        UpdateCameraVectors(); 
+    }
+
+    void SetMovementSpeed(float newValue)    { movementSpeed = newValue; }
     void SetMouseSensitivity(float newValue) { mouseSensitivity = newValue; }
-    void SetZoom(float newValue) { zoom = newValue; }
+    void SetZoom(float newValue)             { zoom = newValue; }
 
 private:
     void UpdateCameraVectors();

@@ -32,7 +32,7 @@ bool ImGuiManager::Initialize(GLFWwindow* window)
     ImGui_ImplOpenGL3_Init(glsl_version);
     
     initialized = true;
-    Logger::Info("ImGui initialized");
+    Logger::Log(LogLevel::INFO, "ImGui initialized");
     
     return true;
 }
@@ -47,7 +47,7 @@ void ImGuiManager::Shutdown()
     ImGui::DestroyContext();
     
     initialized = false;
-    Logger::Info("ImGui shutdown completed");
+    Logger::Log(LogLevel::INFO, "ImGui shutdown completed");
 }
 
 void ImGuiManager::BeginFrame() 

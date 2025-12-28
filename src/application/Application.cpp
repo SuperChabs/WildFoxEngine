@@ -1,5 +1,6 @@
-#include <imgui.h>
 #include <glad/glad.h>
+
+#include <glm/glm.hpp>
 
 #include "application/Application.h"
 #include "utils/Logger.h"
@@ -11,13 +12,13 @@ void FramebufferSizeCallback(GLFWwindow* window, int width, int height)
 }
 
 Application::Application(int width, int height, const std::string& title)
-    : window(nullptr), input(nullptr), time(nullptr), camera(nullptr),
-      renderer(nullptr), textureManager(nullptr), sceneManager(nullptr),
-      isRunning(false), showDebugUI(true), cameraControlEnabled(true)
+        : window(nullptr), input(nullptr), time(nullptr), camera(nullptr),
+            renderer(nullptr), textureManager(nullptr), sceneManager(nullptr),
+            isRunning(false), showUI(true), cameraControlEnabled(false)
 {
     window = std::make_unique<Window>(width, height, title);
 
-    Logger::Info("Application created");
+    Logger::Log(LogLevel::INFO, "Application created");
 }
 
 Application::~Application()
@@ -29,7 +30,7 @@ bool Application::Initialize()
 {
     if (!window->Initialize())
     {
-        Logger::Error("Failed to initialize Window");
+        Logger::Log(LogLevel::ERROR, "Failed to initialize Window");
         return false;
     }
 
@@ -46,6 +47,7 @@ bool Application::Initialize()
     renderer = std::make_unique<Renderer>();
     textureManager = std::make_unique<TextureManager>();
     sceneManager = std::make_unique<SceneManager>();
+    imGuiManager = std::make_unique<ImGuiManager>();
     
     renderer->Initialize();
     
@@ -56,9 +58,9 @@ bool Application::Initialize()
     if (!imGuiManager->Initialize(window->GetGLFWWindow())) 
         return false;
 
-    SetCameraControlMode(true);    
+    SetCameraControlMode(false);    
     
-    Logger::Info("Application initialized successfully");
+    Logger::Log(LogLevel::INFO, "Application initialized successfully");
     
     OnInitialize();
     
@@ -84,25 +86,26 @@ void Application::Run()
 
 void Application::ProcessInput()
 {
-    if (input->IsKeyPressed(GLFW_KEY_ESCAPE)) 
+    if (input->IsKeyPressed(XKey::KEY_ESCAPE)) 
         Stop();
     
-    if (input->IsKeyJustPressed(GLFW_KEY_F1)) 
-        showDebugUI = !showDebugUI;
+    if (input->IsKeyJustPressed(XKey::KEY_F1)) 
+        showUI = !showUI;
     
     if (cameraControlEnabled) 
     {
-        if (input->IsKeyPressed(GLFW_KEY_W)) 
+        if (input->IsKeyPressed(XKey::KEY_W)) 
             camera->ProcessKeyboard(FORWARD, time->GetDeltaTime());
-        if (input->IsKeyPressed(GLFW_KEY_S)) 
+        if (input->IsKeyPressed(XKey::KEY_S)) 
             camera->ProcessKeyboard(BACKWARD, time->GetDeltaTime()); 
-        if (input->IsKeyPressed(GLFW_KEY_A)) 
+        if (input->IsKeyPressed(XKey::KEY_A)) 
             camera->ProcessKeyboard(LEFT, time->GetDeltaTime());
-        if (input->IsKeyPressed(GLFW_KEY_D)) 
+        if (input->IsKeyPressed(XKey::KEY_D)) 
             camera->ProcessKeyboard(RIGHT, time->GetDeltaTime());
-        if (input->IsKeyPressed(GLFW_KEY_SPACE)) 
+
+        if (input->IsKeyPressed(XKey::KEY_SPACE)) 
             camera->ProcessKeyboard(UP, time->GetDeltaTime());
-        if (input->IsKeyPressed(GLFW_KEY_LEFT_SHIFT)) 
+        if (input->IsKeyPressed(XKey::KEY_LEFT_SHIFT)) 
             camera->ProcessKeyboard(DOWN, time->GetDeltaTime());
     }
 }
@@ -121,57 +124,25 @@ void Application::Render()
     
     OnRender();
 
-    if (showDebugUI) 
+    if (showUI) 
     {
         imGuiManager->BeginFrame();
-        RenderDebugUI();
+        RenderUI();
         imGuiManager->EndFrame();
     }    
     
     renderer->EndFrame();
 }
 
-void Application::RenderDebugUI() 
+void Application::RenderUI() 
 {
-    ImGui::Begin("Debug Info");
-
-    float fps = 1.0f / time->GetDeltaTime();
-    ImGui::Text("FPS: %.1f", fps);
-    ImGui::Text("Frame time: %.3f ms", time->GetDeltaTime() * 1000.0f);
-    
-    ImGui::Separator();
-
-    if (ImGui::CollapsingHeader("Camera")) 
-    {
-        glm::vec3 pos = camera->GetPosition();
-        ImGui::Text("Position: (%.1f, %.1f, %.1f)", pos.x, pos.y, pos.z);
-        
-        float speed = camera->GetMovementSpeed();
-        if (ImGui::SliderFloat("Speed", &speed, 1.0f, 20.0f)) 
-            camera->SetMovementSpeed(speed);
-
-        float sensitivity = camera->GetMouseSensitivity();
-        if (ImGui::SliderFloat("Sensitivity", &sensitivity, 0.01f, 1.0f)) 
-            camera->SetMouseSensitivity(sensitivity);
-    }
-
-    if (ImGui::CollapsingHeader("Window")) 
-    {
-        ImGui::Text("Size: %dx%d", window->GetWidth(), window->GetHeight());
-        ImGui::Text("Aspect: %.2f", window->GetAspectRatio());
-    }
-    
-    ImGui::Separator();
-    ImGui::Text("Press F1 to toggle this window");
-    
-    ImGui::End();
 }
 
 void Application::Shutdown()
 {
     OnShutdown();
     
-    Logger::Info("Application shutdown complete");
+    Logger::Log(LogLevel::INFO, "Application shutdown complete");
 }
 
 void Application::SetCameraControlMode(bool enabled) 
@@ -181,15 +152,13 @@ void Application::SetCameraControlMode(bool enabled)
     if (enabled) 
     {
         window->SetCursorMode(GLFW_CURSOR_DISABLED);
-        Logger::Info("Camera control: ON");
+        Logger::Log(LogLevel::INFO, "Camera control: ON");
     } else 
     {
         window->SetCursorMode(GLFW_CURSOR_NORMAL);
-        Logger::Info("Camera control: OFF (UI mode)");
+        Logger::Log(LogLevel::INFO, "Camera control: OFF (UI mode)");
     }
 }
-
-
 
 void Application::MouseCallback(GLFWwindow* window, double xpos, double ypos) 
 {
@@ -211,7 +180,8 @@ void Application::MouseButtonCallback(GLFWwindow* window, int button, int action
 {
     Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
     
-    if (!app) return;
+    if (!app || !app->input || !app->camera)
+        return;
     
     if (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS) 
         app->SetCameraControlMode(!app->cameraControlEnabled);

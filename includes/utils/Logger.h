@@ -4,22 +4,34 @@
 #include <string>
 #include <iostream>
 
+enum class LogLevel
+{
+    INFO,
+    WARNING,
+    ERROR,
+    DEBUG
+};
+
 class Logger
 {
 public:
-    static void Info(const std::string& message)
+    static void Log(LogLevel level, const std::string& message)
     {
-        std::cout << "[INFO]: " << message << std::endl;
-    }
-
-    static void Warning(const std::string& message)
-    {
-        std::cout << "[WARNING]: " << message << std::endl;
-    }
-
-    static void Error(const std::string& message)
-    {
-        std::cerr << "[ERROR]: " << message << std::endl;
+        switch (level)
+        {
+            case LogLevel::INFO:
+                std::cout << "[INFO]: " << message << std::endl;
+                break;
+            case LogLevel::WARNING:
+                std::cout << "[WARNING]: " << message << std::endl;
+                break;
+            case LogLevel::ERROR:
+                std::cerr << "[ERROR]: " << message << std::endl;
+                break;
+            case LogLevel::DEBUG:
+                std::cout << "[DEBUG]: " << message << std::endl;
+                break;
+        }
     }
 
 };

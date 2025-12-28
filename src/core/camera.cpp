@@ -12,7 +12,7 @@ Camera::Camera(vec3 position, vec3 up, float yaw, float pitch)
     this->pitch = pitch;
     UpdateCameraVectors();
 
-    Logger::Info("Camera created at position (" + std::to_string(position.x) + ", " + std::to_string(position.y) + ", " + std::to_string(position.z) + ")");
+    Logger::Log(LogLevel::INFO, "Camera created at position (" + std::to_string(position.x) + ", " + std::to_string(position.y) + ", " + std::to_string(position.z) + ")");
 }
 
 Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
@@ -24,7 +24,7 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float u
     this->pitch = pitch;
     UpdateCameraVectors();
 
-    Logger::Info("Camera created at position (" + std::to_string(posX) + ", " + std::to_string(posY) + ", " + std::to_string(posZ) + ")"); 
+    Logger::Log(LogLevel::INFO, "Camera created at position (" + std::to_string(posX) + ", " + std::to_string(posY) + ", " + std::to_string(posZ) + ")"); 
 }
 
 void Camera::ProcessKeyboard(CameraMovement direction, float deltaTime)
@@ -35,14 +35,14 @@ void Camera::ProcessKeyboard(CameraMovement direction, float deltaTime)
     if (direction == FORWARD)
     {
         vec3 flatFront = vec3(front.x, 0.0f, front.z);
-        float len = sqrt(flatFront.x * flatFront.x + flatFront.z * flatFront.z);
+        float len = glm::length(flatFront.x * flatFront.x + flatFront.z * flatFront.z);
         if (len > 1e-6f)
             position += normalize(flatFront) * velocity;
     }
     if (direction == BACKWARD)
     {
         vec3 flatFront = vec3(front.x, 0.0f, front.z);
-        float len = sqrt(flatFront.x * flatFront.x + flatFront.z * flatFront.z);
+        float len = glm::length(flatFront.x * flatFront.x + flatFront.z * flatFront.z);
         if (len > 1e-6f)
             position -= normalize(flatFront) * velocity;
     }
@@ -72,6 +72,9 @@ void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constr
         if (pitch < -89.0f)
             pitch = -89.0f;
     }
+
+    if (yaw > 360.0f || yaw < -360.0f)
+        yaw = 0.0f;
 
     // Обновляем значения вектора-прямо, вектора-вправо и вектора-вверх, используя обновленные значения углов Эйлера
     UpdateCameraVectors();

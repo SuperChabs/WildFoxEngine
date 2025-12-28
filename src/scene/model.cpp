@@ -20,10 +20,10 @@ void Model::loadModel(string path)
     
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) 
     {
-        Logger::Error("ASSIMP:: " + string(import.GetErrorString()));
+        Logger::Log(LogLevel::ERROR, "ASSIMP:: " + string(import.GetErrorString()));
         return;
     }
-    Logger::Info("Model loaded: " + path + " - Meshes: " + std::to_string(scene->mNumMeshes));
+    Logger::Log(LogLevel::INFO, "Model loaded: " + path + " - Meshes: " + std::to_string(scene->mNumMeshes));
     directory = path.substr(0, path.find_last_of('/'));
 
     processNode(scene->mRootNode, scene);
@@ -94,7 +94,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     }
-    Logger::Info("Mesh processed: Vertices=" + std::to_string(vertices.size()) + 
+    Logger::Log(LogLevel::INFO, "Mesh processed: Vertices=" + std::to_string(vertices.size()) + 
                  ", Indices=" + std::to_string(indices.size()) + 
                  ", Textures=" + std::to_string(textures.size()));
     return Mesh(vertices, indices, textures);
@@ -105,7 +105,7 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
     vector<Texture> textures;
     int value = mat->GetTextureCount(type);
 
-    Logger::Info("Loading " + std::to_string(value) + " textures of type: " + typeName);
+    Logger::Log(LogLevel::INFO, "Loading " + std::to_string(value) + " textures of type: " + typeName);
 
     for(unsigned int i = 0; i < value; i++)
     {
@@ -113,8 +113,8 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
         mat->GetTexture(type, i, &str);
         bool skip = false;
 
-        Logger::Info("  Found texture from path: " + std::string(str.C_Str()));
-        Logger::Info("  Full path will be: " + directory + "/" + std::string(str.C_Str()));
+        Logger::Log(LogLevel::INFO, "  Found texture from path: " + std::string(str.C_Str()));
+        Logger::Log(LogLevel::INFO, "  Full path will be: " + directory + "/" + std::string(str.C_Str()));
         
         for(unsigned int j = 0; j < textures_loaded.size(); j++)
         {
@@ -137,7 +137,7 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
     }
 
     if (value == 0) {
-        Logger::Info("  WARNING: No " + typeName + " textures found in material!");
+        Logger::Log(LogLevel::INFO, "  WARNING: No " + typeName + " textures found in material!");
     }
 
     return textures;
@@ -176,7 +176,7 @@ unsigned int TextureFromFile(const char *path, const string &directory, bool gam
     }
     else
     {
-        Logger::Error("Texture failed to load at path: " + std::string(path));
+        Logger::Log(LogLevel::ERROR, "Texture failed to load at path: " + std::string(path));
         stbi_image_free(data);
     }
  

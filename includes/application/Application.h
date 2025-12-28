@@ -25,21 +25,19 @@ private:
     std::unique_ptr<ImGuiManager> imGuiManager;
     
     bool isRunning;
-    bool showDebugUI;
-    bool cameraControlEnabled;
+    bool showUI;
     
     void ProcessInput();
     void Update();
     void Render();
-    void RenderDebugUI();
-
-    void SetCameraControlMode(bool enabled);
     
     //static void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
     static void MouseCallback(GLFWwindow* window, double xpos, double ypos);
     static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 
 protected:
+    bool cameraControlEnabled;
+
     Application(int width, int height, const std::string& title);
 
     virtual void OnInitialize() {}
@@ -47,13 +45,17 @@ protected:
     virtual void OnRender() {}
     virtual void OnShutdown() {}
 
+    virtual void RenderUI();
+
+    void SetCameraControlMode(bool enabled);
+
 public:
     virtual ~Application();
 
-    Application(const Application&) = default;
-    Application& operator=(const Application&) = default;
-    Application(Application&&) = default;
-    Application& operator=(Application&&) = default;    
+    Application(const Application&) = delete;
+    Application& operator=(const Application&) = delete;
+    Application(Application&&) = delete;
+    Application& operator=(Application&&) = delete;    
     
     bool Initialize();
     void Run();
@@ -67,6 +69,7 @@ public:
     Renderer* GetRenderer() const { return renderer.get(); }
     SceneManager* GetSceneManager() const { return sceneManager.get(); }
     TextureManager* GetTextureManager() const { return textureManager.get(); }
+    ImGuiManager* GetImGuiManager() const { return imGuiManager.get(); }
 };
 
 #endif

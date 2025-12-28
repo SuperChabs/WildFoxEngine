@@ -20,11 +20,11 @@ unsigned int TextureManager::LoadTexture(const std::string& path, bool gamma)
     if (textureID != 0)
     {
         loadedTextures[path] = textureID;
-        Logger::Info("Texture loaded: " + path + " with ID: " + std::to_string(textureID));
+        Logger::Log(LogLevel::INFO, "Texture loaded: " + path + " with ID: " + std::to_string(textureID));
     }
     else
     {
-        Logger::Error("Failed to load texture: " + path);
+        Logger::Log(LogLevel::ERROR, "Failed to load texture: " + path);
     }
     
     return textureID;
@@ -45,11 +45,11 @@ unsigned int TextureManager::LoadCubemap(const std::vector<std::string>& faces)
     if (textureID != 0)
     {
         loadedTextures[key] = textureID;
-        Logger::Info("Cubemap loaded with ID: " + std::to_string(textureID));
+        Logger::Log(LogLevel::INFO, "Cubemap loaded with ID: " + std::to_string(textureID));
     }
     else
     {
-        Logger::Error("Failed to load cubemap.");
+        Logger::Log(LogLevel::ERROR, "Failed to load cubemap.");
     }
 
     return textureID;
@@ -64,7 +64,7 @@ unsigned int TextureManager::LoadTextureFromFile(const char* path, bool gamma)
     unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 0);
     if (!data)
     {
-        Logger::Error("Texture failed to load at path: " + std::string(path));
+        Logger::Log(LogLevel::ERROR, "Texture failed to load at path: " + std::string(path));
         return 0;
     }
 
@@ -118,7 +118,7 @@ unsigned int TextureManager::LoadCubemapFromFiles(const std::vector<std::string>
         }
         else
         {
-            Logger::Error("Cubemap texture failed to load at path: " + faces[i]);
+            Logger::Log(LogLevel::ERROR, "Cubemap texture failed to load at path: " + faces[i]);
             return 0;
         } 
     }

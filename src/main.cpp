@@ -3,14 +3,17 @@
 #include "rendering/Skybox.h"
 #include "utils/Logger.h"
 
+#include <imgui.h>
+
 #include <memory>
 
+#define DEBUG
 class MyGame : public Application 
 {
 private:
     std::unique_ptr<Shader> mainShader;
     std::unique_ptr<Shader> skyboxShader;
-    Skybox* skybox;
+    std::unique_ptr<Skybox> skybox;
     
     unsigned int diffuseMap;
     unsigned int normalMap;
@@ -22,7 +25,7 @@ private:
 protected:
     void OnInitialize() override 
     {
-        Logger::Info("Initializing game...");
+        Logger::Log(LogLevel::INFO, "Initializing game...");
         
         // Завантаження шейдерів
         mainShader = std::make_unique<Shader>("parallax");
@@ -45,7 +48,7 @@ protected:
         };
         
         unsigned int cubemapTexture = GetTextureManager()->LoadCubemap(faces);
-        skybox = new Skybox(cubemapTexture, skyboxShader.get());
+        skybox = std::make_unique<Skybox>(cubemapTexture, skyboxShader.get());
         
         // Налаштування шейдерів
         mainShader->use();
@@ -60,19 +63,19 @@ protected:
         lightPos = glm::vec3(0.5f, 1.0f, 0.3f);
         heightScale = 0.1f;
         
-        Logger::Info("Game initialized successfully");
+        Logger::Log(LogLevel::INFO, "Game initialized successfully");
     }
     
     void OnUpdate(float deltaTime) override 
     {
-        if (GetInput()->IsKeyPressed(GLFW_KEY_Q))
+        if (GetInput()->IsKeyPressed(XKey::KEY_Q))
         {
             if (heightScale > 0.0f)
                 heightScale -= 0.5f * deltaTime;
             else
                 heightScale = 0.0f;
         }
-        else if (GetInput()->IsKeyPressed(GLFW_KEY_E))
+        else if (GetInput()->IsKeyPressed(XKey::KEY_E))
         {
             if (heightScale < 1.0f)
                 heightScale += 0.5f * deltaTime;
@@ -80,7 +83,112 @@ protected:
                 heightScale = 1.0f;
         }
     }
+
+    void RenderUI() override
+    {    
+        Menu();
+        SceneSettings();
+    }
     
+    void Menu() 
+    {
+        ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_MenuBar);
+
+        if (ImGui::BeginMenuBar())
+        {
+            if (ImGui::BeginMenu("File"))
+            {
+                if (ImGui::MenuItem("Open..", "Ctrl+O")) { /* Do stuff */ }
+                if (ImGui::MenuItem("Save", "Ctrl+S"))   { /* Do stuff */ }
+                if (ImGui::MenuItem("Close", "Ctrl+W"))  { Stop(); }
+                ImGui::EndMenu();
+            }
+            ImGui::EndMenuBar();
+        }
+
+        float fps = 1.0f / GetTime()->GetDeltaTime();
+        ImGui::Text("FPS: %", fps);
+        ImGui::Text("Frame time: %.3f ms", GetTime()->GetDeltaTime() * 1000.0f);
+        
+        ImGui::Separator();
+
+        if (ImGui::CollapsingHeader("Camera")) 
+        {
+            glm::vec3 pos = GetCamera()->GetPosition();
+            ImGui::Text("Position: (%.1f, %.1f, %.1f)", pos.x, pos.y, pos.z);
+            
+            float speed = GetCamera()->GetMovementSpeed();
+            if (ImGui::SliderFloat("Speed", &speed, 1.0f, 20.0f)) 
+                GetCamera()->SetMovementSpeed(speed);
+
+            float sensitivity = GetCamera()->GetMouseSensitivity();
+            if (ImGui::SliderFloat("Sensitivity", &sensitivity, 0.01f, 1.0f)) 
+                GetCamera()->SetMouseSensitivity(sensitivity);
+
+            if (ImGui::SliderFloat3("Position", &pos[0], -10.0f, 10.0f)) 
+                GetCamera()->SetPosition(pos);
+
+            float yaw = GetCamera()->GetYaw();
+            if(ImGui::SliderFloat("Yaw", &yaw, -360.0f, 360.0f)) 
+            {
+                GetCamera()->SetYaw(yaw);
+            }
+
+            float pitch = GetCamera()->GetPitch();
+            if(ImGui::SliderFloat("Pitch", &pitch, -90.0f, 90.0f)) 
+            {
+                GetCamera()->SetPitch(pitch);
+            }
+
+            ImGui::Separator();
+
+            if (ImGui::Button("Reset Position")) 
+                GetCamera()->SetPosition(glm::vec3(0.0f, 0.0f, 3.0f));
+
+            if (ImGui::Button("Reset Orientation")) 
+            {
+                GetCamera()->SetYaw(-95.0f);
+                GetCamera()->SetPitch(0.0f);
+            }
+
+            if (ImGui::Button("Reset All")) 
+            {
+                GetCamera()->SetPosition(glm::vec3(0.0f, 0.0f, 3.0f));
+                GetCamera()->SetYaw(-95.0f);
+                GetCamera()->SetPitch(0.0f);
+            }
+
+            if (ImGui::Button(cameraControlEnabled ? "Disable Camera Control" : "Enable Camera Control")) 
+                SetCameraControlMode(!cameraControlEnabled);
+        }
+
+        if (ImGui::CollapsingHeader("Window")) 
+        {
+            ImGui::Text("Size: %dx%d", GetWindow()->GetWidth(), GetWindow()->GetHeight());
+            ImGui::Text("Aspect: %.2f", GetWindow()->GetAspectRatio());
+        }
+        
+        ImGui::Separator();
+        ImGui::Text("Press F1 to toggle this window");
+        
+        ImGui::End();
+    }
+
+    void SceneSettings() 
+    {
+        ImGui::Begin("Scene Settings");
+
+        ImGui::Text("Light Position");
+        if (ImGui::SliderFloat3("Light Pos", &lightPos[0], -5.0f, 5.0f))
+            mainShader->setVec3("lightPos", lightPos);
+
+        ImGui::Text("Height Scale");
+        if (ImGui::SliderFloat("Height Scale", &heightScale, 0.0f, 1.0f))
+            mainShader->setFloat("height_scale", heightScale);
+
+        ImGui::End();
+    }
+
     void OnRender() override 
     {
         int width = GetWindow()->GetWidth();
@@ -120,15 +228,17 @@ protected:
     
     void OnShutdown() override 
     {
-        Logger::Info("Shutting down game...");
+        Logger::Log(LogLevel::INFO, "Shutting down game...");
         
-        delete skybox;
+        mainShader.reset();
+        skyboxShader.reset();
+        skybox.reset();
         
-        Logger::Info("Game shutdown complete!");
+        Logger::Log(LogLevel::INFO, "Game shutdown complete!");
     }
 
 public:
-    MyGame() : Application(1024, 720, "Parallax Mapping Demo") {}
+    MyGame() : Application(1020, 800, "Game Demo") {}
 };
 
 int main() 
@@ -137,7 +247,7 @@ int main()
     
     if (!game.Initialize()) 
     {
-        Logger::Error("Failed to initialize game");
+        Logger::Log(LogLevel::ERROR, "Failed to initialize game");
         return -1;
     }
     
