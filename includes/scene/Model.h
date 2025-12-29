@@ -9,28 +9,27 @@
 
 #include "scene/Mesh.h"
 #include "core/Shader.h"
+#include "rendering/TextureManager.h"
 
 #include <vector>
-
-using namespace std;
+#include <memory>
 
 class Model 
 {
+private:
+    std::vector<Mesh> meshes;
+    std::vector<Texture> textures_loaded;
+    std::string directory;
+
 public:
-    //
-    vector<Mesh>    meshes;
-    vector<Texture> textures_loaded;
-    string          directory;
-
-
     Model(const char* path) {loadModel(path);}
     void Draw(Shader &shader);
 
 private:
-    void loadModel(string path);
+    void loadModel(std::string path);
     void processNode(aiNode* node, const aiScene* scene);
     Mesh processMesh(aiMesh* mesh, const aiScene* scene);
-    vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, string typeName);
+    std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
 };
 
 #endif

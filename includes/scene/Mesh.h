@@ -7,54 +7,22 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "core/Shader.h"
-
-using namespace glm;
-using namespace std;
-
-struct Vertex
-{
-    vec3 Position;
-    vec3 Normal;
-    vec2 TexCoords;
-    
-    vec3 Tangent;
-    vec3 Bitangent;
-};
-
-struct Texture
-{
-    unsigned int id;
-    string type;
-    string path;
-};
+#include "rendering/Material.h"
+#include "rendering/GPUMesh.h"
 
 class Mesh 
 {
-public:
-    // Mesh-данні
-    vector<Vertex>       vertices;
-    vector<unsigned int> indices;
-    vector<Texture>      textures;
-
-
-    // Ренденг данні
-    unsigned int VAO, VBO, EBO;
-
-    Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures);
-    void Draw(Shader shader);
-
-    vector<Vertex> GetVertices()      {return vertices;}
-    vector<unsigned int> GetIndices() {return indices; }
-    vector<Texture> GetTexture()      {return textures;}
-    
-    void SetVerices(vector<Vertex> newVertices)      {vertices = newVertices;}
-    void SetIndices(vector<unsigned int> newIndices) {indices  = newIndices;}
-    void SetTexture(vector<Texture> newTextures)     {textures = newTextures;}
-
 private:
-    void setupMesh();
+    std::unique_ptr<GPUMesh> gpuMesh;
+    std::unique_ptr<Material> material;
+
+public:
+    Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
+
+    void Draw(Shader& shader);
 };
 
 #endif
