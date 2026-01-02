@@ -4,20 +4,19 @@
 
 SceneObject* SceneManager::AddObject(const std::string& name, std::unique_ptr<Model> model)
 {
-    objects.push_back(std::make_unique<SceneObject>(name, model));
-    return objects.back().get();
+    objects.insert(ObjectID, std::make_unique<SceneObject>(name, std::move(model)));
+    return objects.
 }
 
 SceneObject* SceneManager::AddObject(const std::string& name, std::unique_ptr<Model> model, const Transform& transform)
 {
-    objects.push_back(std::make_unique<SceneObject>(name, model, transform));
+    objects.push_back(std::make_unique<SceneObject>(name, std::move(model), transform));
     return objects.back().get();
 }
 
 void SceneManager::RemoveObject(SceneObject* object)
 {
-    it = std::find(objects.begin(), objects.end(), object);
-    objects.erase(it);
+    return;
 }
 
 void SceneManager::Clear()

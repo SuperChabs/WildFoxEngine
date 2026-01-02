@@ -63,7 +63,7 @@ SceneManager* PrimitivesFactory::CreatePrimitiveInScene(PrimitiveType type, Scen
         return sceneManager;
 
     std::unique_ptr<Model> model = std::make_unique<Model>(primitiveMesh, GetPrimitiveName(type));
-    sceneManager->AddObject(GetPrimitiveName(type), model.release());
+    sceneManager->AddObject(GetPrimitiveName(type), std::move(model));
 
     return sceneManager;
 }

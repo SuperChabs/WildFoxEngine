@@ -32,7 +32,7 @@ private:
     glm::vec3 lightPos;
     float heightScale;
 
-    std::unique_ptr<SceneObject> gameObject;
+    SceneObject* gameObject = nullptr;
     bool gameAutoRotate = false;
     float gameRotateSpeed = 50.0f; 
 
@@ -140,7 +140,7 @@ protected:
                     if (gameMesh)
                     {
                         std::unique_ptr<Model> gameModel = std::make_unique<Model>(gameMesh, "Cube");
-                        gameObject = GetSceneManager()->AddObject("Cube", gameModel);
+                        gameObject = GetSceneManager()->AddObject("Cube", std::move(gameModel));
 
                         objectParams[gameObject->ID] = ObjectParams();
 

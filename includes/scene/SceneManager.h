@@ -5,35 +5,32 @@
 #include "scene/Transform.h"
 
 #include <memory>
-#include <vector>
+#include <map>
 
 struct SceneObject 
 {
     std::string name;
-
-    Model* model;
+    std::unique_ptr<Model> model;
     Transform transform;
-
-    uint64_t ID;
-    bool isActive;
-
-    static inline uint64_t counter = 0;
+    bool isActive;  
     
-    SceneObject(const std::string& objName, Model* mdl) 
-        : name(objName), model(mdl), isActive(true), ID(counter++) {}
+    SceneObject(const std::string& objName, std::unique_ptr<Model> mdl) 
+        : name(objName), model(std::move(mdl)), isActive(true) {}
         
-    SceneObject(const std::string& objName, Model* mdl, const Transform& trans)  
-        : name(objName), model(mdl), transform(trans), isActive(true), ID(counter++) {}
+    SceneObject(const std::string& objName, std::unique_ptr<Model> mdl, const Transform& trans)  
+        : name(objName), model(std::move(mdl)), transform(trans), isActive(true) {}
 };
 
 class SceneManager 
 {
 private:
-    std::vector<std::unique_ptr<SceneObject>> objects;
-    std::vector<std::unique_ptr<SceneObject>>::iterator it;
+    static inline uint64_t counter = 0;
+    uint64_t objectID;
+
+    std::map<uint64_t, SceneObject*> objects;
     
 public:
-    SceneManager() = default;
+    SceneManager() : objectID(counter++) {};
     ~SceneManager() = default;
     
     SceneObject* AddObject(const std::string& name, std::unique_ptr<Model> model);
@@ -45,7 +42,7 @@ public:
     void RenderAll(Shader& shader);
     void Update(float deltaTime);
     
-    std::vector<std::unique_ptr<SceneObject>>& GetObjects() { return objects; }
+    std::map<counter, SceneObject*>& GetObjects() { return objects; }
     size_t GetObjectCount() const { return objects.size(); }
 };
 
