@@ -4,19 +4,40 @@
 
 SceneObject* SceneManager::AddObject(const std::string& name, std::unique_ptr<Model> model)
 {
-    objects.insert(ObjectID, std::make_unique<SceneObject>(name, std::move(model)));
-    return objects.
+    auto obj = std::make_unique<SceneObject>(name, std::move(model));
+    SceneObject* ptr = obj.get();
+    
+    objects[ptr->objectID] = std::move(obj);
+    
+    return ptr;
 }
 
 SceneObject* SceneManager::AddObject(const std::string& name, std::unique_ptr<Model> model, const Transform& transform)
 {
-    objects.push_back(std::make_unique<SceneObject>(name, std::move(model), transform));
-    return objects.back().get();
+    auto obj = std::make_unique<SceneObject>(name, std::move(model), transform);
+    SceneObject* ptr = obj.get();
+    
+    objects[ptr->objectID] = std::move(obj);
+    
+    return ptr;
 }
 
 void SceneManager::RemoveObject(SceneObject* object)
 {
-    return;
+    if (!object)
+        return;
+        
+    auto it = objects.find(object->objectID);
+    
+    if (it != objects.end()) 
+        objects.erase(it);
+}
+
+void SceneManager::RemoveObject(uint64_t id) 
+{
+    auto it = objects.find(id);
+    if (it != objects.end())
+        objects.erase(it);
 }
 
 void SceneManager::Clear()
@@ -26,7 +47,7 @@ void SceneManager::Clear()
 
 void SceneManager::RenderAll(Shader& shader)
 {
-    for (auto& object : objects)
+    for (auto& [id, object] : objects)
     {
         if (!object->isActive)
             continue;
@@ -38,7 +59,7 @@ void SceneManager::RenderAll(Shader& shader)
 
 void SceneManager::Update(float deltaTime)
 {
-    for (auto& object : objects)
+    for (auto& [id, object] : objects)
         if (!object->isActive)
             continue;
 }
