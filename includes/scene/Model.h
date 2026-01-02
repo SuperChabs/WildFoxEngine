@@ -36,6 +36,9 @@ public:
 
     void Draw(Shader &shader);
 
+    void SetColor(const glm::vec3& color);
+    void SetTextures(const std::vector<Texture>& textures);
+
 private:
     void loadModel(std::string path);
     void processNode(aiNode* node, const aiScene* scene);

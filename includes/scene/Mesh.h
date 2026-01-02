@@ -24,6 +24,9 @@ public:
     Mesh(GPUMesh* gpuMesh, Material* material);
 
     void Draw(Shader& shader);
+
+    void SetColor(const glm::vec3& color) { material->SetColor(color); }
+    void SetTextures(const std::vector<Texture>& textures) { material->SetTextures(textures); }
 };
 
 #endif

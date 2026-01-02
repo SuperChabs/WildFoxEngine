@@ -7,12 +7,24 @@
 #include <memory>
 #include <map>
 
+struct ObjectParams 
+{
+    bool autoRotate = false;
+    float rotateSpeed = 50.0f; 
+
+    glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
+    bool useColor = true;
+    std::string texturePath = "";
+};
+
 struct SceneObject 
 {
     std::string name;
     std::unique_ptr<Model> model;
     Transform transform;
     bool isActive; 
+
+    ObjectParams params;
     
     static inline uint64_t counter = 1;
     uint64_t objectID;

@@ -13,6 +13,19 @@ void Model::Draw(Shader &shader)
     for (unsigned int i = 0; i < meshes.size(); i++)
         meshes[i].Draw(shader);
 }
+
+void Model::SetColor(const glm::vec3& color)
+{
+    for (auto& mesh : meshes)
+        mesh.SetColor(color);
+}
+
+void Model::SetTextures(const std::vector<Texture>& textures)
+{
+    for (auto& mesh : meshes)
+        mesh.SetTextures(textures);
+}
+
 void Model::loadModel(std::string path)
 {
     Assimp::Importer import;

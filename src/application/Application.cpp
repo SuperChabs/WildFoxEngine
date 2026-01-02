@@ -11,9 +11,7 @@ void FramebufferSizeCallback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
     Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
     if (app && app->GetWindow())
-    {
         app->GetWindow()->SetSize(width, height);
-    }
 }
 
 Application::Application(int width, int height, const std::string& title)
@@ -125,18 +123,22 @@ void Application::Update()
 
 void Application::Render()
 {
-    renderer->BeginFrame();
-    
-    OnRender();
+    OnRender();  // Тут рендериться 3D сцена в framebuffer
 
     if (showUI) 
     {
+        // Очищаємо екран перед ImGui
+        int width = window->GetWidth();
+        int height = window->GetHeight();
+        glViewport(0, 0, width, height);
+        glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDisable(GL_DEPTH_TEST);
+        
         imGuiManager->BeginFrame();
         RenderUI();
         imGuiManager->EndFrame();
-    }    
-    
-    renderer->EndFrame();
+    } 
 }
 
 void Application::RenderUI() 
