@@ -30,13 +30,14 @@ class SceneManager
 {
 private:
     std::vector<std::unique_ptr<SceneObject>> objects;
+    std::vector<std::unique_ptr<SceneObject>>::iterator it;
     
 public:
     SceneManager() = default;
     ~SceneManager() = default;
     
-    SceneObject* AddObject(const std::string& name, Model* model);
-    SceneObject* AddObject(const std::string& name, Model* model, const Transform& transform);
+    SceneObject* AddObject(const std::string& name, std::unique_ptr<Model> model);
+    SceneObject* AddObject(const std::string& name, std::unique_ptr<Model> model, const Transform& transform);
     
     void RemoveObject(SceneObject* object);
     void Clear();

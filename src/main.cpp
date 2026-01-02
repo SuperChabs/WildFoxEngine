@@ -32,9 +32,9 @@ private:
     glm::vec3 lightPos;
     float heightScale;
 
-    SceneObject* cubeObject = nullptr;
-    bool cubeAutoRotate = false;
-    float cubeRotateSpeed = 50.0f; 
+    std::unique_ptr<SceneObject> gameObject;
+    bool gameAutoRotate = false;
+    float gameRotateSpeed = 50.0f; 
 
     std::unordered_map<uint64_t, ObjectParams> objectParams;
 
@@ -99,7 +99,7 @@ protected:
                 heightScale = 1.0f;
         }
 
-        if (GetSceneManager()->GetObjectCount() > 0 && cubeObject)
+        if (GetSceneManager()->GetObjectCount() > 0 && gameObject)
         {
             for (const auto& obj : GetSceneManager()->GetObjects()) 
             {
@@ -136,15 +136,15 @@ protected:
             {
                 if (ImGui::MenuItem("Cube")) 
                 {
-                    Mesh* cubeMesh = PrimitivesFactory::CreatePrimitive(PrimitiveType::CUBE);
-                    if (cubeMesh)
+                    Mesh* gameMesh = PrimitivesFactory::CreatePrimitive(PrimitiveType::CUBE);
+                    if (gameMesh)
                     {
-                        std::unique_ptr<Model> cubeModel = std::make_unique<Model>(cubeMesh, "Cube");
-                        cubeObject = GetSceneManager()->AddObject("Cube", cubeModel.release());
+                        std::unique_ptr<Model> gameModel = std::make_unique<Model>(gameMesh, "Cube");
+                        gameObject = GetSceneManager()->AddObject("Cube", gameModel);
 
-                        objectParams[cubeObject->ID] = ObjectParams();
+                        objectParams[gameObject->ID] = ObjectParams();
 
-                        Logger::Log(LogLevel::INFO, "Cube created and added to scene with ID: " + std::to_string(cubeObject->ID));
+                        Logger::Log(LogLevel::INFO, "Cube created and added to scene with ID: " + std::to_string(gameObject->ID));
                     }
                 }
                 
@@ -239,12 +239,11 @@ protected:
         {
             for (const auto& obj : GetSceneManager()->GetObjects()) 
             {
-                char headerLabel[64];
-                snprintf(headerLabel, sizeof(headerLabel), "%s (ID: %llu)", obj->name.c_str(), obj->ID);
+                std::string headerLabel = obj->name + " (ID: " + std::to_string(obj->ID) + " )";
                 
                 ImGui::PushID(static_cast<int>(obj->ID));
                 
-                if (ImGui::CollapsingHeader(headerLabel)) 
+                if (ImGui::CollapsingHeader(headerLabel.c_str())) 
                 {
                     glm::vec3 pos = obj->transform.GetPosition();
                     if (ImGui::SliderFloat3("Position", &pos[0], -10.0f, 10.0f))
@@ -267,16 +266,16 @@ protected:
                     
                     ImGui::Separator();
                     
-                    // if (ImGui::Button("Delete Object"))
-                    // {
-                    //     GetSceneManager()->RemoveObject(obj.get());
-                    //     objectParams.erase(obj->ID);
-                    //     ImGui::PopID();
+                    if (ImGui::Button("Delete Object"))
+                    {
+                        GetSceneManager()->RemoveObject(obj.get());
+                        objectParams.erase(obj->ID);
+                        ImGui::PopID();
                         
-                    //     Logger::Log(LogLevel::INFO, "Object with ID " + std::to_string(obj->ID) + " deleted from scene");
+                        Logger::Log(LogLevel::INFO, "Object with ID " + std::to_string(obj->ID) + " deleted from scene");
 
-                    //     break; 
-                    // }
+                        break; 
+                    }
                 }
                 
                 ImGui::PopID();

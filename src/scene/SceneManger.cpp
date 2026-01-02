@@ -1,12 +1,14 @@
 #include "scene/SceneManager.h"
 
-SceneObject* SceneManager::AddObject(const std::string& name, Model* model)
+#include <algorithm>
+
+SceneObject* SceneManager::AddObject(const std::string& name, std::unique_ptr<Model> model)
 {
     objects.push_back(std::make_unique<SceneObject>(name, model));
     return objects.back().get();
 }
 
-SceneObject* SceneManager::AddObject(const std::string& name, Model* model, const Transform& transform)
+SceneObject* SceneManager::AddObject(const std::string& name, std::unique_ptr<Model> model, const Transform& transform)
 {
     objects.push_back(std::make_unique<SceneObject>(name, model, transform));
     return objects.back().get();
@@ -14,13 +16,8 @@ SceneObject* SceneManager::AddObject(const std::string& name, Model* model, cons
 
 void SceneManager::RemoveObject(SceneObject* object)
 {
-    objects.erase(
-        std::remove_if(objects.begin(), objects.end(),
-            [object](const std::unique_ptr<SceneObject>& obj) {
-                return obj.get() == object;
-            }),
-        objects.end()
-    );
+    it = std::find(objects.begin(), objects.end(), object);
+    objects.erase(it);
 }
 
 void SceneManager::Clear()
@@ -42,13 +39,7 @@ void SceneManager::RenderAll(Shader& shader)
 
 void SceneManager::Update(float deltaTime)
 {
-    // Тут можна додати логіку оновлення для об'єктів сцени
-    // Наприклад: фізика, анімації, скрипти
     for (auto& object : objects)
-    {
         if (!object->isActive)
             continue;
-        
-        // Оновлення об'єктів (якщо потрібно)
-    }
 }
