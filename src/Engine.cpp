@@ -11,6 +11,8 @@ Engine::Engine(int w, int h, const std::string& title)
 
 void Engine::OnInitialize()
 {
+    //Logger::Log(LogLevel::INFO, "test", true);
+
     Logger::Log(LogLevel::INFO, "Initializing game...");
     
     // Завантаження шейдерів

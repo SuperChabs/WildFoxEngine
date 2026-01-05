@@ -150,6 +150,8 @@ void Application::RenderUI()
 void Application::Shutdown()
 {
     OnShutdown();
+
+    Logger::RemoveSink(&console);
     
     Logger::Log(LogLevel::INFO, "Application shutdown complete");
 }

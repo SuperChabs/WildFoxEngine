@@ -141,6 +141,8 @@ void EditorLayout::RenderSceneHierarchy(SceneManager* sceneManager)
     size_t objCount = sceneManager->GetObjectCount();
     ImGui::Text("Objects: %zu", objCount);
     ImGui::Separator();
+
+    uint64_t objectToDelete = 0;
     
     try
     {
@@ -177,19 +179,24 @@ void EditorLayout::RenderSceneHierarchy(SceneManager* sceneManager)
                 
                 if (ImGui::MenuItem("Delete"))
                 {
+                    objectToDelete = obj->objectID;
                     Logger::Log(LogLevel::INFO, "Deleting: " + obj->name);
-                    sceneManager->RemoveObject(id);
-                    if (selectedObject == obj)
-                        selectedObject = nullptr;
                 }
                 
                 ImGui::EndPopup();
             }
         }
+
     }
     catch (const std::exception& e)
     {
         Logger::Log(LogLevel::ERROR, "Exception in Hierarchy: " + std::string(e.what()));
+    }
+
+    if (objectToDelete != 0)
+    {
+        sceneManager->RemoveObject(objectToDelete);
+        Logger::Log(LogLevel::INFO, "Object was successful deleted with ID: " + std::to_string(objectToDelete));
     }
     
     if (objCount == 0)
