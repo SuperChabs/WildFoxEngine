@@ -51,16 +51,27 @@ add_library(magic_enum INTERFACE)
 target_include_directories(magic_enum INTERFACE ${CMAKE_SOURCE_DIR}/vendor/magic_enum/include)
 
 # ========== XEngine =============
-include_directories(${CMAKE_SOURCE_DIR}/includes)
 include_directories(${IMGUI_INCLUDE_DIRS})
 
-file(GLOB_RECURSE SOURCES "src/*.cpp")
+file(GLOB_RECURSE XENGINE_SOURCES 
+    "src/*.cpp"
+    "src/*.c"
+)
 
-# Ensure top-level main.cpp (project entry) is included
-# list(APPEND SOURCES ${CMAKE_SOURCE_DIR}/main.cpp)
+file(GLOB_RECURSE XENGINE_HEADERS 
+    "src/*.h"
+    "src/*.hpp"
+)
 
-add_executable(${PROJECT_NAME}  ${SOURCES}
-                                ${IMGUI_SOURCES})
+
+add_executable(${PROJECT_NAME} 
+    ${XENGINE_SOURCES}
+    ${XENGINE_HEADERS}
+)
+
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_SOURCE_DIR}/src   
+)
 
 target_link_libraries(${PROJECT_NAME}
     OpenGL::GL
