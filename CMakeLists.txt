@@ -1,10 +1,17 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.30)
 
 project(XEngine LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_MODULE_STD OFF)
+set(CMAKE_CXX_SCAN_FOR_MODULES ON)
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    add_compile_options(-fmodules-ts)
+endif()
 
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
@@ -21,53 +28,84 @@ target_include_directories(stb_image PUBLIC vendor/stb_image)
 
 # ========== ImGui ==========
 set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/vendor/imgui)
-
 set(IMGUI_SOURCES
     ${IMGUI_DIR}/imgui.cpp
     ${IMGUI_DIR}/imgui_draw.cpp
     ${IMGUI_DIR}/imgui_tables.cpp
     ${IMGUI_DIR}/imgui_widgets.cpp
     ${IMGUI_DIR}/imgui_demo.cpp
-    # Backend GLFW + OpenGL3
     ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
     ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
 )
-
 set(IMGUI_INCLUDE_DIRS
     ${IMGUI_DIR}
     ${IMGUI_DIR}/backends
 )
-
-
 add_library(imgui STATIC ${IMGUI_SOURCES})
 target_include_directories(imgui PUBLIC ${IMGUI_INCLUDE_DIRS})
-
 target_link_libraries(imgui PUBLIC glad)
 target_compile_definitions(imgui PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLAD)
 
 # ========== Magic_enum =============
-# magic_enum is header-only; provide an INTERFACE target exposing the include dir
 add_library(magic_enum INTERFACE)
 target_include_directories(magic_enum INTERFACE ${CMAKE_SOURCE_DIR}/vendor/magic_enum/include)
 
 # ========== XEngine =============
 include_directories(${IMGUI_INCLUDE_DIRS})
 
-file(GLOB_RECURSE XENGINE_SOURCES 
+file(GLOB_RECURSE XENGINE_ALL_SOURCES 
     "src/*.cpp"
     "src/*.c"
 )
 
-file(GLOB_RECURSE XENGINE_HEADERS 
+list(FILTER XENGINE_ALL_SOURCES EXCLUDE REGEX ".*/old/.*")
+
+file(GLOB_RECURSE XENGINE_ALL_HEADERS 
     "src/*.h"
     "src/*.hpp"
 )
+list(FILTER XENGINE_ALL_HEADERS EXCLUDE REGEX ".*/old/.*")
 
+file(GLOB_RECURSE XENGINE_MODULES 
+    "src/*.cppm"
+)
+list(FILTER XENGINE_MODULES EXCLUDE REGEX ".*/old/.*")
 
+set(XENGINE_SOURCES ${XENGINE_ALL_SOURCES})
+if(XENGINE_MODULES)
+    list(FILTER XENGINE_SOURCES EXCLUDE REGEX ".*\\.cppm$")
+endif()
+
+if(NOT EXISTS ${CMAKE_SOURCE_DIR}/src/main.cpp)
+    message(FATAL_ERROR "src/main.cpp not found!")
+endif()
+
+message(STATUS "=== Знайдені файли ===")
+message(STATUS "C++ файли: ${XENGINE_SOURCES}")
+message(STATUS "Заголовки: ${XENGINE_ALL_HEADERS}")
+
+# Створити executable з main.cpp
 add_executable(${PROJECT_NAME} 
     ${XENGINE_SOURCES}
-    ${XENGINE_HEADERS}
+    ${XENGINE_ALL_HEADERS}
 )
+
+# Додати модулі
+if(XENGINE_MODULES)
+    message(STATUS "=== Модулі C++ ===")
+    foreach(MODULE ${XENGINE_MODULES})
+        message(STATUS "  - ${MODULE}")
+    endforeach()
+    
+    target_sources(${PROJECT_NAME}
+        PUBLIC FILE_SET CXX_MODULES FILES
+        ${XENGINE_MODULES}
+    )
+    
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        CXX_MODULE_STD ""
+    )
+endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/src   
@@ -86,8 +124,8 @@ target_link_libraries(${PROJECT_NAME}
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-            ${CMAKE_SOURCE_DIR}/assets
-            ${CMAKE_BINARY_DIR}/assets
+    ${CMAKE_SOURCE_DIR}/assets
+    ${CMAKE_BINARY_DIR}/assets
     COMMENT "Copying assets to build directory"
 )
 
@@ -95,7 +133,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
 )
 
-add_compile_definitions(
+target_compile_definitions(${PROJECT_NAME} PRIVATE
     ASSETS_PATH="${CMAKE_BINARY_DIR}/assets"
     PROJECT_ROOT="${CMAKE_SOURCE_DIR}"
 )

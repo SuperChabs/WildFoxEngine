@@ -1,5 +1,5 @@
-#include "Engine.h"
-#include "utils/Logger.h"
+import XEngine.Engine;
+import XEngine.Utils.Logger;
 
 int main() 
 {
