@@ -16,7 +16,8 @@ import XEngine.Core.ImGuiManager;
 import XEngine.Rendering.Renderer;
 import XEngine.Rendering.TextureManager;
 import XEngine.Scene.SceneManager;
-import XEngine.Utils.Logger;
+import XEngine.Core.Logger;
+import XEngine.Core.Logging.ConsoleLogger;
 
 export class Application 
 {

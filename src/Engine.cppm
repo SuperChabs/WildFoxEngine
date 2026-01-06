@@ -25,7 +25,7 @@ import XEngine.Scene.SceneManager;
 import XEngine.Scene.Mesh;
 import XEngine.Scene.Model;
 import XEngine.UI.EditorLayout;
-import XEngine.Utils.Logger;
+import XEngine.Core.Logger;
 
 export class Engine : public Application 
 {
@@ -52,9 +52,8 @@ private:
 protected:
     void OnInitialize() override
     {
-        //Logger::Log(LogLevel::INFO, "test", true);
 
-        Logger::Log(LogLevel::INFO, "Initializing game...");
+        Logger::Log(LogLevel::INFO, "Initializing XEngine...");
         
         // Завантаження шейдерів
         mainShader = std::make_unique<Shader>("basic");

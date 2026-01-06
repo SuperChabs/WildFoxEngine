@@ -1,5 +1,5 @@
 import XEngine.Engine;
-import XEngine.Utils.Logger;
+import XEngine.Core.Logger;
 
 int main() 
 {

@@ -8,7 +8,7 @@ module;
 
 export module XEngine.Core.ImGuiManager;
 
-import XEngine.Utils.Logger;
+import XEngine.Core.Logger;
 
 export class ImGuiManager 
 {

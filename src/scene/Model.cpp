@@ -19,7 +19,7 @@ module XEngine.Scene.Model;
 import XEngine.Scene.Mesh;
 import XEngine.Rendering.MeshData;
 import XEngine.Core.Shader;
-// import XEngine.Utils.Logger;  
+// import XEngine.Core.Logger;  
 
 void Model::Draw(Shader &shader) {
     for (auto& mesh : meshes)

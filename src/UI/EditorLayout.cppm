@@ -17,7 +17,7 @@ import XEngine.Scene.SceneManager;
 import XEngine.Core.Camera;
 import XEngine.Rendering.Renderer;
 import XEngine.Rendering.Framebuffer;
-import XEngine.Utils.Logger;
+import XEngine.Core.Logger;
 
 export class EditorLayout
 {

@@ -6,7 +6,7 @@ module;
 
 export module XEngine.Core.Window;
 
-import XEngine.Utils.Logger;
+import XEngine.Core.Logger;
 
 export class Window 
 {

@@ -8,7 +8,7 @@ module;
 
 export module XEngine.Rendering.TextureManager;
 
-import XEngine.Utils.Logger;
+import XEngine.Core.Logger;
 
 export class TextureManager
 {

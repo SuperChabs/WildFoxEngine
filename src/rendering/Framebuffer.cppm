@@ -5,7 +5,7 @@ module;
 
 export module XEngine.Rendering.Framebuffer;
 
-import XEngine.Utils.Logger; 
+import XEngine.Core.Logger; 
 
 export class Framebuffer
 {

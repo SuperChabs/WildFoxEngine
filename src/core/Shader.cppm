@@ -11,7 +11,7 @@ module;
 
 export module XEngine.Core.Shader;
 
-import XEngine.Utils.Logger;
+import XEngine.Core.Logger;
 
 export class Shader
 {

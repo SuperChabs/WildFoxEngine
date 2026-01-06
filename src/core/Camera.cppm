@@ -9,7 +9,7 @@ module;
 
 export module XEngine.Core.Camera;
 
-import XEngine.Utils.Logger;
+import XEngine.Core.Logger;
 
 using namespace glm;
 

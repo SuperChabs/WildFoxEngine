@@ -14,7 +14,7 @@ import XEngine.Rendering.Primitive.PrimitiveGenerator;
 import XEngine.Scene.Mesh;
 import XEngine.Scene.SceneManager;
 import XEngine.Scene.Model;
-import XEngine.Utils.Logger;
+import XEngine.Core.Logger;
 
 export
 enum class PrimitiveType
