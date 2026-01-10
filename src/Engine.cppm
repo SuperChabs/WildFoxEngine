@@ -12,7 +12,7 @@ module;
 #include <memory>
 #include <unordered_map>
 #include <string>
-#include <functional>
+#include <variant>
 
 export module XEngine.Engine;
 
@@ -69,7 +69,7 @@ protected:
         skybox = std::make_unique<Skybox>(cubemapTexture, skyboxShader.get());
         
         CommandManager::RegisterCommand("onCreateCube",
-        [this]() 
+        [this](const CommandArgs&) 
         {
             Mesh* gameMesh = PrimitivesFactory::CreatePrimitive(PrimitiveType::CUBE);
             if (gameMesh)
@@ -85,10 +85,29 @@ protected:
         });
 
         CommandManager::RegisterCommand("onExit",
-        [this]() 
+        [this](const CommandArgs&) 
         {
             Logger::Log(LogLevel::INFO, "Exit requested from menu");
             Stop();
+        });
+
+        CommandManager::RegisterCommand("onChangeMeshColor", 
+        [this](const CommandArgs& args)
+        {
+            if (args.size() != 1)
+                return;
+
+            const auto& color = std::get<glm::vec3>(args[0]);
+
+            SceneObject* selected = editorLayout->GetSelectedObject();
+            auto it = selected->model->GetMeshCount();
+
+            if (selected)
+                for (size_t i = 0; i < it; i++)
+                {
+                    Mesh* mesh = selected->model->GetMesh(i);
+                    mesh->SetColor(glm::vec3(color));
+                }
         });
 
         Logger::Log(LogLevel::INFO, "Creating EditorLayout...");

@@ -71,7 +71,7 @@ public:
             {
                 if (ImGui::MenuItem("Exit"))
                     if(CommandManager::HasCommand("onExit")) 
-                        CommandManager::ExecuteCommand("onExit");
+                        CommandManager::ExecuteCommand("onExit", {});
                     
                 ImGui::EndMenu();
             }
@@ -80,7 +80,7 @@ public:
             {
                 if (ImGui::MenuItem("Cube"))
                     if(CommandManager::HasCommand("onCreateCube")) 
-                        CommandManager::ExecuteCommand("onCreateCube");
+                        CommandManager::ExecuteCommand("onCreateCube", {});
                 
                 if (ImGui::MenuItem("Sphere"))
                     Logger::Log(LogLevel::INFO, "Sphere not implemented");
@@ -345,6 +345,7 @@ private:
                     selectedObject->transform.SetPosition(pos);
                 
                 ImGui::Spacing();
+                ImGui::Separator();
                 
                 glm::vec3 rot = selectedObject->transform.GetRotation();
                 ImGui::Text("Rotation");
@@ -352,6 +353,7 @@ private:
                     selectedObject->transform.SetRotation(rot);
                 
                 ImGui::Spacing();
+                ImGui::Separator();
                 
                 glm::vec3 scale = selectedObject->transform.GetScale();
                 float uniformScale = scale.x;
@@ -359,6 +361,12 @@ private:
                 if (ImGui::DragFloat("##Scale", &uniformScale, 0.01f, 0.01f, 10.0f))
                     selectedObject->transform.SetScale(uniformScale);
             }
+
+            ImGui::Separator();
+
+            glm::vec3 color;
+            if (ImGui::ColorEdit3("SetColor", &color[0]))
+                CommandManager::ExecuteCommand("onChangeMeshColor", {color});
 
             ImGui::Separator();
 
