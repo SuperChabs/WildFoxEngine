@@ -23,6 +23,8 @@ import XEngine.Rendering.Renderer;
 import XEngine.Rendering.TextureManager;
 import XEngine.Rendering.MaterialManager;
 
+import XEngine.Resource.Shader.ShaderManager;
+
 export class Application 
 {
 private:
@@ -35,6 +37,7 @@ private:
     std::unique_ptr<ImGuiManager> imGuiManager;
     std::unique_ptr<MaterialManager> materialManager;
     std::unique_ptr<ECSWorld> ecsWorld;
+    std::unique_ptr<ShaderManager> shaderManager;
     
     ConsoleLogger console;
 
@@ -191,12 +194,13 @@ public:
         
         input = std::make_unique<Input>(window->GetGLFWWindow());
         time = std::make_unique<Time>();
-        camera = std::make_unique<Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
+        camera = std::make_unique<Camera>(glm::vec3(0.0f, 0.0f, 0.0f));
         renderer = std::make_unique<Renderer>();
         textureManager = std::make_unique<TextureManager>();
         imGuiManager = std::make_unique<ImGuiManager>();
         materialManager = std::make_unique<MaterialManager>(textureManager.get());
         ecsWorld = std::make_unique<ECSWorld>();
+        shaderManager = std::make_unique<ShaderManager>();
         
         renderer->Initialize();
         
@@ -264,4 +268,5 @@ public:
     ImGuiManager* GetImGuiManager() const { return imGuiManager.get(); }
     MaterialManager* GetMaterialManager() const { return materialManager.get(); }
     ECSWorld* GetECSWorld() const { return ecsWorld.get(); }
+    ShaderManager* GetShaderManager() const { return shaderManager.get(); }
 };

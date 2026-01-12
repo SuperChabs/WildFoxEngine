@@ -9,7 +9,8 @@ module;
 
 export module XEngine.Scene.Mesh;
 
-import XEngine.Core.Shader;
+import XEngine.Resource.Shader.ShaderManager;
+
 import XEngine.Rendering.Material;
 import XEngine.Rendering.GPUMesh;
 import XEngine.Rendering.MeshData;
@@ -33,9 +34,9 @@ public:
         material = std::unique_ptr<Material>(materialPtr);
     }
 
-    void Draw(Shader& shader)
+    void Draw(ShaderManager& shaderManager, const std::string& name)
     {  
-        material->Bind(shader);
+        material->Bind(shaderManager, name);
         gpuMesh->Draw();
         material->Unbind();
     }

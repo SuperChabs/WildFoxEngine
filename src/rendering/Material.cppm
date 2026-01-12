@@ -9,7 +9,9 @@ module;
 export module XEngine.Rendering.Material;
 
 import XEngine.Rendering.MeshData; 
-import XEngine.Core.Shader;   
+   
+import XEngine.Resource.Shader.ShaderManager;
+
 import XEngine.Core.Logger;
 
 export class Material
@@ -20,6 +22,8 @@ private:
     glm::vec3 color;
     bool useColor = false;
 
+    
+
 public:
     Material(const std::vector<Texture>& textures)
         : textures(textures), useColor(false), color(1.0f, 1.0f, 1.0f) 
@@ -29,7 +33,8 @@ public:
             useColor = true;
             color = glm::vec3(1.0f, 1.0f, 1.0f);
             Logger::Log(LogLevel::WARNING, "Material created with white color (no textures)");
-        } else 
+        } 
+        else 
         { 
             useColor = false;
             Logger::Log(LogLevel::INFO, "Material created with " + std::to_string(textures.size()) + " textures");
@@ -60,16 +65,16 @@ public:
         return *this;
     }
 
-    void Bind(Shader& shader)
+    void Bind(ShaderManager& shaderManager, const std::string& name)
     {
-        shader.use();
+        shaderManager.Bind(name);
 
         static int frameCount = 0;
         if (frameCount % 60 == 0) 
             Logger::Log(LogLevel::DEBUG, "Material::Bind() - useColor: " + std::to_string(useColor));
         frameCount++;
 
-        shader.setBool("useColor", useColor);
+        shaderManager.SetBool(name, "useColor", useColor);
 
         if (useColor)
         {
@@ -79,7 +84,7 @@ public:
                     std::to_string(color.g) + ", " + 
                     std::to_string(color.b) + ")");
             
-            shader.setVec3("material.color", color);
+            shaderManager.SetVec3(name, "material.color", color);
         }
         else
         {
@@ -103,7 +108,7 @@ public:
                 else if (name == "texture_normal") number = std::to_string(normalNr++);
                 else if (name == "texture_height") number = std::to_string(heightNr++);
 
-                shader.setInt(("material." + name + number).c_str(), i);
+                shaderManager.SetInt(name, ("material." + name + number).c_str(), i);
                 glBindTexture(GL_TEXTURE_2D, textures[i].id);
             }
 

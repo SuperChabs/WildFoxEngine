@@ -54,6 +54,10 @@ target_include_directories(magic_enum INTERFACE ${CMAKE_SOURCE_DIR}/vendor/magic
 add_library(entt INTERFACE)
 target_include_directories(entt INTERFACE ${CMAKE_SOURCE_DIR}/vendor/entt/src/entt)
 
+# ========== nlohmann_json =============
+add_library(json INTERFACE)
+target_include_directories(json INTERFACE ${CMAKE_SOURCE_DIR}/vendor/nlohmann_json/include)
+
 # ========== XEngine =============
 include_directories(${IMGUI_INCLUDE_DIRS})
 

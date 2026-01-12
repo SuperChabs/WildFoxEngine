@@ -12,7 +12,7 @@ module;
 #include <entt.hpp>
 
 #include <memory>
-#include <unordered_map>
+// #include <unordered_map>
 #include <string>
 #include <variant>
 
@@ -37,8 +37,6 @@ import XEngine.ECS.Systems;
 export class Engine : public Application 
 {
 private:
-    std::unique_ptr<Shader> mainShader;
-    std::unique_ptr<Shader> skyboxShader;
     std::unique_ptr<Skybox> skybox;
 
     std::unique_ptr<EditorLayout> editorLayout;
@@ -51,9 +49,8 @@ protected:
     {
 
         Logger::Log(LogLevel::INFO, "Initializing XEngine...");
-        
-        mainShader = std::make_unique<Shader>("basic");
-        skyboxShader = std::make_unique<Shader>("skybox"); 
+
+        GetShaderManager()->Load("assets/shaders/shaders.json");
 
         std::vector<std::string> faces = 
         {
@@ -66,7 +63,7 @@ protected:
         };
         
         unsigned int cubemapTexture = GetTextureManager()->LoadCubemap(faces);
-        skybox = std::make_unique<Skybox>(cubemapTexture, skyboxShader.get());
+        skybox = std::make_unique<Skybox>(cubemapTexture, "skybox");
 
         renderSystem = std::make_unique<RenderSystem>();
         rotationSystem = std::make_unique<RotationSystem>();
@@ -80,9 +77,9 @@ protected:
             Logger::Log(LogLevel::ERROR, "Failed to create EditorLayout!");
         else
             Logger::Log(LogLevel::INFO, "EditorLayout created successfully!");
-        
-        skyboxShader->use();
-        skyboxShader->setInt("skybox", 0);
+
+        GetShaderManager()->Bind("skybox");
+        GetShaderManager()->SetInt("skybox", "skybox", 0);
         
         Logger::Log(LogLevel::INFO, "Game initialized successfully");
     }
@@ -114,16 +111,16 @@ protected:
                 );
                 glm::mat4 view = GetCamera()->GetViewMatrix();
                 
-                mainShader->use();
+                GetShaderManager()->Bind("basic");
 
                 GLint currentProgram;
                 glGetIntegerv(GL_CURRENT_PROGRAM, &currentProgram);
-                if (currentProgram != mainShader->ID) 
+                if (currentProgram != GetShaderManager()->GetShader("basic")->ID) 
                     Logger::Log(LogLevel::ERROR, "Shader not active!");
                 
-                mainShader->setMat4("projection", projection);
-                mainShader->setMat4("view", view);
-                mainShader->setVec3("viewPos", GetCamera()->GetPosition());
+                GetShaderManager()->SetMat4("basic", "projection", projection);
+                GetShaderManager()->SetMat4("basic", "view", view);
+                GetShaderManager()->SetVec3("basic", "viewPos", GetCamera()->GetPosition());
                 
                 static int frameCount = 0;
                 if (frameCount % 60 == 0) 
@@ -131,8 +128,8 @@ protected:
                         std::to_string(GetECSWorld()->GetEntityCount()) + " entities");
                 frameCount++; 
                 
-                renderSystem->Update(*GetECSWorld(), *mainShader, *GetCamera());
-                skybox->Render(*GetCamera(), projection);
+                renderSystem->Update(*GetECSWorld(), *GetShaderManager(), "basic", *GetCamera());
+                skybox->Render(*GetShaderManager(), *GetCamera(), projection);
             }
             
             fb->Unbind();
@@ -149,9 +146,7 @@ protected:
     {
         Logger::Log(LogLevel::INFO, "Shutting down game...");
         
-        mainShader.reset();
-        skyboxShader.reset();
-        skybox.reset();
+        GetShaderManager()->ClearAll();
         
         Logger::Log(LogLevel::INFO, "Game shutdown complete!");
     }

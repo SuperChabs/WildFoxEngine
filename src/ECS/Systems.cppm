@@ -3,19 +3,23 @@ module;
 #include <entt.hpp>
 #include <glm/glm.hpp>
 
+#include <string>
+
 export module XEngine.ECS.Systems;
 
-import XEngine.ECS.Components;
+import XEngine.ECS.Components; 
 import XEngine.ECS.ECSWorld;
-import XEngine.Core.Shader;
+
 import XEngine.Core.Camera;
+
+import XEngine.Resource.Shader.ShaderManager; 
 
 export class RenderSystem 
 {
 public:
-    void Update(ECSWorld& world, Shader& shader, Camera& camera) 
+    void Update(ECSWorld& world, ShaderManager& shaderManager, const std::string& name, Camera& camera) 
     {
-        shader.use();
+        shaderManager.Bind(name);
         
         world.Each<TransformComponent, MeshComponent, MaterialComponent, VisibilityComponent>(
             [&](entt::entity entity, 
@@ -26,7 +30,7 @@ public:
         {
             if (!vis.isActive || !vis.visible) return;
             
-            shader.setMat4("model", transform.GetModelMatrix());
+            shaderManager.SetMat4(name, "model", transform.GetModelMatrix());
             
             if (world.HasComponent<ColorComponent>(entity)) 
             {
@@ -38,8 +42,10 @@ public:
             }
             
             if (meshComp.mesh) 
-                meshComp.mesh->Draw(shader);
+                meshComp.mesh->Draw(shaderManager, name);
         });
+
+        shaderManager.Unbind();
     }
 };
 
@@ -54,9 +60,7 @@ public:
                 RotationComponent& rotation) 
         {
             if (rotation.autoRotate) 
-            {
                 transform.rotation += rotation.axis * rotation.speed * deltaTime;
-            }
         });
     }
 };

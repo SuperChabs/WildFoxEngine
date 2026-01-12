@@ -13,9 +13,11 @@ module;
 export module XEngine.Scene.Model;
 
 import XEngine.Scene.Mesh;
-import XEngine.Core.Shader;
+
 import XEngine.Rendering.MeshData;
 import XEngine.Rendering.Material;
+
+import XEngine.Resource.Shader.ShaderManager;
 
 export class Model 
 {
@@ -40,7 +42,7 @@ public:
         meshes.push_back(std::move(*mesh)); 
     }
 
-    void Draw(Shader &shader);
+    void Draw(ShaderManager& shaderManager, const std::string& name);
 
     void SetColor(const glm::vec3& color);
     void SetTextures(const std::vector<Texture>& textures);

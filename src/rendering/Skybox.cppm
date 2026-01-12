@@ -10,16 +10,20 @@ module;
 export module XEngine.Rendering.Skybox;
 
 import XEngine.Core.Camera;
-import XEngine.Core.Shader;
+
 import XEngine.Rendering.Buffer; 
+
+import XEngine.Resource.Shader.ShaderManager;
 
 export class Skybox 
 {
 private:
     std::unique_ptr<VertexArray> skyboxVAO;
     std::unique_ptr<VertexBuffer> skyboxVBO;
+
     unsigned int cubemapTexture;
-    Shader* shader;
+
+    std::string shaderName;
 
     void SetupSkybox()
     {
@@ -79,22 +83,22 @@ private:
     }
 
 public:
-    Skybox(unsigned int cubemapTex, Shader* skyboxShader)
-        : cubemapTexture(cubemapTex), shader(skyboxShader)
+    Skybox(unsigned int cubemapTex, const std::string& shaderName)
+        : cubemapTexture(cubemapTex), shaderName(shaderName)
     {
         SetupSkybox();
     }
 
     //~Skybox() = default;
 
-    void Render(const Camera& camera, const glm::mat4& projection)
+    void Render(ShaderManager& shaderManager, const Camera& camera, const glm::mat4& projection)
     {
         glDepthFunc(GL_LEQUAL);
-        shader->use();
+        shaderManager.Bind(shaderName);
 
         glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
-        shader->setMat4("view", view);
-        shader->setMat4("projection", projection);
+        shaderManager.SetMat4(shaderName, "view", view);
+        shaderManager.SetMat4(shaderName, "projection", projection);
 
         skyboxVAO->Bind();
         glActiveTexture(GL_TEXTURE0);
@@ -105,7 +109,7 @@ public:
         glDepthFunc(GL_LESS);
     }
 
-    void SetShader(Shader* newShader) { shader = newShader; }
-    Shader* GetShader() const { return shader; }
+    void SetShader(const std::string& newShaderName) { shaderName = newShaderName; }
+    std::string GetShader() const { return shaderName; }
     unsigned int GetTexture() const { return cubemapTexture; }
 };
