@@ -36,9 +36,7 @@ public:
             {
                 auto& color = world.GetComponent<ColorComponent>(entity);
                 if (meshComp.mesh) 
-                {
                     meshComp.mesh->SetColor(color.color);
-                }
             }
             
             if (meshComp.mesh) 

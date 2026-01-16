@@ -23,6 +23,16 @@ export struct ShaderObj
     std::string name;
 
     bool IsValid() const { return ID != 0; }
+
+    bool operator == (const ShaderObj& other) const
+    {
+        return this->name == other.name && this->ID == other.ID;
+    }
+
+    bool operator!=(const ShaderObj& other) const
+    {
+        return !(*this == other);
+    }
 };
 
 export class ShaderManager
@@ -82,6 +92,8 @@ public:
 
     bool Reload(const std::string& name)
     {
+        std::vector<ShaderConfig> configs = scl.LoadShaderConfigs("assets/shaders/shaders.json");
+
         auto it = shaders.find(name);
         if (it == shaders.end()) 
         {
@@ -91,18 +103,14 @@ public:
 
         ShaderObj* oldShader = it->second.get();
         GLuint oldID = oldShader->ID;
-
-        std::vector<ShaderConfig> configs = scl.LoadShaderConfigs("assets/shaders/shaders.json");
         
         ShaderConfig* config = nullptr;
         for (auto& c : configs) 
-        {
             if (c.name == name) 
             {
                 config = &c;
                 break;
             }
-        }
 
         if (!config) 
         {
@@ -110,9 +118,12 @@ public:
             return false;
         }
 
-        ShaderSource newSource = LoadShader(config->vertexPath, config->fragmentPath, config->geometryPath);
+        ShaderSource newSource = LoadShader(sourcePath + config->vertexPath, 
+                                            sourcePath + config->fragmentPath, 
+                                            sourcePath + config->geometryPath);
 
-        if (newSource.vertex.empty() || newSource.fragment.empty()) {
+        if (newSource.vertex.empty() || newSource.fragment.empty()) 
+        {
             Logger::Log(LogLevel::ERROR, "Failed to reload source: " + name);
             return false;
         }
@@ -140,23 +151,20 @@ public:
 
     void ReloadAll()
     {
+        std::vector<ShaderConfig> configs = scl.LoadShaderConfigs("assets/shaders/shaders.json");
+
         for (auto& s : shaders)
         {
-
             ShaderObj* oldShader = s.second.get();
             GLuint oldID = oldShader->ID;
-
-            std::vector<ShaderConfig> configs = scl.LoadShaderConfigs("assets/shaders/shaders.json");
             
             ShaderConfig* config = nullptr;
             for (auto& c : configs) 
-            {
                 if (c.name == s.second->name) 
                     {
                         config = &c;
                         break;
                     }
-            }
 
             if (!config) 
             {
@@ -307,4 +315,10 @@ public:
     {
         return shaders.size();
     }
+
+    const std::unordered_map<std::string, std::unique_ptr<ShaderObj>>& GetShaderMap() const
+    { return shaders; }
+
+    bool IsShaderValid(const std::string& name) const
+    { return GetShader(name)->IsValid(); }
 };

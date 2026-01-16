@@ -19,6 +19,8 @@ export class FileLogger : public ILogSink
     std::string logPath;
     std::ofstream file;
 
+    bool isShuttingDown = false;
+
 public:
     FileLogger()
         : folderName("../log")
@@ -29,6 +31,7 @@ public:
 
     ~FileLogger() 
     {
+        isShuttingDown = true;
         if (file.is_open()) 
         {
             file.flush(); 
@@ -38,6 +41,8 @@ public:
 
     void write(const LogData& data) override
     {
+        if (isShuttingDown) return;
+
         if (!file.is_open())
             OpenLogFile(data);
 

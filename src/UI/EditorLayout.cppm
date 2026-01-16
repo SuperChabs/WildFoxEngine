@@ -23,6 +23,8 @@ import XEngine.Rendering.Framebuffer;
 
 import XEngine.UI.Theme; 
 
+import XEngine.Resource.Shader.ShaderManager;
+
 export class EditorLayout
 {
 public:
@@ -41,7 +43,7 @@ public:
         Logger::Log(LogLevel::INFO, "EditorLayout created with Framebuffer");
     }
 
-    void RenderEditor(ECSWorld* ecs, Camera* camera, Renderer* renderer)
+    void RenderEditor(ECSWorld* ecs, Camera* camera, Renderer* renderer, ShaderManager* shaderManager)
     {
         if (!ecs || !camera || !renderer)
         {
@@ -98,15 +100,6 @@ public:
                 ImGui::MenuItem("Inspector", nullptr, &showInspector);
                 ImGui::MenuItem("Properties", nullptr, &showProperties);
                 ImGui::MenuItem("Console", nullptr, &showConsole);
-                ImGui::EndMenu();
-            }
-
-            if (ImGui::BeginMenu("Window"))
-            {
-                ImGui::MenuItem("Hierarchy", nullptr, &showHierarchy);
-                ImGui::MenuItem("Inspector", nullptr, &showInspector);
-                ImGui::MenuItem("Properties", nullptr, &showProperties);
-                ImGui::MenuItem("Console", nullptr, &showConsole);
                 
                 ImGui::Separator();
                 
@@ -154,8 +147,8 @@ public:
 
         ImGui::End();
 
-        if (showHierarchy)  RenderSceneHierarchy(ecs);
-        if (showInspector)  RenderInspector(ecs);
+        if (showHierarchy)  RenderSceneHierarchy(ecs, shaderManager);
+        if (showInspector)  RenderInspector(ecs, shaderManager);
         if (showProperties) RenderProperties(camera, renderer);
         if (showConsole)    RenderConsole();
         
@@ -168,6 +161,7 @@ public:
     bool   IsViewportFocused() const { return isViewportFocused; }
 
     entt::entity GetSelectedEntity() const { return selectedEntity; }
+    ShaderObj* GetSelectedShader() const { return selectedShader; }
     Framebuffer* GetFramebuffer() const { return framebuffer.get(); }
     void SetSelectedEntity(entt::entity entity) { selectedEntity = entity; }
 
@@ -175,6 +169,7 @@ private:
     // ───── state ─────
 
     entt::entity selectedEntity;
+    ShaderObj* selectedShader;
 
     bool showHierarchy;
     bool showInspector;
@@ -234,41 +229,65 @@ private:
         ImGui::PopStyleVar();
     }
 
-    void RenderSceneHierarchy(ECSWorld* ecs)
+    void RenderSceneHierarchy(ECSWorld* ecs, ShaderManager* shaderManager)
     {
         ImGui::SetNextWindowPos({10, 170}, ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize({280, 400}, ImGuiCond_FirstUseEver);
 
         ImGui::Begin("Hierarchy", &showHierarchy);
 
-        ImGui::Text("Entities: %zu", ecs->GetEntityCount());
-        ImGui::Separator();
-
         entt::entity entityToDelete = entt::null;
 
-        ecs->Each<TagComponent, IDComponent>(
-            [&](entt::entity entity, TagComponent& tag, IDComponent& id) 
+        if (ImGui::CollapsingHeader("Objects"))
         {
-            ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+            ImGui::Text("Entities: %zu", ecs->GetEntityCount());
+            ImGui::Separator();
 
-            if (selectedEntity == entity)
-                flags |= ImGuiTreeNodeFlags_Selected;
-
-            std::string label = tag.name + " [" + std::to_string(id.id) + "]";
-
-            ImGui::TreeNodeEx((void*)(intptr_t)entity, flags, "%s", label.c_str());
-
-            if (ImGui::IsItemClicked())
-                selectedEntity = entity;
-
-            if (ImGui::BeginPopupContextItem())
+            ecs->Each<TagComponent, IDComponent>(
+                [&](entt::entity entity, TagComponent& tag, IDComponent& id) 
             {
-                if (ImGui::MenuItem("Delete"))
-                    entityToDelete = entity;
+                ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 
-                ImGui::EndPopup();
+                if (selectedEntity == entity)
+                    flags |= ImGuiTreeNodeFlags_Selected;
+
+                std::string label = tag.name + " [" + std::to_string(id.id) + "]";
+
+                ImGui::TreeNodeEx((void*)(intptr_t)entity, flags, "%s", label.c_str());
+
+                if (ImGui::IsItemClicked())
+                    selectedEntity = entity;
+
+                if (ImGui::BeginPopupContextItem())
+                {
+                    if (ImGui::MenuItem("Delete"))
+                        entityToDelete = entity;
+
+                    ImGui::EndPopup();
+                }
+            });
+        }
+
+        if (ImGui::CollapsingHeader("Shaders"))
+        {
+            ImGui::Text("Shaders: %zu", shaderManager->GetCount());
+            ImGui::Separator();
+
+            for (auto& [name, shader] : shaderManager->GetShaderMap())
+            {
+                ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+
+                if (selectedShader == shader.get())
+                    flags |= ImGuiTreeNodeFlags_Selected;
+
+                std::string label = name + " [" + std::to_string(shader->ID) + "]";
+
+                ImGui::TreeNodeEx((void*)(intptr_t)shader.get(), flags, "%s", label.c_str());
+
+                if (ImGui::IsItemClicked())
+                    selectedShader = shader.get();
             }
-        });
+        }
 
         if (entityToDelete != entt::null)
         {
@@ -280,7 +299,7 @@ private:
         ImGui::End();
     }
 
-    void RenderInspector(ECSWorld* ecs)
+    void RenderInspector(ECSWorld* ecs, ShaderManager* shaderManager)
     {
         ImGui::SetNextWindowPos(ImVec2(1110, 10), ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize(ImVec2(300, 660), ImGuiCond_FirstUseEver);
@@ -399,11 +418,16 @@ private:
                 if (ImGui::CollapsingHeader("Material"))
                     ImGui::BulletText("Has Material: Yes"); 
         }
+        else if (selectedShader != nullptr && shaderManager->IsShaderValid(selectedShader->name))
+        {
+            if (ImGui::MenuItem("Reload"))
+                shaderManager->Reload(selectedShader->name);
+        }
         else
         {
-            ImGui::TextDisabled("No entity selected");
+            ImGui::TextDisabled("Nothink selected");
             ImGui::Separator();
-            ImGui::TextWrapped("Select an entity from Hierarchy");
+            ImGui::TextWrapped("Select an object from Hierarchy or stfu");
         }
         
         ImGui::End();

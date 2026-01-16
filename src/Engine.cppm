@@ -162,7 +162,7 @@ protected:
             return;
         }
 
-        editorLayout->RenderEditor( GetECSWorld(), GetCamera(), GetRenderer());
+        editorLayout->RenderEditor(GetECSWorld(), GetCamera(), GetRenderer(), GetShaderManager());
     }
 
 public:
