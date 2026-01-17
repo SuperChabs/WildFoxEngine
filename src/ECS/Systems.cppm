@@ -41,20 +41,23 @@ public:
                         "Binding material: " + matComp.material->GetName());
                 frameCount++;
                 
-                matComp.material->Bind(shaderManager, name);
+                if (meshComp.mesh) 
+                    meshComp.mesh->Draw(shaderManager, name, matComp.material);
             }
             else if (world.HasComponent<ColorComponent>(entity)) 
             {
                 auto& color = world.GetComponent<ColorComponent>(entity);
                 if (meshComp.mesh) 
                     meshComp.mesh->SetColor(color.color);
+                
+                if (meshComp.mesh)
+                    meshComp.mesh->Draw(shaderManager, name);
             }
-            
-            if (meshComp.mesh) 
-                meshComp.mesh->Draw(shaderManager, name);
-            
-            if (matComp.material)
-                matComp.material->Unbind();
+            else
+            {
+                if (meshComp.mesh)
+                    meshComp.mesh->Draw(shaderManager, name);
+            }
         });
 
         shaderManager.Unbind();

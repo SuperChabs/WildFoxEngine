@@ -36,9 +36,28 @@ public:
 
     void Draw(ShaderManager& shaderManager, const std::string& name)
     {  
-        material->Bind(shaderManager, name);
-        gpuMesh->Draw();
-        material->Unbind();
+        if (material)
+        {
+            material->Bind(shaderManager, name);
+            gpuMesh->Draw();
+            material->Unbind();
+        }
+    }
+
+    void Draw(ShaderManager& shaderManager, const std::string& name, std::shared_ptr<Material> externalMaterial)
+    {  
+        if (externalMaterial)
+        {
+            externalMaterial->Bind(shaderManager, name);
+            gpuMesh->Draw();
+            externalMaterial->Unbind();
+        }
+        else if (material)
+        {
+            material->Bind(shaderManager, name);
+            gpuMesh->Draw();
+            material->Unbind();
+        }
     }
 
     void SetColor(const glm::vec3& color) 
