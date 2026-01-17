@@ -8,11 +8,14 @@ module;
 
 #include <glm/glm.hpp>
 
-export module XEngine.Rendering.MaterialManager;
+export module XEngine.Resource.Material.MaterialManager;
 
 import XEngine.Rendering.MeshData;
 import XEngine.Rendering.Material;
-import XEngine.Rendering.TextureManager;
+
+import XEngine.Resource.Texture.TextureManager;
+import XEngine.Resource.Material.MaterialConfigLoader;
+
 import XEngine.Core.Logger;
 
 export class MaterialManager 
@@ -20,6 +23,11 @@ export class MaterialManager
 private:
     std::unordered_map<std::string, std::shared_ptr<Material>> materials;
     TextureManager* textureManager;
+    MaterialConfigLoader configLoader;
+
+    std::string runtimePath = "assets/";
+    std::string sourcePath = "../assets/";
+    std::string materialConfigPath = "../assets/configs/materials.json";
 
 public:
     MaterialManager(TextureManager* tm) 
@@ -28,35 +36,66 @@ public:
         CreateDefaultMaterials(); 
     }
 
+    void LoadMaterialConfigs()
+    {
+        const std::vector<MaterialConfig>& configs = configLoader.LoadMaterialConfigs(*textureManager, materialConfigPath);
+        
+        for (const auto& config : configs)
+        {
+            if (materials.contains(config.name))
+            {
+                Logger::Log(LogLevel::WARNING, LogCategory::RENDERING, 
+                    "Material already loaded, skipping: " + config.name);
+                continue;
+            }
+
+            if (config.type == "color")
+            {
+                CreateColorMaterial(config.name, config.color);
+            }
+            else if (config.type == "texture")
+            {
+                CreateTextureMaterial(config.name, 
+                    runtimePath + config.diffusePath,
+                    runtimePath + config.specularPath,
+                    runtimePath + config.normalPath,
+                    runtimePath + config.heightPath);
+            }
+        }
+    }
+
     std::shared_ptr<Material> CreateColorMaterial(const std::string name, const glm::vec3& color)
     {
         if (materials.contains(name))
         {
-            Logger::Log(LogLevel::WARNING, LogCategory::RENDERING, "Color material with name '" + name + "' alrady exists");
+            Logger::Log(LogLevel::WARNING, LogCategory::RENDERING, 
+                "Color material with name '" + name + "' already exists");
             return materials[name];
         }
 
-        auto material = std::make_shared<Material>(color);
-        if(!material)
+        auto material = std::make_shared<Material>(color, name);
+        if (!material)
         {
-            Logger::Log(LogLevel::ERROR, LogCategory::RENDERING, "Unable to create " + name + " material");
-            return materials[name];
+            Logger::Log(LogLevel::ERROR, LogCategory::RENDERING, 
+                "Unable to create color material: " + name);
+            return nullptr;
         }
 
         materials[name] = material;
-
         Logger::Log(LogLevel::INFO, LogCategory::RENDERING, "Created color material: " + name);
         return material;
     }
 
-    std::shared_ptr<Material> CreateTextureMaterial(const std::string name, const std::string diffusePath, 
-                                                                            const std::string specularPath = "", 
-                                                                            const std::string normalPath = "",
-                                                                            const std::string heightPath = "")
+    std::shared_ptr<Material> CreateTextureMaterial(const std::string name, 
+                                                    const std::string diffusePath, 
+                                                    const std::string specularPath = "", 
+                                                    const std::string normalPath = "",
+                                                    const std::string heightPath = "")
     {
         if (materials.contains(name))
         {
-            Logger::Log(LogLevel::WARNING, LogCategory::RENDERING, "Material with name '" + name + "' alrady exists");
+            Logger::Log(LogLevel::WARNING, LogCategory::RENDERING, 
+                "Material with name '" + name + "' already exists");
             return materials[name];
         }
 
@@ -75,7 +114,6 @@ public:
                 };
                 textures.push_back(diff);
             }
-
         }
 
         if (!specularPath.empty())
@@ -123,16 +161,16 @@ public:
             }
         }
 
-        auto material = std::make_shared<Material>(textures);
-        if(!material)
+        auto material = std::make_shared<Material>(textures, name);
+        if (!material)
         {
-            Logger::Log(LogLevel::ERROR, LogCategory::RENDERING, "Unable to create " + name + " material");
-            return materials[name];
+            Logger::Log(LogLevel::ERROR, LogCategory::RENDERING, 
+                "Unable to create texture material: " + name);
+            return nullptr;
         }
 
         materials[name] = material;
-
-        Logger::Log(LogLevel::INFO, LogCategory::RENDERING, "Created texture material " + name);
+        Logger::Log(LogLevel::INFO, LogCategory::RENDERING, "Created texture material: " + name);
         return material;
     }
 
@@ -142,11 +180,11 @@ public:
         if (it != materials.end())
             return it->second;
 
-        Logger::Log(LogLevel::WARNING, "Material '" + name + "' not found");
+        Logger::Log(LogLevel::WARNING, LogCategory::RENDERING, "Material '" + name + "' not found");
         return materials["default"];
     }
 
-    bool HasMaterial(const std::string& name)
+    bool HasMaterial(const std::string& name) const
     {
         return materials.contains(name);
     }
@@ -154,20 +192,21 @@ public:
     void RemoveMaterial(const std::string& name)
     {
         if (!materials.contains(name))
-            Logger::Log(LogLevel::WARNING, "Unable to delete '" + name + "' material");
-
-        if (name == "default")
         {
-            Logger::Log(LogLevel::WARNING, "Unable to delete default material");
+            Logger::Log(LogLevel::WARNING, LogCategory::RENDERING, 
+                "Unable to delete - material not found: '" + name + "'");
             return;
         }
 
-        auto it = materials.find(name);
-        if (it != materials.end())
+        if (name == "default")
         {
-            materials.erase(name);
-            Logger::Log(LogLevel::INFO, "Material '" + name + "' was deleted");
+            Logger::Log(LogLevel::WARNING, LogCategory::RENDERING, 
+                "Unable to delete default material");
+            return;
         }
+
+        materials.erase(name);
+        Logger::Log(LogLevel::INFO, LogCategory::RENDERING, "Material '" + name + "' was deleted");
     }
 
     void ClearMaterials()
@@ -175,25 +214,38 @@ public:
         auto defaultMat = materials["default"];
         materials.clear();
         materials["default"] = defaultMat;
-        Logger::Log(LogLevel::INFO, "All material were cleared");
+        Logger::Log(LogLevel::INFO, LogCategory::RENDERING, "All materials were cleared");
     }
 
-    size_t GetMaterialsCount() { return materials.size(); }
+    size_t GetMaterialsCount() const { return materials.size(); }
+
+    const std::unordered_map<std::string, std::shared_ptr<Material>>& GetMaterialsMap() const
+    {
+        return materials;
+    }
+
+    std::vector<std::string> GetMaterialNames() const
+    {
+        std::vector<std::string> names;
+        for (const auto& [name, _] : materials)
+            names.push_back(name);
+        return names;
+    }
 
 private:
     void CreateDefaultMaterials()
     {
-        auto defaultMat = std::make_shared<Material>(glm::vec3(1.0f, 1.0f, 1.0f));
+        auto defaultMat = std::make_shared<Material>(glm::vec3(1.0f, 1.0f, 1.0f), "default");
         materials["default"] = defaultMat;
 
-        materials["red"] = std::make_shared<Material>(glm::vec3(1.0f, 0.0f, 0.0f));
-        materials["green"] = std::make_shared<Material>(glm::vec3(0.0f, 1.0f, 0.0f));
-        materials["blue"] = std::make_shared<Material>(glm::vec3(0.0f, 0.0f, 1.0f));
-        materials["yellow"] = std::make_shared<Material>(glm::vec3(1.0f, 1.0f, 0.0f));
-        materials["cyan"] = std::make_shared<Material>(glm::vec3(0.0f, 1.0f, 1.0f));
-        materials["magenta"] = std::make_shared<Material>(glm::vec3(1.0f, 0.0f, 1.0f));
-        materials["gray"] = std::make_shared<Material>(glm::vec3(0.5f, 0.5f, 0.5f));
+        materials["red"] = std::make_shared<Material>(glm::vec3(1.0f, 0.0f, 0.0f), "red");
+        materials["green"] = std::make_shared<Material>(glm::vec3(0.0f, 1.0f, 0.0f), "green");
+        materials["blue"] = std::make_shared<Material>(glm::vec3(0.0f, 0.0f, 1.0f), "blue");
+        materials["yellow"] = std::make_shared<Material>(glm::vec3(1.0f, 1.0f, 0.0f), "yellow");
+        materials["cyan"] = std::make_shared<Material>(glm::vec3(0.0f, 1.0f, 1.0f), "cyan");
+        materials["magenta"] = std::make_shared<Material>(glm::vec3(1.0f, 0.0f, 1.0f), "magenta");
+        materials["gray"] = std::make_shared<Material>(glm::vec3(0.5f, 0.5f, 0.5f), "gray");
 
-        Logger::Log(LogLevel::INFO, "Default materials created");
+        Logger::Log(LogLevel::INFO, LogCategory::RENDERING, "Default materials created");
     }
 };

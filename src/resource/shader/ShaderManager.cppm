@@ -28,11 +28,6 @@ export struct ShaderObj
     {
         return this->name == other.name && this->ID == other.ID;
     }
-
-    bool operator!=(const ShaderObj& other) const
-    {
-        return !(*this == other);
-    }
 };
 
 export class ShaderManager
@@ -45,14 +40,16 @@ export class ShaderManager
     std::string runtimePath = "assets/shaders/"; 
     std::string sourcePath = "../assets/shaders/";
 
+    std::string shaderConfigsFilePath = "../assets/configs/shaders.json";
+
     GLuint currentShader = 0;
 
 public:
     ~ShaderManager() { ClearAll(); }
 
-    void Load(const std::string& path = "assets/shaders/shaders.json")
+    void Load()
     {
-        const std::vector<ShaderConfig> &shaderConfigs = scl.LoadShaderConfigs(path);
+        const std::vector<ShaderConfig> &shaderConfigs = scl.LoadShaderConfigs(shaderConfigsFilePath);
 
         for (auto& config : shaderConfigs)
         {
@@ -92,7 +89,7 @@ public:
 
     bool Reload(const std::string& name)
     {
-        std::vector<ShaderConfig> configs = scl.LoadShaderConfigs("assets/shaders/shaders.json");
+        std::vector<ShaderConfig> configs = scl.LoadShaderConfigs(shaderConfigsFilePath);
 
         auto it = shaders.find(name);
         if (it == shaders.end()) 
@@ -151,7 +148,7 @@ public:
 
     void ReloadAll()
     {
-        std::vector<ShaderConfig> configs = scl.LoadShaderConfigs("assets/shaders/shaders.json");
+        std::vector<ShaderConfig> configs = scl.LoadShaderConfigs(shaderConfigsFilePath);
 
         for (auto& s : shaders)
         {
@@ -306,15 +303,8 @@ public:
         return nullptr;
     }
 
-    GLuint GetCurrentShader()
-    {
-        return currentShader;
-    }
-
-    size_t GetCount()
-    {
-        return shaders.size();
-    }
+    GLuint GetCurrentShader() { return currentShader; }
+    size_t GetCount() { return shaders.size(); }
 
     const std::unordered_map<std::string, std::unique_ptr<ShaderObj>>& GetShaderMap() const
     { return shaders; }

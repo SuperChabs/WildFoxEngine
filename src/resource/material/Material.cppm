@@ -18,35 +18,35 @@ export class Material
 {
 private:
     std::string name;
+    std::string type;  
     std::vector<Texture> textures;
     glm::vec3 color;
     bool useColor = false;
 
-    
-
 public:
-    Material(const std::vector<Texture>& textures)
-        : textures(textures), useColor(false), color(1.0f, 1.0f, 1.0f) 
+    Material(const std::vector<Texture>& textures, const std::string& materialName = "unnamed")
+        : name(materialName), type("texture"), textures(textures), useColor(false), color(1.0f, 1.0f, 1.0f) 
     {
         if (textures.empty()) 
         {
             useColor = true;
             color = glm::vec3(1.0f, 1.0f, 1.0f);
-            Logger::Log(LogLevel::WARNING, "Material created with white color (no textures)");
+            Logger::Log(LogLevel::WARNING, LogCategory::RENDERING, 
+                "Material '" + name + "' created with white color (no textures)");
         } 
         else 
         { 
             useColor = false;
-            Logger::Log(LogLevel::INFO, "Material created with " + std::to_string(textures.size()) + " textures");
+            Logger::Log(LogLevel::INFO, LogCategory::RENDERING, 
+                "Material '" + name + "' created with " + std::to_string(textures.size()) + " textures");
         }
-            
-        
     }
 
-    Material(const glm::vec3& solidColor)
-        : color(solidColor), useColor(true) 
+    Material(const glm::vec3& solidColor, const std::string& materialName = "unnamed")
+        : name(materialName), type("color"), color(solidColor), useColor(true) 
     {
-        Logger::Log(LogLevel::INFO, "Material created with color: (" + 
+        Logger::Log(LogLevel::INFO, LogCategory::RENDERING, 
+            "Material '" + name + "' created with color: (" + 
             std::to_string(color.r) + ", " + 
             std::to_string(color.g) + ", " + 
             std::to_string(color.b) + ")");
@@ -58,6 +58,7 @@ public:
             return *this;
         
         this->name = other.name;
+        this->type = other.type;
         this->color = other.color;
         this->textures = other.textures;
         this->useColor = other.useColor;
@@ -130,14 +131,17 @@ public:
     { 
         color = newColor; 
         useColor = true;
-        // Logger::Log(LogLevel::INFO, "Material color changed to: (" + std::to_string(color.r) + ", " + std::to_string(color.g) + ", " + std::to_string(color.b) + ")");
     }
 
     void SetTextures(std::vector<Texture> newTextures) { textures = newTextures; }
     void SetColorUsing(bool newUsing) { useColor = newUsing; }
+    void SetName(const std::string& newName) { name = newName; }
+    void SetType(const std::string& newType) { type = newType; }
 
     const std::vector<Texture>& GetTextures() const { return textures; }
     size_t GetTextureCount() const { return textures.size(); }
     glm::vec3 GetColor() const { return color; }
     bool IsUsingColor() const { return useColor; }
+    const std::string& GetName() const { return name; }
+    const std::string& GetType() const { return type; }
 };

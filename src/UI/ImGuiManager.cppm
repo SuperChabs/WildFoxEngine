@@ -6,7 +6,7 @@ module;
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
-export module XEngine.Core.ImGuiManager;
+export module XEngine.UI.ImGuiManager;
 
 import XEngine.Core.Logger;
 import XEngine.UI.Theme; 

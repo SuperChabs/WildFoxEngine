@@ -6,7 +6,7 @@ module;
 #include <vector>
 #include <stb_image.h>
 
-export module XEngine.Rendering.TextureManager;
+export module XEngine.Resource.Texture.TextureManager;
 
 import XEngine.Core.Logger;
 

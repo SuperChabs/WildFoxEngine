@@ -11,6 +11,7 @@ import XEngine.ECS.Components;
 import XEngine.ECS.ECSWorld;
 
 import XEngine.Core.Camera;
+import XEngine.Core.Logger;
 
 import XEngine.Resource.Shader.ShaderManager; 
 
@@ -31,8 +32,18 @@ public:
             if (!vis.isActive || !vis.visible) return;
             
             shaderManager.SetMat4(name, "model", transform.GetModelMatrix());
-            
-            if (world.HasComponent<ColorComponent>(entity)) 
+        
+            if (matComp.material)
+            {
+                static int frameCount = 0;
+                if (frameCount % 300 == 0)
+                    Logger::Log(LogLevel::DEBUG, LogCategory::RENDERING, 
+                        "Binding material: " + matComp.material->GetName());
+                frameCount++;
+                
+                matComp.material->Bind(shaderManager, name);
+            }
+            else if (world.HasComponent<ColorComponent>(entity)) 
             {
                 auto& color = world.GetComponent<ColorComponent>(entity);
                 if (meshComp.mesh) 
@@ -41,6 +52,9 @@ public:
             
             if (meshComp.mesh) 
                 meshComp.mesh->Draw(shaderManager, name);
+            
+            if (matComp.material)
+                matComp.material->Unbind();
         });
 
         shaderManager.Unbind();

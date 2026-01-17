@@ -3,6 +3,10 @@ import XEngine.Core.Logger;
 
 int main() 
 {
+#if defined (__WIN32__)
+    exit()
+#endif
+
     Engine e(1020, 800, "XEngine - Best Engine");
     
     if (!e.Initialize()) 

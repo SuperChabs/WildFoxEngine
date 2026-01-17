@@ -53,7 +53,8 @@ protected:
 
         Logger::Log(LogLevel::INFO, "Initializing XEngine...");
 
-        GetShaderManager()->Load("assets/shaders/shaders.json");
+        GetShaderManager()->Load();
+        GetMaterialManager()->LoadMaterialConfigs();
 
         std::vector<std::string> faces = 
         {
@@ -162,7 +163,7 @@ protected:
             return;
         }
 
-        editorLayout->RenderEditor(GetECSWorld(), GetCamera(), GetRenderer(), GetShaderManager());
+        editorLayout->RenderEditor(GetECSWorld(), GetCamera(), GetRenderer(), GetShaderManager(), GetMaterialManager());
     }
 
 public:

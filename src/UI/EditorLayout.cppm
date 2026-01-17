@@ -20,6 +20,7 @@ import XEngine.Core.CommandManager;
 
 import XEngine.Rendering.Renderer;
 import XEngine.Rendering.Framebuffer;
+import XEngine.Resource.Material.MaterialManager;
 
 import XEngine.UI.Theme; 
 
@@ -30,6 +31,8 @@ export class EditorLayout
 public:
     EditorLayout()
         : selectedEntity(entt::null)
+        , selectedShader(nullptr)
+        , selectedMaterial("default_white")
         , showHierarchy(true)
         , showInspector(true)
         , showProperties(true)
@@ -43,14 +46,14 @@ public:
         Logger::Log(LogLevel::INFO, "EditorLayout created with Framebuffer");
     }
 
-    void RenderEditor(ECSWorld* ecs, Camera* camera, Renderer* renderer, ShaderManager* shaderManager)
+    void RenderEditor(ECSWorld* ecs, Camera* camera, Renderer* renderer, ShaderManager* shaderManager, MaterialManager* materialManager)
     {
-        if (!ecs || !camera || !renderer)
+        if (!ecs || !camera || !renderer || !materialManager)
         {
             Logger::Log(LogLevel::ERROR, "EditorLayout: nullptr passed to RenderEditor");
             return;
         }
-        
+
         ImGuiViewport* viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(viewport->WorkPos);
         ImGui::SetNextWindowSize(viewport->WorkSize);
@@ -147,8 +150,8 @@ public:
 
         ImGui::End();
 
-        if (showHierarchy)  RenderSceneHierarchy(ecs, shaderManager);
-        if (showInspector)  RenderInspector(ecs, shaderManager);
+        if (showHierarchy)  RenderSceneHierarchy(ecs, shaderManager, materialManager);
+        if (showInspector)  RenderInspector(ecs, shaderManager, materialManager);
         if (showProperties) RenderProperties(camera, renderer);
         if (showConsole)    RenderConsole();
         
@@ -170,6 +173,7 @@ private:
 
     entt::entity selectedEntity;
     ShaderObj* selectedShader;
+    std::string selectedMaterial;
 
     bool showHierarchy;
     bool showInspector;
@@ -229,7 +233,7 @@ private:
         ImGui::PopStyleVar();
     }
 
-    void RenderSceneHierarchy(ECSWorld* ecs, ShaderManager* shaderManager)
+    void RenderSceneHierarchy(ECSWorld* ecs, ShaderManager* shaderManager, MaterialManager* materialManager)
     {
         ImGui::SetNextWindowPos({10, 170}, ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize({280, 400}, ImGuiCond_FirstUseEver);
@@ -289,6 +293,73 @@ private:
             }
         }
 
+        if (ImGui::CollapsingHeader("Materials"))
+        {
+            ImGui::Text("Materials: %zu", materialManager->GetMaterialsCount());
+            ImGui::Separator();
+
+            if (ImGui::Button("+ Add Color Material", ImVec2(-1, 0)))
+                ImGui::OpenPopup("AddColorMaterial");
+
+            if (ImGui::BeginPopupModal("AddColorMaterial", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+            {
+                static char matNameBuf[128] = "";
+                static float matColor[3] = {1.0f, 1.0f, 1.0f};
+
+                ImGui::InputText("Material Name##color", matNameBuf, sizeof(matNameBuf));
+                ImGui::ColorEdit3("Color##material", matColor);
+
+                if (ImGui::Button("Create", ImVec2(120, 0)))
+                {
+                    if (strlen(matNameBuf) > 0)
+                    {
+                        materialManager->CreateColorMaterial(
+                            std::string(matNameBuf),
+                            glm::vec3(matColor[0], matColor[1], matColor[2]));
+                        memset(matNameBuf, 0, sizeof(matNameBuf));
+                        matColor[0] = matColor[1] = matColor[2] = 1.0f;
+                        ImGui::CloseCurrentPopup();
+                    }
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Cancel", ImVec2(120, 0)))
+                {
+                    memset(matNameBuf, 0, sizeof(matNameBuf));
+                    ImGui::CloseCurrentPopup();
+                }
+
+                ImGui::Text("(In development!)");
+
+                ImGui::EndPopup();
+            }
+
+            ImGui::Spacing();
+
+            for (const auto& [name, material] : materialManager->GetMaterialsMap())
+            {
+                ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+
+                if (selectedMaterial == name)
+                    flags |= ImGuiTreeNodeFlags_Selected;
+
+                std::string label = name;
+                // if (material->IsUsingColor())
+                // {
+                //     auto col = material->GetColor();
+                //     label += " [Color: " + std::to_string((int)(col.r * 255)) + ", " +
+                //              std::to_string((int)(col.g * 255)) + ", " +
+                //              std::to_string((int)(col.b * 255)) + "]";
+                // }
+                // else
+                //     label += " [Texture: " + std::to_string(material->GetTextureCount()) + " textures]";
+
+                ImGui::TreeNodeEx((void*)(intptr_t)material.get(), flags, "%s", label.c_str());
+
+                if (ImGui::IsItemClicked())
+                    selectedMaterial = name;
+            }
+        }
+
         if (entityToDelete != entt::null)
         {
             ecs->DestroyEntity(entityToDelete);
@@ -299,7 +370,7 @@ private:
         ImGui::End();
     }
 
-    void RenderInspector(ECSWorld* ecs, ShaderManager* shaderManager)
+    void RenderInspector(ECSWorld* ecs, ShaderManager* shaderManager, MaterialManager* materialManager)
     {
         ImGui::SetNextWindowPos(ImVec2(1110, 10), ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize(ImVec2(300, 660), ImGuiCond_FirstUseEver);
@@ -363,32 +434,32 @@ private:
                 }
             }
 
-            if (ecs->HasComponent<ColorComponent>(selectedEntity))
-            {
-                auto& colorComp = ecs->GetComponent<ColorComponent>(selectedEntity);
+            // if (ecs->HasComponent<ColorComponent>(selectedEntity))
+            // {
+            //     auto& colorComp = ecs->GetComponent<ColorComponent>(selectedEntity);
                 
-                static std::unordered_map<entt::entity, float[3]> entityColors;
-                static std::unordered_map<entt::entity, bool> entityColorsInitialized;
+            //     static std::unordered_map<entt::entity, float[3]> entityColors;
+            //     static std::unordered_map<entt::entity, bool> entityColorsInitialized;
                 
-                if (!entityColorsInitialized[selectedEntity])
-                {
-                    entityColors[selectedEntity][0] = colorComp.color.r;
-                    entityColors[selectedEntity][1] = colorComp.color.g;
-                    entityColors[selectedEntity][2] = colorComp.color.b;
-                    entityColorsInitialized[selectedEntity] = true;
-                }
+            //     if (!entityColorsInitialized[selectedEntity])
+            //     {
+            //         entityColors[selectedEntity][0] = colorComp.color.r;
+            //         entityColors[selectedEntity][1] = colorComp.color.g;
+            //         entityColors[selectedEntity][2] = colorComp.color.b;
+            //         entityColorsInitialized[selectedEntity] = true;
+            //     }
                 
-                float* colorEdit = entityColors[selectedEntity];
+            //     float* colorEdit = entityColors[selectedEntity];
                 
-                ImGui::Text("Color");
-                if (ImGui::ColorEdit3("##Color", colorEdit))
-                {
-                    glm::vec3 newColor(colorEdit[0], colorEdit[1], colorEdit[2]);
+            //     ImGui::Text("Color");
+            //     if (ImGui::ColorEdit3("##Color", colorEdit))
+            //     {
+            //         glm::vec3 newColor(colorEdit[0], colorEdit[1], colorEdit[2]);
                     
-                    if (CommandManager::HasCommand("onChangeMeshColor"))
-                        CommandManager::ExecuteCommand("onChangeMeshColor", {newColor});
-                }
-            }
+            //         if (CommandManager::HasCommand("onChangeMeshColor"))
+            //             CommandManager::ExecuteCommand("onChangeMeshColor", {newColor});
+            //     }
+            // }
 
             if (ecs->HasComponent<RotationComponent>(selectedEntity))
             {
@@ -414,20 +485,72 @@ private:
                     ImGui::BulletText("Has Mesh: Yes");
                 }
             
-            if (ecs->HasComponent<MaterialComponent>(selectedEntity))
-                if (ImGui::CollapsingHeader("Material"))
-                    ImGui::BulletText("Has Material: Yes"); 
+            if (ImGui::CollapsingHeader("Material"))
+            {
+                if (ecs->HasComponent<MaterialComponent>(selectedEntity))
+                {
+                    auto& matComp = ecs->GetComponent<MaterialComponent>(selectedEntity);
+                    ImGui::BulletText("Current: %s", matComp.material ? matComp.material->GetName().c_str() : "None");
+                    ImGui::Separator();
+                }
+
+                ImGui::Text("Assign Material:");
+                
+                if (ImGui::BeginCombo("##MaterialSelect", selectedMaterial.c_str(), 0))
+                {
+                    for (const auto& name : materialManager->GetMaterialNames())
+                    {
+                        bool is_selected = (selectedMaterial == name);
+                        if (ImGui::Selectable(name.c_str(), is_selected))
+                        {
+                            selectedMaterial = name;
+                            auto material = materialManager->GetMaterial(name);
+                            
+                            if (ecs->HasComponent<MaterialComponent>(selectedEntity))
+                            {
+                                auto& matComp = ecs->GetComponent<MaterialComponent>(selectedEntity);
+                                matComp.material = material;
+                            }
+                            else
+                            {
+                                ecs->AddComponent<MaterialComponent>(selectedEntity, material);
+                            }
+                            
+                            // Видаляємо ColorComponent щоб матеріал беруся з MaterialComponent
+                            if (ecs->HasComponent<ColorComponent>(selectedEntity))
+                            {
+                                ecs->RemoveComponent<ColorComponent>(selectedEntity);
+                            }
+                            
+                            Logger::Log(LogLevel::INFO, LogCategory::RENDERING, 
+                                "Material '" + name + "' assigned to entity");
+                        }
+                        if (is_selected)
+                            ImGui::SetItemDefaultFocus();
+                    }
+                    ImGui::EndCombo();
+                }
+
+                if (ImGui::Button("Remove Material", ImVec2(-1, 0)))
+                {
+                    if (ecs->HasComponent<MaterialComponent>(selectedEntity))
+                    {
+                        ecs->RemoveComponent<MaterialComponent>(selectedEntity);
+                        Logger::Log(LogLevel::INFO, LogCategory::RENDERING, "Material removed from entity");
+                    }
+                }
+            } 
         }
-        else if (selectedShader != nullptr && shaderManager->IsShaderValid(selectedShader->name))
+        else if (selectedShader != nullptr && !selectedShader->name.empty() && shaderManager->IsShaderValid(selectedShader->name))
         {
             if (ImGui::MenuItem("Reload"))
                 shaderManager->Reload(selectedShader->name);
         }
         else
         {
-            ImGui::TextDisabled("Nothink selected");
+            ImGui::TextDisabled("Nothing selected");
             ImGui::Separator();
-            ImGui::TextWrapped("Select an object from Hierarchy or stfu");
+            ImGui::TextWrapped("Select an object from Hierarchy");
         }
         
         ImGui::End();
