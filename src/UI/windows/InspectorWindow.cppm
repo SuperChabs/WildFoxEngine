@@ -25,7 +25,6 @@ export class InspectorWindow
 private:
     bool isOpen = true;
     
-    // Panels
     TagPanel tagPanel;
     TransformPanel transformPanel;
     RotationPanel rotationPanel;
@@ -71,7 +70,6 @@ private:
         ImGui::Text("Entity");
         ImGui::Separator();
         
-        // Використовуємо панелі
         tagPanel.Render(ecs, entity);
         
         ImGui::Spacing();

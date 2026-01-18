@@ -33,7 +33,6 @@ public:
         
         ImGui::Spacing();
         
-        // Visibility component
         if (ecs->HasComponent<VisibilityComponent>(entity))
         {
             auto& vis = ecs->GetComponent<VisibilityComponent>(entity);
