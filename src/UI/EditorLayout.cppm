@@ -7,7 +7,6 @@ module;
 #include <string>
 #include <cstring>
 #include <memory>
-#include <unordered_map>
 
 export module XEngine.UI.EditorLayout;
 
@@ -23,32 +22,43 @@ import XEngine.Rendering.Framebuffer;
 import XEngine.Rendering.Light;
 
 import XEngine.Resource.Material.MaterialManager;
+import XEngine.Resource.Shader.ShaderManager;
 
 import XEngine.UI.Theme; 
 
-import XEngine.Resource.Shader.ShaderManager;
+import XEngine.UI.Windows.ViewportWindow;
+import XEngine.UI.Windows.MenuBarWindow;
+import XEngine.UI.Windows.HierarchyWindow;
+import XEngine.UI.Windows.PropertiesWindow;
+import XEngine.UI.Windows.InspectorWindow;
+import XEngine.UI.Windows.ConsoleWindow;
 
 export class EditorLayout
 {
+private:
+    bool showHierarchy = true;
+    bool showInspector = true;
+    bool showProperties = true;
+    bool showConsole = false;
+
+    std::unique_ptr<Framebuffer> framebuffer;
+
+    ViewportWindow viewportWindow;
+    MenuBarWindow menuBarWindow;
+    HierarchyWindow hierarchyWindow;
+    PropertiesWindow propertiesWindow;
+    InspectorWindow inspectorWindow;
+    ConsoleWindow consoleWindow;
+
 public:
     EditorLayout()
-        : selectedEntity(entt::null)
-        , selectedShader(nullptr)
-        , selectedMaterial("default_white")
-        , showHierarchy(true)
-        , showInspector(true)
-        , showProperties(true)
-        , showConsole(false)
-        , viewportSize({800, 600})
-        , viewportPos({0, 0})
-        , isViewportHovered(false)
-        , isViewportFocused(false)
     {
         framebuffer = std::make_unique<Framebuffer>(1280, 720);
         Logger::Log(LogLevel::INFO, "EditorLayout created with Framebuffer");
     }
 
-    void RenderEditor(ECSWorld* ecs, Camera* camera, Renderer* renderer, ShaderManager* shaderManager, MaterialManager* materialManager)
+    void RenderEditor(ECSWorld* ecs, Camera* camera, Renderer* renderer, 
+                     ShaderManager* shaderManager, MaterialManager* materialManager)
     {
         if (!ecs || !camera || !renderer || !materialManager)
         {
@@ -56,6 +66,25 @@ public:
             return;
         }
 
+        RenderDockSpace();
+        RenderWindows(ecs, camera, renderer, shaderManager, materialManager);
+    }
+    
+    ImVec2 GetViewportSize() const { return viewportWindow.GetViewportSize(); }
+    ImVec2 GetViewportPos() const { return viewportWindow.GetViewportPos(); }
+    
+    bool IsViewportHovered() const { return viewportWindow.IsHovered(); }
+    bool IsViewportFocused() const { return viewportWindow.IsFocused(); }
+
+    entt::entity GetSelectedEntity() const { return hierarchyWindow.GetSelectedEntity(); }
+    ShaderObj* GetSelectedShader() const { return hierarchyWindow.GetSelectedShader(); }
+    std::string GetSelectedMaterial() const { return hierarchyWindow.GetSelectedMaterial(); }
+
+    Framebuffer* GetFramebuffer() const { return framebuffer.get(); }
+
+private:
+    void RenderDockSpace()
+    {
         ImGuiViewport* viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(viewport->WorkPos);
         ImGui::SetNextWindowSize(viewport->WorkSize);
@@ -76,668 +105,52 @@ public:
         ImGuiID dockspace_id = ImGui::GetID("MainDockSpace");
         ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
 
-        if (ImGui::BeginMenuBar())
-        {
-            if (ImGui::BeginMenu("File"))
-            {
-                if (ImGui::MenuItem("Exit"))
-                    if(CommandManager::HasCommand("onExit")) 
-                        CommandManager::ExecuteCommand("onExit", {});
-                    
-                ImGui::EndMenu();
-            }
-            
-            if (ImGui::BeginMenu("Create"))
-            {
-                if (ImGui::BeginMenu("Mesh"))
-                {
-                    if (ImGui::MenuItem("Cube"))
-                        if(CommandManager::HasCommand("onCreateCube")) 
-                            CommandManager::ExecuteCommand("onCreateCube", {});
-                    
-                    if (ImGui::MenuItem("Sphere"))
-                        Logger::Log(LogLevel::INFO, "Sphere not implemented");
-                    
-                    ImGui::EndMenu();
-                }
-                
-                if (ImGui::BeginMenu("Light"))
-                {
-                    if (ImGui::MenuItem("Directional Light"))
-                        if(CommandManager::HasCommand("onCreateDirectionalLight")) 
-                            CommandManager::ExecuteCommand("onCreateDirectionalLight", {});
-                    
-                    if (ImGui::MenuItem("Point Light"))
-                        if(CommandManager::HasCommand("onCreatePointLight")) 
-                            CommandManager::ExecuteCommand("onCreatePointLight", {});
-                    
-                    if (ImGui::MenuItem("Spot Light"))
-                        if(CommandManager::HasCommand("onCreateSpotLight")) 
-                            CommandManager::ExecuteCommand("onCreateSpotLight", {});
-                    
-                    ImGui::EndMenu();
-                }
-                
-                ImGui::EndMenu();
-            }
-
-            if (ImGui::BeginMenu("View"))
-            {
-                ImGui::MenuItem("Hierarchy", nullptr, &showHierarchy);
-                ImGui::MenuItem("Inspector", nullptr, &showInspector);
-                ImGui::MenuItem("Properties", nullptr, &showProperties);
-                ImGui::MenuItem("Console", nullptr, &showConsole);
-                
-                ImGui::Separator();
-                
-                if (ImGui::BeginMenu("Theme"))
-                {
-                    if (ImGui::MenuItem("Dark")) 
-                        Theme::ApplyTheme(ThemeStyle::Dark);
-                    if (ImGui::MenuItem("Light")) 
-                        Theme::ApplyTheme(ThemeStyle::Light);
-                    
-                    ImGui::Separator();
-                    
-                    if (ImGui::MenuItem("Custom")) 
-                        Theme::ApplyTheme(ThemeStyle::Custom);
-                    if (ImGui::MenuItem("Red Accent"))
-                        Theme::ApplyTheme(ThemeStyle::RedAccent);
-                    if (ImGui::MenuItem("Enemymouse (Cyan)"))
-                        Theme::ApplyTheme(ThemeStyle::Enemymouse);
-                    if (ImGui::MenuItem("Adobe Spectrum"))
-                        Theme::ApplyTheme(ThemeStyle::AdobeSpectrum);
-                    if (ImGui::MenuItem("LED Synthmaster (Green)"))   
-                        Theme::ApplyTheme(ThemeStyle::LedSynthmaster);
-                    if (ImGui::MenuItem("Dougbinks Light"))          
-                        Theme::ApplyTheme(ThemeStyle::DougbinksLight);
-                    if (ImGui::MenuItem("Dougbinks Dark"))             
-                        Theme::ApplyTheme(ThemeStyle::DougbinksDark);
-                    
-                    ImGui::Separator();
-                    
-                    if (ImGui::MenuItem("Unreal Engine")) 
-                        Theme::ApplyTheme(ThemeStyle::UnrealEngine);
-                    if (ImGui::MenuItem("Unity")) 
-                        Theme::ApplyTheme(ThemeStyle::Unity);
-                    if (ImGui::MenuItem("Visual Studio")) 
-                        Theme::ApplyTheme(ThemeStyle::VisualStudio);
-                    
-                    ImGui::EndMenu();
-                }
-                
-                ImGui::EndMenu();
-            }
-
-            ImGui::EndMenuBar();
-        }
+        menuBarWindow.Render(showHierarchy, showInspector, showProperties, showConsole);
 
         ImGui::End();
+    }
 
-        if (showHierarchy)  RenderSceneHierarchy(ecs, shaderManager, materialManager);
-        if (showInspector)  RenderInspector(ecs, shaderManager, materialManager);
-        if (showProperties) RenderProperties(camera, renderer);
-        if (showConsole)    RenderConsole();
+    void RenderWindows(ECSWorld* ecs, Camera* camera, Renderer* renderer,
+                      ShaderManager* shaderManager, MaterialManager* materialManager)
+    {
+        viewportWindow.Render(framebuffer.get());
         
-        RenderViewport();
-    }
-
-    ImVec2 GetViewportSize()  const { return viewportSize; }
-    ImVec2 GetViewportPos()   const { return viewportPos; }
-    bool   IsViewportHovered() const { return isViewportHovered; }
-    bool   IsViewportFocused() const { return isViewportFocused; }
-
-    entt::entity GetSelectedEntity() const { return selectedEntity; }
-    ShaderObj* GetSelectedShader() const { return selectedShader; }
-    Framebuffer* GetFramebuffer() const { return framebuffer.get(); }
-    void SetSelectedEntity(entt::entity entity) { selectedEntity = entity; }
-
-private:
-    // ───── state ─────
-
-    entt::entity selectedEntity;
-    ShaderObj* selectedShader;
-    std::string selectedMaterial;
-
-    bool showHierarchy;
-    bool showInspector;
-    bool showProperties;
-    bool showConsole;
-
-    ImVec2 viewportSize;
-    ImVec2 viewportPos;
-    bool   isViewportHovered;
-    bool   isViewportFocused;
-
-    std::unique_ptr<Framebuffer> framebuffer;
-
-    // ───── UI blocks ─────
-
-    void RenderViewport() 
-    {
-        ImGui::SetNextWindowPos({300, 10}, ImGuiCond_FirstUseEver);
-        ImGui::SetNextWindowSize({800, 650}, ImGuiCond_FirstUseEver);
-
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {0, 0});
-        ImGui::Begin("Game Viewport");
-
-        isViewportHovered = ImGui::IsWindowHovered();
-        isViewportFocused = ImGui::IsWindowFocused();
-
-        ImVec2 size = ImGui::GetContentRegionAvail();
-
-        if (size.x > 0 && size.y > 0 &&
-            (size.x != viewportSize.x || size.y != viewportSize.y))
-        {
-            viewportSize = size;
-            framebuffer->Resize((int)size.x, (int)size.y);
-
-            Logger::Log(LogLevel::INFO,
-                "Viewport resized to " +
-                std::to_string((int)size.x) + "x" +
-                std::to_string((int)size.y));
-        }
-
-        viewportPos = ImGui::GetCursorScreenPos();
-
-        if (framebuffer)
-        {
-            ImGui::Image(
-                (void*)(intptr_t)framebuffer->GetTextureID(),
-                size,
-                {0, 1},
-                {1, 0});
-        }
-        else
-        {
-            ImGui::Text("Framebuffer error");
-        }
-
-        ImGui::End();
-        ImGui::PopStyleVar();
-    }
-
-    void RenderSceneHierarchy(ECSWorld* ecs, ShaderManager* shaderManager, MaterialManager* materialManager)
-    {
-        ImGui::SetNextWindowPos({10, 170}, ImGuiCond_FirstUseEver);
-        ImGui::SetNextWindowSize({280, 400}, ImGuiCond_FirstUseEver);
-
-        ImGui::Begin("Hierarchy", &showHierarchy);
-
-        entt::entity entityToDelete = entt::null;
-
-        if (ImGui::CollapsingHeader("Objects"))
-        {
-            ImGui::Text("Entities: %zu", ecs->GetEntityCount());
-            ImGui::Separator();
-
-            ecs->Each<TagComponent, IDComponent>(
-                [&](entt::entity entity, TagComponent& tag, IDComponent& id) 
-            {
-                ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-
-                if (selectedEntity == entity)
-                    flags |= ImGuiTreeNodeFlags_Selected;
-
-                std::string label = tag.name + " [" + std::to_string(id.id) + "]";
-
-                ImGui::TreeNodeEx((void*)(intptr_t)entity, flags, "%s", label.c_str());
-
-                if (ImGui::IsItemClicked())
-                    selectedEntity = entity;
-
-                if (ImGui::BeginPopupContextItem())
-                {
-                    if (ImGui::MenuItem("Delete"))
-                        entityToDelete = entity;
-
-                    ImGui::EndPopup();
-                }
-            });
-        }
-
-        if (ImGui::CollapsingHeader("Shaders"))
-        {
-            ImGui::Text("Shaders: %zu", shaderManager->GetCount());
-            ImGui::Separator();
-
-            for (auto& [name, shader] : shaderManager->GetShaderMap())
-            {
-                ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-
-                if (selectedShader == shader.get())
-                    flags |= ImGuiTreeNodeFlags_Selected;
-
-                std::string label = name + " [" + std::to_string(shader->ID) + "]";
-
-                ImGui::TreeNodeEx((void*)(intptr_t)shader.get(), flags, "%s", label.c_str());
-
-                if (ImGui::IsItemClicked())
-                    selectedShader = shader.get();
-            }
-        }
-
-        if (ImGui::CollapsingHeader("Materials"))
-        {
-            ImGui::Text("Materials: %zu", materialManager->GetMaterialsCount());
-            ImGui::Separator();
-
-            if (ImGui::Button("+ Add Color Material", ImVec2(-1, 0)))
-                ImGui::OpenPopup("AddColorMaterial");
-
-            if (ImGui::BeginPopupModal("AddColorMaterial", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
-            {
-                static char matNameBuf[128] = "";
-                static float matColor[3] = {1.0f, 1.0f, 1.0f};
-
-                ImGui::InputText("Material Name##color", matNameBuf, sizeof(matNameBuf));
-                ImGui::ColorEdit3("Color##material", matColor);
-
-                if (ImGui::Button("Create", ImVec2(120, 0)))
-                {
-                    if (strlen(matNameBuf) > 0)
-                    {
-                        materialManager->CreateColorMaterial(
-                            std::string(matNameBuf),
-                            glm::vec3(matColor[0], matColor[1], matColor[2]));
-                        memset(matNameBuf, 0, sizeof(matNameBuf));
-                        matColor[0] = matColor[1] = matColor[2] = 1.0f;
-                        ImGui::CloseCurrentPopup();
-                    }
-                }
-                ImGui::SameLine();
-                if (ImGui::Button("Cancel", ImVec2(120, 0)))
-                {
-                    memset(matNameBuf, 0, sizeof(matNameBuf));
-                    ImGui::CloseCurrentPopup();
-                }
-
-                ImGui::Text("(In development!)");
-
-                ImGui::EndPopup();
-            }
-
-            ImGui::Spacing();
-
-            for (const auto& [name, material] : materialManager->GetMaterialsMap())
-            {
-                ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-
-                if (selectedMaterial == name)
-                    flags |= ImGuiTreeNodeFlags_Selected;
-
-                std::string label = name;
-                // if (material->IsUsingColor())
-                // {
-                //     auto col = material->GetColor();
-                //     label += " [Color: " + std::to_string((int)(col.r * 255)) + ", " +
-                //              std::to_string((int)(col.g * 255)) + ", " +
-                //              std::to_string((int)(col.b * 255)) + "]";
-                // }
-                // else
-                //     label += " [Texture: " + std::to_string(material->GetTextureCount()) + " textures]";
-
-                ImGui::TreeNodeEx((void*)(intptr_t)material.get(), flags, "%s", label.c_str());
-
-                if (ImGui::IsItemClicked())
-                    selectedMaterial = name;
-            }
-        }
-
-        if (entityToDelete != entt::null)
-        {
-            ecs->DestroyEntity(entityToDelete);
-            if (selectedEntity == entityToDelete)
-                selectedEntity = entt::null;
-        }
-
-        ImGui::End();
-    }
-
-    void RenderInspector(ECSWorld* ecs, ShaderManager* shaderManager, MaterialManager* materialManager)
-    {
-        ImGui::SetNextWindowPos(ImVec2(1110, 10), ImGuiCond_FirstUseEver);
-        ImGui::SetNextWindowSize(ImVec2(300, 660), ImGuiCond_FirstUseEver);
+        if (showHierarchy)
+            hierarchyWindow.Render(ecs, shaderManager, materialManager);
         
-        ImGui::Begin("Inspector", &showInspector);
+        if (showInspector)
+            inspectorWindow.Render(
+                ecs, 
+                hierarchyWindow.GetSelectedEntity(), 
+                materialManager,
+                shaderManager,
+                hierarchyWindow.GetSelectedShader()
+            );
         
-        if (selectedEntity != entt::null && ecs->IsValid(selectedEntity))
-        {
-            ImGui::Text("Entity");
-            ImGui::Separator();
-            
-            if (ecs->HasComponent<TagComponent>(selectedEntity))
-            {
-                auto& tag = ecs->GetComponent<TagComponent>(selectedEntity);
-                
-                char buffer[256];
-                strncpy(buffer, tag.name.c_str(), sizeof(buffer));
-                buffer[255] = '\0';
-                
-                ImGui::Text("Name:");
-                ImGui::SameLine();
-                ImGui::PushItemWidth(-1);
-                if (ImGui::InputText("##Name", buffer, sizeof(buffer)))
-                    tag.name = std::string(buffer);
-                ImGui::PopItemWidth();
-            }
-            
-            ImGui::Spacing();
-            
-            if (ecs->HasComponent<VisibilityComponent>(selectedEntity))
-            {
-                auto& vis = ecs->GetComponent<VisibilityComponent>(selectedEntity);
-                ImGui::Checkbox("Active", &vis.isActive);
-            }
-            
-            ImGui::Spacing();
-            ImGui::Separator();
-            
-            if (ecs->HasComponent<TransformComponent>(selectedEntity))
-            {
-                if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
-                {
-                    auto& transform = ecs->GetComponent<TransformComponent>(selectedEntity);
-                    
-                    ImGui::Text("Position");
-                    ImGui::DragFloat3("##Pos", &transform.position[0], 0.1f);
-                    
-                    ImGui::Spacing();
-                    ImGui::Separator();
-                    
-                    ImGui::Text("Rotation");
-                    ImGui::DragFloat3("##Rot", &transform.rotation[0], 1.0f);
-                    
-                    ImGui::Spacing();
-                    ImGui::Separator();
-                    
-                    ImGui::Text("Scale");
-                    float uniformScale = transform.scale.x;
-                    if (ImGui::DragFloat("##Scale", &uniformScale, 0.01f, 0.01f, 10.0f))
-                        transform.scale = glm::vec3(uniformScale);
-                }
-            }
-
-            if (ecs->HasComponent<RotationComponent>(selectedEntity))
-            {
-                if (ImGui::CollapsingHeader("Rotation Animation"))
-                {
-                    auto& rotation = ecs->GetComponent<RotationComponent>(selectedEntity);
-                    
-                    ImGui::Checkbox("Auto Rotate", &rotation.autoRotate);
-                    ImGui::DragFloat("Speed", &rotation.speed, 1.0f, 0.0f, 360.0f);
-                    ImGui::DragFloat3("Axis", &rotation.axis[0], 0.1f, -1.0f, 1.0f);
-                }
-            }
-            else
-            {
-                if (ImGui::Button("Add Rotation Component"))
-                    ecs->AddComponent<RotationComponent>(selectedEntity);
-            }
-            
-            if (ImGui::CollapsingHeader("Material"))
-            {
-                if (ecs->HasComponent<MaterialComponent>(selectedEntity))
-                {
-                    auto& matComp = ecs->GetComponent<MaterialComponent>(selectedEntity);
-                    ImGui::BulletText("Current: %s", matComp.material ? matComp.material->GetName().c_str() : "None");
-                    ImGui::Separator();
-                }
-
-                ImGui::Text("Assign Material:");
-                
-                if (ImGui::BeginCombo("##MaterialSelect", selectedMaterial.c_str(), 0))
-                {
-                    for (const auto& name : materialManager->GetMaterialNames())
-                    {
-                        bool is_selected = (selectedMaterial == name);
-                        if (ImGui::Selectable(name.c_str(), is_selected))
-                        {
-                            selectedMaterial = name;
-                            auto material = materialManager->GetMaterial(name);
-                            
-                            if (ecs->HasComponent<MaterialComponent>(selectedEntity))
-                            {
-                                auto& matComp = ecs->GetComponent<MaterialComponent>(selectedEntity);
-                                matComp.material = material;
-                            }
-                            else
-                                ecs->AddComponent<MaterialComponent>(selectedEntity, material);
-                            
-                            if (ecs->HasComponent<ColorComponent>(selectedEntity))
-                                ecs->RemoveComponent<ColorComponent>(selectedEntity);
-                            
-                            Logger::Log(LogLevel::INFO, LogCategory::RENDERING, 
-                                "Material '" + name + "' assigned to entity");
-                        }
-                        if (is_selected)
-                            ImGui::SetItemDefaultFocus();
-                    }
-                    ImGui::EndCombo();
-                }
-
-                if (ImGui::Button("Remove Material", ImVec2(-1, 0)))
-                {
-                    if (ecs->HasComponent<MaterialComponent>(selectedEntity))
-                    {
-                        ecs->RemoveComponent<MaterialComponent>(selectedEntity);
-                        Logger::Log(LogLevel::INFO, LogCategory::RENDERING, "Material removed from entity");
-                    }
-                }
-            } 
-
-            if (ecs->HasComponent<LightComponent>(selectedEntity))
-            {
-                if (ImGui::CollapsingHeader("Light", ImGuiTreeNodeFlags_DefaultOpen))
-                {
-                    auto& light = ecs->GetComponent<LightComponent>(selectedEntity);
-                    
-                    const char* lightTypes[] = { "Directional", "Point", "Spot" };
-                    int currentType = static_cast<int>(light.type);
-                    
-                    ImGui::Text("Light Type");
-                    if (ImGui::Combo("##LightType", &currentType, lightTypes, 3))
-                    {
-                        light.type = static_cast<LightType>(currentType);
-                        
-                        if (light.type == LightType::DIRECTIONAL)
-                        {
-                            light.ambient = glm::vec3(0.05f);
-                            light.diffuse = glm::vec3(0.4f);
-                            light.specular = glm::vec3(0.5f);
-                        }
-                        else if (light.type == LightType::POINT)
-                        {
-                            light.ambient = glm::vec3(0.05f);
-                            light.diffuse = glm::vec3(0.8f);
-                            light.specular = glm::vec3(1.0f);
-                        }
-                        else if (light.type == LightType::SPOT)
-                        {
-                            light.ambient = glm::vec3(0.0f);
-                            light.diffuse = glm::vec3(1.0f);
-                            light.specular = glm::vec3(1.0f);
-                        }
-                    }
-                    
-                    ImGui::Spacing();
-                    ImGui::Separator();
-                    ImGui::Spacing();
-                    
-                    ImGui::Checkbox("Active##Light", &light.isActive);
-                    ImGui::SameLine();
-                    ImGui::Checkbox("Cast Shadows", &light.castShadows);
-                    
-                    ImGui::Spacing();
-                    ImGui::Separator();
-                    ImGui::Spacing();
-                    
-                    if (light.type == LightType::DIRECTIONAL || light.type == LightType::SPOT)
-                    {
-                        ImGui::Text("Direction");
-                        ImGui::DragFloat3("##Direction", &light.direction[0], 0.1f, -1.0f, 1.0f);
-                        
-                        if (glm::length(light.direction) > 0.001f)
-                            light.direction = glm::normalize(light.direction);
-                        
-                        ImGui::Spacing();
-                        ImGui::Separator();
-                        ImGui::Spacing();
-                    }
-                    
-                    ImGui::Text("Intensity");
-                    ImGui::DragFloat("##Intensity", &light.intensity, 0.01f, 0.0f, 10.0f);
-                    
-                    ImGui::Spacing();
-                    ImGui::Separator();
-                    ImGui::Spacing();
-                    
-                    ImGui::Text("Ambient Color");
-                    float ambient[3] = { light.ambient.r, light.ambient.g, light.ambient.b };
-                    if (ImGui::ColorEdit3("##Ambient", ambient))
-                        light.ambient = glm::vec3(ambient[0], ambient[1], ambient[2]);
-                    
-                    ImGui::Spacing();
-                    
-                    ImGui::Text("Diffuse Color");
-                    float diffuse[3] = { light.diffuse.r, light.diffuse.g, light.diffuse.b };
-                    if (ImGui::ColorEdit3("##Diffuse", diffuse))
-                        light.diffuse = glm::vec3(diffuse[0], diffuse[1], diffuse[2]);
-                    
-                    ImGui::Spacing();
-                    
-                    ImGui::Text("Specular Color");
-                    float specular[3] = { light.specular.r, light.specular.g, light.specular.b };
-                    if (ImGui::ColorEdit3("##Specular", specular))
-                        light.specular = glm::vec3(specular[0], specular[1], specular[2]);
-                    
-                    ImGui::Spacing();
-                    ImGui::Separator();
-                    ImGui::Spacing();
-                    
-                    if (light.type == LightType::POINT || light.type == LightType::SPOT)
-                    {
-                        ImGui::Text("Attenuation");
-                        
-                        ImGui::Text("Constant");
-                        ImGui::DragFloat("##Constant", &light.constant, 0.01f, 0.0f, 10.0f);
-                        
-                        ImGui::Text("Linear");
-                        ImGui::DragFloat("##Linear", &light.linear, 0.001f, 0.0f, 1.0f);
-                        
-                        ImGui::Text("Quadratic");
-                        ImGui::DragFloat("##Quadratic", &light.quadratic, 0.001f, 0.0f, 1.0f);
-                        
-                        ImGui::Text("Radius");
-                        ImGui::DragFloat("##Radius", &light.radius, 0.5f, 1.0f, 100.0f);
-                        
-                        ImGui::Spacing();
-                        ImGui::Separator();
-                        ImGui::Spacing();
-                    }
-                    
-                    if (light.type == LightType::SPOT)
-                    {
-                        ImGui::Text("Spot Cone");
-                        
-                        ImGui::Text("Inner Cutoff (degrees)");
-                        ImGui::DragFloat("##InnerCutoff", &light.innerCutoff, 0.5f, 0.0f, 90.0f);
-                        
-                        ImGui::Text("Outer Cutoff (degrees)");
-                        ImGui::DragFloat("##OuterCutoff", &light.outerCutoff, 0.5f, 0.0f, 90.0f);
-                        
-                        if (light.outerCutoff < light.innerCutoff)
-                            light.outerCutoff = light.innerCutoff;
-                        
-                        ImGui::Spacing();
-                        ImGui::Separator();
-                        ImGui::Spacing();
-                    }
-                    
-                    // if (ImGui::Button("Remove Light Component", ImVec2(-1, 0)))
-                    //     ecs->RemoveComponent<LightComponent>(selectedEntity);
-                }
-            }
-            // else
-            // {
-            //     if (ImGui::Button("Add Light Component", ImVec2(-1, 0)))
-            //     {
-            //         ecs->AddComponent<LightComponent>(selectedEntity, LightType::DIRECTIONAL);
-            //         Logger::Log(LogLevel::INFO, "Light component added to entity");
-            //     }
-            // }
-        }
-        else if (selectedShader != nullptr && !selectedShader->name.empty() && shaderManager->IsShaderValid(selectedShader->name))
-        {
-            if (ImGui::MenuItem("Reload"))
-                shaderManager->Reload(selectedShader->name);
-        }
-        else
-        {
-            ImGui::TextDisabled("Nothing selected");
-            ImGui::Separator();
-            ImGui::TextWrapped("Select an object from Hierarchy");
-        }
+        if (showProperties)
+            propertiesWindow.Render(camera);
         
-        ImGui::End();
+        if (showConsole)
+            consoleWindow.Render();
+        
+        SyncWindowFlags();
     }
-
-    void RenderProperties(Camera* camera, Renderer* renderer)
+    
+    void SyncWindowFlags()
     {
-        ImGui::SetNextWindowPos({10, 580}, ImGuiCond_FirstUseEver);
-        ImGui::SetNextWindowSize({280, 250}, ImGuiCond_FirstUseEver);
-
-        ImGui::Begin("Scene Settings", &showProperties);
-
-        if (ImGui::CollapsingHeader("Camera"))
-        {
-            float speed = camera->GetMovementSpeed();
-            if (ImGui::SliderFloat("Speed", &speed, 1.f, 20.f))
-                camera->SetMovementSpeed(speed);
-
-            ImGui::Spacing();
-
-            float sensitivity = camera->GetMouseSensitivity();
-            if (ImGui::SliderFloat("Mouse Sensitivity", &sensitivity, 0.0f, 1.0f))
-                camera->SetMouseSensitivity(sensitivity);
-
-            ImGui::Spacing();
-
-            float zoom = camera->GetZoom();
-            if (ImGui::SliderFloat("Zoom", &zoom, 1.0f, 100.0f))
-                camera->SetZoom(zoom);
-
-            ImGui::Spacing();
-
-            float pitch = camera->GetPitch();
-            if (ImGui::SliderFloat("Pitch", &pitch, -90.0f, 90.0f, "%.1f"))
-                camera->SetPitch(pitch);
-
-            ImGui::Spacing();
-
-            float yaw = camera->GetYaw();
-            if (ImGui::SliderFloat("Yaw", &yaw, -360.0f, 360.0f, "%.1f"))
-                camera->SetYaw(yaw);
-        }
-
-        if (ImGui::CollapsingHeader("Renderer"))
-        {
-            auto& s = renderer->GetSettings();
-            ImGui::Checkbox("Wireframe", &s.enableWireframe);
-            ImGui::Checkbox("Depth Test", &s.enableDepthTest);
-            ImGui::ColorEdit3("Clear", &s.clearColor[0]);
-        }
-
-        ImGui::End();
-    }
-
-    void RenderConsole()
-    {
-        ImGui::SetNextWindowPos({300, 670}, ImGuiCond_FirstUseEver);
-        ImGui::SetNextWindowSize({800, 120}, ImGuiCond_FirstUseEver);
-
-        ImGui::Begin("Console", &showConsole);
-        ImGui::Text("[INFO] Editor ready with ECS");
-        ImGui::End();
+        if (!hierarchyWindow.IsOpen())
+            showHierarchy = false;
+            
+        if (!inspectorWindow.IsOpen())
+            showInspector = false;
+            
+        if (!propertiesWindow.IsOpen())
+            showProperties = false;
+            
+        if (!consoleWindow.IsOpen())
+            showConsole = false;
+            
+        if (!viewportWindow.IsOpen())
+            viewportWindow.SetOpen(true);
     }
 };
