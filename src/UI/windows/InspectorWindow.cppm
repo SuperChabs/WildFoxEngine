@@ -19,17 +19,19 @@ import XEngine.UI.Panels.TransformPanel;
 import XEngine.UI.Panels.RotationPanel;
 import XEngine.UI.Panels.MaterialPanel;
 import XEngine.UI.Panels.LightPanel;
+import XEngine.UI.Panels.IconPanel;
 
 export class InspectorWindow 
 {
 private:
     bool isOpen = true;
-    
+
     TagPanel tagPanel;
     TransformPanel transformPanel;
     RotationPanel rotationPanel;
     MaterialPanel materialPanel;
     LightPanel lightPanel;
+    IconPanel iconPanel;
 
 public:
     void Render(ECSWorld* ecs, entt::entity selectedEntity, 
@@ -79,6 +81,7 @@ private:
         rotationPanel.Render(ecs, entity);
         materialPanel.Render(ecs, entity, materialManager);
         lightPanel.Render(ecs, entity);
+        iconPanel.Render(ecs, entity); 
     }
     
     void RenderShaderInspector(ShaderObj* shader, ShaderManager* shaderManager)

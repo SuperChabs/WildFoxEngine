@@ -9,6 +9,11 @@
             "name": "basic",
             "vertex": "vertex/basic.vs",
             "fragment": "fragment/basic.fs"
+        },
+        {
+        "name": "icon",
+        "vertex": "vertex/icon.vs",
+        "fragment": "fragment/icon.fs"
         }
     ]
 }

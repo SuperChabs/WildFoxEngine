@@ -80,6 +80,8 @@ private:
         return textureID;
     }
 
+
+
 public:
     TextureManager() = default;
 
@@ -104,6 +106,21 @@ public:
         if (IsLoaded(key)) return loadedTextures[key];
         unsigned int textureID = LoadCubemapFromFiles(faces);
         if (textureID != 0) loadedTextures[key] = textureID;
+        return textureID;
+    }
+
+    unsigned int CreateWhiteTexture()
+    {
+        unsigned int textureID;
+        glGenTextures(1, &textureID);
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        
+        unsigned char data[] = { 255, 255, 255, 255 }; // Білий піксель
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        
         return textureID;
     }
 
@@ -135,3 +152,5 @@ public:
         return loadedTextures.find(path) != loadedTextures.end();
     }
 };
+
+

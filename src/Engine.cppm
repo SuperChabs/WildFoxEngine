@@ -12,7 +12,6 @@ module;
 #include <entt.hpp>
 
 #include <memory>
-// #include <unordered_map>
 #include <string>
 #include <variant>
 
@@ -42,17 +41,16 @@ export class Engine : public Application
 {
 private:
     std::unique_ptr<Skybox> skybox;
-
     std::unique_ptr<EditorLayout> editorLayout;
 
     std::unique_ptr<RenderSystem> renderSystem;
     std::unique_ptr<RotationSystem> rotationSystem;
     std::unique_ptr<LightSystem> lightSystem;
+    std::unique_ptr<IconRenderSystem> iconRenderSystem;
 
 protected:
     void OnInitialize() override
     {
-
         Logger::Log(LogLevel::INFO, "Initializing XEngine...");
 
         GetShaderManager()->Load();
@@ -74,6 +72,7 @@ protected:
         renderSystem = std::make_unique<RenderSystem>();
         rotationSystem = std::make_unique<RotationSystem>();
         lightSystem = std::make_unique<LightSystem>();
+        iconRenderSystem = std::make_unique<IconRenderSystem>(GetTextureManager());
 
         InitCommandRegistration();
 
@@ -138,6 +137,13 @@ protected:
                 
                 renderSystem->Update(*GetECSWorld(), *GetShaderManager(), "basic", *GetCamera());
                 skybox->Render(*GetShaderManager(), *GetCamera(), projection);
+
+                glDisable(GL_DEPTH_TEST);
+                GetShaderManager()->Bind("icon");
+                GetShaderManager()->SetMat4("icon", "projection", projection);
+                GetShaderManager()->SetMat4("icon", "view", view);
+                iconRenderSystem->Update(*GetECSWorld(), *GetShaderManager(), "icon", *GetCamera());
+                glEnable(GL_DEPTH_TEST);
             }
             
             fb->Unbind();
@@ -255,7 +261,10 @@ private:
             GetECSWorld()->AddComponent<LightComponent>(entity, LightType::DIRECTIONAL);
             GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
             
-            Logger::Log(LogLevel::INFO, "Directional light created");
+            GetECSWorld()->AddComponent<IconComponent>(entity, 
+                "assets/textures/icons/light_directional.png", 0.3f);
+            
+            Logger::Log(LogLevel::INFO, "Directional light created with icon");
         });
 
         CommandManager::RegisterCommand("onCreatePointLight",
@@ -271,7 +280,10 @@ private:
             GetECSWorld()->AddComponent<LightComponent>(entity, LightType::POINT);
             GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
             
-            Logger::Log(LogLevel::INFO, "Point light created");
+            GetECSWorld()->AddComponent<IconComponent>(entity, 
+                "assets/textures/icons/light_point.png", 0.4f);
+            
+            Logger::Log(LogLevel::INFO, "Point light created with icon");
         });
 
         CommandManager::RegisterCommand("onCreateSpotLight",
@@ -287,7 +299,10 @@ private:
             GetECSWorld()->AddComponent<LightComponent>(entity, LightType::SPOT);
             GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
             
-            Logger::Log(LogLevel::INFO, "Spot light created");
+            GetECSWorld()->AddComponent<IconComponent>(entity, 
+                "assets/textures/icons/light_spot.png", 0.35f);
+            
+            Logger::Log(LogLevel::INFO, "Spot light created with icon");
         });
     }
 };

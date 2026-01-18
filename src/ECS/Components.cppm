@@ -11,6 +11,7 @@ import XEngine.Scene.Mesh;
 
 import XEngine.Rendering.Material;
 import XEngine.Rendering.Light;
+import XEngine.Rendering.MeshData;
 
 export struct TagComponent 
 {
@@ -156,4 +157,16 @@ export struct LightComponent
         glm::vec4 dir = rotMat * glm::vec4(0.0f, -1.0f, 0.0f, 0.0f);
         direction = glm::normalize(glm::vec3(dir));
     }
+};
+
+export struct IconComponent 
+{
+    std::string iconTexturePath;
+    unsigned int textureID = 0;
+    float scale = 0.5f;
+    bool billboardMode = true; 
+    
+    IconComponent() = default;
+    IconComponent(const std::string& path, float s = 0.5f) 
+        : iconTexturePath(path), scale(s) {}
 };
