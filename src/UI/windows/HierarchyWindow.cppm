@@ -7,13 +7,13 @@ module;
 #include <string>
 #include <cstring>
 
-export module WildFoxEngine.UI.Windows.HierarchyWindow;
+export module WFE.UI.Windows.HierarchyWindow;
 
-import WildFoxEngine.ECS.ECSWorld;
-import WildFoxEngine.ECS.Components;
+import WFE.ECS.ECSWorld;
+import WFE.ECS.Components;
 
-import WildFoxEngine.Resource.Shader.ShaderManager;
-import WildFoxEngine.Resource.Material.MaterialManager;
+import WFE.Resource.Shader.ShaderManager;
+import WFE.Resource.Material.MaterialManager;
 
 export class HierarchyWindow
 {

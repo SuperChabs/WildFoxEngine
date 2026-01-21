@@ -6,10 +6,10 @@ module;
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
-export module WildFoxEngine.UI.ImGuiManager;
+export module WFE.UI.ImGuiManager;
 
-import WildFoxEngine.Core.Logger;
-import WildFoxEngine.UI.Theme; 
+import WFE.Core.Logger;
+import WFE.UI.Theme; 
 
 export class ImGuiManager 
 {

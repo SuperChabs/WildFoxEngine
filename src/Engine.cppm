@@ -15,27 +15,27 @@ module;
 #include <string>
 #include <variant>
 
-export module WildFoxEngine.Engine;
+export module WFE.Engine;
 
-import WildFoxEngine.Application.Application;
+import WFE.Application.Application;
 
-import WildFoxEngine.Core.Input;
-import WildFoxEngine.Core.CommandManager;
-import WildFoxEngine.Core.Logger;
+import WFE.Core.Input;
+import WFE.Core.CommandManager;
+import WFE.Core.Logger;
 
-import WildFoxEngine.Rendering.Skybox;
-import WildFoxEngine.Rendering.Framebuffer;
-import WildFoxEngine.Rendering.Primitive.PrimitivesFactory;
-import WildFoxEngine.Rendering.Light;
+import WFE.Rendering.Skybox;
+import WFE.Rendering.Framebuffer;
+import WFE.Rendering.Primitive.PrimitivesFactory;
+import WFE.Rendering.Light;
 
-import WildFoxEngine.Scene.Mesh;
-import WildFoxEngine.Scene.Model;
+import WFE.Scene.Mesh;
+import WFE.Scene.Model;
 
-import WildFoxEngine.UI.EditorLayout;
+import WFE.UI.EditorLayout;
 
-import WildFoxEngine.ECS.ECSWorld;
-import WildFoxEngine.ECS.Components;
-import WildFoxEngine.ECS.Systems;
+import WFE.ECS.ECSWorld;
+import WFE.ECS.Components;
+import WFE.ECS.Systems;
 
 export class Engine : public Application 
 {
@@ -51,7 +51,7 @@ private:
 protected:
     void OnInitialize() override
     {
-        Logger::Log(LogLevel::INFO, "Initializing WildFoxEngine...");
+        Logger::Log(LogLevel::INFO, "Initializing WFE...");
 
         GetShaderManager()->Load();
         GetMaterialManager()->LoadMaterialConfigs();

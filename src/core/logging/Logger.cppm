@@ -6,7 +6,7 @@ module;
 #include <mutex>
 #include <source_location>
 
-export module WildFoxEngine.Core.Logger;
+export module WFE.Core.Logger;
 
 export enum class LogLevel
 {
@@ -132,7 +132,7 @@ private:
 
     static const char* stripProjectRoot(const char* file)
     {
-        constexpr const char* ROOT = "WildFoxEngine/"; 
+        constexpr const char* ROOT = "WFE/"; 
         const char* pos = std::strstr(file, ROOT);
         return pos ? pos : file;
     }

@@ -3,9 +3,9 @@ module;
 #include <glad/glad.h>
 #include <string>
 
-export module WildFoxEngine.Rendering.Framebuffer;
+export module WFE.Rendering.Framebuffer;
 
-import WildFoxEngine.Core.Logger; 
+import WFE.Core.Logger; 
 
 export class Framebuffer
 {

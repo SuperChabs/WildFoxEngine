@@ -2,7 +2,7 @@ module;
 
 #include <imgui.h>
 
-export module WildFoxEngine.UI.Windows.ConsoleWindow;
+export module WFE.UI.Windows.ConsoleWindow;
 
 export class ConsoleWindow
 {

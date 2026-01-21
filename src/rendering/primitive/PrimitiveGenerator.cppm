@@ -2,7 +2,7 @@ module;
 
 #include <cstddef>
 
-export module WildFoxEngine.Rendering.Primitive.PrimitiveGenerator;
+export module WFE.Rendering.Primitive.PrimitiveGenerator;
 
 static const float CUBE_VERTICES[] = 
 {

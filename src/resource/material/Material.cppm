@@ -6,11 +6,11 @@ module;
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
-export module WildFoxEngine.Rendering.Material;
+export module WFE.Rendering.Material;
 
-import WildFoxEngine.Rendering.MeshData; 
-import WildFoxEngine.Resource.Shader.ShaderManager;
-import WildFoxEngine.Core.Logger;
+import WFE.Rendering.MeshData; 
+import WFE.Resource.Shader.ShaderManager;
+import WFE.Core.Logger;
 
 export class Material
 {

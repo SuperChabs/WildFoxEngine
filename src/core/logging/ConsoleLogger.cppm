@@ -4,9 +4,9 @@ module;
 #include <chrono>
 #include <print>
 
-export module WildFoxEngine.Core.Logging.ConsoleLogger;
+export module WFE.Core.Logging.ConsoleLogger;
 
-import WildFoxEngine.Core.Logger;
+import WFE.Core.Logger;
 
 export class ConsoleLogger : public ILogSink
 {

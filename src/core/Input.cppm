@@ -7,7 +7,7 @@ module;
 #include <memory>
 #include <unordered_map>
 
-export module WildFoxEngine.Core.Input;
+export module WFE.Core.Input;
 
 export enum class Key
 {

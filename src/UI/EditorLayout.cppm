@@ -8,30 +8,30 @@ module;
 #include <cstring>
 #include <memory>
 
-export module WildFoxEngine.UI.EditorLayout;
+export module WFE.UI.EditorLayout;
 
-import WildFoxEngine.ECS.ECSWorld;
-import WildFoxEngine.ECS.Components;
+import WFE.ECS.ECSWorld;
+import WFE.ECS.Components;
 
-import WildFoxEngine.Core.Camera;
-import WildFoxEngine.Core.Logger;
-import WildFoxEngine.Core.CommandManager;
+import WFE.Core.Camera;
+import WFE.Core.Logger;
+import WFE.Core.CommandManager;
 
-import WildFoxEngine.Rendering.Renderer;
-import WildFoxEngine.Rendering.Framebuffer;
-import WildFoxEngine.Rendering.Light;
+import WFE.Rendering.Renderer;
+import WFE.Rendering.Framebuffer;
+import WFE.Rendering.Light;
 
-import WildFoxEngine.Resource.Material.MaterialManager;
-import WildFoxEngine.Resource.Shader.ShaderManager;
+import WFE.Resource.Material.MaterialManager;
+import WFE.Resource.Shader.ShaderManager;
 
-import WildFoxEngine.UI.Theme; 
+import WFE.UI.Theme; 
 
-import WildFoxEngine.UI.Windows.ViewportWindow;
-import WildFoxEngine.UI.Windows.MenuBarWindow;
-import WildFoxEngine.UI.Windows.HierarchyWindow;
-import WildFoxEngine.UI.Windows.PropertiesWindow;
-import WildFoxEngine.UI.Windows.InspectorWindow;
-import WildFoxEngine.UI.Windows.ConsoleWindow;
+import WFE.UI.Windows.ViewportWindow;
+import WFE.UI.Windows.MenuBarWindow;
+import WFE.UI.Windows.HierarchyWindow;
+import WFE.UI.Windows.PropertiesWindow;
+import WFE.UI.Windows.InspectorWindow;
+import WFE.UI.Windows.ConsoleWindow;
 
 export class EditorLayout
 {

@@ -6,9 +6,9 @@ module;
 #include <utility>
 #include <filesystem>
 
-export module WildFoxEngine.Resource.Shader.ShaderLoader;
+export module WFE.Resource.Shader.ShaderLoader;
 
-import WildFoxEngine.Core.Logger;
+import WFE.Core.Logger;
 
 std::string FileToString(const std::string& path);
 

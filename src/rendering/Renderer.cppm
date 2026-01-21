@@ -5,10 +5,10 @@ module;
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-export module WildFoxEngine.Rendering.Renderer;
+export module WFE.Rendering.Renderer;
 
-import WildFoxEngine.Core.Camera;
-import WildFoxEngine.Rendering.Primitive.PrimitivesFactory;
+import WFE.Core.Camera;
+import WFE.Rendering.Primitive.PrimitivesFactory;
 
 export struct RenderSettings 
 {

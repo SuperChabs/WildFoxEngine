@@ -4,9 +4,9 @@ module;
 #include <GLFW/glfw3.h>
 #include <string>
 
-export module WildFoxEngine.Core.Window;
+export module WFE.Core.Window;
 
-import WildFoxEngine.Core.Logger;
+import WFE.Core.Logger;
 
 export class Window 
 {

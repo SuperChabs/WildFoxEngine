@@ -6,17 +6,17 @@ module;
 
 #include <glm/glm.hpp>
 
-export module WildFoxEngine.Rendering.Primitive.PrimitivesFactory;
+export module WFE.Rendering.Primitive.PrimitivesFactory;
 
-import WildFoxEngine.Rendering.GPUMesh;
-import WildFoxEngine.Rendering.Material;
-import WildFoxEngine.Rendering.MeshData;
-import WildFoxEngine.Rendering.Primitive.PrimitiveGenerator;
+import WFE.Rendering.GPUMesh;
+import WFE.Rendering.Material;
+import WFE.Rendering.MeshData;
+import WFE.Rendering.Primitive.PrimitiveGenerator;
 
-import WildFoxEngine.Scene.Mesh;
-import WildFoxEngine.Scene.Model;
+import WFE.Scene.Mesh;
+import WFE.Scene.Model;
 
-import WildFoxEngine.Core.Logger;
+import WFE.Core.Logger;
 
 export
 enum class PrimitiveType

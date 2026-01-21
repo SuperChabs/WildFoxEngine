@@ -8,15 +8,15 @@ module;
 
 #include <glm/glm.hpp>
 
-export module WildFoxEngine.Resource.Material.MaterialManager;
+export module WFE.Resource.Material.MaterialManager;
 
-import WildFoxEngine.Rendering.MeshData;
-import WildFoxEngine.Rendering.Material;
+import WFE.Rendering.MeshData;
+import WFE.Rendering.Material;
 
-import WildFoxEngine.Resource.Texture.TextureManager;
-import WildFoxEngine.Resource.Material.MaterialConfigLoader;
+import WFE.Resource.Texture.TextureManager;
+import WFE.Resource.Material.MaterialConfigLoader;
 
-import WildFoxEngine.Core.Logger;
+import WFE.Core.Logger;
 
 export class MaterialManager 
 {

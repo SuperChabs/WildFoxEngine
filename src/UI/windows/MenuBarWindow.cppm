@@ -2,12 +2,12 @@ module;
 
 #include <imgui.h>
 
-export module WildFoxEngine.UI.Windows.MenuBarWindow;
+export module WFE.UI.Windows.MenuBarWindow;
 
-import WildFoxEngine.Core.Logger;
-import WildFoxEngine.Core.CommandManager;
+import WFE.Core.Logger;
+import WFE.Core.CommandManager;
 
-import WildFoxEngine.UI.Theme;
+import WFE.UI.Theme;
 
 export class MenuBarWindow
 {

@@ -4,10 +4,10 @@ module;
 #include <string>
 #include <cstdint>
 
-export module WildFoxEngine.ECS.ECSWorld;
+export module WFE.ECS.ECSWorld;
 
-import WildFoxEngine.ECS.Components;
-import WildFoxEngine.Core.Logger;
+import WFE.ECS.Components;
+import WFE.Core.Logger;
 
 export class ECSWorld 
 {

@@ -7,9 +7,9 @@ module;
 #include <vector>
 #include <string>
 
-export module WildFoxEngine.Core.Camera;
+export module WFE.Core.Camera;
 
-import WildFoxEngine.Core.Logger;
+import WFE.Core.Logger;
 
 using namespace glm;
 
@@ -73,8 +73,6 @@ public:
     void ProcessKeyboard(CameraMovement direction, float deltaTime)
     {
         float velocity = movementSpeed * deltaTime;
-        // При движении вперед/назад игнорируем вертикальную компоненту front,
-        // чтобы не подниматься/опускаться при взгляде вверх/вниз
         if (direction == FORWARD)
         {
             vec3 flatFront = vec3(front.x, 0.0f, front.z);
@@ -107,7 +105,6 @@ public:
         yaw   += xoffset;
         pitch += yoffset;
 
-        // Убеждаемся, что когда тангаж выходит за пределы обзора, экран не переворачивается
         if (constrainPitch)
         {
             if (pitch > 89.0f)
@@ -119,7 +116,6 @@ public:
         if (yaw > 360.0f || yaw < -360.0f)
             yaw = 0.0f;
 
-        // Обновляем значения вектора-прямо, вектора-вправо и вектора-вверх, используя обновленные значения углов Эйлера
         UpdateCameraVectors();
     }
 
@@ -135,21 +131,19 @@ public:
 
     mat4 GetViewMatrix() const {return glm::lookAt(position, position + front, up);}
 
-    // Getteri blyat
-    vec3 GetPosition() {return position;}
-    vec3 GetFront()    {return front;}
-    vec3 GetUp()       {return up;}
-    vec3 GetRight()    {return right;}
-    vec3 GetWorldUp()  {return worldUp;}
+    vec3 GetPosition() const {return position;}
+    vec3 GetFront()    const {return front;}
+    vec3 GetUp()       const {return up;}
+    vec3 GetRight()    const {return right;}
+    vec3 GetWorldUp()  const {return worldUp;}
 
-    float GetYaw()   { return yaw; }
-    float GetPitch() { return pitch; }
+    float GetYaw()   const { return yaw; }
+    float GetPitch() const { return pitch; }
 
-    float GetMovementSpeed()    { return movementSpeed; }
-    float GetMouseSensitivity() { return mouseSensitivity; }
-    float GetZoom()             { return zoom; }
+    float GetMovementSpeed()    const { return movementSpeed; }
+    float GetMouseSensitivity() const { return mouseSensitivity; }
+    float GetZoom()             const { return zoom; }
 
-    // Setteri nahui
     void SetPosition(glm::vec3 newValue) { position = newValue; }
     void SetFront(glm::vec3 newValue)    { front = newValue; }
     void SetUp(glm::vec3 newValue)       { up = newValue; }
@@ -182,7 +176,6 @@ public:
 private:
     void UpdateCameraVectors()
     {
-        // Вычисляем новый вектор-прямо
         vec3 front;
         front.x = cos(radians(yaw)) * cos(radians(pitch));
         front.y = sin(radians(pitch));

@@ -7,25 +7,25 @@ module;
 #include <memory>
 #include <utility>
 
-export module WildFoxEngine.Application.Application;
+export module WFE.Application.Application;
 
-import WildFoxEngine.Core.Window; 
-import WildFoxEngine.Core.Input;
-import WildFoxEngine.Core.Time;
-import WildFoxEngine.Core.Camera;
-import WildFoxEngine.Core.Logger;
-import WildFoxEngine.Core.Logging.ConsoleLogger;
-import WildFoxEngine.Core.Logging.FileLogger;
+import WFE.Core.Window; 
+import WFE.Core.Input;
+import WFE.Core.Time;
+import WFE.Core.Camera;
+import WFE.Core.Logger;
+import WFE.Core.Logging.ConsoleLogger;
+import WFE.Core.Logging.FileLogger;
 
-import WildFoxEngine.ECS.ECSWorld;
+import WFE.ECS.ECSWorld;
 
-import WildFoxEngine.Rendering.Renderer; 
+import WFE.Rendering.Renderer; 
 
-import WildFoxEngine.Resource.Texture.TextureManager;
-import WildFoxEngine.Resource.Material.MaterialManager;
-import WildFoxEngine.Resource.Shader.ShaderManager;
+import WFE.Resource.Texture.TextureManager;
+import WFE.Resource.Material.MaterialManager;
+import WFE.Resource.Shader.ShaderManager;
 
-import WildFoxEngine.UI.ImGuiManager;
+import WFE.UI.ImGuiManager;
 
 export class Application 
 {

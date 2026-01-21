@@ -5,10 +5,12 @@ module;
 #include <fstream>
 #include <filesystem>
 #include <format>
+#include <atomic>
+#include <mutex>
 
-export module WildFoxEngine.Core.Logging.FileLogger;
+export module WFE.Core.Logging.FileLogger;
 
-import WildFoxEngine.Core.Logger;
+import WFE.Core.Logger;
 
 namespace fs = std::filesystem;
 
@@ -19,7 +21,8 @@ export class FileLogger : public ILogSink
     std::string logPath;
     std::ofstream file;
 
-    bool isShuttingDown = false;
+    std::atomic<bool> isShuttingDown{false};  
+    std::mutex fileMutex; 
 
 public:
     FileLogger()
@@ -31,7 +34,9 @@ public:
 
     ~FileLogger() 
     {
-        isShuttingDown = true;
+        isShuttingDown.store(true);
+
+        std::lock_guard<std::mutex> lock(fileMutex);
         if (file.is_open()) 
         {
             file.flush(); 
@@ -41,7 +46,9 @@ public:
 
     void write(const LogData& data) override
     {
-        if (isShuttingDown) return;
+        if (isShuttingDown.load()) return;
+
+        std::lock_guard<std::mutex> lock(fileMutex);
 
         if (!file.is_open())
             OpenLogFile(data);

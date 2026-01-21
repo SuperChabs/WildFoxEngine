@@ -3,7 +3,7 @@ module;
 #include <glm/glm.hpp>
 #include <string>
 
-export module WildFoxEngine.Rendering.MeshData;
+export module WFE.Rendering.MeshData;
 
 export struct Vertex
 {

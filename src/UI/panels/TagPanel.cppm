@@ -6,10 +6,10 @@ module;
 #include <string>
 #include <cstring>
 
-export module WildFoxEngine.UI.Panels.TagPanel;
+export module WFE.UI.Panels.TagPanel;
 
-import WildFoxEngine.ECS.ECSWorld;
-import WildFoxEngine.ECS.Components;
+import WFE.ECS.ECSWorld;
+import WFE.ECS.Components;
 
 export class TagPanel
 {

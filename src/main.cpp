@@ -1,5 +1,5 @@
-import WildFoxEngine.Engine;
-import WildFoxEngine.Core.Logger;
+import WFE.Engine;
+import WFE.Core.Logger;
 
 int main() 
 {
@@ -7,7 +7,7 @@ int main()
     exit()
 #endif
 
-    Engine e(1020, 800, "WildFoxEngine - Best Engine");
+    Engine e(1020, 800, "WFE - Best Engine");
     
     if (!e.Initialize()) 
     {

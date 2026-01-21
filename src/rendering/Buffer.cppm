@@ -3,7 +3,7 @@ module;
 #include <cstddef>
 #include <glad/glad.h>
 
-export module WildFoxEngine.Rendering.Buffer;
+export module WFE.Rendering.Buffer;
 
 // ================= VertexBuffer =================
 export class VertexBuffer

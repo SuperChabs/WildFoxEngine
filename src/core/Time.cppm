@@ -2,7 +2,7 @@ module;
 
 #include <GLFW/glfw3.h>
 
-export module WildFoxEngine.Core.Time;
+export module WFE.Core.Time;
 
 export class Time 
 {
