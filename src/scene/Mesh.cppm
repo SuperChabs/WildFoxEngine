@@ -7,13 +7,13 @@ module;
 #include <vector>
 #include <memory>
 
-export module XEngine.Scene.Mesh;
+export module WildFoxEngine.Scene.Mesh;
 
-import XEngine.Resource.Shader.ShaderManager;
+import WildFoxEngine.Resource.Shader.ShaderManager;
 
-import XEngine.Rendering.Material;
-import XEngine.Rendering.GPUMesh;
-import XEngine.Rendering.MeshData;
+import WildFoxEngine.Rendering.Material;
+import WildFoxEngine.Rendering.GPUMesh;
+import WildFoxEngine.Rendering.MeshData;
 
 export class Mesh 
 {

@@ -6,20 +6,20 @@ module;
 
 #include <string>
 
-export module XEngine.UI.Windows.InspectorWindow;
+export module WildFoxEngine.UI.Windows.InspectorWindow;
 
-import XEngine.ECS.ECSWorld;
-import XEngine.ECS.Components;
-import XEngine.Resource.Material.MaterialManager;
-import XEngine.Resource.Shader.ShaderManager;
-import XEngine.Rendering.Light;
+import WildFoxEngine.ECS.ECSWorld;
+import WildFoxEngine.ECS.Components;
+import WildFoxEngine.Resource.Material.MaterialManager;
+import WildFoxEngine.Resource.Shader.ShaderManager;
+import WildFoxEngine.Rendering.Light;
 
-import XEngine.UI.Panels.TagPanel;
-import XEngine.UI.Panels.TransformPanel;
-import XEngine.UI.Panels.RotationPanel;
-import XEngine.UI.Panels.MaterialPanel;
-import XEngine.UI.Panels.LightPanel;
-import XEngine.UI.Panels.IconPanel;
+import WildFoxEngine.UI.Panels.TagPanel;
+import WildFoxEngine.UI.Panels.TransformPanel;
+import WildFoxEngine.UI.Panels.RotationPanel;
+import WildFoxEngine.UI.Panels.MaterialPanel;
+import WildFoxEngine.UI.Panels.LightPanel;
+import WildFoxEngine.UI.Panels.IconPanel;
 
 export class InspectorWindow 
 {

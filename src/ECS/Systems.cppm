@@ -8,19 +8,19 @@ module;
 
 #include <string>
 
-export module XEngine.ECS.Systems;
+export module WildFoxEngine.ECS.Systems;
 
-import XEngine.ECS.Components; 
-import XEngine.ECS.ECSWorld;
+import WildFoxEngine.ECS.Components; 
+import WildFoxEngine.ECS.ECSWorld;
 
-import XEngine.Core.Camera;
-import XEngine.Core.Logger;
+import WildFoxEngine.Core.Camera;
+import WildFoxEngine.Core.Logger;
 
-import XEngine.Resource.Shader.ShaderManager; 
-import XEngine.Resource.Texture.TextureManager;
+import WildFoxEngine.Resource.Shader.ShaderManager; 
+import WildFoxEngine.Resource.Texture.TextureManager;
 
-import XEngine.Rendering.Buffer;
-import XEngine.Rendering.Light;
+import WildFoxEngine.Rendering.Buffer;
+import WildFoxEngine.Rendering.Light;
 
 export class RenderSystem 
 {

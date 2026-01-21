@@ -3,10 +3,10 @@ module;
 #include <imgui.h>
 #include <entt.hpp>
 
-export module XEngine.UI.Panels.RotationPanel;
+export module WildFoxEngine.UI.Panels.RotationPanel;
 
-import XEngine.ECS.ECSWorld;
-import XEngine.ECS.Components;
+import WildFoxEngine.ECS.ECSWorld;
+import WildFoxEngine.ECS.Components;
 
 export class RotationPanel
 {

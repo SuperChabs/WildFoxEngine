@@ -2,9 +2,9 @@ module;
 
 #include <imgui.h>
 
-export module XEngine.UI.Windows.PropertiesWindow;
+export module WildFoxEngine.UI.Windows.PropertiesWindow;
 
-import XEngine.Core.Camera;
+import WildFoxEngine.Core.Camera;
 
 export class PropertiesWindow
 {

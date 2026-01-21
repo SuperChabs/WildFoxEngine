@@ -4,11 +4,11 @@ module;
 #include <entt.hpp>
 #include <glm/glm.hpp>
 
-export module XEngine.UI.Panels.LightPanel;
+export module WildFoxEngine.UI.Panels.LightPanel;
 
-import XEngine.ECS.ECSWorld;
-import XEngine.ECS.Components;
-import XEngine.Rendering.Light;
+import WildFoxEngine.ECS.ECSWorld;
+import WildFoxEngine.ECS.Components;
+import WildFoxEngine.Rendering.Light;
 
 export class LightPanel
 {

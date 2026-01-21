@@ -5,12 +5,12 @@ module;
 
 #include <string>
 
-export module XEngine.UI.Panels.MaterialPanel;
+export module WildFoxEngine.UI.Panels.MaterialPanel;
 
-import XEngine.ECS.ECSWorld;
-import XEngine.ECS.Components;
-import XEngine.Resource.Material.MaterialManager;
-import XEngine.Core.Logger;
+import WildFoxEngine.ECS.ECSWorld;
+import WildFoxEngine.ECS.Components;
+import WildFoxEngine.Resource.Material.MaterialManager;
+import WildFoxEngine.Core.Logger;
 
 export class MaterialPanel
 {

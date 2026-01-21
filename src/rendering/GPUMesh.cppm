@@ -6,11 +6,11 @@ module;
 
 #include <glad/glad.h>
 
-export module XEngine.Rendering.GPUMesh;
+export module WildFoxEngine.Rendering.GPUMesh;
 
-import XEngine.Rendering.Buffer;    
-import XEngine.Rendering.MeshData; 
-import XEngine.Core.Logger;
+import WildFoxEngine.Rendering.Buffer;    
+import WildFoxEngine.Rendering.MeshData; 
+import WildFoxEngine.Core.Logger;
 
 export class GPUMesh
 {

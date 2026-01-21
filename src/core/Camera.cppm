@@ -7,9 +7,9 @@ module;
 #include <vector>
 #include <string>
 
-export module XEngine.Core.Camera;
+export module WildFoxEngine.Core.Camera;
 
-import XEngine.Core.Logger;
+import WildFoxEngine.Core.Logger;
 
 using namespace glm;
 

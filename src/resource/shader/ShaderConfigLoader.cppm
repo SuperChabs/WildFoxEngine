@@ -8,9 +8,9 @@ module;
 
 #include <nlohmann/json.hpp>
 
-export module XEngine.Resource.Shader.ShaderConfigLoader;
+export module WildFoxEngine.Resource.Shader.ShaderConfigLoader;
 
-import XEngine.Core.Logger;
+import WildFoxEngine.Core.Logger;
 
 using json = nlohmann::json;
 

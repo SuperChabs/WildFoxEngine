@@ -7,9 +7,9 @@ module;
 
 #include <glm/glm.hpp>
 
-export module XEngine.Core.CommandManager;
+export module WildFoxEngine.Core.CommandManager;
 
-import XEngine.Core.Logger;
+import WildFoxEngine.Core.Logger;
 
 export using CommandArg = std::variant<int, bool, float, std::string, glm::vec3>;
 export using CommandArgs = std::vector<CommandArg>;

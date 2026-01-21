@@ -3,10 +3,10 @@ module;
 #include <imgui.h>
 #include <entt.hpp>
 
-export module XEngine.UI.Panels.IconPanel;
+export module WildFoxEngine.UI.Panels.IconPanel;
 
-import XEngine.ECS.ECSWorld;
-import XEngine.ECS.Components;
+import WildFoxEngine.ECS.ECSWorld;
+import WildFoxEngine.ECS.Components;
 
 export class IconPanel
 {

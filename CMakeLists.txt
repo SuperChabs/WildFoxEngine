@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.30)
 
-project(XEngine LANGUAGES C CXX)
+project(WildFoxEngine LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -58,56 +58,55 @@ target_include_directories(entt INTERFACE ${CMAKE_SOURCE_DIR}/vendor/entt/src/en
 add_library(json INTERFACE)
 target_include_directories(json INTERFACE ${CMAKE_SOURCE_DIR}/vendor/nlohmann_json/include)
 
-# ========== XEngine =============
+# ========== WildFoxEngine =============
 include_directories(${IMGUI_INCLUDE_DIRS})
 
-file(GLOB_RECURSE XENGINE_ALL_SOURCES 
+file(GLOB_RECURSE WildFoxEngine_ALL_SOURCES 
     "src/*.cpp"
     "src/*.c"
 )
 
-list(FILTER XENGINE_ALL_SOURCES EXCLUDE REGEX ".*/old/.*")
+list(FILTER WildFoxEngine_ALL_SOURCES EXCLUDE REGEX ".*/old/.*")
 
-file(GLOB_RECURSE XENGINE_ALL_HEADERS 
+file(GLOB_RECURSE WildFoxEngine_ALL_HEADERS 
     "src/*.h"
     "src/*.hpp"
 )
-list(FILTER XENGINE_ALL_HEADERS EXCLUDE REGEX ".*/old/.*")
+list(FILTER WildFoxEngine_ALL_HEADERS EXCLUDE REGEX ".*/old/.*")
 
-file(GLOB_RECURSE XENGINE_MODULES 
+file(GLOB_RECURSE WildFoxEngine_MODULES 
     "src/*.cppm"
 )
-list(FILTER XENGINE_MODULES EXCLUDE REGEX ".*/old/.*")
+list(FILTER WildFoxEngine_MODULES EXCLUDE REGEX ".*/old/.*")
 
-set(XENGINE_SOURCES ${XENGINE_ALL_SOURCES})
-if(XENGINE_MODULES)
-    list(FILTER XENGINE_SOURCES EXCLUDE REGEX ".*\\.cppm$")
+set(WildFoxEngine_SOURCES ${WildFoxEngine_ALL_SOURCES})
+if(WildFoxEngine_MODULES)
+    list(FILTER WildFoxEngine_SOURCES EXCLUDE REGEX ".*\\.cppm$")
 endif()
 
 if(NOT EXISTS ${CMAKE_SOURCE_DIR}/src/main.cpp)
     message(FATAL_ERROR "src/main.cpp not found!")
 endif()
 
-message(STATUS "=== Знайдені файли ===")
-message(STATUS "C++ файли: ${XENGINE_SOURCES}")
-message(STATUS "Заголовки: ${XENGINE_ALL_HEADERS}")
+message(STATUS "=== Founded files ===")
+message(STATUS "C++ files: ${WildFoxEngine_SOURCES}")
+message(STATUS "Heanders: ${WildFoxEngine_ALL_HEADERS}")
 
-# Створити executable з main.cpp
 add_executable(${PROJECT_NAME} 
-    ${XENGINE_SOURCES}
-    ${XENGINE_ALL_HEADERS}
+    ${WildFoxEngine_SOURCES}
+    ${WildFoxEngine_ALL_HEADERS}
 )
 
 # Додати модулі
-if(XENGINE_MODULES)
-    message(STATUS "=== Модулі C++ ===")
-    foreach(MODULE ${XENGINE_MODULES})
+if(WildFoxEngine_MODULES)
+    message(STATUS "=== C++ Modules ===")
+    foreach(MODULE ${WildFoxEngine_MODULES})
         message(STATUS "  - ${MODULE}")
     endforeach()
     
     target_sources(${PROJECT_NAME}
         PUBLIC FILE_SET CXX_MODULES FILES
-        ${XENGINE_MODULES}
+        ${WildFoxEngine_MODULES}
     )
     
     set_target_properties(${PROJECT_NAME} PROPERTIES

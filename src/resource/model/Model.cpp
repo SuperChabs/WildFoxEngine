@@ -14,14 +14,14 @@ module;
 #include <string>
 //#include <utility>
 
-module XEngine.Scene.Model;
+module WildFoxEngine.Scene.Model;
 
-import XEngine.Scene.Mesh;
+import WildFoxEngine.Scene.Mesh;
 
-import XEngine.Rendering.MeshData;
-import XEngine.Core.Logger; 
+import WildFoxEngine.Rendering.MeshData;
+import WildFoxEngine.Core.Logger; 
 
-import XEngine.Resource.Shader.ShaderManager;
+import WildFoxEngine.Resource.Shader.ShaderManager;
 
 void Model::Draw(ShaderManager& shaderManager, const std::string& name) 
 {

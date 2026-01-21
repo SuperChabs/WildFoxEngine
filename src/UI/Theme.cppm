@@ -2,9 +2,9 @@ module;
 
 #include <imgui.h>
 
-export module XEngine.UI.Theme;
+export module WildFoxEngine.UI.Theme;
 
-import XEngine.Core.Logger;
+import WildFoxEngine.Core.Logger;
 
 export enum class ThemeStyle
 {

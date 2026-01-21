@@ -4,10 +4,10 @@ module;
 #include <entt.hpp>
 #include <glm/glm.hpp>
 
-export module XEngine.UI.Panels.TransformPanel;
+export module WildFoxEngine.UI.Panels.TransformPanel;
 
-import XEngine.ECS.ECSWorld;
-import XEngine.ECS.Components;
+import WildFoxEngine.ECS.ECSWorld;
+import WildFoxEngine.ECS.Components;
 
 export class TransformPanel
 {

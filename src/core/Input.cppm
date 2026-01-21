@@ -7,9 +7,9 @@ module;
 #include <memory>
 #include <unordered_map>
 
-export module XEngine.Core.Input;
+export module WildFoxEngine.Core.Input;
 
-export enum class XKey
+export enum class Key
 {
     KEY_UNKNOWN         = GLFW_KEY_UNKNOWN,
     KEY_SPACE           = GLFW_KEY_SPACE,
@@ -116,7 +116,7 @@ private:
     float mouseDeltaX;
     float mouseDeltaY;
 
-    mutable std::unordered_map<XKey, bool> keyStates;
+    mutable std::unordered_map<Key, bool> keyStates;
 
     static inline float scrollOffsetX = 0.0f;
     static inline float scrollOffsetY = 0.0f;
@@ -128,7 +128,7 @@ public:
         firstMouse(true), mouseDeltaX(0.0f), mouseDeltaY(0.0f)
     {}
     
-    bool IsKeyPressed(XKey key) const
+    bool IsKeyPressed(Key key) const
     { 
         bool pressed = glfwGetKey(window, static_cast<int>(key)) == GLFW_PRESS;
 
@@ -140,7 +140,7 @@ public:
         return pressed;
     }
 
-    bool IsKeyReleased(XKey key) const
+    bool IsKeyReleased(Key key) const
     { 
         bool released = glfwGetKey(window, static_cast<int>(key)) == GLFW_RELEASE;
 
@@ -152,7 +152,7 @@ public:
         return released;
     }
 
-    bool IsKeyDown(XKey key) const
+    bool IsKeyDown(Key key) const
     {
         bool down = glfwGetKey(window, static_cast<int>(key)) == GLFW_KEY_DOWN;
 
@@ -164,7 +164,7 @@ public:
         return down;
     }
 
-    bool IsKeyJustPressed(XKey key) const
+    bool IsKeyJustPressed(Key key) const
     {
         bool currentState = IsKeyPressed(key);
         bool previousState = keyStates[key];

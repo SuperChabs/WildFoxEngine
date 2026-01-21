@@ -7,13 +7,13 @@ module;
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-export module XEngine.Rendering.Skybox;
+export module WildFoxEngine.Rendering.Skybox;
 
-import XEngine.Core.Camera;
+import WildFoxEngine.Core.Camera;
 
-import XEngine.Rendering.Buffer; 
+import WildFoxEngine.Rendering.Buffer; 
 
-import XEngine.Resource.Shader.ShaderManager;
+import WildFoxEngine.Resource.Shader.ShaderManager;
 
 export class Skybox 
 {

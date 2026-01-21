@@ -6,9 +6,9 @@ module;
 #include <vector>
 #include <stb_image.h>
 
-export module XEngine.Resource.Texture.TextureManager;
+export module WildFoxEngine.Resource.Texture.TextureManager;
 
-import XEngine.Core.Logger;
+import WildFoxEngine.Core.Logger;
 
 export class TextureManager
 {

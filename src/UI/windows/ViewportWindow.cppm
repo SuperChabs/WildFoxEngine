@@ -5,10 +5,10 @@ module;
 #include <string>
 #include <cstdint>
 
-export module XEngine.UI.Windows.ViewportWindow;
+export module WildFoxEngine.UI.Windows.ViewportWindow;
 
-import XEngine.Core.Logger;
-import XEngine.Rendering.Framebuffer;
+import WildFoxEngine.Core.Logger;
+import WildFoxEngine.Rendering.Framebuffer;
 
 export class ViewportWindow 
 {

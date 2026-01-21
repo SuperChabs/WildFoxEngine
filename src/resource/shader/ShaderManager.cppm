@@ -9,13 +9,13 @@ module;
 #include <memory>
 #include <utility>
 
-export module XEngine.Resource.Shader.ShaderManager;
+export module WildFoxEngine.Resource.Shader.ShaderManager;
 
-import XEngine.Core.Logger;
+import WildFoxEngine.Core.Logger;
 
-import XEngine.Resource.Shader.ShaderLoader;
-import XEngine.Resource.Shader.ShaderCompiler;
-import XEngine.Resource.Shader.ShaderConfigLoader;
+import WildFoxEngine.Resource.Shader.ShaderLoader;
+import WildFoxEngine.Resource.Shader.ShaderCompiler;
+import WildFoxEngine.Resource.Shader.ShaderConfigLoader;
 
 export struct ShaderObj
 {

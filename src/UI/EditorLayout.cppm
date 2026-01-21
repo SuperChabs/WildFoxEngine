@@ -8,30 +8,30 @@ module;
 #include <cstring>
 #include <memory>
 
-export module XEngine.UI.EditorLayout;
+export module WildFoxEngine.UI.EditorLayout;
 
-import XEngine.ECS.ECSWorld;
-import XEngine.ECS.Components;
+import WildFoxEngine.ECS.ECSWorld;
+import WildFoxEngine.ECS.Components;
 
-import XEngine.Core.Camera;
-import XEngine.Core.Logger;
-import XEngine.Core.CommandManager;
+import WildFoxEngine.Core.Camera;
+import WildFoxEngine.Core.Logger;
+import WildFoxEngine.Core.CommandManager;
 
-import XEngine.Rendering.Renderer;
-import XEngine.Rendering.Framebuffer;
-import XEngine.Rendering.Light;
+import WildFoxEngine.Rendering.Renderer;
+import WildFoxEngine.Rendering.Framebuffer;
+import WildFoxEngine.Rendering.Light;
 
-import XEngine.Resource.Material.MaterialManager;
-import XEngine.Resource.Shader.ShaderManager;
+import WildFoxEngine.Resource.Material.MaterialManager;
+import WildFoxEngine.Resource.Shader.ShaderManager;
 
-import XEngine.UI.Theme; 
+import WildFoxEngine.UI.Theme; 
 
-import XEngine.UI.Windows.ViewportWindow;
-import XEngine.UI.Windows.MenuBarWindow;
-import XEngine.UI.Windows.HierarchyWindow;
-import XEngine.UI.Windows.PropertiesWindow;
-import XEngine.UI.Windows.InspectorWindow;
-import XEngine.UI.Windows.ConsoleWindow;
+import WildFoxEngine.UI.Windows.ViewportWindow;
+import WildFoxEngine.UI.Windows.MenuBarWindow;
+import WildFoxEngine.UI.Windows.HierarchyWindow;
+import WildFoxEngine.UI.Windows.PropertiesWindow;
+import WildFoxEngine.UI.Windows.InspectorWindow;
+import WildFoxEngine.UI.Windows.ConsoleWindow;
 
 export class EditorLayout
 {

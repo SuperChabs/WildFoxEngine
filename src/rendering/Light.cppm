@@ -3,7 +3,7 @@ module;
 #include <glm/glm.hpp>
 #include <string>
 
-export module XEngine.Rendering.Light;
+export module WildFoxEngine.Rendering.Light;
 
 export enum class LightType
 {

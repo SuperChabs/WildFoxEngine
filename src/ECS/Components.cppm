@@ -5,13 +5,13 @@ module;
 #include <string>
 #include <memory>
 
-export module XEngine.ECS.Components;
+export module WildFoxEngine.ECS.Components;
 
-import XEngine.Scene.Mesh;
+import WildFoxEngine.Scene.Mesh;
 
-import XEngine.Rendering.Material;
-import XEngine.Rendering.Light;
-import XEngine.Rendering.MeshData;
+import WildFoxEngine.Rendering.Material;
+import WildFoxEngine.Rendering.Light;
+import WildFoxEngine.Rendering.MeshData;
 
 export struct TagComponent 
 {

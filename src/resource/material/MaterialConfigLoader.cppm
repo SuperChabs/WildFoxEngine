@@ -8,13 +8,13 @@ module;
 
 #include <glm/vec3.hpp>
 
-export module XEngine.Resource.Material.MaterialConfigLoader;
+export module WildFoxEngine.Resource.Material.MaterialConfigLoader;
 
-import XEngine.Core.Logger;
+import WildFoxEngine.Core.Logger;
 
-import XEngine.Rendering.MeshData;
+import WildFoxEngine.Rendering.MeshData;
 
-import XEngine.Resource.Texture.TextureManager;
+import WildFoxEngine.Resource.Texture.TextureManager;
 
 using json = nlohmann::json;
 

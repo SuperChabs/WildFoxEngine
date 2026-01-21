@@ -4,9 +4,9 @@ module;
 
 #include <glad/glad.h>
 
-export module XEngine.Resource.Shader.ShaderCompiler;
+export module WildFoxEngine.Resource.Shader.ShaderCompiler;
 
-import XEngine.Core.Logger;
+import WildFoxEngine.Core.Logger;
 
 void CheckCompileErrors(unsigned int obj, const std::string& type);
 

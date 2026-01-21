@@ -7,25 +7,25 @@ module;
 #include <memory>
 #include <utility>
 
-export module XEngine.Application.Application;
+export module WildFoxEngine.Application.Application;
 
-import XEngine.Core.Window; 
-import XEngine.Core.Input;
-import XEngine.Core.Time;
-import XEngine.Core.Camera;
-import XEngine.Core.Logger;
-import XEngine.Core.Logging.ConsoleLogger;
-import XEngine.Core.Logging.FileLogger;
+import WildFoxEngine.Core.Window; 
+import WildFoxEngine.Core.Input;
+import WildFoxEngine.Core.Time;
+import WildFoxEngine.Core.Camera;
+import WildFoxEngine.Core.Logger;
+import WildFoxEngine.Core.Logging.ConsoleLogger;
+import WildFoxEngine.Core.Logging.FileLogger;
 
-import XEngine.ECS.ECSWorld;
+import WildFoxEngine.ECS.ECSWorld;
 
-import XEngine.Rendering.Renderer; 
+import WildFoxEngine.Rendering.Renderer; 
 
-import XEngine.Resource.Texture.TextureManager;
-import XEngine.Resource.Material.MaterialManager;
-import XEngine.Resource.Shader.ShaderManager;
+import WildFoxEngine.Resource.Texture.TextureManager;
+import WildFoxEngine.Resource.Material.MaterialManager;
+import WildFoxEngine.Resource.Shader.ShaderManager;
 
-import XEngine.UI.ImGuiManager;
+import WildFoxEngine.UI.ImGuiManager;
 
 export class Application 
 {
@@ -49,13 +49,13 @@ private:
     
     void ProcessInput()
     {
-        if (input->IsKeyPressed(XKey::KEY_ESCAPE)) 
+        if (input->IsKeyPressed(Key::KEY_ESCAPE)) 
             Stop();
         
-        if (input->IsKeyJustPressed(XKey::KEY_F1)) 
+        if (input->IsKeyJustPressed(Key::KEY_F1)) 
             showUI = !showUI;
 
-        if (input->IsKeyJustPressed(XKey::KEY_F5))
+        if (input->IsKeyJustPressed(Key::KEY_F5))
         {
             shaderManager->ReloadAll();
             Logger::Log(LogLevel::INFO, "Reloaded all shaders");
@@ -63,18 +63,18 @@ private:
         
         if (cameraControlEnabled) 
         {
-            if (input->IsKeyPressed(XKey::KEY_W)) 
+            if (input->IsKeyPressed(Key::KEY_W)) 
                 camera->ProcessKeyboard(FORWARD, time->GetDeltaTime());
-            if (input->IsKeyPressed(XKey::KEY_S)) 
+            if (input->IsKeyPressed(Key::KEY_S)) 
                 camera->ProcessKeyboard(BACKWARD, time->GetDeltaTime()); 
-            if (input->IsKeyPressed(XKey::KEY_A)) 
+            if (input->IsKeyPressed(Key::KEY_A)) 
                 camera->ProcessKeyboard(LEFT, time->GetDeltaTime());
-            if (input->IsKeyPressed(XKey::KEY_D)) 
+            if (input->IsKeyPressed(Key::KEY_D)) 
                 camera->ProcessKeyboard(RIGHT, time->GetDeltaTime());
 
-            if (input->IsKeyPressed(XKey::KEY_SPACE)) 
+            if (input->IsKeyPressed(Key::KEY_SPACE)) 
                 camera->ProcessKeyboard(UP, time->GetDeltaTime());
-            if (input->IsKeyPressed(XKey::KEY_LEFT_SHIFT)) 
+            if (input->IsKeyPressed(Key::KEY_LEFT_SHIFT)) 
                 camera->ProcessKeyboard(DOWN, time->GetDeltaTime());
         }
     }

@@ -6,9 +6,9 @@ module;
 #include <filesystem>
 #include <format>
 
-export module XEngine.Core.Logging.FileLogger;
+export module WildFoxEngine.Core.Logging.FileLogger;
 
-import XEngine.Core.Logger;
+import WildFoxEngine.Core.Logger;
 
 namespace fs = std::filesystem;
 

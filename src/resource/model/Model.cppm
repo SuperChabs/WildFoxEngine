@@ -10,14 +10,14 @@ module;
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-export module XEngine.Scene.Model;
+export module WildFoxEngine.Scene.Model;
 
-import XEngine.Scene.Mesh;
+import WildFoxEngine.Scene.Mesh;
 
-import XEngine.Rendering.MeshData;
-import XEngine.Rendering.Material;
+import WildFoxEngine.Rendering.MeshData;
+import WildFoxEngine.Rendering.Material;
 
-import XEngine.Resource.Shader.ShaderManager;
+import WildFoxEngine.Resource.Shader.ShaderManager;
 
 export class Model 
 {
