@@ -6,9 +6,11 @@ module;
 
 #include <glad/glad.h>
 
-export module WFE.Rendering.GPUMesh;
+export module WFE.Rendering.MeshRenderer;
 
-import WFE.Rendering.Buffer;    
+import WFE.Rendering.Core.VertexBuffer;
+import WFE.Rendering.Core.VertexArray;
+import WFE.Rendering.Core.IndexBuffer;
 import WFE.Rendering.MeshData; 
 import WFE.Core.Logger;
 

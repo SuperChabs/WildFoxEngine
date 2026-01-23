@@ -3,7 +3,7 @@ module;
 #include <glad/glad.h>
 #include <string>
 
-export module WFE.Rendering.Framebuffer;
+export module WFE.Rendering.Core.Framebuffer;
 
 import WFE.Core.Logger; 
 

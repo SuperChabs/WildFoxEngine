@@ -24,7 +24,7 @@ import WFE.Core.CommandManager;
 import WFE.Core.Logger;
 
 import WFE.Rendering.Skybox;
-import WFE.Rendering.Framebuffer;
+import WFE.Rendering.Core.Framebuffer;
 import WFE.Rendering.Primitive.PrimitivesFactory;
 import WFE.Rendering.Light;
 

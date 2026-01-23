@@ -19,7 +19,8 @@ import WFE.Core.Logger;
 import WFE.Resource.Shader.ShaderManager; 
 import WFE.Resource.Texture.TextureManager;
 
-import WFE.Rendering.Buffer;
+import WFE.Rendering.Core.VertexArray;
+import WFE.Rendering.Core.VertexBuffer;
 
 export class IconRenderSystem 
 {

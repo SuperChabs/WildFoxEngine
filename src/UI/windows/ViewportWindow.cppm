@@ -8,7 +8,7 @@ module;
 export module WFE.UI.Windows.ViewportWindow;
 
 import WFE.Core.Logger;
-import WFE.Rendering.Framebuffer;
+import WFE.Rendering.Core.Framebuffer;
 
 export class ViewportWindow 
 {

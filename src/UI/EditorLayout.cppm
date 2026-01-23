@@ -18,7 +18,7 @@ import WFE.Core.Logger;
 import WFE.Core.CommandManager;
 
 import WFE.Rendering.Renderer;
-import WFE.Rendering.Framebuffer;
+import WFE.Rendering.Core.Framebuffer;
 import WFE.Rendering.Light;
 
 import WFE.Resource.Material.MaterialManager;
@@ -26,12 +26,7 @@ import WFE.Resource.Shader.ShaderManager;
 
 import WFE.UI.Theme; 
 
-import WFE.UI.Windows.ViewportWindow;
-import WFE.UI.Windows.MenuBarWindow;
-import WFE.UI.Windows.HierarchyWindow;
-import WFE.UI.Windows.PropertiesWindow;
-import WFE.UI.Windows.InspectorWindow;
-import WFE.UI.Windows.ConsoleWindow;
+import WFE.UI.Windows;
 
 export class EditorLayout
 {

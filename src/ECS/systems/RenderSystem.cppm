@@ -18,8 +18,6 @@ import WFE.Core.Logger;
 
 import WFE.Resource.Shader.ShaderManager;
 
-import WFE.Rendering.Buffer;
-
 export class RenderSystem 
 {
 public:
@@ -40,12 +38,6 @@ public:
         
             if (matComp.material)
             {
-                static int frameCount = 0;
-                if (frameCount % 300 == 0)
-                    Logger::Log(LogLevel::DEBUG, LogCategory::RENDERING, 
-                        "Binding material: " + matComp.material->GetName());
-                frameCount++;
-                
                 if (meshComp.mesh) 
                     meshComp.mesh->Draw(shaderManager, name, matComp.material);
             }

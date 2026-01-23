@@ -12,7 +12,7 @@ export module WFE.Scene.Mesh;
 import WFE.Resource.Shader.ShaderManager;
 
 import WFE.Rendering.Material;
-import WFE.Rendering.GPUMesh;
+import WFE.Rendering.MeshRenderer;
 import WFE.Rendering.MeshData;
 
 export class Mesh 

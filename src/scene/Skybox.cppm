@@ -11,7 +11,8 @@ export module WFE.Rendering.Skybox;
 
 import WFE.Core.Camera;
 
-import WFE.Rendering.Buffer; 
+import WFE.Rendering.Core.VertexBuffer;
+import WFE.Rendering.Core.VertexArray;
 
 import WFE.Resource.Shader.ShaderManager;
 

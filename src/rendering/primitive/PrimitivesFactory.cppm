@@ -8,7 +8,7 @@ module;
 
 export module WFE.Rendering.Primitive.PrimitivesFactory;
 
-import WFE.Rendering.GPUMesh;
+import WFE.Rendering.MeshRenderer;
 import WFE.Rendering.Material;
 import WFE.Rendering.MeshData;
 import WFE.Rendering.Primitive.PrimitiveGenerator;
