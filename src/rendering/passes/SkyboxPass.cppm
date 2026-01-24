@@ -26,7 +26,9 @@ public:
     
     void Setup() override
     {
+        glDepthMask(GL_FALSE);
         context->SetDepthFunc(GL_LEQUAL);
+        
         shaderManager->Bind("skybox");
     }
     
@@ -50,6 +52,7 @@ public:
     
     void Cleanup() override
     {
+        glDepthMask(GL_TRUE); 
         context->SetDepthFunc(GL_LESS);
         shaderManager->Unbind();
     }

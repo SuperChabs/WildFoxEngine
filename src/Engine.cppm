@@ -95,41 +95,40 @@ protected:
         rotationSystem->Update(*GetECSWorld(), deltaTime);
     }
 
-    void OnRender() override
+void OnRender() override
+{
+    if (editorLayout && editorLayout->GetFramebuffer())
     {
-        if (editorLayout && editorLayout->GetFramebuffer())
+        Framebuffer* fb = editorLayout->GetFramebuffer();
+        ImVec2 viewportSize = editorLayout->GetViewportSize();
+        
+        fb->Bind();
+        
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
+        
+        GetRenderer()->BeginFrame();
+        
+        if (viewportSize.x > 0 && viewportSize.y > 0)
         {
-            Framebuffer* fb = editorLayout->GetFramebuffer();
-            ImVec2 viewportSize = editorLayout->GetViewportSize();
-            
-            // Рендер у framebuffer
-            fb->Bind();
-            
-            // Renderer тепер керує всім рендерингом
-            GetRenderer()->BeginFrame();
-            
-            if (viewportSize.x > 0 && viewportSize.y > 0)
-            {
-                GetRenderer()->Render(
-                    *GetCamera(), 
-                    static_cast<int>(viewportSize.x), 
-                    static_cast<int>(viewportSize.y)
-                );
-            }
-            
-            GetRenderer()->EndFrame();
-            
-            fb->Unbind();
+            GetRenderer()->Render(
+                *GetCamera(), 
+                static_cast<int>(viewportSize.x), 
+                static_cast<int>(viewportSize.y)
+            );
         }
         
-        // Очищення головного вікна
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glViewport(0, 0, GetWindow()->GetWidth(), GetWindow()->GetHeight());
-        glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glDisable(GL_DEPTH_TEST);
+        GetRenderer()->EndFrame();
+        
+        fb->Unbind();
     }
-
+    
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glViewport(0, 0, GetWindow()->GetWidth(), GetWindow()->GetHeight());
+    glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_DEPTH_TEST); 
+}
     void OnShutdown() override
     {
         Logger::Log(LogLevel::INFO, "Shutting down engine...");
@@ -177,7 +176,6 @@ private:
             auto material = GetMaterialManager()->GetMaterial("gray");
             GetECSWorld()->AddComponent<MaterialComponent>(entity, material);
             
-            GetECSWorld()->AddComponent<ColorComponent>(entity, glm::vec3(0.5f, 0.5f, 0.5f));
             GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
             GetECSWorld()->AddComponent<RotationComponent>(entity, 50.0f);
             

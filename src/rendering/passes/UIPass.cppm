@@ -2,6 +2,7 @@ module;
 
 #include <string>
 #include <glm/glm.hpp>
+#include <glad/glad.h>
 
 export module WFE.Rendering.Passes.UIPass;
 
@@ -20,8 +21,16 @@ public:
     
     void Setup() override
     {
-        context->SetDepthTest(false);
+        // Вмикаємо тест, щоб іконка ховалася за стінами
+        context->SetDepthTest(true);
+        // Використовуємо стандартну функцію порівняння
+        context->SetDepthFunc(GL_LESS); 
+        
+        // Вимикаємо ЗАПИС у глибину для іконок (вони прозорі, це стандартна практика)
+        glDepthMask(GL_FALSE);
+
         context->SetBlend(true);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
     
     void Execute(Camera& camera, const glm::mat4& projection) override
@@ -42,6 +51,8 @@ public:
     
     void Cleanup() override
     {
+        // Повертаємо запис глибини для наступного кадру
+        glDepthMask(GL_TRUE);
         context->SetDepthTest(true);
         context->SetBlend(false);
     }

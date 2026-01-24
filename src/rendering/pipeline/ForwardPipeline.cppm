@@ -44,19 +44,19 @@ public:
         AddPass(std::move(shadowPass));
         Logger::Log(LogLevel::DEBUG, "ShadowPass created");
         
-        Logger::Log(LogLevel::DEBUG, "Creating GeometryPass...");
-        auto geometryPass = std::make_unique<GeometryPass>(
-            context, shaderManager, world
-        );
-        AddPass(std::move(geometryPass));
-        Logger::Log(LogLevel::DEBUG, "GeometryPass created");
-        
         Logger::Log(LogLevel::DEBUG, "Creating SkyboxPass...");
         auto skyboxPass = std::make_unique<SkyboxPass>(
             context, shaderManager, skyboxVAO, cubemapTexture
         );
         AddPass(std::move(skyboxPass));
         Logger::Log(LogLevel::DEBUG, "SkyboxPass created");
+
+        Logger::Log(LogLevel::DEBUG, "Creating GeometryPass...");
+        auto geometryPass = std::make_unique<GeometryPass>(
+            context, shaderManager, world
+        );
+        AddPass(std::move(geometryPass));
+        Logger::Log(LogLevel::DEBUG, "GeometryPass created");
         
         Logger::Log(LogLevel::DEBUG, "Creating UIPass...");
         auto uiPass = std::make_unique<UIPass>(

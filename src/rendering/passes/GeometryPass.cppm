@@ -2,6 +2,7 @@ module;
 
 #include <string>
 #include <glm/glm.hpp>
+#include <glad/glad.h>
 
 export module WFE.Rendering.Passes.GeometryPass;
 
@@ -25,9 +26,14 @@ public:
     
     void Setup() override
     {
+        glDepthMask(GL_TRUE);
+        
         context->SetDepthTest(true);
+        context->SetDepthFunc(GL_LESS);
+        
         context->SetBlend(false);
         context->SetCullFace(true);
+        glCullFace(GL_BACK); 
     }
     
     void Execute(Camera& camera, const glm::mat4& projection) override
