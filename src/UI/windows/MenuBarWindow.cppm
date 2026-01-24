@@ -56,6 +56,10 @@ private:
             if(CommandManager::HasCommand("onCreateCube")) 
                 CommandManager::ExecuteCommand("onCreateCube", {});
         
+        if (ImGui::MenuItem("Plane"))
+            if(CommandManager::HasCommand("onCreatePlane")) 
+                CommandManager::ExecuteCommand("onCreatePlane", {});
+
         if (ImGui::MenuItem("Sphere"))
             Logger::Log(LogLevel::INFO, "Sphere not implemented");
         

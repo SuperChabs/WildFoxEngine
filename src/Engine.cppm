@@ -182,6 +182,24 @@ private:
             Logger::Log(LogLevel::INFO, "Cube entity created");
         });
 
+        CommandManager::RegisterCommand("onCreatePlane",
+        [this](const CommandArgs&) 
+        {
+            auto entity = GetECSWorld()->CreateEntity("Plane");
+            GetECSWorld()->AddComponent<TransformComponent>(entity, glm::vec3(0, 0, -5), glm::vec3(0), glm::vec3(1));
+            
+            auto mesh = PrimitivesFactory::CreatePrimitive(PrimitiveType::QUAD);
+            GetECSWorld()->AddComponent<MeshComponent>(entity, mesh);
+            
+            auto material = GetMaterialManager()->GetMaterial("gray");
+            GetECSWorld()->AddComponent<MaterialComponent>(entity, material);
+            
+            GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
+            GetECSWorld()->AddComponent<RotationComponent>(entity, 50.0f);
+            
+            Logger::Log(LogLevel::INFO, "Cube entity created");
+        });
+
         CommandManager::RegisterCommand("onExit",
         [this](const CommandArgs&) 
         {

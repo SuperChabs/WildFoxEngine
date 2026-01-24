@@ -24,7 +24,7 @@ static const float CUBE_VERTICES[] =
     -1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f,
 
     // левая грань
-    -1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
+     -1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
     -1.0f,  1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
     -1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
     -1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
@@ -56,6 +56,18 @@ static const float CUBE_VERTICES[] =
     -1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f
 };
 
+static const float QUAD_VERTICES[] = 
+{
+    // positions          // normals           // texture coords
+    -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,  // нижній лівий
+     0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   1.0f, 0.0f,  // нижній правий
+     0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   1.0f, 1.0f,  // верхній правий
+    
+     0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   1.0f, 1.0f,  // верхній правий
+    -0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f,  // верхній лівий
+    -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f   // нижній лівий
+};
+
 export class PrimitiveGenerator 
 {
 public:
@@ -67,8 +79,8 @@ public:
 
     static const float* GetQuadData(size_t& outSize)
     {
-        outSize = 0;
-        return nullptr;
+        outSize = sizeof(QUAD_VERTICES);
+        return QUAD_VERTICES;
     }
     
     static const float* GetPlaneData(size_t& outSize)
