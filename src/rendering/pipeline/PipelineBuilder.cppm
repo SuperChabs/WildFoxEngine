@@ -1,3 +1,9 @@
+module;
+
+#include <glad/glad.h>
+#include <memory>
+#include <string>
+
 export module WFE.Rendering.Pipeline.PipelineBuilder;
 
 import WFE.Rendering.Pipeline.RenderPipeline;
@@ -60,6 +66,13 @@ public:
     
     std::unique_ptr<RenderPipeline> Build()
     {
+        Logger::Log(LogLevel::DEBUG, "PipelineBuilder::Build() checking components:");
+        Logger::Log(LogLevel::DEBUG, "  - context: " + std::string(context ? "OK" : "NULL"));
+        Logger::Log(LogLevel::DEBUG, "  - shaderManager: " + std::string(shaderManager ? "OK" : "NULL"));
+        Logger::Log(LogLevel::DEBUG, "  - world: " + std::string(world ? "OK" : "NULL"));
+        Logger::Log(LogLevel::DEBUG, "  - skyboxVAO: " + std::to_string(skyboxVAO));
+        Logger::Log(LogLevel::DEBUG, "  - cubemapTexture: " + std::to_string(cubemapTexture));
+
         if (!context || !shaderManager || !world)
         {
             Logger::Log(LogLevel::ERROR, 
@@ -73,7 +86,7 @@ public:
         {
             case PipelineType::FORWARD:
                 pipeline = std::make_unique<ForwardPipeline>(
-                    context, shaderManager, world, 
+                    context, shaderManager, world,
                     skyboxVAO, cubemapTexture
                 );
                 break;

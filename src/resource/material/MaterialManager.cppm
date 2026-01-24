@@ -11,7 +11,7 @@ module;
 export module WFE.Resource.Material.MaterialManager;
 
 import WFE.Rendering.MeshData;
-import WFE.Rendering.Material;
+import WFE.Resource.Material.Material;
 
 import WFE.Resource.Texture.TextureManager;
 import WFE.Resource.Material.MaterialConfigLoader;

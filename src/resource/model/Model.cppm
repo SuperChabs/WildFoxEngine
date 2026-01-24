@@ -13,10 +13,8 @@ module;
 export module WFE.Scene.Model;
 
 import WFE.Scene.Mesh;
-
 import WFE.Rendering.MeshData;
-import WFE.Rendering.Material;
-
+import WFE.Resource.Material.Material;
 import WFE.Resource.Shader.ShaderManager;
 
 export class Model 

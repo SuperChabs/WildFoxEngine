@@ -160,6 +160,12 @@ protected:
 
     virtual void RenderUI() = 0;
 
+    void SetRenderer(std::unique_ptr<Renderer> r)
+    {
+        renderer = std::move(r);
+        Logger::Log(LogLevel::INFO, "Renderer set in Application");
+    }
+
     void SetCameraControlMode(bool enabled)
     {
         cameraControlEnabled = enabled;
@@ -168,7 +174,8 @@ protected:
         {
             window->SetCursorMode(GLFW_CURSOR_DISABLED);
             Logger::Log(LogLevel::INFO, "Camera control: ON");
-        } else 
+        } 
+        else 
         {
             window->SetCursorMode(GLFW_CURSOR_NORMAL);
             Logger::Log(LogLevel::INFO, "Camera control: OFF (UI mode)");
@@ -204,15 +211,18 @@ public:
         input = std::make_unique<Input>(window->GetGLFWWindow());
         time = std::make_unique<Time>();
         camera = std::make_unique<Camera>(glm::vec3(0.0f, 0.0f, 0.0f));
-        renderer = std::make_unique<Renderer>();
+        renderer = nullptr; // std::make_unique<Renderer>(shaderManager.get(), ecsWorld.get());
         textureManager = std::make_unique<TextureManager>();
         imGuiManager = std::make_unique<ImGuiManager>();
         materialManager = std::make_unique<MaterialManager>(textureManager.get());
         ecsWorld = std::make_unique<ECSWorld>();
         shaderManager = std::make_unique<ShaderManager>();
         
-        renderer->Initialize();
-        
+        Logger::Log(LogLevel::DEBUG, "ShaderManager address: " + 
+            std::to_string(reinterpret_cast<uintptr_t>(shaderManager.get())));
+        Logger::Log(LogLevel::DEBUG, "ECSWorld address: " + 
+            std::to_string(reinterpret_cast<uintptr_t>(ecsWorld.get())));
+
         glEnable(GL_DEBUG_OUTPUT);
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 

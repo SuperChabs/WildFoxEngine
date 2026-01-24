@@ -5,7 +5,6 @@ module;
 
 export module WFE.Rendering.Passes.RenderPass;
 
-import WFE.Rendering.Commands.CommandBuffer;
 import WFE.Rendering.Core.GLContext;
 import WFE.Resource.Shader.ShaderManager;
 import WFE.Core.Camera;
@@ -14,7 +13,6 @@ export class RenderPass
 {
 protected:
     std::string name;
-    CommandBuffer commandBuffer;
     GLContext* context;
     ShaderManager* shaderManager;
     
@@ -35,6 +33,4 @@ public:
     bool IsEnabled() const { return enabled; }
     
     const std::string& GetName() const { return name; }
-    
-    CommandBuffer& GetCommandBuffer() { return commandBuffer; }
 };

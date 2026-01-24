@@ -216,11 +216,9 @@ public:
         glClearColor(r, g, b, a);
     }
     
-    // Stats
     const Stats& GetStats() const { return stats; }
     void ResetStats() { stats.Reset(); }
     
-    // State info
     const State& GetState() const { return state; }
     
     void LogStats() const

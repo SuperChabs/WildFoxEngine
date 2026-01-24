@@ -1,6 +1,7 @@
 module;
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <vector>
 #include <memory>
 #include <string>
@@ -24,7 +25,9 @@ protected:
 public:
     RenderPipeline(const std::string& n, GLContext* ctx, ShaderManager* sm)
         : name(n), context(ctx), shaderManager(sm)
-    {}
+    {
+        Logger::Log(LogLevel::DEBUG, "RenderPipeline '" + name + "' constructed");
+    }
     
     virtual ~RenderPipeline() = default;
     
@@ -40,7 +43,7 @@ public:
         
         for (auto& pass : passes)
         {
-            if (pass->IsEnabled())
+            if (pass && pass->IsEnabled())
             {
                 pass->Execute(camera, projection);
             }
@@ -49,15 +52,22 @@ public:
     
     void AddPass(std::unique_ptr<RenderPass> pass)
     {
+        if (!pass)
+        {
+            Logger::Log(LogLevel::ERROR, "Attempted to add null pass!");
+            return;
+        }
+        
+        std::string passName = pass->GetName();
         passes.push_back(std::move(pass));
-        Logger::Log(LogLevel::INFO, "Added pass: " + pass->GetName());
+        Logger::Log(LogLevel::DEBUG, "Added pass: " + passName);
     }
     
     RenderPass* GetPass(const std::string& passName)
     {
         for (auto& pass : passes)
         {
-            if (pass->GetName() == passName)
+            if (pass && pass->GetName() == passName)
                 return pass.get();
         }
         return nullptr;

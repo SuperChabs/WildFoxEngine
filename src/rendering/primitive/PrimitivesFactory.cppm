@@ -9,7 +9,7 @@ module;
 export module WFE.Rendering.Primitive.PrimitivesFactory;
 
 import WFE.Rendering.MeshRenderer;
-import WFE.Rendering.Material;
+import WFE.Resource.Material.Material;
 import WFE.Rendering.MeshData;
 import WFE.Rendering.Primitive.PrimitiveGenerator;
 
@@ -39,10 +39,10 @@ public:
                 size_t dataSize;
                 const float* data = PrimitiveGenerator::GetCubeData(dataSize);
 
-                auto gpuMesh = std::make_unique<GPUMesh>(data, dataSize, 8);
+                auto meshRenderer = std::make_unique<MeshRenderer>(data, dataSize, 8);
                 auto material = std::make_unique<Material>(glm::vec3(1.0f, 0.0f, 1.0f));
 
-                auto mesh = std::make_unique<Mesh>(gpuMesh.release(), material.release());
+                auto mesh = std::make_unique<Mesh>(meshRenderer.release(), material.release());
                 return mesh.release();
             }
             case PrimitiveType::QUAD:
@@ -50,10 +50,10 @@ public:
                 size_t dataSize;
                 const float* data = PrimitiveGenerator::GetQuadData(dataSize);
 
-                auto gpuMesh = std::make_unique<GPUMesh>(data, dataSize, 8);
+                auto meshRenderer = std::make_unique<MeshRenderer>(data, dataSize, 8);
                 auto material = std::make_unique<Material>(glm::vec3(1.0f, 1.0f, 1.0f));
 
-                auto mesh = std::make_unique<Mesh>(gpuMesh.release(), material.release());
+                auto mesh = std::make_unique<Mesh>(meshRenderer.release(), material.release());
                 return mesh.release();
             }
             case PrimitiveType::PLANE:
@@ -61,10 +61,10 @@ public:
                 size_t dataSize;
                 const float* data = PrimitiveGenerator::GetPlaneData(dataSize);
 
-                auto gpuMesh = std::make_unique<GPUMesh>(data, dataSize, 8);
+                auto meshRenderer = std::make_unique<MeshRenderer>(data, dataSize, 8);
                 auto material = std::make_unique<Material>(glm::vec3(1.0f, 1.0f, 1.0f));
 
-                auto mesh = std::make_unique<Mesh>(gpuMesh.release(), material.release());
+                auto mesh = std::make_unique<Mesh>(meshRenderer.release(), material.release());
                 return mesh.release();
             }
             default:

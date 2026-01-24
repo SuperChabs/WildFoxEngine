@@ -6,7 +6,7 @@ module;
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
-export module WFE.Rendering.Material;
+export module WFE.Resource.Material.Material;
 
 import WFE.Rendering.MeshData; 
 import WFE.Resource.Shader.ShaderManager;

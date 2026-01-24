@@ -8,7 +8,7 @@ export module WFE.ECS.Components.Rendering;
 
 import WFE.Scene.Mesh;
 
-import WFE.Rendering.Material;
+import WFE.Resource.Material.Material;
 
 export struct MeshComponent 
 {

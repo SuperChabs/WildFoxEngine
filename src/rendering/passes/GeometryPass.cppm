@@ -1,7 +1,16 @@
+module;
+
+#include <string>
+#include <glm/glm.hpp>
+
 export module WFE.Rendering.Passes.GeometryPass;
 
 import WFE.Rendering.Passes.RenderPass;
 import WFE.ECS.ECSWorld;
+import WFE.Core.Camera;
+import WFE.Core.CommandManager;
+import WFE.Rendering.Core.GLContext;
+import WFE.Resource.Shader.ShaderManager;
 
 export class GeometryPass : public RenderPass
 {
@@ -10,7 +19,8 @@ private:
 
 public:
     GeometryPass(GLContext* ctx, ShaderManager* sm, ECSWorld* w)
-        : RenderPass("GeometryPass", ctx, sm), world(w)
+        : RenderPass("GeometryPass", ctx, sm)
+        , world(w)
     {}
     
     void Setup() override
@@ -26,9 +36,12 @@ public:
         
         Setup();
         
-        commandBuffer.Sort();
-        commandBuffer.Execute();
-        commandBuffer.Clear();
+        CommandManager::ExecuteCommand("Renderer_RenderGeometry", 
+        {
+            &camera,
+            projection,
+            std::string("basic")
+        });
         
         Cleanup();
     }

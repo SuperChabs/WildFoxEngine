@@ -1,7 +1,15 @@
+module;
+
+#include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 export module WFE.Rendering.Passes.SkyboxPass;
 
 import WFE.Rendering.Passes.RenderPass;
-import WFE.Rendering.Commands.DrawSkyboxCommand;
+import WFE.Core.Camera;
+import WFE.Rendering.Core.GLContext;
+import WFE.Resource.Shader.ShaderManager;
 
 export class SkyboxPass : public RenderPass
 {
@@ -32,13 +40,10 @@ public:
         shaderManager->SetMat4("skybox", "view", view);
         shaderManager->SetMat4("skybox", "projection", projection);
         
-        auto cmd = std::make_unique<DrawSkyboxCommand>(
-            skyboxVAO, cubemapTexture, context
-        );
-        commandBuffer.Submit(std::move(cmd));
-        
-        commandBuffer.Execute();
-        commandBuffer.Clear();
+        context->BindVAO(skyboxVAO);
+        context->BindTexture2D(cubemapTexture, 0);
+        context->DrawArrays(GL_TRIANGLES, 0, 36);
+        context->UnbindVAO();
         
         Cleanup();
     }
@@ -46,5 +51,6 @@ public:
     void Cleanup() override
     {
         context->SetDepthFunc(GL_LESS);
+        shaderManager->Unbind();
     }
 };

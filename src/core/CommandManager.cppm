@@ -10,8 +10,9 @@ module;
 export module WFE.Core.CommandManager;
 
 import WFE.Core.Logger;
+import WFE.Core.Camera;
 
-export using CommandArg = std::variant<int, bool, float, std::string, glm::vec3>;
+export using CommandArg = std::variant<int, bool, float, std::string, glm::vec3, glm::mat4, Camera*>;
 export using CommandArgs = std::vector<CommandArg>;
 export using CommandFn = std::function<void(const CommandArgs&)>;
 
@@ -37,7 +38,7 @@ public:
         auto it = commands.find(name);
         if (it != commands.end())
         {
-            Logger::Log(LogLevel::INFO, "Executing '" + name + "'");
+            // Logger::Log(LogLevel::INFO, "Executing '" + name + "'");
             it->second(args);
         }
         else 

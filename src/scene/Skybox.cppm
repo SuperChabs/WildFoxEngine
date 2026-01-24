@@ -7,7 +7,7 @@ module;
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-export module WFE.Rendering.Skybox;
+export module WFE.Scene.Skybox;
 
 import WFE.Core.Camera;
 
@@ -113,4 +113,5 @@ public:
     void SetShader(const std::string& newShaderName) { shaderName = newShaderName; }
     std::string GetShader() const { return shaderName; }
     unsigned int GetTexture() const { return cubemapTexture; }
+    GLint GetVAO() const { return skyboxVAO->GetID(); }
 };

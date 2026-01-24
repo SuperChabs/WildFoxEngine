@@ -2,15 +2,9 @@ module;
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp> 
-#include <glm/gtc/type_ptr.hpp>
-
 #include <imgui.h>
-
 #include <entt.hpp>
-
 #include <memory>
 #include <string>
 #include <variant>
@@ -18,35 +12,29 @@ module;
 export module WFE.Engine;
 
 import WFE.Application.Application;
-
 import WFE.Core.Input;
 import WFE.Core.CommandManager;
 import WFE.Core.Logger;
-
-import WFE.Rendering.Skybox;
+import WFE.Scene.Skybox;
 import WFE.Rendering.Core.Framebuffer;
 import WFE.Rendering.Primitive.PrimitivesFactory;
 import WFE.Rendering.Light;
-
 import WFE.Scene.Mesh;
 import WFE.Scene.Model;
-
 import WFE.UI.EditorLayout;
-
 import WFE.ECS.ECSWorld;
 import WFE.ECS.Components;
 import WFE.ECS.Systems;
+import WFE.Rendering.Renderer;
 
 export class Engine : public Application 
 {
 private:
     std::unique_ptr<Skybox> skybox;
     std::unique_ptr<EditorLayout> editorLayout;
-
-    std::unique_ptr<RenderSystem> renderSystem;
+    
+    // Тільки RotationSystem залишається в Engine (логіка гри)
     std::unique_ptr<RotationSystem> rotationSystem;
-    std::unique_ptr<LightSystem> lightSystem;
-    std::unique_ptr<IconRenderSystem> iconRenderSystem;
 
 protected:
     void OnInitialize() override
@@ -56,6 +44,7 @@ protected:
         GetShaderManager()->Load();
         GetMaterialManager()->LoadMaterialConfigs();
 
+        // Завантаження skybox текстур
         std::vector<std::string> faces = 
         {
             "assets/textures/skybox1/right.png",
@@ -69,10 +58,20 @@ protected:
         unsigned int cubemapTexture = GetTextureManager()->LoadCubemap(faces);
         skybox = std::make_unique<Skybox>(cubemapTexture, "skybox");
 
-        renderSystem = std::make_unique<RenderSystem>();
+        auto renderer = std::make_unique<Renderer>(GetShaderManager(), GetECSWorld());
+
+        SetRenderer(std::move(renderer));
+
+        auto iconSystem = std::make_unique<IconRenderSystem>(GetTextureManager());
+        GetRenderer()->SetIconRenderSystem(std::move(iconSystem));
+
+        if (!GetRenderer()->Initialize(skybox->GetVAO(), skybox->GetTexture()))
+        {
+            Logger::Log(LogLevel::ERROR, "Failed to initialize Renderer!");
+            return;
+        }
+
         rotationSystem = std::make_unique<RotationSystem>();
-        lightSystem = std::make_unique<LightSystem>();
-        iconRenderSystem = std::make_unique<IconRenderSystem>(GetTextureManager());
 
         InitCommandRegistration();
 
@@ -87,13 +86,13 @@ protected:
         GetShaderManager()->Bind("skybox");
         GetShaderManager()->SetInt("skybox", "skybox", 0);
         
-        Logger::Log(LogLevel::INFO, "Game initialized successfully");
+        Logger::Log(LogLevel::INFO, "Engine initialized successfully");
     }
 
     void OnUpdate(float deltaTime) override
     {
+        // Тільки логіка гри в Engine
         rotationSystem->Update(*GetECSWorld(), deltaTime);
-        lightSystem->Update(*GetECSWorld(), *GetShaderManager(), "basic");
     }
 
     void OnRender() override
@@ -103,52 +102,27 @@ protected:
             Framebuffer* fb = editorLayout->GetFramebuffer();
             ImVec2 viewportSize = editorLayout->GetViewportSize();
             
+            // Рендер у framebuffer
             fb->Bind();
             
-            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glEnable(GL_DEPTH_TEST);
+            // Renderer тепер керує всім рендерингом
+            GetRenderer()->BeginFrame();
             
             if (viewportSize.x > 0 && viewportSize.y > 0)
             {
-                glm::mat4 projection = glm::perspective(
-                    glm::radians(GetCamera()->GetZoom()), 
-                    viewportSize.x / viewportSize.y, 
-                    0.1f, 100.0f
+                GetRenderer()->Render(
+                    *GetCamera(), 
+                    static_cast<int>(viewportSize.x), 
+                    static_cast<int>(viewportSize.y)
                 );
-                glm::mat4 view = GetCamera()->GetViewMatrix();
-                
-                GetShaderManager()->Bind("basic");
-
-                GLint currentProgram;
-                glGetIntegerv(GL_CURRENT_PROGRAM, &currentProgram);
-                if (currentProgram != GetShaderManager()->GetShader("basic")->ID) 
-                    Logger::Log(LogLevel::ERROR, "Shader not active!");
-                
-                GetShaderManager()->SetMat4("basic", "projection", projection);
-                GetShaderManager()->SetMat4("basic", "view", view);
-                GetShaderManager()->SetVec3("basic", "viewPos", GetCamera()->GetPosition());
-                
-                static int frameCount = 0;
-                if (frameCount % 60 == 0) 
-                    Logger::Log(LogLevel::DEBUG, "Rendering " + 
-                        std::to_string(GetECSWorld()->GetEntityCount()) + " entities");
-                frameCount++; 
-                
-                renderSystem->Update(*GetECSWorld(), *GetShaderManager(), "basic", *GetCamera());
-                skybox->Render(*GetShaderManager(), *GetCamera(), projection);
-
-                glDisable(GL_DEPTH_TEST);
-                GetShaderManager()->Bind("icon");
-                GetShaderManager()->SetMat4("icon", "projection", projection);
-                GetShaderManager()->SetMat4("icon", "view", view);
-                iconRenderSystem->Update(*GetECSWorld(), *GetShaderManager(), "icon", *GetCamera());
-                glEnable(GL_DEPTH_TEST);
             }
+            
+            GetRenderer()->EndFrame();
             
             fb->Unbind();
         }
         
+        // Очищення головного вікна
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glViewport(0, 0, GetWindow()->GetWidth(), GetWindow()->GetHeight());
         glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
@@ -158,11 +132,12 @@ protected:
 
     void OnShutdown() override
     {
-        Logger::Log(LogLevel::INFO, "Shutting down game...");
+        Logger::Log(LogLevel::INFO, "Shutting down engine...");
         
+        GetRenderer()->Shutdown();
         GetShaderManager()->ClearAll();
         
-        Logger::Log(LogLevel::INFO, "Game shutdown complete!");
+        Logger::Log(LogLevel::INFO, "Engine shutdown complete!");
     }
 
     void RenderUI() override
@@ -173,7 +148,13 @@ protected:
             return;
         }
 
-        editorLayout->RenderEditor(GetECSWorld(), GetCamera(), GetRenderer(), GetShaderManager(), GetMaterialManager());
+        editorLayout->RenderEditor(
+            GetECSWorld(), 
+            GetCamera(), 
+            GetRenderer(), 
+            GetShaderManager(), 
+            GetMaterialManager()
+        );
     }
 
 public:
@@ -188,18 +169,17 @@ private:
         [this](const CommandArgs&) 
         {
             auto entity = GetECSWorld()->CreateEntity("Cube");
-
-            GetECSWorld()->AddComponent<TransformComponent>(entity, glm::vec3(0, 0, 0), glm::vec3(0), glm::vec3(1));
-
+            GetECSWorld()->AddComponent<TransformComponent>(entity, glm::vec3(0, 0, -5), glm::vec3(0), glm::vec3(1));
+            
             auto cubeMesh = PrimitivesFactory::CreatePrimitive(PrimitiveType::CUBE);
             GetECSWorld()->AddComponent<MeshComponent>(entity, cubeMesh);
-
+            
             auto material = GetMaterialManager()->GetMaterial("gray");
             GetECSWorld()->AddComponent<MaterialComponent>(entity, material);
-
+            
             GetECSWorld()->AddComponent<ColorComponent>(entity, glm::vec3(0.5f, 0.5f, 0.5f));
             GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
-            GetECSWorld()->AddComponent<RotationComponent >(entity, 50.0f);
+            GetECSWorld()->AddComponent<RotationComponent>(entity, 50.0f);
             
             Logger::Log(LogLevel::INFO, "Cube entity created");
         });
@@ -221,7 +201,6 @@ private:
             }
 
             const auto& color = std::get<glm::vec3>(args[0]);
-
             entt::entity selected = editorLayout->GetSelectedEntity();
             
             if (selected == entt::null || !GetECSWorld()->IsValid(selected))
@@ -252,18 +231,12 @@ private:
         [this](const CommandArgs&) 
         {
             auto entity = GetECSWorld()->CreateEntity("Directional Light");
-            
             GetECSWorld()->AddComponent<TransformComponent>(entity, 
-                glm::vec3(0, 10, 0), 
-                glm::vec3(45, 0, 0), 
-                glm::vec3(1));
-            
+                glm::vec3(0, 10, 0), glm::vec3(45, 0, 0), glm::vec3(1));
             GetECSWorld()->AddComponent<LightComponent>(entity, LightType::DIRECTIONAL);
             GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
-            
             GetECSWorld()->AddComponent<IconComponent>(entity, 
                 "assets/textures/icons/light_directional.png", 0.3f);
-            
             Logger::Log(LogLevel::INFO, "Directional light created with icon");
         });
 
@@ -271,18 +244,12 @@ private:
         [this](const CommandArgs&) 
         {
             auto entity = GetECSWorld()->CreateEntity("Point Light");
-            
             GetECSWorld()->AddComponent<TransformComponent>(entity, 
-                glm::vec3(0, 5, 0), 
-                glm::vec3(0), 
-                glm::vec3(1));
-            
+                glm::vec3(0, 5, 0), glm::vec3(0), glm::vec3(1));
             GetECSWorld()->AddComponent<LightComponent>(entity, LightType::POINT);
             GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
-            
             GetECSWorld()->AddComponent<IconComponent>(entity, 
                 "assets/textures/icons/light_point.png", 0.4f);
-            
             Logger::Log(LogLevel::INFO, "Point light created with icon");
         });
 
@@ -290,18 +257,12 @@ private:
         [this](const CommandArgs&) 
         {
             auto entity = GetECSWorld()->CreateEntity("Spot Light");
-            
             GetECSWorld()->AddComponent<TransformComponent>(entity, 
-                glm::vec3(0, 5, 0), 
-                glm::vec3(45, 0, 0), 
-                glm::vec3(1));
-            
+                glm::vec3(0, 5, 0), glm::vec3(45, 0, 0), glm::vec3(1));
             GetECSWorld()->AddComponent<LightComponent>(entity, LightType::SPOT);
             GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
-            
             GetECSWorld()->AddComponent<IconComponent>(entity, 
                 "assets/textures/icons/light_spot.png", 0.35f);
-            
             Logger::Log(LogLevel::INFO, "Spot light created with icon");
         });
     }

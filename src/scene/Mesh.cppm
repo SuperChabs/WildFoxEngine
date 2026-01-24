@@ -11,26 +11,26 @@ export module WFE.Scene.Mesh;
 
 import WFE.Resource.Shader.ShaderManager;
 
-import WFE.Rendering.Material;
+import WFE.Resource.Material.Material;
 import WFE.Rendering.MeshRenderer;
 import WFE.Rendering.MeshData;
 
 export class Mesh 
 {
 private:
-    std::unique_ptr<GPUMesh> gpuMesh;
+    std::unique_ptr<MeshRenderer> meshRenderer;
     std::shared_ptr<Material> material;
 
 public:
     Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
     {
-        gpuMesh = std::make_unique<GPUMesh>(vertices, indices);
+        meshRenderer = std::make_unique<MeshRenderer>(vertices, indices);
         material = std::make_unique<Material>(textures);    
     }
 
-    Mesh(GPUMesh* gpuMeshPtr, Material* materialPtr)
+    Mesh(MeshRenderer* MeshRendererPtr, Material* materialPtr)
     {
-        gpuMesh = std::unique_ptr<GPUMesh>(gpuMeshPtr);
+        meshRenderer = std::unique_ptr<MeshRenderer>(MeshRendererPtr);
         material = std::unique_ptr<Material>(materialPtr);
     }
 
@@ -39,7 +39,7 @@ public:
         if (material)
         {
             material->Bind(shaderManager, name);
-            gpuMesh->Draw();
+            meshRenderer->Draw();
             material->Unbind();
         }
     }
@@ -49,13 +49,13 @@ public:
         if (externalMaterial)
         {
             externalMaterial->Bind(shaderManager, name);
-            gpuMesh->Draw();
+            meshRenderer->Draw();
             externalMaterial->Unbind();
         }
         else if (material)
         {
             material->Bind(shaderManager, name);
-            gpuMesh->Draw();
+            meshRenderer->Draw();
             material->Unbind();
         }
     }
@@ -83,4 +83,6 @@ public:
     }
 
     glm::vec3 GetColor() const { return material->GetColor(); }
+    MeshRenderer* GetMeshRenderer() { return meshRenderer.get(); }
+    std::shared_ptr<Material> GetMaterial() { return material; }
 };

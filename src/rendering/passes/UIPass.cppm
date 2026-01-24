@@ -1,6 +1,15 @@
+module;
+
+#include <string>
+#include <glm/glm.hpp>
+
 export module WFE.Rendering.Passes.UIPass;
 
 import WFE.Rendering.Passes.RenderPass;
+import WFE.Core.Camera;
+import WFE.Core.CommandManager;
+import WFE.Rendering.Core.GLContext;
+import WFE.Resource.Shader.ShaderManager;
 
 export class UIPass : public RenderPass
 {
@@ -20,9 +29,13 @@ public:
         if (!enabled) return;
         
         Setup();
-
-        commandBuffer.Execute();
-        commandBuffer.Clear();
+        
+        CommandManager::ExecuteCommand("Renderer_RenderUI", 
+        {
+            &camera,
+            projection,
+            std::string("icon")
+        });
         
         Cleanup();
     }

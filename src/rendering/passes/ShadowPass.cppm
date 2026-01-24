@@ -1,6 +1,16 @@
+module;
+
+#include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 export module WFE.Rendering.Passes.ShadowPass;
 
 import WFE.Rendering.Passes.RenderPass;
+import WFE.Rendering.Core.GLContext;
+import WFE.Resource.Shader.ShaderManager;
+import WFE.Core.CommandManager;
+import WFE.Core.Camera;
 
 export class ShadowPass : public RenderPass
 {
@@ -34,10 +44,8 @@ public:
         if (!enabled) return;
         
         Setup();
+        
 
-        commandBuffer.Sort();
-        commandBuffer.Execute();
-        commandBuffer.Clear();
         
         Cleanup();
     }

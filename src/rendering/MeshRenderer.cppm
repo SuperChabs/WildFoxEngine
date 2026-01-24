@@ -14,7 +14,7 @@ import WFE.Rendering.Core.IndexBuffer;
 import WFE.Rendering.MeshData; 
 import WFE.Core.Logger;
 
-export class GPUMesh
+export class MeshRenderer
 {
 private:
     std::unique_ptr<VertexArray>  VAO;
@@ -26,12 +26,12 @@ private:
     bool   usedIndices = false;
 
 public:
-    GPUMesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices)
+    MeshRenderer(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices)
     {
         usedIndices = true;
         indexCount = indices.size();
 
-        Logger::Log(LogLevel::INFO, "GPUMesh created with " + 
+        Logger::Log(LogLevel::INFO, "MeshRenderer created with " + 
             std::to_string(vertices.size()) + " vertices and " + 
             std::to_string(indexCount) + " indices");
 
@@ -55,15 +55,15 @@ public:
 
         VAO->Unbind();
 
-        Logger::Log(LogLevel::INFO, "GPUMesh attributes configured successfully");
+        Logger::Log(LogLevel::INFO, "MeshRenderer attributes configured successfully");
     }
 
-    GPUMesh(const float* data, size_t dataSize, int stride)
+    MeshRenderer(const float* data, size_t dataSize, int stride)
     {
         usedIndices = false;
         vertexCount = dataSize / (stride * sizeof(float));
 
-        Logger::Log(LogLevel::INFO, "GPUMesh created from raw data: " + 
+        Logger::Log(LogLevel::INFO, "MeshRenderer created from raw data: " + 
             std::to_string(vertexCount) + " vertices, stride=" + std::to_string(stride));
 
         VAO = std::make_unique<VertexArray>();
