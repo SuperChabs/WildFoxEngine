@@ -42,12 +42,8 @@ public:
         );
         
         for (auto& pass : passes)
-        {
-            if (pass && pass->IsEnabled())
-            {
+            if (pass && pass->IsEnabled()) 
                 pass->Execute(camera, projection);
-            }
-        }
     }
     
     void AddPass(std::unique_ptr<RenderPass> pass)
@@ -66,10 +62,8 @@ public:
     RenderPass* GetPass(const std::string& passName)
     {
         for (auto& pass : passes)
-        {
             if (pass && pass->GetName() == passName)
                 return pass.get();
-        }
         return nullptr;
     }
     

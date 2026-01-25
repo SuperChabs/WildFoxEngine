@@ -21,6 +21,7 @@ import WFE.Rendering.Primitive.PrimitivesFactory;
 import WFE.Rendering.Light;
 import WFE.Scene.Mesh;
 import WFE.Scene.Model;
+import WFE.Scene.SceneSurializer;
 import WFE.UI.EditorLayout;
 import WFE.ECS.ECSWorld;
 import WFE.ECS.Components;
@@ -33,8 +34,9 @@ private:
     std::unique_ptr<Skybox> skybox;
     std::unique_ptr<EditorLayout> editorLayout;
     
-    // Тільки RotationSystem залишається в Engine (логіка гри)
     std::unique_ptr<RotationSystem> rotationSystem;
+
+    std::unique_ptr<SceneSerializer> sceneSerializer;
 
 protected:
     void OnInitialize() override
@@ -44,7 +46,6 @@ protected:
         GetShaderManager()->Load();
         GetMaterialManager()->LoadMaterialConfigs();
 
-        // Завантаження skybox текстур
         std::vector<std::string> faces = 
         {
             "assets/textures/skybox1/right.png",
@@ -73,6 +74,11 @@ protected:
 
         rotationSystem = std::make_unique<RotationSystem>();
 
+        sceneSerializer = std::make_unique<SceneSerializer>(
+            GetECSWorld(), 
+            GetCamera()
+        );
+
         InitCommandRegistration();
 
         Logger::Log(LogLevel::INFO, "Creating EditorLayout...");
@@ -91,7 +97,6 @@ protected:
 
     void OnUpdate(float deltaTime) override
     {
-        // Тільки логіка гри в Engine
         rotationSystem->Update(*GetECSWorld(), deltaTime);
     }
 
@@ -280,6 +285,109 @@ private:
             GetECSWorld()->AddComponent<IconComponent>(entity, 
                 "assets/textures/icons/light_spot.png", 0.35f);
             Logger::Log(LogLevel::INFO, "Spot light created with icon");
+        });
+
+        CommandManager::RegisterCommand("onSaveScene",
+        [this](const CommandArgs& args) 
+        {
+            std::string filename = "scene.json";
+            
+            if (!args.empty())
+            {
+                try 
+                {
+                    filename = std::get<std::string>(args[0]);
+                }
+                catch (...) 
+                {
+                    Logger::Log(LogLevel::WARNING, "Invalid filename argument, using default");
+                }
+            }
+            
+            if (filename.find(".json") == std::string::npos)
+                filename += ".json";
+            
+            bool success = sceneSerializer->SaveScene(filename);
+            
+            if (success)
+                Logger::Log(LogLevel::INFO, "✓ Scene saved successfully: " + filename);
+            else
+                Logger::Log(LogLevel::ERROR, "✗ Failed to save scene: " + filename);
+        });
+        
+        CommandManager::RegisterCommand("onLoadScene",
+        [this](const CommandArgs& args) 
+        {
+            std::string filename = "scene.json";
+            
+            if (!args.empty())
+            {
+                try 
+                {
+                    filename = std::get<std::string>(args[0]);
+                }
+                catch (...) 
+                {
+                    Logger::Log(LogLevel::WARNING, "Invalid filename argument, using default");
+                }
+            }
+            
+            if (filename.find(".json") == std::string::npos)
+                filename += ".json";
+            
+            bool success = sceneSerializer->LoadScene(
+                filename,
+                GetMaterialManager(),
+                GetTextureManager()
+            );
+            
+            if (success)
+                Logger::Log(LogLevel::INFO, "✓ Scene loaded successfully: " + filename);
+            else
+                Logger::Log(LogLevel::ERROR, "✗ Failed to load scene: " + filename);
+        });
+        
+        CommandManager::RegisterCommand("onQuickSave",
+        [this](const CommandArgs&) 
+        {
+            CommandManager::ExecuteCommand("onSaveScene", {std::string("quicksave.json")});
+        });
+        
+        CommandManager::RegisterCommand("onQuickLoad",
+        [this](const CommandArgs&) 
+        {
+            CommandManager::ExecuteCommand("onLoadScene", {std::string("quicksave.json")});
+        });
+        
+        CommandManager::RegisterCommand("onNewScene",
+        [this](const CommandArgs&) 
+        {
+            GetECSWorld()->Clear();
+            
+            GetCamera()->SetPosition(glm::vec3(0, 0, 0));
+            GetCamera()->SetYaw(-95.0f);
+            GetCamera()->SetPitch(0.0f);
+            
+            Logger::Log(LogLevel::INFO, "New scene created");
+        });
+        
+        CommandManager::RegisterCommand("onListScenes",
+        [this](const CommandArgs&) 
+        {
+            auto scenes = sceneSerializer->GetAvailableScenes();
+            
+            if (scenes.empty())
+            {
+                Logger::Log(LogLevel::INFO, "No saved scenes found");
+            }
+            else
+            {
+                Logger::Log(LogLevel::INFO, "Available scenes (" + 
+                    std::to_string(scenes.size()) + "):");
+                
+                for (const auto& scene : scenes)
+                    Logger::Log(LogLevel::INFO, "  - " + scene);
+            }
         });
     }
 };

@@ -238,7 +238,7 @@ public:
                 shadowPass->SetEnabled(enable);
         }
     }
-    
+
     // Getters
     GLContext* GetContext() { return context.get(); }
     RenderPipeline* GetPipeline() { return pipeline.get(); }

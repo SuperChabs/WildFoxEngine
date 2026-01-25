@@ -1,6 +1,8 @@
 module;
 
 #include <imgui.h>
+#include <string>
+#include <chrono>
 
 export module WFE.UI.Windows.MenuBarWindow;
 
@@ -31,8 +33,52 @@ private:
     {
         if (!ImGui::BeginMenu("File")) return;
         
-        if (ImGui::MenuItem("Exit"))
-            if(CommandManager::HasCommand("onExit")) 
+        if (ImGui::MenuItem("New Scene", "Ctrl+N"))
+            if (CommandManager::HasCommand("onNewScene"))
+                CommandManager::ExecuteCommand("onNewScene", {});
+        
+        ImGui::Separator();
+        
+        if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
+            if (CommandManager::HasCommand("onSaveScene"))
+                CommandManager::ExecuteCommand("onSaveScene", {});
+        
+        if (ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S"))
+            if (CommandManager::HasCommand("onSaveScene"))
+            {
+                std::string filename = "scene_" + GetTimestampString() + ".json";
+                CommandManager::ExecuteCommand("onSaveScene", {filename});
+            }
+        
+        ImGui::Separator();
+        
+        if (ImGui::MenuItem("Load Scene", "Ctrl+O"))
+            if (CommandManager::HasCommand("onLoadScene"))
+                CommandManager::ExecuteCommand("onLoadScene", {});
+        
+        if (ImGui::BeginMenu("Recent Scenes"))
+        {
+            // auto scenes = sceneSerializer->GetAvailableScenes();
+            
+            if (ImGui::MenuItem("quicksave.json"))
+                CommandManager::ExecuteCommand("onLoadScene", {std::string("quicksave.json")});
+            
+            if (ImGui::MenuItem("scene.json"))
+                CommandManager::ExecuteCommand("onLoadScene", {std::string("scene.json")});
+            
+            ImGui::Separator();
+            
+            if (ImGui::MenuItem("List All Scenes"))
+                if (CommandManager::HasCommand("onListScenes"))
+                    CommandManager::ExecuteCommand("onListScenes", {});
+            
+            ImGui::EndMenu();
+        }
+        
+        ImGui::Separator();
+        
+        if (ImGui::MenuItem("Exit", "Alt+F4"))
+            if (CommandManager::HasCommand("onExit"))
                 CommandManager::ExecuteCommand("onExit", {});
         
         ImGui::EndMenu();
@@ -138,5 +184,19 @@ private:
             Theme::ApplyTheme(ThemeStyle::VisualStudio);
         
         ImGui::EndMenu();
+    }
+
+    std::string GetTimestampString()
+    {
+        auto now = std::chrono::system_clock::now();
+        auto time = std::chrono::system_clock::to_time_t(now);
+        
+        std::tm tm_snapshot;
+        localtime_r(&time, &tm_snapshot);
+        
+        char buffer[32];
+        std::strftime(buffer, sizeof(buffer), "%Y%m%d_%H%M%S", &tm_snapshot);
+        
+        return std::string(buffer);
     }
 };

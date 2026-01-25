@@ -16,11 +16,9 @@ import WFE.Core.Camera;
 import WFE.Core.Logger;
 import WFE.Core.Logging.ConsoleLogger;
 import WFE.Core.Logging.FileLogger;
-
+import WFE.Core.CommandManager;
 import WFE.ECS.ECSWorld;
-
 import WFE.Rendering.Renderer; 
-
 import WFE.Resource.Texture.TextureManager;
 import WFE.Resource.Material.MaterialManager;
 import WFE.Resource.Shader.ShaderManager;
@@ -59,6 +57,30 @@ private:
         {
             shaderManager->ReloadAll();
             Logger::Log(LogLevel::INFO, "Reloaded all shaders");
+        }
+
+        // Ctrl+S - Quick Save
+        if (input->IsKeyPressed(Key::KEY_LEFT_CONTROL) && 
+            input->IsKeyJustPressed(Key::KEY_S))
+        {
+            if (CommandManager::HasCommand("onQuickSave"))
+                CommandManager::ExecuteCommand("onQuickSave", {});
+        }
+        
+        // Ctrl+L - Quick Load
+        if (input->IsKeyPressed(Key::KEY_LEFT_CONTROL) && 
+            input->IsKeyJustPressed(Key::KEY_L))
+        {
+            if (CommandManager::HasCommand("onQuickLoad"))
+                CommandManager::ExecuteCommand("onQuickLoad", {});
+        }
+        
+        // Ctrl+N - New Scene
+        if (input->IsKeyPressed(Key::KEY_LEFT_CONTROL) && 
+            input->IsKeyJustPressed(Key::KEY_N))
+        {
+            if (CommandManager::HasCommand("onNewScene"))
+                CommandManager::ExecuteCommand("onNewScene", {});
         }
         
         if (cameraControlEnabled) 
