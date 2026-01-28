@@ -6,62 +6,86 @@ module;
 
 #include <glm/glm.hpp>
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-
-export module WFE.Scene.Model;
+export module WFE.Resource.Model.Model;
 
 import WFE.Scene.Mesh;
-import WFE.Rendering.MeshData;
-import WFE.Resource.Material.Material;
 import WFE.Resource.Shader.ShaderManager;
+import WFE.Resource.Material.Material;
+import WFE.Rendering.MeshData;
 
-export class Model 
+export class Model
 {
-private:
-    std::vector<Mesh> meshes;
-    std::vector<Texture> textures_loaded;
-    std::string directory;
-
-    void loadModel(const std::string& path);
-    void processNode(aiNode* node, const aiScene* scene);
-    Mesh processMesh(aiMesh* mesh, const aiScene* scene);
-    std::vector<Texture> loadMaterialTextures(void* mat, int type, const std::string& typeName);
+    std::vector<std::shared_ptr<Mesh>> meshes;
+    std::string filepath;
+    std::string name;
 
 public:
-    Model(const char* path) 
+    Model(const std::string& path)
+        : filepath(path)
     {
-        loadModel(path);
+        size_t lastSlash = path.find_last_of("/");
+        size_t lastDot   = path.find_last_of(".");
+
+        if (lastSlash != std::string::npos && lastDot != std::string::npos)
+            name = path.substr(lastSlash + 1, lastDot - lastSlash - 1);
+        else
+            name = path;
     }
 
-    Model(Mesh* mesh, std::string name = "") 
-    { 
-        meshes.push_back(std::move(*mesh)); 
-    }
-
-    void Draw(ShaderManager& shaderManager, const std::string& name);
-
-    void SetColor(const glm::vec3& color);
-    void SetTextures(const std::vector<Texture>& textures);
-
-    void SetMaterialForAll(std::shared_ptr<Material> material)
+    void AddMesh(Mesh&& mesh)
     {
-        for (auto& mesh : meshes)
-            mesh.SetMaterial(material);
-    }
-    
-    size_t GetMeshCount() const
-    {
-        return meshes.size();
+        meshes.push_back(std::make_shared<Mesh>(std::move(mesh)));
     }
 
-    Mesh* GetMesh(size_t index)
+    void AddMesh(std::shared_ptr<Mesh> mesh)
+    {
+        meshes.push_back(mesh);
+    }
+
+    std::shared_ptr<Mesh> GetMesh(size_t index)
     {
         if (index < meshes.size())
-            return &meshes[index];
+            return meshes[index];
         return nullptr;
     }
-};
 
-unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma = false);
+    const std::vector<std::shared_ptr<Mesh>>& GetMeshes() const
+    {
+        return meshes;
+    }
+
+    void Draw(ShaderManager& shaderManager, const std::string& shaderName) 
+    {
+        for (auto& mesh : meshes) 
+            if (mesh)
+                mesh->Draw(shaderManager, shaderName);
+    }
+
+    void SetColor(const glm::vec3& color) 
+    {
+        for (auto& mesh : meshes) 
+            if (mesh)
+                mesh->SetColor(color);
+    }
+
+    void SetTextures(const std::vector<Texture>& textures)
+    {
+        for (auto& mesh : meshes) 
+            if (mesh)
+                mesh->SetTextures(textures);
+    }
+
+    void SetMaterialForAll(std::shared_ptr<Material> material) 
+    {
+        for (auto& mesh : meshes) 
+            if (mesh)
+                mesh->SetMaterial(material);
+    }
+    
+    size_t GetMeshCount() const { return meshes.size(); }
+    const std::string& GetName() const { return name; }
+    const std::string& GetFilepath() const { return filepath; }
+    
+    void SetName(const std::string& n) { name = n; }
+    void SetFilepath(const std::string& path) { filepath = path; }
+};

@@ -14,7 +14,6 @@ import WFE.Rendering.MeshData;
 import WFE.Rendering.Primitive.PrimitiveGenerator;
 
 import WFE.Scene.Mesh;
-import WFE.Scene.Model;
 
 import WFE.Core.Logger;
 

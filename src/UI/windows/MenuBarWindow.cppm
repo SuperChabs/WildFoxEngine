@@ -2,201 +2,253 @@ module;
 
 #include <imgui.h>
 #include <string>
-#include <chrono>
+#include <cstring>
+#include <vector>
+#include <variant>
 
 export module WFE.UI.Windows.MenuBarWindow;
 
 import WFE.Core.Logger;
 import WFE.Core.CommandManager;
-
 import WFE.UI.Theme;
 
 export class MenuBarWindow
 {
 public:
-    void Render(bool& showHierarchy, bool& showInspector, 
+    void Render(bool& showHierarchy, bool& showInspector,
                 bool& showProperties, bool& showConsole)
     {
         if (ImGui::BeginMenuBar())
         {
             RenderFileMenu();
             RenderCreateMenu();
-            RenderViewMenu(showHierarchy, showInspector, 
-                          showProperties, showConsole);
-            
+            RenderViewMenu(showHierarchy, showInspector,
+                           showProperties, showConsole);
             ImGui::EndMenuBar();
         }
+
+        RenderOpenModelDialog();
+        RenderSaveSceneDialog();
     }
 
 private:
+    /* ===================== STATE ===================== */
+
+    bool showOpenModelDialog = false;
+    bool showSaveSceneDialog = false;
+
+    char modelPath[512]{};
+    char scenePath[512]{};
+
+    /* ===================== FILE MENU ===================== */
+
     void RenderFileMenu()
     {
         if (!ImGui::BeginMenu("File")) return;
-        
-        if (ImGui::MenuItem("New Scene", "Ctrl+N"))
-            if (CommandManager::HasCommand("onNewScene"))
-                CommandManager::ExecuteCommand("onNewScene", {});
-        
-        ImGui::Separator();
-        
-        if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
-            if (CommandManager::HasCommand("onSaveScene"))
-                CommandManager::ExecuteCommand("onSaveScene", {});
-        
-        if (ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S"))
-            if (CommandManager::HasCommand("onSaveScene"))
-            {
-                std::string filename = "scene_" + GetTimestampString() + ".json";
-                CommandManager::ExecuteCommand("onSaveScene", {filename});
-            }
-        
-        ImGui::Separator();
-        
-        if (ImGui::MenuItem("Load Scene", "Ctrl+O"))
-            if (CommandManager::HasCommand("onLoadScene"))
-                CommandManager::ExecuteCommand("onLoadScene", {});
-        
-        if (ImGui::BeginMenu("Recent Scenes"))
+
+        if (ImGui::MenuItem("Open Model...", "Ctrl+O"))
         {
-            // auto scenes = sceneSerializer->GetAvailableScenes();
-            
-            if (ImGui::MenuItem("quicksave.json"))
-                CommandManager::ExecuteCommand("onLoadScene", {std::string("quicksave.json")});
-            
-            if (ImGui::MenuItem("scene.json"))
-                CommandManager::ExecuteCommand("onLoadScene", {std::string("scene.json")});
-            
-            ImGui::Separator();
-            
-            if (ImGui::MenuItem("List All Scenes"))
-                if (CommandManager::HasCommand("onListScenes"))
-                    CommandManager::ExecuteCommand("onListScenes", {});
-            
-            ImGui::EndMenu();
+            showOpenModelDialog = true;
+            modelPath[0] = '\0';
         }
-        
+
+        if (ImGui::MenuItem("New Scene", "Ctrl+N"))
+            Execute("onNewScene");
+
         ImGui::Separator();
-        
+
+        if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
+            Execute("onSaveScene");
+
+        if (ImGui::MenuItem("Save Scene As..."))
+        {
+            showSaveSceneDialog = true;
+            std::strcpy(scenePath, "scene.json");
+        }
+
+        ImGui::Separator();
+
+        if (ImGui::MenuItem("Load Scene"))
+            Execute("onLoadScene");
+
+        ImGui::Separator();
+
         if (ImGui::MenuItem("Exit", "Alt+F4"))
-            if (CommandManager::HasCommand("onExit"))
-                CommandManager::ExecuteCommand("onExit", {});
-        
+            Execute("onExit");
+
         ImGui::EndMenu();
     }
-    
+
+    /* ===================== OPEN MODEL DIALOG ===================== */
+
+    void RenderOpenModelDialog()
+    {
+        if (!showOpenModelDialog) return;
+
+        ImGui::OpenPopup("Open Model");
+
+        if (ImGui::BeginPopupModal(
+                "Open Model",
+                &showOpenModelDialog,
+                ImGuiWindowFlags_AlwaysAutoResize))
+        {
+            ImGui::Text("Path to model file:");
+            ImGui::InputTextWithHint(
+                "##modelpath",
+                "/home/user/model.obj",
+                modelPath,
+                sizeof(modelPath));
+
+            ImGui::Spacing();
+
+            if (ImGui::Button("Open"))
+            {
+                std::string path = modelPath;
+
+                if (!path.empty())
+                {
+                    Logger::Log(LogLevel::INFO,
+                        "Opening model: " + path);
+                    Execute("onLoadModel", path);
+                }
+
+                ClosePopup(showOpenModelDialog);
+            }
+
+            ImGui::SameLine();
+
+            if (ImGui::Button("Cancel"))
+                ClosePopup(showOpenModelDialog);
+
+            ImGui::EndPopup();
+        }
+    }
+
+    /* ===================== SAVE SCENE DIALOG ===================== */
+
+    void RenderSaveSceneDialog()
+    {
+        if (!showSaveSceneDialog) return;
+
+        ImGui::OpenPopup("Save Scene");
+
+        if (ImGui::BeginPopupModal(
+                "Save Scene",
+                &showSaveSceneDialog,
+                ImGuiWindowFlags_AlwaysAutoResize))
+        {
+            ImGui::Text("Scene filename:");
+            ImGui::InputText("##scenepath",
+                             scenePath,
+                             sizeof(scenePath));
+
+            ImGui::Spacing();
+
+            if (ImGui::Button("Save"))
+            {
+                std::string path = scenePath;
+                if (!path.empty())
+                    Execute("onSaveScene", path);
+
+                ClosePopup(showSaveSceneDialog);
+            }
+
+            ImGui::SameLine();
+
+            if (ImGui::Button("Cancel"))
+                ClosePopup(showSaveSceneDialog);
+
+            ImGui::EndPopup();
+        }
+    }
+
+    /* ===================== CREATE MENU ===================== */
+
     void RenderCreateMenu()
     {
         if (!ImGui::BeginMenu("Create")) return;
-        
-        RenderMeshSubmenu();
-        RenderLightSubmenu();
-        
-        ImGui::EndMenu();
-    }
-    
-    void RenderMeshSubmenu()
-    {
-        if (!ImGui::BeginMenu("Mesh")) return;
-        
-        if (ImGui::MenuItem("Cube"))
-            if(CommandManager::HasCommand("onCreateCube")) 
-                CommandManager::ExecuteCommand("onCreateCube", {});
-        
-        if (ImGui::MenuItem("Plane"))
-            if(CommandManager::HasCommand("onCreatePlane")) 
-                CommandManager::ExecuteCommand("onCreatePlane", {});
 
-        if (ImGui::MenuItem("Sphere"))
-            Logger::Log(LogLevel::INFO, "Sphere not implemented");
-        
+        if (ImGui::BeginMenu("Mesh"))
+        {
+            ExecuteItem("Cube", "onCreateCube");
+            ExecuteItem("Plane", "onCreatePlane");
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("Light"))
+        {
+            ExecuteItem("Directional", "onCreateDirectionalLight");
+            ExecuteItem("Point", "onCreatePointLight");
+            ExecuteItem("Spot", "onCreateSpotLight");
+            ImGui::EndMenu();
+        }
+
         ImGui::EndMenu();
     }
-    
-    void RenderLightSubmenu()
-    {
-        if (!ImGui::BeginMenu("Light")) return;
-        
-        if (ImGui::MenuItem("Directional Light"))
-            if(CommandManager::HasCommand("onCreateDirectionalLight")) 
-                CommandManager::ExecuteCommand("onCreateDirectionalLight", {});
-        
-        if (ImGui::MenuItem("Point Light"))
-            if(CommandManager::HasCommand("onCreatePointLight")) 
-                CommandManager::ExecuteCommand("onCreatePointLight", {});
-        
-        if (ImGui::MenuItem("Spot Light"))
-            if(CommandManager::HasCommand("onCreateSpotLight")) 
-                CommandManager::ExecuteCommand("onCreateSpotLight", {});
-        
-        ImGui::EndMenu();
-    }
-    
+
+    /* ===================== VIEW MENU ===================== */
+
     void RenderViewMenu(bool& showHierarchy, bool& showInspector,
                         bool& showProperties, bool& showConsole)
     {
         if (!ImGui::BeginMenu("View")) return;
-        
+
         ImGui::MenuItem("Hierarchy", nullptr, &showHierarchy);
         ImGui::MenuItem("Inspector", nullptr, &showInspector);
         ImGui::MenuItem("Properties", nullptr, &showProperties);
         ImGui::MenuItem("Console", nullptr, &showConsole);
-        
+
         ImGui::Separator();
-        
-        RenderThemeSubmenu();
-        
-        ImGui::EndMenu();
-    }
-    
-    void RenderThemeSubmenu()
-    {
-        if (!ImGui::BeginMenu("Theme")) return;
-        
-        if (ImGui::MenuItem("Dark")) 
-            Theme::ApplyTheme(ThemeStyle::Dark);
-        if (ImGui::MenuItem("Light")) 
-            Theme::ApplyTheme(ThemeStyle::Light);
-        
-        ImGui::Separator();
-        
-        if (ImGui::MenuItem("Custom")) 
-            Theme::ApplyTheme(ThemeStyle::Custom);
-        if (ImGui::MenuItem("Red Accent"))
-            Theme::ApplyTheme(ThemeStyle::RedAccent);
-        if (ImGui::MenuItem("Enemymouse (Cyan)"))
-            Theme::ApplyTheme(ThemeStyle::Enemymouse);
-        if (ImGui::MenuItem("Adobe Spectrum"))
-            Theme::ApplyTheme(ThemeStyle::AdobeSpectrum);
-        if (ImGui::MenuItem("LED Synthmaster (Green)"))   
-            Theme::ApplyTheme(ThemeStyle::LedSynthmaster);
-        if (ImGui::MenuItem("Dougbinks Light"))          
-            Theme::ApplyTheme(ThemeStyle::DougbinksLight);
-        if (ImGui::MenuItem("Dougbinks Dark"))             
-            Theme::ApplyTheme(ThemeStyle::DougbinksDark);
-        
-        ImGui::Separator();
-        
-        if (ImGui::MenuItem("Unreal Engine")) 
-            Theme::ApplyTheme(ThemeStyle::UnrealEngine);
-        if (ImGui::MenuItem("Unity")) 
-            Theme::ApplyTheme(ThemeStyle::Unity);
-        if (ImGui::MenuItem("Visual Studio")) 
-            Theme::ApplyTheme(ThemeStyle::VisualStudio);
-        
+
+        if (ImGui::BeginMenu("Theme"))
+        {
+            ThemeItem("Dark", ThemeStyle::Dark);
+            ThemeItem("Light", ThemeStyle::Light);
+            ThemeItem("Unreal Engine", ThemeStyle::UnrealEngine);
+            ThemeItem("Unity", ThemeStyle::Unity);
+            ThemeItem("Visual Studio", ThemeStyle::VisualStudio);
+            ImGui::EndMenu();
+        }
+
         ImGui::EndMenu();
     }
 
-    std::string GetTimestampString()
+    /* ===================== HELPERS ===================== */
+
+    void Execute(const char* name)
     {
-        auto now = std::chrono::system_clock::now();
-        auto time = std::chrono::system_clock::to_time_t(now);
-        
-        std::tm tm_snapshot;
-        localtime_r(&time, &tm_snapshot);
-        
-        char buffer[32];
-        std::strftime(buffer, sizeof(buffer), "%Y%m%d_%H%M%S", &tm_snapshot);
-        
-        return std::string(buffer);
+        CommandArgs args;
+        Execute(name, args);
+    }
+
+    void Execute(const char* name, const std::string& arg)
+    {
+        CommandArgs args;
+        args.emplace_back(arg);
+        Execute(name, args);
+    }
+
+    void Execute(const char* name, const CommandArgs& args)
+    {
+        if (CommandManager::HasCommand(name))
+            CommandManager::ExecuteCommand(name, args);
+    }
+
+    void ExecuteItem(const char* label, const char* command)
+    {
+        if (ImGui::MenuItem(label))
+            Execute(command);
+    }
+
+    void ThemeItem(const char* label, ThemeStyle style)
+    {
+        if (ImGui::MenuItem(label))
+            Theme::ApplyTheme(style);
+    }
+
+    void ClosePopup(bool& flag)
+    {
+        flag = false;
+        ImGui::CloseCurrentPopup();
     }
 };

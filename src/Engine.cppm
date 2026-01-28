@@ -20,7 +20,6 @@ import WFE.Rendering.Core.Framebuffer;
 import WFE.Rendering.Primitive.PrimitivesFactory;
 import WFE.Rendering.Light;
 import WFE.Scene.Mesh;
-import WFE.Scene.Model;
 import WFE.Scene.SceneSurializer;
 import WFE.UI.EditorLayout;
 import WFE.ECS.ECSWorld;
@@ -388,6 +387,53 @@ private:
                 for (const auto& scene : scenes)
                     Logger::Log(LogLevel::INFO, "  - " + scene);
             }
+        });
+
+        CommandManager::RegisterCommand("onLoadModel",
+        [this](const CommandArgs& args) 
+        {
+            if (args.empty())
+            {
+                Logger::Log(LogLevel::ERROR, "onLoadModel requires filepath argument");
+                return;
+            }
+            
+            std::string filepath = std::get<std::string>(args[0]);
+            
+            // Завантаж модель через ModelManager
+            auto model = GetModelManager()->Load(filepath);
+            
+            if (!model) 
+            {
+                Logger::Log(LogLevel::ERROR, "Failed to load model: " + filepath);
+                return;
+            }
+            
+            // Створюємо сутності для кожного меша моделі
+            for (size_t i = 0; i < model->GetMeshCount(); ++i) 
+            {
+                auto entity = GetECSWorld()->CreateEntity(
+                    model->GetName() + "_Mesh_" + std::to_string(i));
+                
+                // Transform
+                GetECSWorld()->AddComponent<TransformComponent>(entity, 
+                    glm::vec3(0, 0, -5), glm::vec3(0), glm::vec3(1));
+                
+                // Mesh
+                auto mesh = model->GetMesh(i);
+                GetECSWorld()->AddComponent<MeshComponent>(entity, mesh);
+                
+                // Material
+                auto material = GetMaterialManager()->GetMaterial("default");
+                GetECSWorld()->AddComponent<MaterialComponent>(entity, material);
+                
+                // Visibility
+                GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
+            }
+            
+            Logger::Log(LogLevel::INFO, 
+                "Model entities created: " + model->GetName() + 
+                " (" + std::to_string(model->GetMeshCount()) + " meshes)");
         });
     }
 };

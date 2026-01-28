@@ -22,6 +22,7 @@ import WFE.Rendering.Renderer;
 import WFE.Resource.Texture.TextureManager;
 import WFE.Resource.Material.MaterialManager;
 import WFE.Resource.Shader.ShaderManager;
+import WFE.Resource.Model.ModelManager;
 
 import WFE.UI.ImGuiManager;
 
@@ -38,6 +39,7 @@ private:
     std::unique_ptr<MaterialManager> materialManager;
     std::unique_ptr<ECSWorld> ecsWorld;
     std::unique_ptr<ShaderManager> shaderManager;
+    std::unique_ptr<ModelManager> modelManager;
     
     ConsoleLogger console;
     FileLogger file;
@@ -239,6 +241,7 @@ public:
         materialManager = std::make_unique<MaterialManager>(textureManager.get());
         ecsWorld = std::make_unique<ECSWorld>();
         shaderManager = std::make_unique<ShaderManager>();
+        modelManager = std::make_unique<ModelManager>();
         
         Logger::Log(LogLevel::DEBUG, "ShaderManager address: " + 
             std::to_string(reinterpret_cast<uintptr_t>(shaderManager.get())));
@@ -311,4 +314,5 @@ public:
     MaterialManager* GetMaterialManager() const { return materialManager.get(); }
     ECSWorld* GetECSWorld() const { return ecsWorld.get(); }
     ShaderManager* GetShaderManager() const { return shaderManager.get(); }
+    ModelManager* GetModelManager() const { return modelManager.get(); }
 };

@@ -58,6 +58,9 @@ target_include_directories(entt INTERFACE ${CMAKE_SOURCE_DIR}/vendor/entt/src/en
 add_library(json INTERFACE)
 target_include_directories(json INTERFACE ${CMAKE_SOURCE_DIR}/vendor/nlohmann_json/include)
 
+# ========== nfd =============
+add_subdirectory(vendor/nfd)
+
 # ========== WildFoxEngine =============
 include_directories(${IMGUI_INCLUDE_DIRS})
 
@@ -97,7 +100,6 @@ add_executable(${PROJECT_NAME}
     ${WildFoxEngine_ALL_HEADERS}
 )
 
-# Додати модулі
 if(WildFoxEngine_MODULES)
     message(STATUS "=== C++ Modules ===")
     foreach(MODULE ${WildFoxEngine_MODULES})
@@ -128,6 +130,7 @@ target_link_libraries(${PROJECT_NAME}
     imgui
     magic_enum
     entt
+    nfd
 )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
