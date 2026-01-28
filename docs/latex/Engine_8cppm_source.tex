@@ -1,5 +1,5 @@
 \doxysection{Engine.\+cppm}
-\hypertarget{Engine_8cppm_source}{}\label{Engine_8cppm_source}\index{/home/tymur52/WildFoxEngine/src/Engine.cppm@{/home/tymur52/WildFoxEngine/src/Engine.cppm}}
+\hypertarget{Engine_8cppm_source}{}\label{Engine_8cppm_source}\index{Engine.cppm@{Engine.cppm}}
 \doxymbox{\hyperlink{Engine_8cppm}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{00001\ \textcolor{keyword}{module};}
@@ -31,415 +31,416 @@
 \DoxyCodeLine{00027\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8ECS_8Systems}{WFE.ECS.Systems}};}
 \DoxyCodeLine{00028\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8Rendering_8Renderer}{WFE.Rendering.Renderer}};}
 \DoxyCodeLine{00029\ }
-\DoxyCodeLine{00030\ \textcolor{keyword}{export}\ \textcolor{keyword}{class\ }\doxymbox{\hyperlink{classEngine_a55e31d355fb9e287aa3bcd26bccf31d5}{Engine}}\ :\ \textcolor{keyword}{public}\ \doxymbox{\hyperlink{classApplication_a2ad4d646064502c4f06288c1c50dfed9}{Application}}\ }
-\DoxyCodeLine{00031\ \{}
-\DoxyCodeLine{00032\ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00033\ \ \ \ \ std::unique\_ptr<Skybox>\ skybox;}
-\DoxyCodeLine{00034\ \ \ \ \ std::unique\_ptr<EditorLayout>\ editorLayout;}
-\DoxyCodeLine{00035\ \ \ \ \ }
-\DoxyCodeLine{00036\ \ \ \ \ std::unique\_ptr<RotationSystem>\ rotationSystem;}
-\DoxyCodeLine{00037\ }
-\DoxyCodeLine{00038\ \ \ \ \ std::unique\_ptr<SceneSerializer>\ sceneSerializer;}
-\DoxyCodeLine{00039\ }
-\DoxyCodeLine{00040\ \textcolor{keyword}{protected}:}
-\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{classEngine_ae482abae3a0c90ef02350a1d0a414db0}{OnInitialize}}()\textcolor{keyword}{\ override}}
-\DoxyCodeLine{00042\ \textcolor{keyword}{\ \ \ \ }\{}
-\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}{LogLevel::INFO}},\ \textcolor{stringliteral}{"{}Initializing\ WFE..."{}});}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{keyword}{export}\ \textcolor{keyword}{class\ }Engine\ :\ \textcolor{keyword}{public}\ \doxymbox{\hyperlink{classApplication_a2ad4d646064502c4f06288c1c50dfed9}{Application}}\ }
+\DoxyCodeLine{00036\ \{}
+\DoxyCodeLine{00037\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00038\ \ \ \ \ std::unique\_ptr<Skybox>\ skybox;}
+\DoxyCodeLine{00039\ \ \ \ \ std::unique\_ptr<EditorLayout>\ editorLayout;}
+\DoxyCodeLine{00040\ \ \ \ \ }
+\DoxyCodeLine{00041\ \ \ \ \ std::unique\_ptr<RotationSystem>\ rotationSystem;}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ std::unique\_ptr<SceneSerializer>\ sceneSerializer;}
 \DoxyCodeLine{00044\ }
-\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a077842c627ee3d592ebebb9e4394ba34}{GetShaderManager}}()-\/>\doxymbox{\hyperlink{classShaderManager_af81bfd402f285838eb5f746ade6afc59}{Load}}();}
-\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a910f4af892e4e10a37fa638067cd8cff}{GetMaterialManager}}()-\/>\doxymbox{\hyperlink{classMaterialManager_a860d71e00d466e7b8261d1e0b106c90c}{LoadMaterialConfigs}}();}
-\DoxyCodeLine{00047\ }
-\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ std::vector<std::string>\ faces\ =\ }
-\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/skybox1/right.png"{}},}
-\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/skybox1/left.png"{}},}
-\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/skybox1/top.png"{}},}
-\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/skybox1/bottom.png"{}},}
-\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/skybox1/front.png"{}},}
-\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/skybox1/back.png"{}}}
-\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ cubemapTexture\ =\ \doxymbox{\hyperlink{classApplication_aced35a27b0ebf537f22c3a1dfa4a3582}{GetTextureManager}}()-\/>\doxymbox{\hyperlink{classTextureManager_a146d2dc37df49879240fed8382d242b9}{LoadCubemap}}(faces);}
-\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ skybox\ =\ std::make\_unique<Skybox>(cubemapTexture,\ \textcolor{stringliteral}{"{}skybox"{}});}
-\DoxyCodeLine{00060\ }
-\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ renderer\ =\ std::make\_unique<Renderer>(\doxymbox{\hyperlink{classApplication_a077842c627ee3d592ebebb9e4394ba34}{GetShaderManager}}(),\ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}());}
-\DoxyCodeLine{00062\ }
-\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_ae0c217efce9cc91c82635a7e063335f1}{SetRenderer}}(std::move(renderer));}
-\DoxyCodeLine{00064\ }
-\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ iconSystem\ =\ std::make\_unique<IconRenderSystem>(\doxymbox{\hyperlink{classApplication_aced35a27b0ebf537f22c3a1dfa4a3582}{GetTextureManager}}());}
-\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a752a05cac1ac260d2602f3b67aee40d2}{GetRenderer}}()-\/>\doxymbox{\hyperlink{classRenderer_aa2acf9a121f200a4c41a83869879d4e9}{SetIconRenderSystem}}(std::move(iconSystem));}
+\DoxyCodeLine{00045\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ OnInitialize()\textcolor{keyword}{\ override}}
+\DoxyCodeLine{00047\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Initializing\ WFE..."{}});}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ GetShaderManager()-\/>Load();}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ GetMaterialManager()-\/>LoadMaterialConfigs();}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ std::vector<std::string>\ faces\ =\ }
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/skybox1/right.png"{}},}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/skybox1/left.png"{}},}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/skybox1/top.png"{}},}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/skybox1/bottom.png"{}},}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/skybox1/front.png"{}},}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/skybox1/back.png"{}}}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ cubemapTexture\ =\ GetTextureManager()-\/>LoadCubemap(faces);}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ skybox\ =\ std::make\_unique<Skybox>(cubemapTexture,\ \textcolor{stringliteral}{"{}skybox"{}});}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ renderer\ =\ std::make\_unique<Renderer>(GetShaderManager(),\ GetECSWorld());}
 \DoxyCodeLine{00067\ }
-\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\doxymbox{\hyperlink{classApplication_a752a05cac1ac260d2602f3b67aee40d2}{GetRenderer}}()-\/>\doxymbox{\hyperlink{classApplication_a00d10eb756046bb9a02494ca7362013e}{Initialize}}(skybox-\/>GetVAO(),\ skybox-\/>GetTexture()))}
-\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5}{LogLevel::ERROR}},\ \textcolor{stringliteral}{"{}Failed\ to\ initialize\ Renderer!"{}});}
-\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00073\ }
-\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ rotationSystem\ =\ std::make\_unique<RotationSystem>();}
-\DoxyCodeLine{00075\ }
-\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ sceneSerializer\ =\ std::make\_unique<SceneSerializer>(}
-\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}(),\ }
-\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a70353d15b3ea525cdccbdc8bbf3a693b}{GetCamera}}()}
-\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ SetRenderer(std::move(renderer));}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ iconSystem\ =\ std::make\_unique<IconRenderSystem>(GetTextureManager());}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ GetRenderer()-\/>SetIconRenderSystem(std::move(iconSystem));}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!GetRenderer()-\/>\doxymbox{\hyperlink{classApplication_a00d10eb756046bb9a02494ca7362013e}{Initialize}}(skybox-\/>GetVAO(),\ skybox-\/>GetTexture()))}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}Failed\ to\ initialize\ Renderer!"{}});}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ rotationSystem\ =\ std::make\_unique<RotationSystem>();}
 \DoxyCodeLine{00080\ }
-\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ InitCommandRegistration();}
-\DoxyCodeLine{00082\ }
-\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}{LogLevel::INFO}},\ \textcolor{stringliteral}{"{}Creating\ EditorLayout..."{}});}
-\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ editorLayout\ =\ std::make\_unique<EditorLayout>();}
-\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!editorLayout)}
-\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5}{LogLevel::ERROR}},\ \textcolor{stringliteral}{"{}Failed\ to\ create\ EditorLayout!"{}});}
-\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
-\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}{LogLevel::INFO}},\ \textcolor{stringliteral}{"{}EditorLayout\ created\ successfully!"{}});}
-\DoxyCodeLine{00090\ }
-\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a077842c627ee3d592ebebb9e4394ba34}{GetShaderManager}}()-\/>\doxymbox{\hyperlink{classShaderManager_af626108663f3ced1980347ac411d7a53}{Bind}}(\textcolor{stringliteral}{"{}skybox"{}});}
-\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a077842c627ee3d592ebebb9e4394ba34}{GetShaderManager}}()-\/>\doxymbox{\hyperlink{classShaderManager_a08dfaf698708b7a49a2268134a6f6280}{SetInt}}(\textcolor{stringliteral}{"{}skybox"{}},\ \textcolor{stringliteral}{"{}skybox"{}},\ 0);}
-\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}{LogLevel::INFO}},\ \textcolor{stringliteral}{"{}Engine\ initialized\ successfully"{}});}
-\DoxyCodeLine{00095\ \ \ \ \ \}}
-\DoxyCodeLine{00096\ }
-\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{classEngine_aa60a6ac74074fe6ea7cd4f95246d3389}{OnUpdate}}(\textcolor{keywordtype}{float}\ deltaTime)\textcolor{keyword}{\ override}}
-\DoxyCodeLine{00098\ \textcolor{keyword}{\ \ \ \ }\{}
-\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ rotationSystem-\/>Update(*\doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}(),\ deltaTime);}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ sceneSerializer\ =\ std::make\_unique<SceneSerializer>(}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld(),\ }
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ GetCamera()}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ InitCommandRegistration();}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Creating\ EditorLayout..."{}});}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ editorLayout\ =\ std::make\_unique<EditorLayout>();}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!editorLayout)}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}Failed\ to\ create\ EditorLayout!"{}});}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}EditorLayout\ created\ successfully!"{}});}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ GetShaderManager()-\/>Bind(\textcolor{stringliteral}{"{}skybox"{}});}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ GetShaderManager()-\/>SetInt(\textcolor{stringliteral}{"{}skybox"{}},\ \textcolor{stringliteral}{"{}skybox"{}},\ 0);}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Engine\ initialized\ successfully"{}});}
 \DoxyCodeLine{00100\ \ \ \ \ \}}
 \DoxyCodeLine{00101\ }
-\DoxyCodeLine{00102\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{classEngine_ab2cc692b49470b1554661eb75bf4d688}{OnRender}}()\textcolor{keyword}{\ override}}
-\DoxyCodeLine{00103\ \textcolor{keyword}{}\{}
-\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordflow}{if}\ (editorLayout\ \&\&\ editorLayout-\/>GetFramebuffer())}
-\DoxyCodeLine{00105\ \ \ \ \ \{}
-\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classFramebuffer}{Framebuffer}}*\ fb\ =\ editorLayout-\/>GetFramebuffer();}
-\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ ImVec2\ viewportSize\ =\ editorLayout-\/>GetViewportSize();}
-\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ fb-\/>\doxymbox{\hyperlink{classFramebuffer_a967f1ba7c5cf4f631c4d7f8e646c5ac0}{Bind}}();}
-\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ glEnable(GL\_DEPTH\_TEST);}
-\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ glDepthFunc(GL\_LESS);}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{void}\ OnUpdate(\textcolor{keywordtype}{float}\ deltaTime)\textcolor{keyword}{\ override}}
+\DoxyCodeLine{00103\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ rotationSystem-\/>Update(*GetECSWorld(),\ deltaTime);}
+\DoxyCodeLine{00105\ \ \ \ \ \}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \textcolor{keywordtype}{void}\ OnRender()\textcolor{keyword}{\ override}}
+\DoxyCodeLine{00108\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordflow}{if}\ (editorLayout\ \&\&\ editorLayout-\/>GetFramebuffer())}
+\DoxyCodeLine{00110\ \ \ \ \ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classFramebuffer}{Framebuffer}}*\ fb\ =\ editorLayout-\/>GetFramebuffer();}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ ImVec2\ viewportSize\ =\ editorLayout-\/>GetViewportSize();}
 \DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a752a05cac1ac260d2602f3b67aee40d2}{GetRenderer}}()-\/>\doxymbox{\hyperlink{classRenderer_a7930de5ebe07c0e719c252317854a308}{BeginFrame}}();}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ fb-\/>Bind();}
 \DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (viewportSize.x\ >\ 0\ \&\&\ viewportSize.y\ >\ 0)}
-\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a752a05cac1ac260d2602f3b67aee40d2}{GetRenderer}}()-\/>\doxymbox{\hyperlink{classRenderer_ab0e4dbfcb656abdb58cb71d25dfef328}{Render}}(}
-\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\doxymbox{\hyperlink{classApplication_a70353d15b3ea525cdccbdc8bbf3a693b}{GetCamera}}(),\ }
-\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(viewportSize.x),\ }
-\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(viewportSize.y)}
-\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ );}
-\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a752a05cac1ac260d2602f3b67aee40d2}{GetRenderer}}()-\/>\doxymbox{\hyperlink{classRenderer_a1fce0dbe24ac4c04457684d66a506c53}{EndFrame}}();}
-\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ fb-\/>\doxymbox{\hyperlink{classFramebuffer_ab90a3724b38bd453635deb7e2d2fb619}{Unbind}}();}
-\DoxyCodeLine{00128\ \ \ \ \ \}}
-\DoxyCodeLine{00129\ \ \ \ \ }
-\DoxyCodeLine{00130\ \ \ \ \ glBindFramebuffer(GL\_FRAMEBUFFER,\ 0);}
-\DoxyCodeLine{00131\ \ \ \ \ glViewport(0,\ 0,\ \doxymbox{\hyperlink{classApplication_a14e8be0e5dfb4c6de42b15622a033251}{GetWindow}}()-\/>GetWidth(),\ \doxymbox{\hyperlink{classApplication_a14e8be0e5dfb4c6de42b15622a033251}{GetWindow}}()-\/>GetHeight());}
-\DoxyCodeLine{00132\ \ \ \ \ glClearColor(0.15f,\ 0.15f,\ 0.15f,\ 1.0f);}
-\DoxyCodeLine{00133\ \ \ \ \ glClear(GL\_COLOR\_BUFFER\_BIT);}
-\DoxyCodeLine{00134\ \ \ \ \ glDisable(GL\_DEPTH\_TEST);\ }
-\DoxyCodeLine{00135\ \}}
-\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{classEngine_aeb88272997528d668c07624d10c40cf3}{OnShutdown}}()\textcolor{keyword}{\ override}}
-\DoxyCodeLine{00137\ \textcolor{keyword}{\ \ \ \ }\{}
-\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}{LogLevel::INFO}},\ \textcolor{stringliteral}{"{}Shutting\ down\ engine..."{}});}
-\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a752a05cac1ac260d2602f3b67aee40d2}{GetRenderer}}()-\/>\doxymbox{\hyperlink{classRenderer_a1effb02d0aa8ba8fea3ddd236efb7363}{Shutdown}}();}
-\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a077842c627ee3d592ebebb9e4394ba34}{GetShaderManager}}()-\/>\doxymbox{\hyperlink{classShaderManager_a7749c6be401b1ef9f497bf644d162066}{ClearAll}}();}
-\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}{LogLevel::INFO}},\ \textcolor{stringliteral}{"{}Engine\ shutdown\ complete!"{}});}
-\DoxyCodeLine{00144\ \ \ \ \ \}}
-\DoxyCodeLine{00145\ }
-\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{classEngine_a08ae57a21e3da54edaa155dac5c874fe}{RenderUI}}()\textcolor{keyword}{\ override}}
-\DoxyCodeLine{00147\ \textcolor{keyword}{\ \ \ \ }\{\ \ \ \ }
-\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!editorLayout)}
-\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5}{LogLevel::ERROR}},\ \textcolor{stringliteral}{"{}EditorLayout\ is\ null!"{}});}
-\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00153\ }
-\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ editorLayout-\/>RenderEditor(}
-\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}(),\ }
-\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a70353d15b3ea525cdccbdc8bbf3a693b}{GetCamera}}(),\ }
-\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a752a05cac1ac260d2602f3b67aee40d2}{GetRenderer}}(),\ }
-\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a077842c627ee3d592ebebb9e4394ba34}{GetShaderManager}}(),\ }
-\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a910f4af892e4e10a37fa638067cd8cff}{GetMaterialManager}}()}
-\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ );}
-\DoxyCodeLine{00161\ \ \ \ \ \}}
-\DoxyCodeLine{00162\ }
-\DoxyCodeLine{00163\ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00164\ \ \ \ \ \doxymbox{\hyperlink{classEngine_a55e31d355fb9e287aa3bcd26bccf31d5}{Engine}}(\textcolor{keywordtype}{int}\ w,\ \textcolor{keywordtype}{int}\ h,\ \textcolor{keyword}{const}\ std::string\&\ title)}
-\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ :\ \doxymbox{\hyperlink{classApplication_a2ad4d646064502c4f06288c1c50dfed9}{Application}}(w,\ h,\ title)}
-\DoxyCodeLine{00166\ \ \ \ \ \{\}}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ glEnable(GL\_DEPTH\_TEST);}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ glDepthFunc(GL\_LESS);}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ GetRenderer()-\/>BeginFrame();}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (viewportSize.x\ >\ 0\ \&\&\ viewportSize.y\ >\ 0)}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ GetRenderer()-\/>Render(}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *GetCamera(),\ }
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(viewportSize.x),\ }
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(viewportSize.y)}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ GetRenderer()-\/>EndFrame();}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ fb-\/>Unbind();}
+\DoxyCodeLine{00133\ \ \ \ \ \}}
+\DoxyCodeLine{00134\ \ \ \ \ }
+\DoxyCodeLine{00135\ \ \ \ \ glBindFramebuffer(GL\_FRAMEBUFFER,\ 0);}
+\DoxyCodeLine{00136\ \ \ \ \ glViewport(0,\ 0,\ GetWindow()-\/>GetWidth(),\ GetWindow()-\/>GetHeight());}
+\DoxyCodeLine{00137\ \ \ \ \ glClearColor(0.15f,\ 0.15f,\ 0.15f,\ 1.0f);}
+\DoxyCodeLine{00138\ \ \ \ \ glClear(GL\_COLOR\_BUFFER\_BIT);}
+\DoxyCodeLine{00139\ \ \ \ \ glDisable(GL\_DEPTH\_TEST);\ }
+\DoxyCodeLine{00140\ \}}
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordtype}{void}\ OnShutdown()\textcolor{keyword}{\ override}}
+\DoxyCodeLine{00142\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Shutting\ down\ engine..."{}});}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ GetRenderer()-\/>Shutdown();}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ GetShaderManager()-\/>ClearAll();}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Engine\ shutdown\ complete!"{}});}
+\DoxyCodeLine{00149\ \ \ \ \ \}}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keywordtype}{void}\ RenderUI()\textcolor{keyword}{\ override}}
+\DoxyCodeLine{00152\ \textcolor{keyword}{\ \ \ \ }\{\ \ \ \ }
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!editorLayout)}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}EditorLayout\ is\ null!"{}});}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ editorLayout-\/>RenderEditor(}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld(),\ }
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ GetCamera(),\ }
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ GetRenderer(),\ }
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ GetShaderManager(),\ }
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ GetMaterialManager()}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00166\ \ \ \ \ \}}
 \DoxyCodeLine{00167\ }
-\DoxyCodeLine{00168\ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00169\ \ \ \ \ \textcolor{keywordtype}{void}\ InitCommandRegistration()}
-\DoxyCodeLine{00170\ \ \ \ \ \{}
-\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classCommandManager_ad2ceaf8185c9141fc6534b42bd4dc630}{CommandManager::RegisterCommand}}(\textcolor{stringliteral}{"{}onCreateCube"{}},}
-\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ \doxymbox{\hyperlink{CommandManager_8cppm_a51e26f1359c84c6593e0d675d9e68e6f}{CommandArgs}}\&)\ }
-\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a8600d3a3d2c2739511b12bc370a978cc}{CreateEntity}}(\textcolor{stringliteral}{"{}Cube"{}});}
-\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<\doxymbox{\hyperlink{structTransformComponent}{TransformComponent}}>(entity,\ glm::vec3(0,\ 0,\ -\/5),\ glm::vec3(0),\ glm::vec3(1));}
-\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ cubeMesh\ =\ \doxymbox{\hyperlink{classPrimitivesFactory_a3fcaa913d9efeefde30ce4894db0f261}{PrimitivesFactory::CreatePrimitive}}(\doxymbox{\hyperlink{PrimitivesFactory_8cppm_a240c1924416689e5700ff0d9f30539d9afbfd6568f88d940b586c9ddf8f68236d}{PrimitiveType::CUBE}});}
-\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<\doxymbox{\hyperlink{structMeshComponent}{MeshComponent}}>(entity,\ cubeMesh);}
-\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ material\ =\ \doxymbox{\hyperlink{classApplication_a910f4af892e4e10a37fa638067cd8cff}{GetMaterialManager}}()-\/>\doxymbox{\hyperlink{classMaterialManager_a236d52c0ca0db7c29bba1014b75c2a17}{GetMaterial}}(\textcolor{stringliteral}{"{}gray"{}});}
-\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<\doxymbox{\hyperlink{structMaterialComponent}{MaterialComponent}}>(entity,\ material);}
-\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<\doxymbox{\hyperlink{structVisibilityComponent}{VisibilityComponent}}>(entity,\ \textcolor{keyword}{true});}
-\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<\doxymbox{\hyperlink{structRotationComponent}{RotationComponent}}>(entity,\ 50.0f);}
-\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}{LogLevel::INFO}},\ \textcolor{stringliteral}{"{}Cube\ entity\ created"{}});}
-\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00188\ }
-\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classCommandManager_ad2ceaf8185c9141fc6534b42bd4dc630}{CommandManager::RegisterCommand}}(\textcolor{stringliteral}{"{}onCreatePlane"{}},}
-\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ \doxymbox{\hyperlink{CommandManager_8cppm_a51e26f1359c84c6593e0d675d9e68e6f}{CommandArgs}}\&)\ }
-\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a8600d3a3d2c2739511b12bc370a978cc}{CreateEntity}}(\textcolor{stringliteral}{"{}Plane"{}});}
-\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<TransformComponent>(entity,\ glm::vec3(0,\ 0,\ -\/5),\ glm::vec3(0),\ glm::vec3(1));}
-\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ mesh\ =\ \doxymbox{\hyperlink{classPrimitivesFactory_a3fcaa913d9efeefde30ce4894db0f261}{PrimitivesFactory::CreatePrimitive}}(\doxymbox{\hyperlink{PrimitivesFactory_8cppm_a240c1924416689e5700ff0d9f30539d9ac88da92039291f825814816096db2ea2}{PrimitiveType::QUAD}});}
-\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<MeshComponent>(entity,\ mesh);}
-\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ material\ =\ \doxymbox{\hyperlink{classApplication_a910f4af892e4e10a37fa638067cd8cff}{GetMaterialManager}}()-\/>\doxymbox{\hyperlink{classMaterialManager_a236d52c0ca0db7c29bba1014b75c2a17}{GetMaterial}}(\textcolor{stringliteral}{"{}gray"{}});}
-\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<MaterialComponent>(entity,\ material);}
-\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<VisibilityComponent>(entity,\ \textcolor{keyword}{true});}
-\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<RotationComponent>(entity,\ 50.0f);}
-\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}{LogLevel::INFO}},\ \textcolor{stringliteral}{"{}Cube\ entity\ created"{}});}
-\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00206\ }
-\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classCommandManager_ad2ceaf8185c9141fc6534b42bd4dc630}{CommandManager::RegisterCommand}}(\textcolor{stringliteral}{"{}onExit"{}},}
-\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ \doxymbox{\hyperlink{CommandManager_8cppm_a51e26f1359c84c6593e0d675d9e68e6f}{CommandArgs}}\&)\ }
-\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}{LogLevel::INFO}},\ \textcolor{stringliteral}{"{}Exit\ requested\ from\ menu"{}});}
-\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_ac017244251b5c3b1b6b808c6c8815a4b}{Stop}}();}
-\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00213\ }
-\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classCommandManager_ad2ceaf8185c9141fc6534b42bd4dc630}{CommandManager::RegisterCommand}}(\textcolor{stringliteral}{"{}onChangeMeshColor"{}},\ }
-\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ \doxymbox{\hyperlink{CommandManager_8cppm_a51e26f1359c84c6593e0d675d9e68e6f}{CommandArgs}}\&\ args)}
-\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (args.size()\ !=\ 1)}
-\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5}{LogLevel::ERROR}},\ \textcolor{stringliteral}{"{}onChangeMeshColor\ requires\ 1\ argument:\ color"{}});}
-\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00222\ }
-\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ color\ =\ std::get<glm::vec3>(args[0]);}
-\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ entt::entity\ selected\ =\ editorLayout-\/>GetSelectedEntity();}
-\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (selected\ ==\ entt::null\ ||\ !\doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>IsValid(selected))}
-\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a059e9861e0400dfbe05c98a841f3f96b}{LogLevel::WARNING}},\ \textcolor{stringliteral}{"{}No\ entity\ selected"{}});}
-\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00231\ }
-\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>HasComponent<ColorComponent>(selected))}
-\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ colorComp\ =\ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_acfade1daca793fe5aa8d0ffa407ae88f}{GetComponent}}<ColorComponent>(selected);}
-\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ colorComp.color\ =\ color;}
-\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00168\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00169\ \ \ \ \ Engine(\textcolor{keywordtype}{int}\ w,\ \textcolor{keywordtype}{int}\ h,\ \textcolor{keyword}{const}\ std::string\&\ title)}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ :\ \doxymbox{\hyperlink{classApplication_a2ad4d646064502c4f06288c1c50dfed9}{Application}}(w,\ h,\ title)}
+\DoxyCodeLine{00171\ \ \ \ \ \{\}}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keywordtype}{void}\ InitCommandRegistration()}
+\DoxyCodeLine{00175\ \ \ \ \ \{}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onCreateCube"{}},}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ GetECSWorld()-\/>CreateEntity(\textcolor{stringliteral}{"{}Cube"{}});}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structTransformComponent}{TransformComponent}}>(entity,\ glm::vec3(0,\ 0,\ -\/5),\ glm::vec3(0),\ glm::vec3(1));}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ cubeMesh\ =\ PrimitivesFactory::CreatePrimitive(PrimitiveType::CUBE);}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structMeshComponent}{MeshComponent}}>(entity,\ cubeMesh);}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ material\ =\ GetMaterialManager()-\/>GetMaterial(\textcolor{stringliteral}{"{}gray"{}});}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structMaterialComponent}{MaterialComponent}}>(entity,\ material);}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structVisibilityComponent}{VisibilityComponent}}>(entity,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structRotationComponent}{RotationComponent}}>(entity,\ 50.0f);}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Cube\ entity\ created"{}});}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onCreatePlane"{}},}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ GetECSWorld()-\/>CreateEntity(\textcolor{stringliteral}{"{}Plane"{}});}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structTransformComponent}{TransformComponent}}>(entity,\ glm::vec3(0,\ 0,\ -\/5),\ glm::vec3(0),\ glm::vec3(1));}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ mesh\ =\ PrimitivesFactory::CreatePrimitive(PrimitiveType::QUAD);}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structMeshComponent}{MeshComponent}}>(entity,\ mesh);}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ material\ =\ GetMaterialManager()-\/>GetMaterial(\textcolor{stringliteral}{"{}gray"{}});}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structMaterialComponent}{MaterialComponent}}>(entity,\ material);}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structVisibilityComponent}{VisibilityComponent}}>(entity,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structRotationComponent}{RotationComponent}}>(entity,\ 50.0f);}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Cube\ entity\ created"{}});}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onExit"{}},}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Exit\ requested\ from\ menu"{}});}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_ac017244251b5c3b1b6b808c6c8815a4b}{Stop}}();}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onChangeMeshColor"{}},\ }
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&\ args)}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (args.size()\ !=\ 1)}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}onChangeMeshColor\ requires\ 1\ argument:\ color"{}});}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ color\ =\ std::get<glm::vec3>(args[0]);}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ entt::entity\ selected\ =\ editorLayout-\/>GetSelectedEntity();}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (selected\ ==\ entt::null\ ||\ !GetECSWorld()-\/>IsValid(selected))}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::WARNING,\ \textcolor{stringliteral}{"{}No\ entity\ selected"{}});}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (GetECSWorld()-\/>HasComponent<ColorComponent>(selected))}
 \DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<ColorComponent>(selected,\ color);}
-\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00241\ }
-\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>HasComponent<MeshComponent>(selected))}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ colorComp\ =\ GetECSWorld()-\/>GetComponent<\doxymbox{\hyperlink{structColorComponent}{ColorComponent}}>(selected);}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ colorComp.color\ =\ color;}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
 \DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ meshComp\ =\ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_acfade1daca793fe5aa8d0ffa407ae88f}{GetComponent}}<MeshComponent>(selected);}
-\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (meshComp.mesh)}
-\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ meshComp.mesh-\/>SetColor(color);}
-\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00249\ }
-\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classCommandManager_ad2ceaf8185c9141fc6534b42bd4dc630}{CommandManager::RegisterCommand}}(\textcolor{stringliteral}{"{}onCreateDirectionalLight"{}},}
-\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ \doxymbox{\hyperlink{CommandManager_8cppm_a51e26f1359c84c6593e0d675d9e68e6f}{CommandArgs}}\&)\ }
-\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a8600d3a3d2c2739511b12bc370a978cc}{CreateEntity}}(\textcolor{stringliteral}{"{}Directional\ Light"{}});}
-\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<TransformComponent>(entity,\ }
-\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3(0,\ 10,\ 0),\ glm::vec3(45,\ 0,\ 0),\ glm::vec3(1));}
-\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<LightComponent>(entity,\ \doxymbox{\hyperlink{Light_8cppm_adc3ec8293e6a97ebe43f0196b9a7f638ab6f2249394a4def60a78b342dcc925b9}{LightType::DIRECTIONAL}});}
-\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<VisibilityComponent>(entity,\ \textcolor{keyword}{true});}
-\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<IconComponent>(entity,\ }
-\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/icons/light\_directional.png"{}},\ 0.3f);}
-\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}{LogLevel::INFO}},\ \textcolor{stringliteral}{"{}Directional\ light\ created\ with\ icon"{}});}
-\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00262\ }
-\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classCommandManager_ad2ceaf8185c9141fc6534b42bd4dc630}{CommandManager::RegisterCommand}}(\textcolor{stringliteral}{"{}onCreatePointLight"{}},}
-\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ \doxymbox{\hyperlink{CommandManager_8cppm_a51e26f1359c84c6593e0d675d9e68e6f}{CommandArgs}}\&)\ }
-\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a8600d3a3d2c2739511b12bc370a978cc}{CreateEntity}}(\textcolor{stringliteral}{"{}Point\ Light"{}});}
-\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<TransformComponent>(entity,\ }
-\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3(0,\ 5,\ 0),\ glm::vec3(0),\ glm::vec3(1));}
-\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<LightComponent>(entity,\ \doxymbox{\hyperlink{Light_8cppm_adc3ec8293e6a97ebe43f0196b9a7f638aaebdbcb765394d25d6a604589a890f82}{LightType::POINT}});}
-\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<VisibilityComponent>(entity,\ \textcolor{keyword}{true});}
-\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<IconComponent>(entity,\ }
-\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/icons/light\_point.png"{}},\ 0.4f);}
-\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}{LogLevel::INFO}},\ \textcolor{stringliteral}{"{}Point\ light\ created\ with\ icon"{}});}
-\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00275\ }
-\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classCommandManager_ad2ceaf8185c9141fc6534b42bd4dc630}{CommandManager::RegisterCommand}}(\textcolor{stringliteral}{"{}onCreateSpotLight"{}},}
-\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ \doxymbox{\hyperlink{CommandManager_8cppm_a51e26f1359c84c6593e0d675d9e68e6f}{CommandArgs}}\&)\ }
-\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a8600d3a3d2c2739511b12bc370a978cc}{CreateEntity}}(\textcolor{stringliteral}{"{}Spot\ Light"{}});}
-\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<TransformComponent>(entity,\ }
-\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3(0,\ 5,\ 0),\ glm::vec3(45,\ 0,\ 0),\ glm::vec3(1));}
-\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<LightComponent>(entity,\ \doxymbox{\hyperlink{Light_8cppm_adc3ec8293e6a97ebe43f0196b9a7f638a5bac85a0c611ddef64ab0dfb383056f4}{LightType::SPOT}});}
-\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<VisibilityComponent>(entity,\ \textcolor{keyword}{true});}
-\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<IconComponent>(entity,\ }
-\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/icons/light\_spot.png"{}},\ 0.35f);}
-\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}{LogLevel::INFO}},\ \textcolor{stringliteral}{"{}Spot\ light\ created\ with\ icon"{}});}
-\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00288\ }
-\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classCommandManager_ad2ceaf8185c9141fc6534b42bd4dc630}{CommandManager::RegisterCommand}}(\textcolor{stringliteral}{"{}onSaveScene"{}},}
-\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ \doxymbox{\hyperlink{CommandManager_8cppm_a51e26f1359c84c6593e0d675d9e68e6f}{CommandArgs}}\&\ args)\ }
-\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ filename\ =\ \textcolor{stringliteral}{"{}scene.json"{}};}
-\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!args.empty())}
-\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ }
-\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filename\ =\ std::get<std::string>(args[0]);}
-\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{catch}\ (...)\ }
-\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a059e9861e0400dfbe05c98a841f3f96b}{LogLevel::WARNING}},\ \textcolor{stringliteral}{"{}Invalid\ filename\ argument,\ using\ default"{}});}
-\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (filename.find(\textcolor{stringliteral}{"{}.json"{}})\ ==\ std::string::npos)}
-\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filename\ +=\ \textcolor{stringliteral}{"{}.json"{}};}
-\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ success\ =\ sceneSerializer-\/>SaveScene(filename);}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structColorComponent}{ColorComponent}}>(selected,\ color);}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (GetECSWorld()-\/>HasComponent<MeshComponent>(selected))}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ meshComp\ =\ GetECSWorld()-\/>GetComponent<\doxymbox{\hyperlink{structMeshComponent}{MeshComponent}}>(selected);}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (meshComp.mesh)}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ meshComp.mesh-\/>SetColor(color);}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onCreateDirectionalLight"{}},}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ GetECSWorld()-\/>CreateEntity(\textcolor{stringliteral}{"{}Directional\ Light"{}});}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structTransformComponent}{TransformComponent}}>(entity,\ }
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3(0,\ 10,\ 0),\ glm::vec3(45,\ 0,\ 0),\ glm::vec3(1));}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structLightComponent}{LightComponent}}>(entity,\ LightType::DIRECTIONAL);}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structVisibilityComponent}{VisibilityComponent}}>(entity,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structIconComponent}{IconComponent}}>(entity,\ }
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/icons/light\_directional.png"{}},\ 0.3f);}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Directional\ light\ created\ with\ icon"{}});}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00267\ }
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onCreatePointLight"{}},}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ GetECSWorld()-\/>CreateEntity(\textcolor{stringliteral}{"{}Point\ Light"{}});}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structTransformComponent}{TransformComponent}}>(entity,\ }
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3(0,\ 5,\ 0),\ glm::vec3(0),\ glm::vec3(1));}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structLightComponent}{LightComponent}}>(entity,\ LightType::POINT);}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structVisibilityComponent}{VisibilityComponent}}>(entity,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structIconComponent}{IconComponent}}>(entity,\ }
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/icons/light\_point.png"{}},\ 0.4f);}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Point\ light\ created\ with\ icon"{}});}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00280\ }
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onCreateSpotLight"{}},}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ GetECSWorld()-\/>CreateEntity(\textcolor{stringliteral}{"{}Spot\ Light"{}});}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structTransformComponent}{TransformComponent}}>(entity,\ }
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3(0,\ 5,\ 0),\ glm::vec3(45,\ 0,\ 0),\ glm::vec3(1));}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structLightComponent}{LightComponent}}>(entity,\ LightType::SPOT);}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structVisibilityComponent}{VisibilityComponent}}>(entity,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structIconComponent}{IconComponent}}>(entity,\ }
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/icons/light\_spot.png"{}},\ 0.35f);}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Spot\ light\ created\ with\ icon"{}});}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00293\ }
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onSaveScene"{}},}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&\ args)\ }
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ filename\ =\ \textcolor{stringliteral}{"{}scene.json"{}};}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!args.empty())}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ }
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filename\ =\ std::get<std::string>(args[0]);}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{catch}\ (...)\ }
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::WARNING,\ \textcolor{stringliteral}{"{}Invalid\ filename\ argument,\ using\ default"{}});}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (success)}
-\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}{LogLevel::INFO}},\ \textcolor{stringliteral}{"{}✓\ Scene\ saved\ successfully:\ "{}}\ +\ filename);}
-\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
-\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5}{LogLevel::ERROR}},\ \textcolor{stringliteral}{"{}✗\ Failed\ to\ save\ scene:\ "{}}\ +\ filename);}
-\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classCommandManager_ad2ceaf8185c9141fc6534b42bd4dc630}{CommandManager::RegisterCommand}}(\textcolor{stringliteral}{"{}onLoadScene"{}},}
-\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ \doxymbox{\hyperlink{CommandManager_8cppm_a51e26f1359c84c6593e0d675d9e68e6f}{CommandArgs}}\&\ args)\ }
-\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ filename\ =\ \textcolor{stringliteral}{"{}scene.json"{}};}
-\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!args.empty())}
-\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ }
-\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filename\ =\ std::get<std::string>(args[0]);}
-\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{catch}\ (...)\ }
-\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a059e9861e0400dfbe05c98a841f3f96b}{LogLevel::WARNING}},\ \textcolor{stringliteral}{"{}Invalid\ filename\ argument,\ using\ default"{}});}
-\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (filename.find(\textcolor{stringliteral}{"{}.json"{}})\ ==\ std::string::npos)}
-\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filename\ +=\ \textcolor{stringliteral}{"{}.json"{}};}
-\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ success\ =\ sceneSerializer-\/>LoadScene(}
-\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filename,}
-\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a910f4af892e4e10a37fa638067cd8cff}{GetMaterialManager}}(),}
-\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_aced35a27b0ebf537f22c3a1dfa4a3582}{GetTextureManager}}()}
-\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \ \ \ \ );}
-\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (success)}
-\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}{LogLevel::INFO}},\ \textcolor{stringliteral}{"{}✓\ Scene\ loaded\ successfully:\ "{}}\ +\ filename);}
-\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
-\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5}{LogLevel::ERROR}},\ \textcolor{stringliteral}{"{}✗\ Failed\ to\ load\ scene:\ "{}}\ +\ filename);}
-\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classCommandManager_ad2ceaf8185c9141fc6534b42bd4dc630}{CommandManager::RegisterCommand}}(\textcolor{stringliteral}{"{}onQuickSave"{}},}
-\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ \doxymbox{\hyperlink{CommandManager_8cppm_a51e26f1359c84c6593e0d675d9e68e6f}{CommandArgs}}\&)\ }
-\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classCommandManager_accddb6593757098ada867f261ea44761}{CommandManager::ExecuteCommand}}(\textcolor{stringliteral}{"{}onSaveScene"{}},\ \{std::string(\textcolor{stringliteral}{"{}quicksave.json"{}})\});}
-\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classCommandManager_ad2ceaf8185c9141fc6534b42bd4dc630}{CommandManager::RegisterCommand}}(\textcolor{stringliteral}{"{}onQuickLoad"{}},}
-\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ \doxymbox{\hyperlink{CommandManager_8cppm_a51e26f1359c84c6593e0d675d9e68e6f}{CommandArgs}}\&)\ }
-\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classCommandManager_accddb6593757098ada867f261ea44761}{CommandManager::ExecuteCommand}}(\textcolor{stringliteral}{"{}onLoadScene"{}},\ \{std::string(\textcolor{stringliteral}{"{}quicksave.json"{}})\});}
-\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classCommandManager_ad2ceaf8185c9141fc6534b42bd4dc630}{CommandManager::RegisterCommand}}(\textcolor{stringliteral}{"{}onNewScene"{}},}
-\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ \doxymbox{\hyperlink{CommandManager_8cppm_a51e26f1359c84c6593e0d675d9e68e6f}{CommandArgs}}\&)\ }
-\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a109523b68021abd5f9e2749d0d8a1e4a}{Clear}}();}
-\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a70353d15b3ea525cdccbdc8bbf3a693b}{GetCamera}}()-\/>\doxymbox{\hyperlink{classCamera_a72a52e33910c06d04e508609978378ad}{SetPosition}}(glm::vec3(0,\ 0,\ 0));}
-\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a70353d15b3ea525cdccbdc8bbf3a693b}{GetCamera}}()-\/>\doxymbox{\hyperlink{classCamera_aac4d136398b3341d46616f42114f4574}{SetYaw}}(-\/95.0f);}
-\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a70353d15b3ea525cdccbdc8bbf3a693b}{GetCamera}}()-\/>\doxymbox{\hyperlink{classCamera_a692499690a6aab1bc1e026bf0d33a9bc}{SetPitch}}(0.0f);}
-\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}{LogLevel::INFO}},\ \textcolor{stringliteral}{"{}New\ scene\ created"{}});}
-\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classCommandManager_ad2ceaf8185c9141fc6534b42bd4dc630}{CommandManager::RegisterCommand}}(\textcolor{stringliteral}{"{}onListScenes"{}},}
-\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ \doxymbox{\hyperlink{CommandManager_8cppm_a51e26f1359c84c6593e0d675d9e68e6f}{CommandArgs}}\&)\ }
-\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ scenes\ =\ sceneSerializer-\/>GetAvailableScenes();}
-\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (scenes.empty())}
-\DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}{LogLevel::INFO}},\ \textcolor{stringliteral}{"{}No\ saved\ scenes\ found"{}});}
-\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00382\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
-\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}{LogLevel::INFO}},\ \textcolor{stringliteral}{"{}Available\ scenes\ ("{}}\ +\ }
-\DoxyCodeLine{00385\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::to\_string(scenes.size())\ +\ \textcolor{stringliteral}{"{}):"{}});}
-\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ scene\ :\ scenes)}
-\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}{LogLevel::INFO}},\ \textcolor{stringliteral}{"{}\ \ -\/\ "{}}\ +\ scene);}
-\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00391\ }
-\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classCommandManager_ad2ceaf8185c9141fc6534b42bd4dc630}{CommandManager::RegisterCommand}}(\textcolor{stringliteral}{"{}onLoadModel"{}},}
-\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ \doxymbox{\hyperlink{CommandManager_8cppm_a51e26f1359c84c6593e0d675d9e68e6f}{CommandArgs}}\&\ args)\ }
-\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (args.empty())}
-\DoxyCodeLine{00396\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00397\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5}{LogLevel::ERROR}},\ \textcolor{stringliteral}{"{}onLoadModel\ requires\ filepath\ argument"{}});}
-\DoxyCodeLine{00398\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ filepath\ =\ std::get<std::string>(args[0]);}
-\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Завантаж\ модель\ через\ ModelManager}}
-\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ model\ =\ \doxymbox{\hyperlink{classApplication_a020833795d61b04e38b061aff8850694}{GetModelManager}}()-\/>\doxymbox{\hyperlink{classModelManager_ac60b765a65d015e353352f0e345d9e24}{Load}}(filepath);}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (filename.find(\textcolor{stringliteral}{"{}.json"{}})\ ==\ std::string::npos)}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filename\ +=\ \textcolor{stringliteral}{"{}.json"{}};}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ success\ =\ sceneSerializer-\/>SaveScene(filename);}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (success)}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}✓\ Scene\ saved\ successfully:\ "{}}\ +\ filename);}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}✗\ Failed\ to\ save\ scene:\ "{}}\ +\ filename);}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onLoadScene"{}},}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&\ args)\ }
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ filename\ =\ \textcolor{stringliteral}{"{}scene.json"{}};}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!args.empty())}
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ }
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filename\ =\ std::get<std::string>(args[0]);}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{catch}\ (...)\ }
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::WARNING,\ \textcolor{stringliteral}{"{}Invalid\ filename\ argument,\ using\ default"{}});}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (filename.find(\textcolor{stringliteral}{"{}.json"{}})\ ==\ std::string::npos)}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filename\ +=\ \textcolor{stringliteral}{"{}.json"{}};}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ success\ =\ sceneSerializer-\/>LoadScene(}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filename,}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GetMaterialManager(),}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GetTextureManager()}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (success)}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}✓\ Scene\ loaded\ successfully:\ "{}}\ +\ filename);}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}✗\ Failed\ to\ load\ scene:\ "{}}\ +\ filename);}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onQuickSave"{}},}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \ \ \ \ CommandManager::ExecuteCommand(\textcolor{stringliteral}{"{}onSaveScene"{}},\ \{std::string(\textcolor{stringliteral}{"{}quicksave.json"{}})\});}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onQuickLoad"{}},}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ \ \ \ \ CommandManager::ExecuteCommand(\textcolor{stringliteral}{"{}onLoadScene"{}},\ \{std::string(\textcolor{stringliteral}{"{}quicksave.json"{}})\});}
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onNewScene"{}},}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>Clear();}
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \ \ \ \ GetCamera()-\/>SetPosition(glm::vec3(0,\ 0,\ 0));}
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ \ \ \ \ GetCamera()-\/>SetYaw(-\/95.0f);}
+\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \ \ \ \ GetCamera()-\/>SetPitch(0.0f);}
+\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}New\ scene\ created"{}});}
+\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onListScenes"{}},}
+\DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ scenes\ =\ sceneSerializer-\/>GetAvailableScenes();}
+\DoxyCodeLine{00382\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (scenes.empty())}
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00385\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}No\ saved\ scenes\ found"{}});}
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Available\ scenes\ ("{}}\ +\ }
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::to\_string(scenes.size())\ +\ \textcolor{stringliteral}{"{}):"{}});}
+\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ scene\ :\ scenes)}
+\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}\ \ -\/\ "{}}\ +\ scene);}
+\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00396\ }
+\DoxyCodeLine{00397\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onLoadModel"{}},}
+\DoxyCodeLine{00398\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&\ args)\ }
+\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (args.empty())}
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}onLoadModel\ requires\ filepath\ argument"{}});}
+\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!model)\ }
-\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5}{LogLevel::ERROR}},\ \textcolor{stringliteral}{"{}Failed\ to\ load\ model:\ "{}}\ +\ filepath);}
-\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Створюємо\ сутності\ для\ кожного\ меша\ моделі}}
-\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ model-\/>GetMeshCount();\ ++i)\ }
-\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a8600d3a3d2c2739511b12bc370a978cc}{CreateEntity}}(}
-\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ model-\/>GetName()\ +\ \textcolor{stringliteral}{"{}\_Mesh\_"{}}\ +\ std::to\_string(i));}
-\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Transform}}
-\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<TransformComponent>(entity,\ }
-\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3(0,\ 0,\ -\/5),\ glm::vec3(0),\ glm::vec3(1));}
-\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Mesh}}
-\DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ mesh\ =\ model-\/>GetMesh(i);}
-\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<MeshComponent>(entity,\ mesh);}
-\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Material}}
-\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ material\ =\ \doxymbox{\hyperlink{classApplication_a910f4af892e4e10a37fa638067cd8cff}{GetMaterialManager}}()-\/>\doxymbox{\hyperlink{classMaterialManager_a236d52c0ca0db7c29bba1014b75c2a17}{GetMaterial}}(\textcolor{stringliteral}{"{}default"{}});}
-\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<MaterialComponent>(entity,\ material);}
-\DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Visibility}}
-\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{GetECSWorld}}()-\/>\doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{AddComponent}}<VisibilityComponent>(entity,\ \textcolor{keyword}{true});}
-\DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Logger::Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}{LogLevel::INFO}},\ }
-\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Model\ entities\ created:\ "{}}\ +\ model-\/>GetName()\ +\ }
-\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\ ("{}}\ +\ std::to\_string(model-\/>GetMeshCount())\ +\ \textcolor{stringliteral}{"{}\ meshes)"{}});}
-\DoxyCodeLine{00437\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00438\ \ \ \ \ \}}
-\DoxyCodeLine{00439\ \};}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ filepath\ =\ std::get<std::string>(args[0]);}
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Завантаж\ модель\ через\ ModelManager}}
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ model\ =\ GetModelManager()-\/>Load(filepath);}
+\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!model)\ }
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}Failed\ to\ load\ model:\ "{}}\ +\ filepath);}
+\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Створюємо\ сутності\ для\ кожного\ меша\ моделі}}
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ model-\/>GetMeshCount();\ ++i)\ }
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ GetECSWorld()-\/>CreateEntity(}
+\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ model-\/>GetName()\ +\ \textcolor{stringliteral}{"{}\_Mesh\_"{}}\ +\ std::to\_string(i));}
+\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Transform}}
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structTransformComponent}{TransformComponent}}>(entity,\ }
+\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3(0,\ 0,\ -\/5),\ glm::vec3(0),\ glm::vec3(1));}
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Mesh}}
+\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ mesh\ =\ model-\/>GetMesh(i);}
+\DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structMeshComponent}{MeshComponent}}>(entity,\ mesh);}
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Material}}
+\DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ material\ =\ GetMaterialManager()-\/>GetMaterial(\textcolor{stringliteral}{"{}default"{}});}
+\DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structMaterialComponent}{MaterialComponent}}>(entity,\ material);}
+\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Visibility}}
+\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structVisibilityComponent}{VisibilityComponent}}>(entity,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00437\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00438\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00439\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ }
+\DoxyCodeLine{00440\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Model\ entities\ created:\ "{}}\ +\ model-\/>GetName()\ +\ }
+\DoxyCodeLine{00441\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\ ("{}}\ +\ std::to\_string(model-\/>GetMeshCount())\ +\ \textcolor{stringliteral}{"{}\ meshes)"{}});}
+\DoxyCodeLine{00442\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00443\ \ \ \ \ \}}
+\DoxyCodeLine{00444\ \};}
 
 \end{DoxyCode}

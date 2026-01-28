@@ -13,6 +13,11 @@ import WFE.Resource.Shader.ShaderManager;
 import WFE.Resource.Material.Material;
 import WFE.Rendering.MeshData;
 
+/// @file Model.cppm
+/// @brief Model Object Class
+/// @author SuperChabs
+/// @date 2026-01-28
+
 export class Model
 {
     std::vector<std::shared_ptr<Mesh>> meshes;

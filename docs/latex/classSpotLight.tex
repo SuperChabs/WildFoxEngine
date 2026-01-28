@@ -21,135 +21,116 @@ Collaboration diagram for Spot\+Light:\+\nopagebreak
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\doxymbox{\hyperlink{classSpotLight_ab93472f1d815f95486d8509c0bb36983}{Spot\+Light}} (const std::\+string \&\doxymbox{\hyperlink{classLight_aed2e518d1e739c50c31ae77a865f51ed}{name}}="{}Spot Light"{})
+\Hypertarget{classSpotLight_ab93472f1d815f95486d8509c0bb36983}\label{classSpotLight_ab93472f1d815f95486d8509c0bb36983} 
+{\bfseries Spot\+Light} (const std::\+string \&name="{}Spot Light"{})
 \end{DoxyCompactItemize}
 \doxysubsection*{Public Member Functions inherited from \doxymbox{\hyperlink{classLight}{Light}}}
 \begin{DoxyCompactItemize}
 \item 
-\doxymbox{\hyperlink{classLight_a2e37ae20b84931cc6c8fff0482b947e6}{Light}} (\doxymbox{\hyperlink{Light_8cppm_adc3ec8293e6a97ebe43f0196b9a7f638}{Light\+Type}} \doxymbox{\hyperlink{classLight_a86e648b4a80a5c1e194c97ef52f9efc6}{type}}, const std::\+string \&\doxymbox{\hyperlink{classLight_aed2e518d1e739c50c31ae77a865f51ed}{name}}="{}Light"{})
+{\bfseries Light} (Light\+Type type, const std::\+string \&name="{}Light"{})
 \item 
-virtual \doxymbox{\hyperlink{classLight_ae3e3209d4b97d0bbbd614ded5e1213d9}{\texorpdfstring{$\sim$}{\string~}\+Light}} ()=default
+Light\+Type {\bfseries Get\+Type} () const
 \item 
-\doxymbox{\hyperlink{Light_8cppm_adc3ec8293e6a97ebe43f0196b9a7f638}{Light\+Type}} \doxymbox{\hyperlink{classLight_a3f720182445f910d4e85f6a20ecb59bc}{Get\+Type}} () const
+const std::\+string \& {\bfseries Get\+Name} () const
 \item 
-const std::\+string \& \doxymbox{\hyperlink{classLight_a3552974d1e047a7e4075188c39d3fa62}{Get\+Name}} () const
+const glm::\+vec3 \& {\bfseries Get\+Position} () const
 \item 
-const glm::\+vec3 \& \doxymbox{\hyperlink{classLight_a902b32b00ef53a9c21dd3e0b32aee5eb}{Get\+Position}} () const
+const glm::\+vec3 \& {\bfseries Get\+Direction} () const
 \item 
-const glm::\+vec3 \& \doxymbox{\hyperlink{classLight_ad80134edbe19cc85f219e1d8ca6c9206}{Get\+Direction}} () const
+const glm::\+vec3 \& {\bfseries Get\+Ambient} () const
 \item 
-const glm::\+vec3 \& \doxymbox{\hyperlink{classLight_a7cb442667e88d6bbb2bf80049c9dbebd}{Get\+Ambient}} () const
+const glm::\+vec3 \& {\bfseries Get\+Diffuse} () const
 \item 
-const glm::\+vec3 \& \doxymbox{\hyperlink{classLight_a9fd7cfb354584981302f9f022bca24ef}{Get\+Diffuse}} () const
+const glm::\+vec3 \& {\bfseries Get\+Specular} () const
 \item 
-const glm::\+vec3 \& \doxymbox{\hyperlink{classLight_a045c109b53d4577790894e4b24652a97}{Get\+Specular}} () const
+float {\bfseries Get\+Intensity} () const
 \item 
-float \doxymbox{\hyperlink{classLight_a3df6df8d3503e59227f626380b4d7a29}{Get\+Intensity}} () const
+bool {\bfseries Is\+Active} () const
 \item 
-bool \doxymbox{\hyperlink{classLight_a2789c2105f2907ad34d04d9e53e5ae01}{Is\+Active}} () const
+bool {\bfseries Casts\+Shadows} () const
 \item 
-bool \doxymbox{\hyperlink{classLight_ad1397ab09ba91ed92dbbeb0c8fa8bedc}{Casts\+Shadows}} () const
+float {\bfseries Get\+Constant} () const
 \item 
-float \doxymbox{\hyperlink{classLight_a2dd731ddbb5262bb2a502a3183abc177}{Get\+Constant}} () const
+float {\bfseries Get\+Linear} () const
 \item 
-float \doxymbox{\hyperlink{classLight_a6da53d9477c02605756c883d6348d947}{Get\+Linear}} () const
+float {\bfseries Get\+Quadratic} () const
 \item 
-float \doxymbox{\hyperlink{classLight_ada87e4b82d76cbee89ea67e2920a90c7}{Get\+Quadratic}} () const
+float {\bfseries Get\+Radius} () const
 \item 
-float \doxymbox{\hyperlink{classLight_acba7192fae5c7f97f41c12fb9773145c}{Get\+Radius}} () const
+float {\bfseries Get\+Inner\+Cutoff} () const
 \item 
-float \doxymbox{\hyperlink{classLight_a2cd2c717e86d94771f9b3a2af170a14c}{Get\+Inner\+Cutoff}} () const
+float {\bfseries Get\+Outer\+Cutoff} () const
 \item 
-float \doxymbox{\hyperlink{classLight_a89229c8eb2e51d3451eefd04c20a8ff1}{Get\+Outer\+Cutoff}} () const
+void {\bfseries Set\+Name} (const std::\+string \&n)
 \item 
-void \doxymbox{\hyperlink{classLight_a5d2d08573c8e9fda3a70f9b2ce01ea98}{Set\+Name}} (const std::\+string \&n)
+void {\bfseries Set\+Position} (const glm::\+vec3 \&pos)
 \item 
-void \doxymbox{\hyperlink{classLight_a6fc1b57745bb88c75065b9fb2b726fca}{Set\+Position}} (const glm::\+vec3 \&pos)
+void {\bfseries Set\+Direction} (const glm::\+vec3 \&dir)
 \item 
-void \doxymbox{\hyperlink{classLight_a0a5b51741f6bf41a7cf2fe2fadde4e3e}{Set\+Direction}} (const glm::\+vec3 \&dir)
+void {\bfseries Set\+Ambient} (const glm::\+vec3 \&amb)
 \item 
-void \doxymbox{\hyperlink{classLight_a727ec1795ba4789fe22a01dd21623b95}{Set\+Ambient}} (const glm::\+vec3 \&amb)
+void {\bfseries Set\+Diffuse} (const glm::\+vec3 \&diff)
 \item 
-void \doxymbox{\hyperlink{classLight_aabca5d5537905730cae2fb1de8d98f6c}{Set\+Diffuse}} (const glm::\+vec3 \&diff)
+void {\bfseries Set\+Specular} (const glm::\+vec3 \&spec)
 \item 
-void \doxymbox{\hyperlink{classLight_abf0956eb024329d6ba52b0480e641418}{Set\+Specular}} (const glm::\+vec3 \&spec)
+void {\bfseries Set\+Intensity} (float i)
 \item 
-void \doxymbox{\hyperlink{classLight_af4aebc4f7549492d198d97855f571dc2}{Set\+Intensity}} (float i)
+void {\bfseries Set\+Active} (bool active)
 \item 
-void \doxymbox{\hyperlink{classLight_acbfad94f0daafb0d47defd949bac326e}{Set\+Active}} (bool active)
+void {\bfseries Set\+Cast\+Shadows} (bool shadows)
 \item 
-void \doxymbox{\hyperlink{classLight_a648953dcdabb04148874d1c2e693c945}{Set\+Cast\+Shadows}} (bool shadows)
+void {\bfseries Set\+Constant} (float c)
 \item 
-void \doxymbox{\hyperlink{classLight_ad1e67bdec515f12c12cbff2326e12844}{Set\+Constant}} (float c)
+void {\bfseries Set\+Linear} (float l)
 \item 
-void \doxymbox{\hyperlink{classLight_a9d39689356135df3cd0a83f3330abd85}{Set\+Linear}} (float l)
+void {\bfseries Set\+Quadratic} (float q)
 \item 
-void \doxymbox{\hyperlink{classLight_a38c48765892718aa173fd71c950ddc2c}{Set\+Quadratic}} (float q)
+void {\bfseries Set\+Radius} (float r)
 \item 
-void \doxymbox{\hyperlink{classLight_a8a94a2d29f1a7e2b1fe7fa3df6e15d9a}{Set\+Radius}} (float r)
+void {\bfseries Set\+Inner\+Cutoff} (float angle)
 \item 
-void \doxymbox{\hyperlink{classLight_ae69a23681aa78f2420efadf6cf50d623}{Set\+Inner\+Cutoff}} (float angle)
+void {\bfseries Set\+Outer\+Cutoff} (float angle)
 \item 
-void \doxymbox{\hyperlink{classLight_a4a2082c99fdbe6117d9aaeacb756cab4}{Set\+Outer\+Cutoff}} (float angle)
-\item 
-void \doxymbox{\hyperlink{classLight_a74556fc7a323ff463496858af8a89ffc}{Set\+Type}} (\doxymbox{\hyperlink{Light_8cppm_adc3ec8293e6a97ebe43f0196b9a7f638}{Light\+Type}} new\+Type)
+void {\bfseries Set\+Type} (Light\+Type new\+Type)
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Additional Inherited Members}
 \doxysubsection*{Protected Attributes inherited from \doxymbox{\hyperlink{classLight}{Light}}}
 \begin{DoxyCompactItemize}
 \item 
-\doxymbox{\hyperlink{Light_8cppm_adc3ec8293e6a97ebe43f0196b9a7f638}{Light\+Type}} \doxymbox{\hyperlink{classLight_a86e648b4a80a5c1e194c97ef52f9efc6}{type}}
+Light\+Type {\bfseries type}
 \item 
-std::\+string \doxymbox{\hyperlink{classLight_aed2e518d1e739c50c31ae77a865f51ed}{name}}
+std::\+string {\bfseries name}
 \item 
-glm::\+vec3 \doxymbox{\hyperlink{classLight_a89bffe071ec6431a21c5b54021fe08d6}{position}}
+glm::\+vec3 {\bfseries position}
 \item 
-glm::\+vec3 \doxymbox{\hyperlink{classLight_a494230a45b5cfa2f9fb54dbd4de3812b}{direction}}
+glm::\+vec3 {\bfseries direction}
 \item 
-glm::\+vec3 \doxymbox{\hyperlink{classLight_afaa34bb2efc167adcb2055359fd08a49}{ambient}}
+glm::\+vec3 {\bfseries ambient}
 \item 
-glm::\+vec3 \doxymbox{\hyperlink{classLight_ad47b5347556fd8cd9ebdc60fdfed196b}{diffuse}}
+glm::\+vec3 {\bfseries diffuse}
 \item 
-glm::\+vec3 \doxymbox{\hyperlink{classLight_aefcfb83a0540ddb885c2622061b28d7e}{specular}}
+glm::\+vec3 {\bfseries specular}
 \item 
-float \doxymbox{\hyperlink{classLight_a1071eaa556f4bb2a9345fdfba7e6f220}{intensity}}
+float {\bfseries intensity}
 \item 
-bool \doxymbox{\hyperlink{classLight_aecca4954ea7954bff5dec49fbbfe4875}{is\+Active}}
+bool {\bfseries is\+Active}
 \item 
-bool \doxymbox{\hyperlink{classLight_a75986c7edef4f061af62d71ccef5125c}{cast\+Shadows}}
+bool {\bfseries cast\+Shadows}
 \item 
-float \doxymbox{\hyperlink{classLight_a3e211778e131611d35039827f36f51e5}{constant}}
+float {\bfseries constant}
 \item 
-float \doxymbox{\hyperlink{classLight_a9d89a84a196a1329cda29df47a937e28}{linear}}
+float {\bfseries linear}
 \item 
-float \doxymbox{\hyperlink{classLight_a0427bec0c2333a5dd9a18b2c282d952e}{quadratic}}
+float {\bfseries quadratic}
 \item 
-float \doxymbox{\hyperlink{classLight_ab9a87981b02f4612c872c49efa6b6e53}{radius}}
+float {\bfseries radius}
 \item 
-float \doxymbox{\hyperlink{classLight_a5266b071f63066bdb843ca7e9bcf0f9b}{inner\+Cutoff}}
+float {\bfseries inner\+Cutoff}
 \item 
-float \doxymbox{\hyperlink{classLight_a3170dfe3b90bddc8b339731fa45b4347}{outer\+Cutoff}}
+float {\bfseries outer\+Cutoff}
 \end{DoxyCompactItemize}
-
-
-\label{doc-constructors}
-\Hypertarget{classSpotLight_doc-constructors}
-\doxysubsection{Constructor \& Destructor Documentation}
-\Hypertarget{classSpotLight_ab93472f1d815f95486d8509c0bb36983}\index{SpotLight@{SpotLight}!SpotLight@{SpotLight}}
-\index{SpotLight@{SpotLight}!SpotLight@{SpotLight}}
-\doxysubsubsection{\texorpdfstring{SpotLight()}{SpotLight()}}
-{\footnotesize\ttfamily \label{classSpotLight_ab93472f1d815f95486d8509c0bb36983} 
-Spot\+Light::\+\+Spot\+Light (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{name}{ = {\ttfamily "{}Spot~Light"{}}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-Here is the call graph for this function:\+\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=285pt]{classSpotLight_ab93472f1d815f95486d8509c0bb36983_cgraph}
-\end{center}
-\end{figure}
 
 
 The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
 \item 
-/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+scene/\+\doxymbox{\hyperlink{Light_8cppm}{Light.\+cppm}}\end{DoxyCompactItemize}
+Light.\+cppm\end{DoxyCompactItemize}

@@ -26,33 +26,22 @@ var NAVTREE =
 [
   [ "WildFox Engine", "index.html", [
     [ "Modules", "modules.html", [
-      [ "Modules List", "modules.html", "modules_dup" ],
-      [ "Module Members", "modulemembers.html", [
-        [ "All", "modulemembers.html", null ],
-        [ "Functions", "modulemembers_func.html", null ],
-        [ "Typedefs", "modulemembers_type.html", null ],
-        [ "Enumerations", "modulemembers_enum.html", null ]
-      ] ]
+      [ "Modules List", "modules.html", "modules_dup" ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
-        [ "All", "functions.html", "functions_dup" ],
-        [ "Functions", "functions_func.html", "functions_func" ],
-        [ "Variables", "functions_vars.html", null ]
+        [ "All", "functions.html", null ],
+        [ "Functions", "functions_func.html", null ]
       ] ]
     ] ],
     [ "Files", "files.html", [
       [ "File List", "files.html", "files_dup" ],
       [ "File Members", "globals.html", [
         [ "All", "globals.html", null ],
-        [ "Functions", "globals_func.html", null ],
-        [ "Variables", "globals_vars.html", null ],
-        [ "Typedefs", "globals_type.html", null ],
-        [ "Enumerations", "globals_enum.html", null ],
-        [ "Enumerator", "globals_eval.html", null ]
+        [ "Functions", "globals_func.html", null ]
       ] ]
     ] ]
   ] ]
@@ -61,13 +50,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "Application_8cppm.html",
-"Logger_8cppm_source.html",
-"classCamera.html#ab2a5b92f2b95baf5bf179f174ee66022",
-"classIndexBuffer.html#afe874f852e3267edfa70352c734da4fb",
-"classModel.html#a0885f9a6553274d661150f34d123de93",
-"classShadowPass.html#aaa464904fbd868c62277265e64cf951f",
-"classWindow.html#a8e0bcbe6f00524c98fab4e1414a4f671",
-"structLogData.html#a77dc195482614ffe1cdcb7071789613c"
+"structLogData.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

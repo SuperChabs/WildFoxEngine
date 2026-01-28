@@ -48,7 +48,7 @@ var modules_dup =
     [ "WFE.Resource.Model.Model", "module__WFE_8Resource_8Model_8Model.html", "module__WFE_8Resource_8Model_8Model" ],
     [ "WFE.Resource.Model.ModelLoader", "module__WFE_8Resource_8Model_8ModelLoader.html", "module__WFE_8Resource_8Model_8ModelLoader" ],
     [ "WFE.Resource.Model.ModelManager", "module__WFE_8Resource_8Model_8ModelManager.html", "module__WFE_8Resource_8Model_8ModelManager" ],
-    [ "WFE.Resource.Shader.ShaderCompiler", "module__WFE_8Resource_8Shader_8ShaderCompiler.html", "module__WFE_8Resource_8Shader_8ShaderCompiler" ],
+    [ "WFE.Resource.Shader.ShaderCompiler", "module__WFE_8Resource_8Shader_8ShaderCompiler.html", null ],
     [ "WFE.Resource.Shader.ShaderConfigLoader", "module__WFE_8Resource_8Shader_8ShaderConfigLoader.html", "module__WFE_8Resource_8Shader_8ShaderConfigLoader" ],
     [ "WFE.Resource.Shader.ShaderLoader", "module__WFE_8Resource_8Shader_8ShaderLoader.html", "module__WFE_8Resource_8Shader_8ShaderLoader" ],
     [ "WFE.Resource.Shader.ShaderManager", "module__WFE_8Resource_8Shader_8ShaderManager.html", "module__WFE_8Resource_8Shader_8ShaderManager" ],

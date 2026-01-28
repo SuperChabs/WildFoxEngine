@@ -94,128 +94,15 @@ $(function(){initNavTree('classCommandManager.html','','classCommandManager-memb
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ad2ceaf8185c9141fc6534b42bd4dc630" id="r_ad2ceaf8185c9141fc6534b42bd4dc630"><td class="memItemLeft">static void&#160;</td><td class="memItemRight"><a class="el" href="#ad2ceaf8185c9141fc6534b42bd4dc630">RegisterCommand</a> (const std::string &amp;name, <a class="el" href="CommandManager_8cppm.html#acc6698526f089e0255c749a05941768d">CommandFn</a> fn)</td></tr>
-<tr class="memitem:accddb6593757098ada867f261ea44761" id="r_accddb6593757098ada867f261ea44761"><td class="memItemLeft">static void&#160;</td><td class="memItemRight"><a class="el" href="#accddb6593757098ada867f261ea44761">ExecuteCommand</a> (const std::string &amp;name, const <a class="el" href="CommandManager_8cppm.html#a51e26f1359c84c6593e0d675d9e68e6f">CommandArgs</a> &amp;args)</td></tr>
-<tr class="memitem:ac825df7932950f61160ed5177c06158a" id="r_ac825df7932950f61160ed5177c06158a"><td class="memItemLeft">static bool&#160;</td><td class="memItemRight"><a class="el" href="#ac825df7932950f61160ed5177c06158a">HasCommand</a> (const std::string &amp;name)</td></tr>
+<tr class="memitem:ad2ceaf8185c9141fc6534b42bd4dc630" id="r_ad2ceaf8185c9141fc6534b42bd4dc630"><td class="memItemLeft"><a id="ad2ceaf8185c9141fc6534b42bd4dc630" name="ad2ceaf8185c9141fc6534b42bd4dc630"></a>
+static void&#160;</td><td class="memItemRight"><b>RegisterCommand</b> (const std::string &amp;name, CommandFn fn)</td></tr>
+<tr class="memitem:accddb6593757098ada867f261ea44761" id="r_accddb6593757098ada867f261ea44761"><td class="memItemLeft"><a id="accddb6593757098ada867f261ea44761" name="accddb6593757098ada867f261ea44761"></a>
+static void&#160;</td><td class="memItemRight"><b>ExecuteCommand</b> (const std::string &amp;name, const CommandArgs &amp;args)</td></tr>
+<tr class="memitem:ac825df7932950f61160ed5177c06158a" id="r_ac825df7932950f61160ed5177c06158a"><td class="memItemLeft"><a id="ac825df7932950f61160ed5177c06158a" name="ac825df7932950f61160ed5177c06158a"></a>
+static bool&#160;</td><td class="memItemRight"><b>HasCommand</b> (const std::string &amp;name)</td></tr>
 </table>
-<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
-<a id="accddb6593757098ada867f261ea44761" name="accddb6593757098ada867f261ea44761"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#accddb6593757098ada867f261ea44761">&#9670;&#160;</a></span>ExecuteCommand()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void CommandManager::ExecuteCommand </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="CommandManager_8cppm.html#a51e26f1359c84c6593e0d675d9e68e6f">CommandArgs</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>args</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classCommandManager_accddb6593757098ada867f261ea44761_cgraph.png" border="0" usemap="#aclassCommandManager_accddb6593757098ada867f261ea44761_cgraph" loading="lazy" alt=""/></div>
-<map name="aclassCommandManager_accddb6593757098ada867f261ea44761_cgraph" id="aclassCommandManager_accddb6593757098ada867f261ea44761_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,253,32"/>
-<area shape="rect" href="classLogger.html#ab72dd0825c1a37f2289da714562a722f" title=" " alt="" coords="301,5,390,32"/>
-<area shape="poly" title=" " alt="" coords="253,16,288,19,282,19,253,21"/>
-</map>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classCommandManager_accddb6593757098ada867f261ea44761_icgraph.png" border="0" usemap="#aclassCommandManager_accddb6593757098ada867f261ea44761_icgraph" loading="lazy" alt=""/></div>
-<map name="aclassCommandManager_accddb6593757098ada867f261ea44761_icgraph" id="aclassCommandManager_accddb6593757098ada867f261ea44761_icgraph">
-<area shape="rect" title=" " alt="" coords="218,31,465,57"/>
-<area shape="rect" href="classGeometryPass.html#ac1f9620fb9ffcce4e58df88ee31e0059" title=" " alt="" coords="5,5,170,32"/>
-<area shape="poly" title=" " alt="" coords="200,31,170,30,170,24,205,30"/>
-<area shape="rect" href="classUIPass.html#ac077fbc40d5e1a4137944805ef7561cf" title=" " alt="" coords="27,56,148,83"/>
-<area shape="poly" title=" " alt="" coords="200,58,149,66,148,61,205,58"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="ac825df7932950f61160ed5177c06158a" name="ac825df7932950f61160ed5177c06158a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac825df7932950f61160ed5177c06158a">&#9670;&#160;</a></span>HasCommand()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool CommandManager::HasCommand </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad2ceaf8185c9141fc6534b42bd4dc630" name="ad2ceaf8185c9141fc6534b42bd4dc630"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad2ceaf8185c9141fc6534b42bd4dc630">&#9670;&#160;</a></span>RegisterCommand()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void CommandManager::RegisterCommand </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="CommandManager_8cppm.html#acc6698526f089e0255c749a05941768d">CommandFn</a></td>          <td class="paramname"><span class="paramname"><em>fn</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classCommandManager_ad2ceaf8185c9141fc6534b42bd4dc630_cgraph.png" border="0" usemap="#aclassCommandManager_ad2ceaf8185c9141fc6534b42bd4dc630_cgraph" loading="lazy" alt=""/></div>
-<map name="aclassCommandManager_ad2ceaf8185c9141fc6534b42bd4dc630_cgraph" id="aclassCommandManager_ad2ceaf8185c9141fc6534b42bd4dc630_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,194,48"/>
-<area shape="rect" href="classLogger.html#ab72dd0825c1a37f2289da714562a722f" title=" " alt="" coords="242,13,331,40"/>
-<area shape="poly" title=" " alt="" coords="194,24,229,26,223,27,194,29"/>
-</map>
-</div>
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>/home/tymur52/WildFoxEngine/src/core/<a class="el" href="CommandManager_8cppm.html">CommandManager.cppm</a></li>
+<li><b>CommandManager.cppm</b></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

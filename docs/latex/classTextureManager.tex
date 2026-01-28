@@ -3,132 +3,29 @@
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\doxymbox{\hyperlink{classTextureManager_aca4613cdc54d8c39aa1de41dc26c7fec}{Texture\+Manager}} ()=default
+\Hypertarget{classTextureManager_a2547f3be7ddc1e54576f9a59a0d08d05}\label{classTextureManager_a2547f3be7ddc1e54576f9a59a0d08d05} 
+unsigned int {\bfseries Load\+Texture} (const std::\+string \&path, bool gamma=false)
 \item 
-\doxymbox{\hyperlink{classTextureManager_a001d6d74674961db79987e3222682576}{\texorpdfstring{$\sim$}{\string~}\+Texture\+Manager}} ()
+\Hypertarget{classTextureManager_a146d2dc37df49879240fed8382d242b9}\label{classTextureManager_a146d2dc37df49879240fed8382d242b9} 
+unsigned int {\bfseries Load\+Cubemap} (const std::\+vector$<$ std::\+string $>$ \&faces)
 \item 
-unsigned int \doxymbox{\hyperlink{classTextureManager_a2547f3be7ddc1e54576f9a59a0d08d05}{Load\+Texture}} (const std::\+string \&path, bool gamma=false)
+\Hypertarget{classTextureManager_ad56baf7b4c1989e997de4ac626db55b6}\label{classTextureManager_ad56baf7b4c1989e997de4ac626db55b6} 
+unsigned int {\bfseries Create\+White\+Texture} ()
 \item 
-unsigned int \doxymbox{\hyperlink{classTextureManager_a146d2dc37df49879240fed8382d242b9}{Load\+Cubemap}} (const std::\+vector$<$ std::\+string $>$ \&faces)
+\Hypertarget{classTextureManager_affc5639dcc679a49430ff97635aa21cf}\label{classTextureManager_affc5639dcc679a49430ff97635aa21cf} 
+void {\bfseries Bind\+Texture} (unsigned int texture\+ID, unsigned int slot=0)
 \item 
-unsigned int \doxymbox{\hyperlink{classTextureManager_ad56baf7b4c1989e997de4ac626db55b6}{Create\+White\+Texture}} ()
+\Hypertarget{classTextureManager_a32ae84804ada4aec07bb393cacf35bb6}\label{classTextureManager_a32ae84804ada4aec07bb393cacf35bb6} 
+void {\bfseries Unload\+Texture} (const std::\+string \&path)
 \item 
-void \doxymbox{\hyperlink{classTextureManager_affc5639dcc679a49430ff97635aa21cf}{Bind\+Texture}} (unsigned int texture\+ID, unsigned int slot=0)
+\Hypertarget{classTextureManager_a4d134fdd4ad3090e3dfc80eabba4f86d}\label{classTextureManager_a4d134fdd4ad3090e3dfc80eabba4f86d} 
+void {\bfseries Unload\+All} ()
 \item 
-void \doxymbox{\hyperlink{classTextureManager_a32ae84804ada4aec07bb393cacf35bb6}{Unload\+Texture}} (const std::\+string \&path)
-\item 
-void \doxymbox{\hyperlink{classTextureManager_a4d134fdd4ad3090e3dfc80eabba4f86d}{Unload\+All}} ()
-\item 
-bool \doxymbox{\hyperlink{classTextureManager_a489e0cb75499ab55e4afc3a9452abbc6}{Is\+Loaded}} (const std::\+string \&path) const
+\Hypertarget{classTextureManager_a489e0cb75499ab55e4afc3a9452abbc6}\label{classTextureManager_a489e0cb75499ab55e4afc3a9452abbc6} 
+bool {\bfseries Is\+Loaded} (const std::\+string \&path) const
 \end{DoxyCompactItemize}
-
-
-\label{doc-constructors}
-\Hypertarget{classTextureManager_doc-constructors}
-\doxysubsection{Constructor \& Destructor Documentation}
-\Hypertarget{classTextureManager_aca4613cdc54d8c39aa1de41dc26c7fec}\index{TextureManager@{TextureManager}!TextureManager@{TextureManager}}
-\index{TextureManager@{TextureManager}!TextureManager@{TextureManager}}
-\doxysubsubsection{\texorpdfstring{TextureManager()}{TextureManager()}}
-{\footnotesize\ttfamily \label{classTextureManager_aca4613cdc54d8c39aa1de41dc26c7fec} 
-Texture\+Manager::\+\+Texture\+Manager (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
-
-\Hypertarget{classTextureManager_a001d6d74674961db79987e3222682576}\index{TextureManager@{TextureManager}!````~TextureManager@{\texorpdfstring{$\sim$}{\string~}TextureManager}}
-\index{````~TextureManager@{\texorpdfstring{$\sim$}{\string~}TextureManager}!TextureManager@{TextureManager}}
-\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}TextureManager()}{\string~TextureManager()}}
-{\footnotesize\ttfamily \label{classTextureManager_a001d6d74674961db79987e3222682576} 
-Texture\+Manager::\+\texorpdfstring{$\sim$}{\string~}\+Texture\+Manager (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-Here is the call graph for this function:\+\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{classTextureManager_a001d6d74674961db79987e3222682576_cgraph}
-\end{center}
-\end{figure}
-
-
-\label{doc-func-members}
-\Hypertarget{classTextureManager_doc-func-members}
-\doxysubsection{Member Function Documentation}
-\Hypertarget{classTextureManager_affc5639dcc679a49430ff97635aa21cf}\index{TextureManager@{TextureManager}!BindTexture@{BindTexture}}
-\index{BindTexture@{BindTexture}!TextureManager@{TextureManager}}
-\doxysubsubsection{\texorpdfstring{BindTexture()}{BindTexture()}}
-{\footnotesize\ttfamily \label{classTextureManager_affc5639dcc679a49430ff97635aa21cf} 
-void Texture\+Manager::\+\+Bind\+Texture (\begin{DoxyParamCaption}\item[{unsigned int}]{texture\+ID}{, }\item[{unsigned int}]{slot}{ = {\ttfamily 0}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-\Hypertarget{classTextureManager_ad56baf7b4c1989e997de4ac626db55b6}\index{TextureManager@{TextureManager}!CreateWhiteTexture@{CreateWhiteTexture}}
-\index{CreateWhiteTexture@{CreateWhiteTexture}!TextureManager@{TextureManager}}
-\doxysubsubsection{\texorpdfstring{CreateWhiteTexture()}{CreateWhiteTexture()}}
-{\footnotesize\ttfamily \label{classTextureManager_ad56baf7b4c1989e997de4ac626db55b6} 
-unsigned int Texture\+Manager::\+\+Create\+White\+Texture (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-\Hypertarget{classTextureManager_a489e0cb75499ab55e4afc3a9452abbc6}\index{TextureManager@{TextureManager}!IsLoaded@{IsLoaded}}
-\index{IsLoaded@{IsLoaded}!TextureManager@{TextureManager}}
-\doxysubsubsection{\texorpdfstring{IsLoaded()}{IsLoaded()}}
-{\footnotesize\ttfamily \label{classTextureManager_a489e0cb75499ab55e4afc3a9452abbc6} 
-bool Texture\+Manager::\+\+Is\+Loaded (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{path}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
-
-Here is the caller graph for this function:\+\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{classTextureManager_a489e0cb75499ab55e4afc3a9452abbc6_icgraph}
-\end{center}
-\end{figure}
-\Hypertarget{classTextureManager_a146d2dc37df49879240fed8382d242b9}\index{TextureManager@{TextureManager}!LoadCubemap@{LoadCubemap}}
-\index{LoadCubemap@{LoadCubemap}!TextureManager@{TextureManager}}
-\doxysubsubsection{\texorpdfstring{LoadCubemap()}{LoadCubemap()}}
-{\footnotesize\ttfamily \label{classTextureManager_a146d2dc37df49879240fed8382d242b9} 
-unsigned int Texture\+Manager::\+\+Load\+Cubemap (\begin{DoxyParamCaption}\item[{const std::\+vector$<$ std::\+string $>$ \&}]{faces}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-Here is the call graph for this function:\+\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{classTextureManager_a146d2dc37df49879240fed8382d242b9_cgraph}
-\end{center}
-\end{figure}
-Here is the caller graph for this function:\+\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{classTextureManager_a146d2dc37df49879240fed8382d242b9_icgraph}
-\end{center}
-\end{figure}
-\Hypertarget{classTextureManager_a2547f3be7ddc1e54576f9a59a0d08d05}\index{TextureManager@{TextureManager}!LoadTexture@{LoadTexture}}
-\index{LoadTexture@{LoadTexture}!TextureManager@{TextureManager}}
-\doxysubsubsection{\texorpdfstring{LoadTexture()}{LoadTexture()}}
-{\footnotesize\ttfamily \label{classTextureManager_a2547f3be7ddc1e54576f9a59a0d08d05} 
-unsigned int Texture\+Manager::\+\+Load\+Texture (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{path}{, }\item[{bool}]{gamma}{ = {\ttfamily false}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-Here is the call graph for this function:\+\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{classTextureManager_a2547f3be7ddc1e54576f9a59a0d08d05_cgraph}
-\end{center}
-\end{figure}
-\Hypertarget{classTextureManager_a4d134fdd4ad3090e3dfc80eabba4f86d}\index{TextureManager@{TextureManager}!UnloadAll@{UnloadAll}}
-\index{UnloadAll@{UnloadAll}!TextureManager@{TextureManager}}
-\doxysubsubsection{\texorpdfstring{UnloadAll()}{UnloadAll()}}
-{\footnotesize\ttfamily \label{classTextureManager_a4d134fdd4ad3090e3dfc80eabba4f86d} 
-void Texture\+Manager::\+\+Unload\+All (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-Here is the caller graph for this function:\+\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{classTextureManager_a4d134fdd4ad3090e3dfc80eabba4f86d_icgraph}
-\end{center}
-\end{figure}
-\Hypertarget{classTextureManager_a32ae84804ada4aec07bb393cacf35bb6}\index{TextureManager@{TextureManager}!UnloadTexture@{UnloadTexture}}
-\index{UnloadTexture@{UnloadTexture}!TextureManager@{TextureManager}}
-\doxysubsubsection{\texorpdfstring{UnloadTexture()}{UnloadTexture()}}
-{\footnotesize\ttfamily \label{classTextureManager_a32ae84804ada4aec07bb393cacf35bb6} 
-void Texture\+Manager::\+\+Unload\+Texture (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{path}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
 
 
 The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
 \item 
-/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+resource/\+texture/\+\doxymbox{\hyperlink{TextureManager_8cppm}{Texture\+Manager.\+cppm}}\end{DoxyCompactItemize}
+Texture\+Manager.\+cppm\end{DoxyCompactItemize}

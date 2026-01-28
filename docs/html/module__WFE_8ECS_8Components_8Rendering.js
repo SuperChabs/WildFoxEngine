@@ -1,7 +1,7 @@
 var module__WFE_8ECS_8Components_8Rendering =
 [
-    [ "MeshComponent", "structMeshComponent.html", "structMeshComponent" ],
-    [ "MaterialComponent", "structMaterialComponent.html", "structMaterialComponent" ],
-    [ "ColorComponent", "structColorComponent.html", "structColorComponent" ],
-    [ "VisibilityComponent", "structVisibilityComponent.html", "structVisibilityComponent" ]
+    [ "MeshComponent", "structMeshComponent.html", null ],
+    [ "MaterialComponent", "structMaterialComponent.html", null ],
+    [ "ColorComponent", "structColorComponent.html", null ],
+    [ "VisibilityComponent", "structVisibilityComponent.html", null ]
 ];

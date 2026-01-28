@@ -8,6 +8,11 @@ export module WFE.Core.Window;
 
 import WFE.Core.Logger;
 
+/// @file Window.cppm
+/// @brief Window class handler
+/// @author SuperChabs
+/// @date 2026-01-28
+
 export class Window 
 {
 private:

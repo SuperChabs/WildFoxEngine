@@ -21,57 +21,38 @@ Collaboration diagram for Forward\+Pipeline:\+\nopagebreak
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\doxymbox{\hyperlink{classForwardPipeline_a48d3b1b97612fdd8859701abf7388584}{Forward\+Pipeline}} (\doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*}ctx, \doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}sm, \doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \texorpdfstring{$\ast$}{*}w, GLuint sky\+VAO, GLuint cubemap)
+\Hypertarget{classForwardPipeline_a48d3b1b97612fdd8859701abf7388584}\label{classForwardPipeline_a48d3b1b97612fdd8859701abf7388584} 
+{\bfseries Forward\+Pipeline} (\doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*}ctx, \doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}sm, \doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \texorpdfstring{$\ast$}{*}w, GLuint sky\+VAO, GLuint cubemap)
 \item 
 void \doxymbox{\hyperlink{classForwardPipeline_a65d30384c1f198e3882751208f17e8e2}{Initialize}} () override
 \end{DoxyCompactItemize}
 \doxysubsection*{Public Member Functions inherited from \doxymbox{\hyperlink{classRenderPipeline}{Render\+Pipeline}}}
 \begin{DoxyCompactItemize}
 \item 
-\doxymbox{\hyperlink{classRenderPipeline_a172dbf6a01c4df6f91f7eeffabb88539}{Render\+Pipeline}} (const std::\+string \&n, \doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*}ctx, \doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}sm)
+{\bfseries Render\+Pipeline} (const std::\+string \&n, \doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*}ctx, \doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}sm)
 \item 
-virtual \doxymbox{\hyperlink{classRenderPipeline_aea23e5f1ca5745c3d2098867f24e59b5}{\texorpdfstring{$\sim$}{\string~}\+Render\+Pipeline}} ()=default
+virtual void {\bfseries Execute} (\doxymbox{\hyperlink{classCamera}{Camera}} \&camera, int width, int height)
 \item 
-virtual void \doxymbox{\hyperlink{classRenderPipeline_a4b12675ac846b55cc2fa115efbd4c29f}{Execute}} (\doxymbox{\hyperlink{classCamera}{Camera}} \&camera, int width, int height)
+void {\bfseries Add\+Pass} (std::\+unique\+\_\+ptr$<$ \doxymbox{\hyperlink{classRenderPass}{Render\+Pass}} $>$ pass)
 \item 
-void \doxymbox{\hyperlink{classRenderPipeline_a5c5e17156d4b04f6943c6e39b928043a}{Add\+Pass}} (std::\+unique\+\_\+ptr$<$ \doxymbox{\hyperlink{classRenderPass}{Render\+Pass}} $>$ pass)
+\doxymbox{\hyperlink{classRenderPass}{Render\+Pass}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Pass} (const std::\+string \&pass\+Name)
 \item 
-\doxymbox{\hyperlink{classRenderPass}{Render\+Pass}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classRenderPipeline_ae8813675959e9388f3d53df1418e013f}{Get\+Pass}} (const std::\+string \&pass\+Name)
+const std::\+string \& {\bfseries Get\+Name} () const
 \item 
-const std::\+string \& \doxymbox{\hyperlink{classRenderPipeline_aaff50222c7a4d550eaf1a7a675c4fe85}{Get\+Name}} () const
-\item 
-size\+\_\+t \doxymbox{\hyperlink{classRenderPipeline_a407c88cb3cb3a9db32490c014570b85d}{Get\+Pass\+Count}} () const
+size\+\_\+t {\bfseries Get\+Pass\+Count} () const
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Additional Inherited Members}
 \doxysubsection*{Protected Attributes inherited from \doxymbox{\hyperlink{classRenderPipeline}{Render\+Pipeline}}}
 \begin{DoxyCompactItemize}
 \item 
-std::\+string \doxymbox{\hyperlink{classRenderPipeline_a4c9bb441a44b6af2dd73fcb363f3e251}{name}}
+std::\+string {\bfseries name}
 \item 
-std::\+vector$<$ std::\+unique\+\_\+ptr$<$ \doxymbox{\hyperlink{classRenderPass}{Render\+Pass}} $>$ $>$ \doxymbox{\hyperlink{classRenderPipeline_a8fdfdc61044d65e9bddf3124525fa468}{passes}}
+std::\+vector$<$ std::\+unique\+\_\+ptr$<$ \doxymbox{\hyperlink{classRenderPass}{Render\+Pass}} $>$ $>$ {\bfseries passes}
 \item 
-\doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classRenderPipeline_af29e62ab2ed9d0ccda0ee7ee6567dcfd}{context}}
+\doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*} {\bfseries context}
 \item 
-\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classRenderPipeline_a037ddf2f08e72a0f29afdac8ef81a15a}{shader\+Manager}}
+\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries shader\+Manager}
 \end{DoxyCompactItemize}
-
-
-\label{doc-constructors}
-\Hypertarget{classForwardPipeline_doc-constructors}
-\doxysubsection{Constructor \& Destructor Documentation}
-\Hypertarget{classForwardPipeline_a48d3b1b97612fdd8859701abf7388584}\index{ForwardPipeline@{ForwardPipeline}!ForwardPipeline@{ForwardPipeline}}
-\index{ForwardPipeline@{ForwardPipeline}!ForwardPipeline@{ForwardPipeline}}
-\doxysubsubsection{\texorpdfstring{ForwardPipeline()}{ForwardPipeline()}}
-{\footnotesize\ttfamily \label{classForwardPipeline_a48d3b1b97612fdd8859701abf7388584} 
-Forward\+Pipeline::\+\+Forward\+Pipeline (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*}}]{ctx}{, }\item[{\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}}]{sm}{, }\item[{\doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \texorpdfstring{$\ast$}{*}}]{w}{, }\item[{GLuint}]{sky\+VAO}{, }\item[{GLuint}]{cubemap}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-Here is the call graph for this function:\+\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{classForwardPipeline_a48d3b1b97612fdd8859701abf7388584_cgraph}
-\end{center}
-\end{figure}
 
 
 \label{doc-func-members}
@@ -85,17 +66,10 @@ void Forward\+Pipeline::\+\+Initialize (\begin{DoxyParamCaption}{}{}\end{DoxyPar
 
 
 
-Implements \doxymbox{\hyperlink{classRenderPipeline_a99473e01757654220a768b24fa8f588f}{Render\+Pipeline}}.
+Implements \doxymbox{\hyperlink{classRenderPipeline}{Render\+Pipeline}}.
 
-Here is the call graph for this function:\+\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{classForwardPipeline_a65d30384c1f198e3882751208f17e8e2_cgraph}
-\end{center}
-\end{figure}
 
 
 The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
 \item 
-/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+rendering/\+pipeline/\+\doxymbox{\hyperlink{ForwardPipeline_8cppm}{Forward\+Pipeline.\+cppm}}\end{DoxyCompactItemize}
+Forward\+Pipeline.\+cppm\end{DoxyCompactItemize}

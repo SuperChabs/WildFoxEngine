@@ -1,13 +1,13 @@
-<map id="/home/tymur52/WildFoxEngine/src/core/Input.cppm" name="/home/tymur52/WildFoxEngine/src/core/Input.cppm">
-<area shape="rect" id="Node000001" title=" " alt="" coords="189,5,389,48"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,96,90,123"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="227,51,101,93,99,88,226,46"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="114,96,219,123"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="260,48,199,90,197,85,255,49"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="243,96,335,123"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="291,47,291,82,287,79,287,51"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="359,96,427,123"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="316,46,367,87,362,86,315,51"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="451,96,561,123"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="345,46,461,90,455,90,344,51"/>
+<map id="Input.cppm" name="Input.cppm">
+<area shape="rect" id="Node000001" title=" " alt="" coords="246,5,332,32"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,80,90,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="248,35,105,78,103,73,246,30"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="114,80,219,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="270,32,202,74,200,69,265,33"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="243,80,335,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="291,31,291,66,287,63,287,34"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="359,80,427,107"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="308,30,365,71,360,71,306,35"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="451,80,561,107"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="327,30,456,74,451,75,326,35"/>
 </map>

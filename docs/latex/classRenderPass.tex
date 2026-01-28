@@ -21,141 +21,44 @@ Collaboration diagram for Render\+Pass:\+\nopagebreak
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\doxymbox{\hyperlink{classRenderPass_af78cb299781cbb67319c5887942024d2}{Render\+Pass}} (const std::\+string \&n, \doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*}ctx, \doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}sm)
+\Hypertarget{classRenderPass_af78cb299781cbb67319c5887942024d2}\label{classRenderPass_af78cb299781cbb67319c5887942024d2} 
+{\bfseries Render\+Pass} (const std::\+string \&n, \doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*}ctx, \doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}sm)
 \item 
-virtual \doxymbox{\hyperlink{classRenderPass_a01478f3a9140caee9422d22b9ace54d8}{\texorpdfstring{$\sim$}{\string~}\+Render\+Pass}} ()=default
+\Hypertarget{classRenderPass_a445313b8aa3bea369d76ff19d467d39d}\label{classRenderPass_a445313b8aa3bea369d76ff19d467d39d} 
+virtual void {\bfseries Setup} ()
 \item 
-virtual void \doxymbox{\hyperlink{classRenderPass_a445313b8aa3bea369d76ff19d467d39d}{Setup}} ()
+\Hypertarget{classRenderPass_a85d731d498dda3f3a179abc71f1f8da6}\label{classRenderPass_a85d731d498dda3f3a179abc71f1f8da6} 
+virtual void {\bfseries Execute} (\doxymbox{\hyperlink{classCamera}{Camera}} \&camera, const glm::\+mat4 \&projection)=0
 \item 
-virtual void \doxymbox{\hyperlink{classRenderPass_a85d731d498dda3f3a179abc71f1f8da6}{Execute}} (\doxymbox{\hyperlink{classCamera}{Camera}} \&camera, const glm::\+mat4 \&projection)=0
+\Hypertarget{classRenderPass_abc9846c5fec2fb3a547e8d7f2124044b}\label{classRenderPass_abc9846c5fec2fb3a547e8d7f2124044b} 
+virtual void {\bfseries Cleanup} ()
 \item 
-virtual void \doxymbox{\hyperlink{classRenderPass_abc9846c5fec2fb3a547e8d7f2124044b}{Cleanup}} ()
+\Hypertarget{classRenderPass_a16262c95f0b903fd73f3e680133e327e}\label{classRenderPass_a16262c95f0b903fd73f3e680133e327e} 
+void {\bfseries Set\+Enabled} (bool e)
 \item 
-void \doxymbox{\hyperlink{classRenderPass_a16262c95f0b903fd73f3e680133e327e}{Set\+Enabled}} (bool e)
+\Hypertarget{classRenderPass_a21f7697652119e448e051c9f695ebd59}\label{classRenderPass_a21f7697652119e448e051c9f695ebd59} 
+bool {\bfseries Is\+Enabled} () const
 \item 
-bool \doxymbox{\hyperlink{classRenderPass_a21f7697652119e448e051c9f695ebd59}{Is\+Enabled}} () const
-\item 
-const std::\+string \& \doxymbox{\hyperlink{classRenderPass_a5acbf0cd5539eac48a277b5a0033242a}{Get\+Name}} () const
+\Hypertarget{classRenderPass_a5acbf0cd5539eac48a277b5a0033242a}\label{classRenderPass_a5acbf0cd5539eac48a277b5a0033242a} 
+const std::\+string \& {\bfseries Get\+Name} () const
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Protected Attributes}
 \begin{DoxyCompactItemize}
 \item 
-std::\+string \doxymbox{\hyperlink{classRenderPass_a798c0eec824f424db666e2ebeee8aefd}{name}}
+\Hypertarget{classRenderPass_a798c0eec824f424db666e2ebeee8aefd}\label{classRenderPass_a798c0eec824f424db666e2ebeee8aefd} 
+std::\+string {\bfseries name}
 \item 
-\doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classRenderPass_ab6201cca28590e27962af76dc7b42975}{context}}
+\Hypertarget{classRenderPass_ab6201cca28590e27962af76dc7b42975}\label{classRenderPass_ab6201cca28590e27962af76dc7b42975} 
+\doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*} {\bfseries context}
 \item 
-\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classRenderPass_af7521307ed050e36f31a6f5e89bf587b}{shader\+Manager}}
+\Hypertarget{classRenderPass_af7521307ed050e36f31a6f5e89bf587b}\label{classRenderPass_af7521307ed050e36f31a6f5e89bf587b} 
+\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries shader\+Manager}
 \item 
-bool \doxymbox{\hyperlink{classRenderPass_a1e887a5961c6da86e175c2cf24a44cfb}{enabled}} = true
+\Hypertarget{classRenderPass_a1e887a5961c6da86e175c2cf24a44cfb}\label{classRenderPass_a1e887a5961c6da86e175c2cf24a44cfb} 
+bool {\bfseries enabled} = true
 \end{DoxyCompactItemize}
-
-
-\label{doc-constructors}
-\Hypertarget{classRenderPass_doc-constructors}
-\doxysubsection{Constructor \& Destructor Documentation}
-\Hypertarget{classRenderPass_af78cb299781cbb67319c5887942024d2}\index{RenderPass@{RenderPass}!RenderPass@{RenderPass}}
-\index{RenderPass@{RenderPass}!RenderPass@{RenderPass}}
-\doxysubsubsection{\texorpdfstring{RenderPass()}{RenderPass()}}
-{\footnotesize\ttfamily \label{classRenderPass_af78cb299781cbb67319c5887942024d2} 
-Render\+Pass::\+\+Render\+Pass (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{n}{, }\item[{\doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*}}]{ctx}{, }\item[{\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}}]{sm}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-Here is the caller graph for this function:\+\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{classRenderPass_af78cb299781cbb67319c5887942024d2_icgraph}
-\end{center}
-\end{figure}
-\Hypertarget{classRenderPass_a01478f3a9140caee9422d22b9ace54d8}\index{RenderPass@{RenderPass}!````~RenderPass@{\texorpdfstring{$\sim$}{\string~}RenderPass}}
-\index{````~RenderPass@{\texorpdfstring{$\sim$}{\string~}RenderPass}!RenderPass@{RenderPass}}
-\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}RenderPass()}{\string~RenderPass()}}
-{\footnotesize\ttfamily \label{classRenderPass_a01478f3a9140caee9422d22b9ace54d8} 
-virtual Render\+Pass::\+\texorpdfstring{$\sim$}{\string~}\+Render\+Pass (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}}
-
-
-
-\label{doc-func-members}
-\Hypertarget{classRenderPass_doc-func-members}
-\doxysubsection{Member Function Documentation}
-\Hypertarget{classRenderPass_abc9846c5fec2fb3a547e8d7f2124044b}\index{RenderPass@{RenderPass}!Cleanup@{Cleanup}}
-\index{Cleanup@{Cleanup}!RenderPass@{RenderPass}}
-\doxysubsubsection{\texorpdfstring{Cleanup()}{Cleanup()}}
-{\footnotesize\ttfamily \label{classRenderPass_abc9846c5fec2fb3a547e8d7f2124044b} 
-virtual void Render\+Pass::\+\+Cleanup (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
-
-
-
-Reimplemented in \doxymbox{\hyperlink{classGeometryPass_a6cb03a54e7f557a81ff2fa9f3ca5cce1}{Geometry\+Pass}}, \doxymbox{\hyperlink{classShadowPass_a91c561d59f6f02652c263a7246436de9}{Shadow\+Pass}}, \doxymbox{\hyperlink{classSkyboxPass_a6fcad98510230f3898c4f91c25fe3e07}{Skybox\+Pass}}, and \doxymbox{\hyperlink{classUIPass_a2155062a4f1694fd09e593f3f45d4e55}{UIPass}}.
-
-\Hypertarget{classRenderPass_a85d731d498dda3f3a179abc71f1f8da6}\index{RenderPass@{RenderPass}!Execute@{Execute}}
-\index{Execute@{Execute}!RenderPass@{RenderPass}}
-\doxysubsubsection{\texorpdfstring{Execute()}{Execute()}}
-{\footnotesize\ttfamily \label{classRenderPass_a85d731d498dda3f3a179abc71f1f8da6} 
-virtual void Render\+Pass::\+\+Execute (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{classCamera}{Camera}} \&}]{camera}{, }\item[{const glm::\+mat4 \&}]{projection}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
-
-
-
-Implemented in \doxymbox{\hyperlink{classGeometryPass_ac1f9620fb9ffcce4e58df88ee31e0059}{Geometry\+Pass}}, \doxymbox{\hyperlink{classShadowPass_aaa464904fbd868c62277265e64cf951f}{Shadow\+Pass}}, \doxymbox{\hyperlink{classSkyboxPass_a44b896ed96991382938b82ad28412077}{Skybox\+Pass}}, and \doxymbox{\hyperlink{classUIPass_ac077fbc40d5e1a4137944805ef7561cf}{UIPass}}.
-
-\Hypertarget{classRenderPass_a5acbf0cd5539eac48a277b5a0033242a}\index{RenderPass@{RenderPass}!GetName@{GetName}}
-\index{GetName@{GetName}!RenderPass@{RenderPass}}
-\doxysubsubsection{\texorpdfstring{GetName()}{GetName()}}
-{\footnotesize\ttfamily \label{classRenderPass_a5acbf0cd5539eac48a277b5a0033242a} 
-const std::\+string \& Render\+Pass::\+\+Get\+Name (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
-
-\Hypertarget{classRenderPass_a21f7697652119e448e051c9f695ebd59}\index{RenderPass@{RenderPass}!IsEnabled@{IsEnabled}}
-\index{IsEnabled@{IsEnabled}!RenderPass@{RenderPass}}
-\doxysubsubsection{\texorpdfstring{IsEnabled()}{IsEnabled()}}
-{\footnotesize\ttfamily \label{classRenderPass_a21f7697652119e448e051c9f695ebd59} 
-bool Render\+Pass::\+\+Is\+Enabled (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
-
-\Hypertarget{classRenderPass_a16262c95f0b903fd73f3e680133e327e}\index{RenderPass@{RenderPass}!SetEnabled@{SetEnabled}}
-\index{SetEnabled@{SetEnabled}!RenderPass@{RenderPass}}
-\doxysubsubsection{\texorpdfstring{SetEnabled()}{SetEnabled()}}
-{\footnotesize\ttfamily \label{classRenderPass_a16262c95f0b903fd73f3e680133e327e} 
-void Render\+Pass::\+\+Set\+Enabled (\begin{DoxyParamCaption}\item[{bool}]{e}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-\Hypertarget{classRenderPass_a445313b8aa3bea369d76ff19d467d39d}\index{RenderPass@{RenderPass}!Setup@{Setup}}
-\index{Setup@{Setup}!RenderPass@{RenderPass}}
-\doxysubsubsection{\texorpdfstring{Setup()}{Setup()}}
-{\footnotesize\ttfamily \label{classRenderPass_a445313b8aa3bea369d76ff19d467d39d} 
-virtual void Render\+Pass::\+\+Setup (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
-
-
-
-Reimplemented in \doxymbox{\hyperlink{classGeometryPass_a13364c6831aa07903a97c7aea1e4542f}{Geometry\+Pass}}, \doxymbox{\hyperlink{classShadowPass_ac96ac8378a77bfea4bf3e688a66e6230}{Shadow\+Pass}}, \doxymbox{\hyperlink{classSkyboxPass_a2970ba28c225274d5962d83db0cc6d9e}{Skybox\+Pass}}, and \doxymbox{\hyperlink{classUIPass_a51f1b6f5075f264de5859dd3539889de}{UIPass}}.
-
-
-
-\label{doc-variable-members}
-\Hypertarget{classRenderPass_doc-variable-members}
-\doxysubsection{Member Data Documentation}
-\Hypertarget{classRenderPass_ab6201cca28590e27962af76dc7b42975}\index{RenderPass@{RenderPass}!context@{context}}
-\index{context@{context}!RenderPass@{RenderPass}}
-\doxysubsubsection{\texorpdfstring{context}{context}}
-{\footnotesize\ttfamily \label{classRenderPass_ab6201cca28590e27962af76dc7b42975} 
-\doxymbox{\hyperlink{classGLContext}{GLContext}}\texorpdfstring{$\ast$}{*} Render\+Pass::\+context\hspace{0.3cm}{\ttfamily [protected]}}
-
-\Hypertarget{classRenderPass_a1e887a5961c6da86e175c2cf24a44cfb}\index{RenderPass@{RenderPass}!enabled@{enabled}}
-\index{enabled@{enabled}!RenderPass@{RenderPass}}
-\doxysubsubsection{\texorpdfstring{enabled}{enabled}}
-{\footnotesize\ttfamily \label{classRenderPass_a1e887a5961c6da86e175c2cf24a44cfb} 
-bool Render\+Pass::\+enabled = true\hspace{0.3cm}{\ttfamily [protected]}}
-
-\Hypertarget{classRenderPass_a798c0eec824f424db666e2ebeee8aefd}\index{RenderPass@{RenderPass}!name@{name}}
-\index{name@{name}!RenderPass@{RenderPass}}
-\doxysubsubsection{\texorpdfstring{name}{name}}
-{\footnotesize\ttfamily \label{classRenderPass_a798c0eec824f424db666e2ebeee8aefd} 
-std::\+string Render\+Pass::\+name\hspace{0.3cm}{\ttfamily [protected]}}
-
-\Hypertarget{classRenderPass_af7521307ed050e36f31a6f5e89bf587b}\index{RenderPass@{RenderPass}!shaderManager@{shaderManager}}
-\index{shaderManager@{shaderManager}!RenderPass@{RenderPass}}
-\doxysubsubsection{\texorpdfstring{shaderManager}{shaderManager}}
-{\footnotesize\ttfamily \label{classRenderPass_af7521307ed050e36f31a6f5e89bf587b} 
-\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}}\texorpdfstring{$\ast$}{*} Render\+Pass::\+shader\+Manager\hspace{0.3cm}{\ttfamily [protected]}}
-
 
 
 The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
 \item 
-/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+rendering/\+passes/\+\doxymbox{\hyperlink{RenderPass_8cppm}{Render\+Pass.\+cppm}}\end{DoxyCompactItemize}
+Render\+Pass.\+cppm\end{DoxyCompactItemize}

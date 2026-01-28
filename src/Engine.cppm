@@ -27,6 +27,11 @@ import WFE.ECS.Components;
 import WFE.ECS.Systems;
 import WFE.Rendering.Renderer;
 
+/// @file Engine.cppm
+/// @brief Engine class
+/// @author SuperChabs
+/// @date 2026-01-28
+
 export class Engine : public Application 
 {
 private:

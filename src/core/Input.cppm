@@ -9,6 +9,11 @@ module;
 
 export module WFE.Core.Input;
 
+/// @file Input.cppm
+/// @brief 
+/// @author SuperChabs
+/// @date 2026-01-28
+
 export enum class Key
 {
     KEY_UNKNOWN         = GLFW_KEY_UNKNOWN,

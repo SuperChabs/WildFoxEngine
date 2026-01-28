@@ -21,7 +21,8 @@ Collaboration diagram for Skybox\+Pass:\+\nopagebreak
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\doxymbox{\hyperlink{classSkyboxPass_a5eccbfb66d4f93d561ddaa6f4eaac3e1}{Skybox\+Pass}} (\doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*}ctx, \doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}sm, GLuint vao, GLuint cubemap)
+\Hypertarget{classSkyboxPass_a5eccbfb66d4f93d561ddaa6f4eaac3e1}\label{classSkyboxPass_a5eccbfb66d4f93d561ddaa6f4eaac3e1} 
+{\bfseries Skybox\+Pass} (\doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*}ctx, \doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}sm, GLuint vao, GLuint cubemap)
 \item 
 void \doxymbox{\hyperlink{classSkyboxPass_a2970ba28c225274d5962d83db0cc6d9e}{Setup}} () override
 \item 
@@ -32,46 +33,26 @@ void \doxymbox{\hyperlink{classSkyboxPass_a6fcad98510230f3898c4f91c25fe3e07}{Cle
 \doxysubsection*{Public Member Functions inherited from \doxymbox{\hyperlink{classRenderPass}{Render\+Pass}}}
 \begin{DoxyCompactItemize}
 \item 
-\doxymbox{\hyperlink{classRenderPass_af78cb299781cbb67319c5887942024d2}{Render\+Pass}} (const std::\+string \&n, \doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*}ctx, \doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}sm)
+{\bfseries Render\+Pass} (const std::\+string \&n, \doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*}ctx, \doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}sm)
 \item 
-virtual \doxymbox{\hyperlink{classRenderPass_a01478f3a9140caee9422d22b9ace54d8}{\texorpdfstring{$\sim$}{\string~}\+Render\+Pass}} ()=default
+void {\bfseries Set\+Enabled} (bool e)
 \item 
-void \doxymbox{\hyperlink{classRenderPass_a16262c95f0b903fd73f3e680133e327e}{Set\+Enabled}} (bool e)
+bool {\bfseries Is\+Enabled} () const
 \item 
-bool \doxymbox{\hyperlink{classRenderPass_a21f7697652119e448e051c9f695ebd59}{Is\+Enabled}} () const
-\item 
-const std::\+string \& \doxymbox{\hyperlink{classRenderPass_a5acbf0cd5539eac48a277b5a0033242a}{Get\+Name}} () const
+const std::\+string \& {\bfseries Get\+Name} () const
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Additional Inherited Members}
 \doxysubsection*{Protected Attributes inherited from \doxymbox{\hyperlink{classRenderPass}{Render\+Pass}}}
 \begin{DoxyCompactItemize}
 \item 
-std::\+string \doxymbox{\hyperlink{classRenderPass_a798c0eec824f424db666e2ebeee8aefd}{name}}
+std::\+string {\bfseries name}
 \item 
-\doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classRenderPass_ab6201cca28590e27962af76dc7b42975}{context}}
+\doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*} {\bfseries context}
 \item 
-\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classRenderPass_af7521307ed050e36f31a6f5e89bf587b}{shader\+Manager}}
+\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries shader\+Manager}
 \item 
-bool \doxymbox{\hyperlink{classRenderPass_a1e887a5961c6da86e175c2cf24a44cfb}{enabled}} = true
+bool {\bfseries enabled} = true
 \end{DoxyCompactItemize}
-
-
-\label{doc-constructors}
-\Hypertarget{classSkyboxPass_doc-constructors}
-\doxysubsection{Constructor \& Destructor Documentation}
-\Hypertarget{classSkyboxPass_a5eccbfb66d4f93d561ddaa6f4eaac3e1}\index{SkyboxPass@{SkyboxPass}!SkyboxPass@{SkyboxPass}}
-\index{SkyboxPass@{SkyboxPass}!SkyboxPass@{SkyboxPass}}
-\doxysubsubsection{\texorpdfstring{SkyboxPass()}{SkyboxPass()}}
-{\footnotesize\ttfamily \label{classSkyboxPass_a5eccbfb66d4f93d561ddaa6f4eaac3e1} 
-Skybox\+Pass::\+\+Skybox\+Pass (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*}}]{ctx}{, }\item[{\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}}]{sm}{, }\item[{GLuint}]{vao}{, }\item[{GLuint}]{cubemap}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-Here is the call graph for this function:\+\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{classSkyboxPass_a5eccbfb66d4f93d561ddaa6f4eaac3e1_cgraph}
-\end{center}
-\end{figure}
 
 
 \label{doc-func-members}
@@ -85,15 +66,8 @@ void Skybox\+Pass::\+\+Cleanup (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaptio
 
 
 
-Reimplemented from \doxymbox{\hyperlink{classRenderPass_abc9846c5fec2fb3a547e8d7f2124044b}{Render\+Pass}}.
+Reimplemented from \doxymbox{\hyperlink{classRenderPass}{Render\+Pass}}.
 
-Here is the caller graph for this function:\+\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=343pt]{classSkyboxPass_a6fcad98510230f3898c4f91c25fe3e07_icgraph}
-\end{center}
-\end{figure}
 \Hypertarget{classSkyboxPass_a44b896ed96991382938b82ad28412077}\index{SkyboxPass@{SkyboxPass}!Execute@{Execute}}
 \index{Execute@{Execute}!SkyboxPass@{SkyboxPass}}
 \doxysubsubsection{\texorpdfstring{Execute()}{Execute()}}
@@ -102,15 +76,8 @@ void Skybox\+Pass::\+\+Execute (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperl
 
 
 
-Implements \doxymbox{\hyperlink{classRenderPass_a85d731d498dda3f3a179abc71f1f8da6}{Render\+Pass}}.
+Implements \doxymbox{\hyperlink{classRenderPass}{Render\+Pass}}.
 
-Here is the call graph for this function:\+\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{classSkyboxPass_a44b896ed96991382938b82ad28412077_cgraph}
-\end{center}
-\end{figure}
 \Hypertarget{classSkyboxPass_a2970ba28c225274d5962d83db0cc6d9e}\index{SkyboxPass@{SkyboxPass}!Setup@{Setup}}
 \index{Setup@{Setup}!SkyboxPass@{SkyboxPass}}
 \doxysubsubsection{\texorpdfstring{Setup()}{Setup()}}
@@ -119,17 +86,10 @@ void Skybox\+Pass::\+\+Setup (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}
 
 
 
-Reimplemented from \doxymbox{\hyperlink{classRenderPass_a445313b8aa3bea369d76ff19d467d39d}{Render\+Pass}}.
+Reimplemented from \doxymbox{\hyperlink{classRenderPass}{Render\+Pass}}.
 
-Here is the caller graph for this function:\+\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=333pt]{classSkyboxPass_a2970ba28c225274d5962d83db0cc6d9e_icgraph}
-\end{center}
-\end{figure}
 
 
 The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
 \item 
-/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+rendering/\+passes/\+\doxymbox{\hyperlink{SkyboxPass_8cppm}{Skybox\+Pass.\+cppm}}\end{DoxyCompactItemize}
+Skybox\+Pass.\+cppm\end{DoxyCompactItemize}

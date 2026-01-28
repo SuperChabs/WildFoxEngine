@@ -4,6 +4,11 @@ module;
 
 export module WFE.Core.Time;
 
+/// @file Time.cppm
+/// @brief Time manager
+/// @author SuperChabs
+/// @date 2026-01-28
+
 export class Time 
 {
 private:

@@ -26,9 +26,9 @@ import WFE.Resource.Model.ModelManager;
 
 import WFE.UI.ImGuiManager;
 
-/// @file Application.hpp
+/// @file Application.cppm
 /// @brief Main application class for the WildFoxEngine
-/// @author 0x00
+/// @author SuperChabs
 /// @date 2026-01-28
 
 /**
@@ -199,17 +199,7 @@ protected:
     }
 
     virtual void OnInitialize() {}
-
-    /**
-     * @brief Updates the application state
-     * @param deltaTime Time elapsed since the last frame in seconds
-     */
     virtual void OnUpdate(float deltaTime) {}
-
-    /**
-     * @brief Renders the scene
-     * @note Called every frame after OnUpdate()
-     */
     virtual void OnRender() {}
     virtual void OnShutdown() {}
 
@@ -252,6 +242,10 @@ public:
     Application(Application&&) = delete;
     Application& operator=(Application&&) = delete;    
     
+    /**
+     * @brief main initializer
+     * Initialize all systems required for base working of engine
+     */
     bool Initialize()
     {
         if (!window->Initialize())
@@ -323,6 +317,9 @@ public:
         }
     }
 
+    /**
+     * @brief well, it do what in method name stand
+     */
     void Shutdown()
     {
         OnShutdown();
@@ -347,6 +344,8 @@ public:
         isRunning = false; 
     }
     
+    /// \name Getters
+    /// @{
     Window* GetWindow() const { return window.get(); }
     Input* GetInput() const { return input.get(); }
     Time* GetTime() const { return time.get(); }
@@ -358,4 +357,5 @@ public:
     ECSWorld* GetECSWorld() const { return ecsWorld.get(); }
     ShaderManager* GetShaderManager() const { return shaderManager.get(); }
     ModelManager* GetModelManager() const { return modelManager.get(); }
+    /// @}
 };

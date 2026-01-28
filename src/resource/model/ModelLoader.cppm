@@ -20,6 +20,10 @@ import WFE.Scene.Mesh;
 import WFE.Rendering.MeshData;
 import WFE.Core.Logger;
 
+/// @file ModelLoader.cppm
+/// @brief Models mesh loader
+/// @author SuperChabs
+/// @date 2026-01-28
 
 void ProcessNode(aiNode* node, const aiScene* scene, Model* model, const std::string& directory);
 Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene, const std::string& directory);
@@ -27,6 +31,9 @@ std::vector<Texture> LoadMaterialTextures(aiMaterial* mat, aiTextureType type,
                                           const std::string& typeName, const std::string& directory);
 unsigned int TextureFromFile(const char* path, const std::string& directory);
 
+/**
+ * @brief Model loader function
+ */
 export Model* LoadModelFromFile(const std::string& path) 
 {
     Assimp::Importer importer;
