@@ -1,0 +1,9 @@
+<map id="Application::GetCamera" name="Application::GetCamera">
+<area shape="rect" id="Node000001" title=" " alt="" coords="188,56,348,83"/>
+<area shape="rect" id="Node000002" href="$classEngine.html#ae482abae3a0c90ef02350a1d0a414db0" title=" " alt="" coords="5,5,140,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,53,127,35,127,30,201,50"/>
+<area shape="rect" id="Node000003" href="$classEngine.html#ab2cc692b49470b1554661eb75bf4d688" title="Renders the scene." alt="" coords="8,56,137,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="169,70,138,72,137,67,174,69"/>
+<area shape="rect" id="Node000004" href="$classEngine.html#a08ae57a21e3da54edaa155dac5c874fe" title=" " alt="" coords="10,107,135,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="201,87,127,109,126,103,196,88"/>
+</map>

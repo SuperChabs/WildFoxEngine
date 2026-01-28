@@ -1,0 +1,20 @@
+<map id="SceneSerializer::LoadScene" name="SceneSerializer::LoadScene">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,97,191,124"/>
+<area shape="rect" id="Node000002" href="$classMaterialManager.html#a219ad1c0eea9b854444d8f4caa05a16d" title=" " alt="" coords="239,5,434,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,94,261,52,257,56,140,99"/>
+<area shape="rect" id="Node000003" href="$classLogger.html#ab72dd0825c1a37f2289da714562a722f" title=" " alt="" coords="502,72,591,99"/>
+<area shape="poly" id="edge10_Node000001_Node000003" title=" " alt="" coords="191,103,488,86,485,91,192,108"/>
+<area shape="rect" id="Node000004" href="$classPrimitivesFactory.html#a3fcaa913d9efeefde30ce4894db0f261" title=" " alt="" coords="271,197,402,240"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="130,122,276,189,271,192,129,127"/>
+<area shape="rect" id="Node000008" href="$classMaterialManager.html#a236d52c0ca0db7c29bba1014b75c2a17" title=" " alt="" coords="240,123,432,149"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="190,118,227,123,222,125,192,123"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="415,46,490,68,485,70,415,51"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="296,195,295,187,301,178,315,173,336,171,359,173,374,182,369,182,358,178,336,176,317,178,305,183,300,189,301,198"/>
+<area shape="rect" id="Node000005" href="$classPrimitiveGenerator.html#a404d20686e5906bc174e40d88a181c99" title=" " alt="" coords="482,131,611,173"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="401,195,464,178,470,176,403,200"/>
+<area shape="rect" id="Node000006" href="$classPrimitiveGenerator.html#a5b99f136cd5c53d0da617440d57bdfa7" title=" " alt="" coords="482,197,611,240"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="402,216,469,218,464,219,402,221"/>
+<area shape="rect" id="Node000007" href="$classPrimitiveGenerator.html#a874cd5d92898392b54778004662674e5" title=" " alt="" coords="482,264,611,307"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="403,237,470,260,464,260,402,242"/>
+<area shape="poly" id="edge9_Node000008_Node000003" title=" " alt="" coords="394,119,489,99,484,101,396,125"/>
+</map>

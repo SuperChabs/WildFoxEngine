@@ -1,0 +1,11 @@
+<map id="MaterialManager::LoadMaterialConfigs" name="MaterialManager::LoadMaterialConfigs">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,64,205,107"/>
+<area shape="rect" id="Node000002" href="$classMaterialManager.html#a219ad1c0eea9b854444d8f4caa05a16d" title=" " alt="" coords="259,5,454,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,61,250,51,245,53,200,66"/>
+<area shape="rect" id="Node000003" href="$classLogger.html#ab72dd0825c1a37f2289da714562a722f" title=" " alt="" coords="508,72,597,99"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="205,83,493,83,491,88,205,88"/>
+<area shape="rect" id="Node000004" href="$classMaterialManager.html#a5d9b8942914bf33c0de610ceea14fe2c" title=" " alt="" coords="253,123,460,165"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="199,105,250,118,245,119,199,110"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="430,46,496,68,491,68,430,51"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="429,120,491,103,496,102,430,125"/>
+</map>

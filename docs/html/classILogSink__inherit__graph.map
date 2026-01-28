@@ -1,0 +1,7 @@
+<map id="ILogSink" name="ILogSink">
+<area shape="rect" id="Node000001" title=" " alt="" coords="82,5,154,32"/>
+<area shape="rect" id="Node000002" href="$classConsoleLogger.html" title=" " alt="" coords="5,80,114,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,44,71,81,68,78,96,45"/>
+<area shape="rect" id="Node000003" href="$classFileLogger.html" title=" " alt="" coords="138,80,219,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="139,42,170,80,165,79,137,46"/>
+</map>

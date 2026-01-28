@@ -1,0 +1,158 @@
+\doxysection{Logger.\+cppm}
+\hypertarget{Logger_8cppm_source}{}\label{Logger_8cppm_source}\index{/home/tymur52/WildFoxEngine/src/core/logging/Logger.cppm@{/home/tymur52/WildFoxEngine/src/core/logging/Logger.cppm}}
+\doxymbox{\hyperlink{Logger_8cppm}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{keyword}{module};}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <chrono>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <cstring>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <mutex>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <source\_location>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{export}\ \textcolor{keyword}{module}\ \doxymbox{\hyperlink{module__WFE_8Core_8Logger}{WFE.Core.Logger}};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{export}\ \textcolor{keyword}{enum\ class}\ \doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9}{LogLevel}}}
+\DoxyCodeLine{00012\ \{}
+\DoxyCodeLine{00013\ \ \ \ \ \doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}{INFO}},}
+\DoxyCodeLine{00014\ \ \ \ \ \doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a059e9861e0400dfbe05c98a841f3f96b}{WARNING}},}
+\DoxyCodeLine{00015\ \ \ \ \ \doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5}{ERROR}},}
+\DoxyCodeLine{00016\ \ \ \ \ \doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9adc30ec20708ef7b0f641ef78b7880a15}{DEBUG}},}
+\DoxyCodeLine{00017\ \ \ \ \ \doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9aa84cc046d48610b05c21fd3670d0c829}{INPUT}},}
+\DoxyCodeLine{00018\ \ \ \ \ \doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a99cd1c61610c76a57cb8d10d6df6b870}{CRITICAL}}\ \textcolor{comment}{//\ ,}}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{comment}{//\ TRACE}}
+\DoxyCodeLine{00020\ \};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{export}\ \textcolor{keyword}{enum\ class}\ \doxymbox{\hyperlink{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0}{LogCategory}}\ }
+\DoxyCodeLine{00023\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \doxymbox{\hyperlink{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0ac5d5df976f196200d1900b2b51827dbb}{CORE}},}
+\DoxyCodeLine{00025\ \ \ \ \ \doxymbox{\hyperlink{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0a17e35167ae5f5c1f995afa40d745addc}{RENDERING}},}
+\DoxyCodeLine{00026\ \ \ \ \ \doxymbox{\hyperlink{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0a71ff71526d15db86eb50fcac245d183b}{UI}},}
+\DoxyCodeLine{00027\ \ \ \ \ \doxymbox{\hyperlink{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0a03570470bad94692ce93e32700d2e1cb}{OTHER}}}
+\DoxyCodeLine{00028\ \};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{keyword}{export}\ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structLogData}{LogData}}}
+\DoxyCodeLine{00031\ \{}
+\DoxyCodeLine{00032\ \ \ \ \ \doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9}{LogLevel}}\ \doxymbox{\hyperlink{structLogData_a739461aa39440228a1dc8b81e9935b68}{lvl}};}
+\DoxyCodeLine{00033\ \ \ \ \ \doxymbox{\hyperlink{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0}{LogCategory}}\ \doxymbox{\hyperlink{structLogData_aa10f4a2864219c47874ad4b8820e5fab}{cat}};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ std::string\ \doxymbox{\hyperlink{structLogData_a77dc195482614ffe1cdcb7071789613c}{m}};}
+\DoxyCodeLine{00036\ \ \ \ \ std::string\ \doxymbox{\hyperlink{structLogData_a0070ac0b1d218c7f775ab2cb4d24f482}{f}};}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{structLogData_a5bf60e1236e4df603afffbd1f076b7a5}{line}};}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{structLogData_af1886aed203667508f586d1320df79f0}{showOrigin}};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ std::chrono::system\_clock::time\_point\ \doxymbox{\hyperlink{structLogData_ad00b6f799136aba6e96d05f56713c55a}{timestamp}};}
+\DoxyCodeLine{00041\ \};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{keyword}{export}\ \textcolor{keyword}{class\ }\doxymbox{\hyperlink{classILogSink}{ILogSink}}}
+\DoxyCodeLine{00044\ \{}
+\DoxyCodeLine{00045\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{virtual}\ \doxymbox{\hyperlink{classILogSink_a12c40041639a7eaacca99c124d53d3d4}{\string~ILogSink}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{classILogSink_a74fe2f7f850e2320134c14b95c57f342}{write}}(\textcolor{keyword}{const}\ \doxymbox{\hyperlink{structLogData}{LogData}}\&\ data)\ =\ 0;}
+\DoxyCodeLine{00048\ \};}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \textcolor{keyword}{export}\ \textcolor{keyword}{class\ }\doxymbox{\hyperlink{classLogger}{Logger}}}
+\DoxyCodeLine{00051\ \{}
+\DoxyCodeLine{00052\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{classLogger_a2fc0d287c73776222f2e4cad6cf5d1f4}{AddSink}}(\doxymbox{\hyperlink{classILogSink}{ILogSink}}*\ sink)}
+\DoxyCodeLine{00054\ \ \ \ \ \{}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ std::lock\_guard<std::mutex>\ lock(logMutex());}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ sinks().push\_back(sink);}
+\DoxyCodeLine{00058\ \ \ \ \ \}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{classLogger_a2bce3c7f19d1b4b7ddff5ec605416282}{RemoveSink}}(\doxymbox{\hyperlink{classILogSink}{ILogSink}}*\ sink)}
+\DoxyCodeLine{00061\ \ \ \ \ \{}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ std::lock\_guard<std::mutex>\ lock(logMutex());}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ s\ =\ sinks();}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ s.erase(std::remove(s.begin(),\ s.end(),\ sink),\ s.end());}
+\DoxyCodeLine{00065\ \ \ \ \ \}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{classLogger_ab3d481570888cec7fc44a50119ac7591}{ClearSinks}}()}
+\DoxyCodeLine{00068\ \ \ \ \ \{}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ std::lock\_guard<std::mutex>\ lock(logMutex());}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ sinks().clear();}
+\DoxyCodeLine{00071\ \ \ \ \ \}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{classLogger_ab72dd0825c1a37f2289da714562a722f}{Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9}{LogLevel}}\ level,\ \textcolor{keyword}{const}\ std::string\&\ message)}
+\DoxyCodeLine{00074\ \ \ \ \ \{}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ std::lock\_guard<std::mutex>\ lock(logMutex());}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{structLogData}{LogData}}\ data\{}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ level,\ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0a03570470bad94692ce93e32700d2e1cb}{LogCategory::OTHER}},\ }
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ message,\ }
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}},\ }
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ 0,\ }
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{false},\ }
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ std::chrono::system\_clock::now()}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}*\ sink\ :\ sinks())}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (sink)}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sink-\/>write(data);}
+\DoxyCodeLine{00090\ \ \ \ \ \}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{classLogger_a240797e6f67ebc79ae94959bb394c544}{Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9}{LogLevel}}\ level,\ \textcolor{keyword}{const}\ std::string\&\ message,\ \textcolor{keywordtype}{bool}\ showOrigin,\ \textcolor{keyword}{const}\ std::source\_location\&\ loc\ =\ std::source\_location::current())}
+\DoxyCodeLine{00094\ \ \ \ \ \{}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ std::lock\_guard<std::mutex>\ lock(logMutex());}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{structLogData}{LogData}}\ data\{}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ level,}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0a03570470bad94692ce93e32700d2e1cb}{LogCategory::OTHER}},}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ message,}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ showOrigin\ ?\ stripProjectRoot(loc.file\_name())\ :\ \textcolor{stringliteral}{"{}"{}},}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ showOrigin\ ?\ int(loc.line())\ :\ 0,}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ showOrigin,}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ std::chrono::system\_clock::now()}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}*\ sink\ :\ sinks())}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (sink)}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sink-\/>write(data);}
+\DoxyCodeLine{00110\ \ \ \ \ \}}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{classLogger_a85072ef3035da8dd857a870f417cd6d8}{Log}}(\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9}{LogLevel}}\ level,\ \doxymbox{\hyperlink{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0}{LogCategory}}\ cat,\ \textcolor{keyword}{const}\ std::string\&\ message,\ \textcolor{keywordtype}{bool}\ showOrigin\ =\ \textcolor{keyword}{false})}
+\DoxyCodeLine{00113\ \ \ \ \ \{}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ std::lock\_guard<std::mutex>\ lock(logMutex());}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{structLogData}{LogData}}\ data\{}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ level,\ }
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ cat,\ }
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ message,\ }
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ showOrigin\ ?\ \_\_FILE\_\_\ :\ \textcolor{stringliteral}{"{}"{}},\ }
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ showOrigin\ ?\ \_\_LINE\_\_\ :\ 0,\ }
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ showOrigin,\ }
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ std::chrono::system\_clock::now()}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}*\ sink\ :\ sinks())}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (sink)}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sink-\/>write(data);}
+\DoxyCodeLine{00129\ \ \ \ \ \}}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ stripProjectRoot(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file)}
+\DoxyCodeLine{00134\ \ \ \ \ \{}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ ROOT\ =\ \textcolor{stringliteral}{"{}WFE/"{}};\ }
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ pos\ =\ std::strstr(file,\ ROOT);}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ pos\ ?\ pos\ :\ file;}
+\DoxyCodeLine{00138\ \ \ \ \ \}}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keyword}{static}\ std::vector<ILogSink*>\&\ sinks()\ }
+\DoxyCodeLine{00141\ \ \ \ \ \{}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ std::vector<ILogSink*>\ instance;}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ instance;}
+\DoxyCodeLine{00144\ \ \ \ \ \}}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keyword}{static}\ std::mutex\&\ logMutex()\ }
+\DoxyCodeLine{00147\ \ \ \ \ \{}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ std::mutex\ instance;}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ instance;}
+\DoxyCodeLine{00150\ \ \ \ \ \}}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \};}
+
+\end{DoxyCode}

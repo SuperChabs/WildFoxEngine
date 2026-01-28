@@ -1,0 +1,130 @@
+\doxysection{/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+core/\+logging/\+\+Logger.cppm File Reference}
+\hypertarget{Logger_8cppm}{}\label{Logger_8cppm}\index{/home/tymur52/WildFoxEngine/src/core/logging/Logger.cppm@{/home/tymur52/WildFoxEngine/src/core/logging/Logger.cppm}}
+{\ttfamily \+\#include $<$string$>$}\newline
+{\ttfamily \+\#include $<$chrono$>$}\newline
+{\ttfamily \+\#include $<$cstring$>$}\newline
+{\ttfamily \+\#include $<$mutex$>$}\newline
+{\ttfamily \+\#include $<$source\+\_\+location$>$}\newline
+Include dependency graph for Logger.\+cppm:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{Logger_8cppm__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=230pt]{Logger_8cppm__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \doxymbox{\hyperlink{structLogData}{Log\+Data}}
+\item 
+class \doxymbox{\hyperlink{classILogSink}{ILog\+Sink}}
+\item 
+class \doxymbox{\hyperlink{classLogger}{Logger}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum class \doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9}{Log\+Level}} \{ \newline
+\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}{INFO}}
+, \doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a059e9861e0400dfbe05c98a841f3f96b}{WARNING}}
+, \doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5}{ERROR}}
+, \doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9adc30ec20708ef7b0f641ef78b7880a15}{DEBUG}}
+, \newline
+\doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9aa84cc046d48610b05c21fd3670d0c829}{INPUT}}
+, \doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a99cd1c61610c76a57cb8d10d6df6b870}{CRITICAL}}
+ \}
+\item 
+enum class \doxymbox{\hyperlink{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0}{Log\+Category}} \{ \doxymbox{\hyperlink{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0ac5d5df976f196200d1900b2b51827dbb}{CORE}}
+, \doxymbox{\hyperlink{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0a17e35167ae5f5c1f995afa40d745addc}{RENDERING}}
+, \doxymbox{\hyperlink{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0a71ff71526d15db86eb50fcac245d183b}{UI}}
+, \doxymbox{\hyperlink{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0a03570470bad94692ce93e32700d2e1cb}{OTHER}}
+ \}
+\end{DoxyCompactItemize}
+
+
+\label{doc-enum-members}
+\Hypertarget{Logger_8cppm_doc-enum-members}
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0}\index{Logger.cppm@{Logger.cppm}!LogCategory@{LogCategory}}
+\index{LogCategory@{LogCategory}!Logger.cppm@{Logger.cppm}}
+\doxysubsubsection{\texorpdfstring{LogCategory}{LogCategory}}
+{\footnotesize\ttfamily \label{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0} 
+enum class \doxymbox{\hyperlink{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0}{Log\+Category}}\hspace{0.3cm}{\ttfamily [export]}, {\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CORE@{CORE}!Logger.cppm@{Logger.cppm}}
+\index{Logger.cppm@{Logger.cppm}!CORE@{CORE}}
+}\Hypertarget{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0ac5d5df976f196200d1900b2b51827dbb}\label{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0ac5d5df976f196200d1900b2b51827dbb} 
+CORE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{RENDERING@{RENDERING}!Logger.cppm@{Logger.cppm}}
+\index{Logger.cppm@{Logger.cppm}!RENDERING@{RENDERING}}
+}\Hypertarget{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0a17e35167ae5f5c1f995afa40d745addc}\label{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0a17e35167ae5f5c1f995afa40d745addc} 
+RENDERING&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UI@{UI}!Logger.cppm@{Logger.cppm}}
+\index{Logger.cppm@{Logger.cppm}!UI@{UI}}
+}\Hypertarget{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0a71ff71526d15db86eb50fcac245d183b}\label{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0a71ff71526d15db86eb50fcac245d183b} 
+UI&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{OTHER@{OTHER}!Logger.cppm@{Logger.cppm}}
+\index{Logger.cppm@{Logger.cppm}!OTHER@{OTHER}}
+}\Hypertarget{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0a03570470bad94692ce93e32700d2e1cb}\label{Logger_8cppm_a5201f40e7a4230fd4f20e9f66d80bbd0a03570470bad94692ce93e32700d2e1cb} 
+OTHER&\\
+\hline
+
+\end{DoxyEnumFields}
+\Hypertarget{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9}\index{Logger.cppm@{Logger.cppm}!LogLevel@{LogLevel}}
+\index{LogLevel@{LogLevel}!Logger.cppm@{Logger.cppm}}
+\doxysubsubsection{\texorpdfstring{LogLevel}{LogLevel}}
+{\footnotesize\ttfamily \label{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9} 
+enum class \doxymbox{\hyperlink{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9}{Log\+Level}}\hspace{0.3cm}{\ttfamily [export]}, {\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{INFO@{INFO}!Logger.cppm@{Logger.cppm}}
+\index{Logger.cppm@{Logger.cppm}!INFO@{INFO}}
+}\Hypertarget{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3}\label{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3} 
+INFO&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WARNING@{WARNING}!Logger.cppm@{Logger.cppm}}
+\index{Logger.cppm@{Logger.cppm}!WARNING@{WARNING}}
+}\Hypertarget{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a059e9861e0400dfbe05c98a841f3f96b}\label{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a059e9861e0400dfbe05c98a841f3f96b} 
+WARNING&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ERROR@{ERROR}!Logger.cppm@{Logger.cppm}}
+\index{Logger.cppm@{Logger.cppm}!ERROR@{ERROR}}
+}\Hypertarget{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5}\label{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5} 
+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{DEBUG@{DEBUG}!Logger.cppm@{Logger.cppm}}
+\index{Logger.cppm@{Logger.cppm}!DEBUG@{DEBUG}}
+}\Hypertarget{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9adc30ec20708ef7b0f641ef78b7880a15}\label{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9adc30ec20708ef7b0f641ef78b7880a15} 
+DEBUG&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{INPUT@{INPUT}!Logger.cppm@{Logger.cppm}}
+\index{Logger.cppm@{Logger.cppm}!INPUT@{INPUT}}
+}\Hypertarget{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9aa84cc046d48610b05c21fd3670d0c829}\label{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9aa84cc046d48610b05c21fd3670d0c829} 
+INPUT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CRITICAL@{CRITICAL}!Logger.cppm@{Logger.cppm}}
+\index{Logger.cppm@{Logger.cppm}!CRITICAL@{CRITICAL}}
+}\Hypertarget{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a99cd1c61610c76a57cb8d10d6df6b870}\label{Logger_8cppm_aca1fd1d8935433e6ba2e3918214e07f9a99cd1c61610c76a57cb8d10d6df6b870} 
+CRITICAL&\\
+\hline
+
+\end{DoxyEnumFields}

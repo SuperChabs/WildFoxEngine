@@ -1,0 +1,7 @@
+<map id="TransformPanel::Render" name="TransformPanel::Render">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,169,57"/>
+<area shape="rect" id="Node000002" href="$classECSWorld.html#acfade1daca793fe5aa8d0ffa407ae88f" title=" " alt="" coords="218,5,396,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,32,205,30,200,31,169,37"/>
+<area shape="rect" id="Node000003" href="$classECSWorld.html#aab445a0a81e5df39c6f5c2329547f333" title=" " alt="" coords="217,56,398,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="169,51,204,57,199,57,169,56"/>
+</map>

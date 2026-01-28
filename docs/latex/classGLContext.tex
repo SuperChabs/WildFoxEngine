@@ -1,0 +1,217 @@
+\doxysection{GLContext Class Reference}
+\hypertarget{classGLContext}{}\label{classGLContext}\index{GLContext@{GLContext}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{classGLContext_ae1fc10198ed1061c6a8e0f23e0e1c33d}{GLContext}} ()=default
+\item 
+void \doxymbox{\hyperlink{classGLContext_aba374c75e534c23d3cd7a3016fa683f1}{Bind\+VAO}} (GLuint vao)
+\item 
+void \doxymbox{\hyperlink{classGLContext_a6db4ecb10a6f94299ab1068b1129bef3}{Unbind\+VAO}} ()
+\item 
+void \doxymbox{\hyperlink{classGLContext_aa60b0594a052c24626dd6f7c002b8a5c}{Bind\+VBO}} (GLuint vbo)
+\item 
+void \doxymbox{\hyperlink{classGLContext_a8da2f7731aedece36e80ec9aa099a0fc}{Bind\+EBO}} (GLuint ebo)
+\item 
+void \doxymbox{\hyperlink{classGLContext_a6b79a5b714c8e92c65fb0f7ccb8bcee4}{Bind\+FBO}} (GLuint fbo)
+\item 
+void \doxymbox{\hyperlink{classGLContext_ac2355c7b6c06fcd647cf901edfea3133}{Bind\+Texture2D}} (GLuint texture, GLuint slot=0)
+\item 
+void \doxymbox{\hyperlink{classGLContext_a6279e5c309226ca14502eaf8eeafa2c0}{Use\+Shader}} (GLuint shader)
+\item 
+void \doxymbox{\hyperlink{classGLContext_a679dd59f8ffbb5025f2fdae1eccc9b5e}{Set\+Depth\+Test}} (bool enable)
+\item 
+void \doxymbox{\hyperlink{classGLContext_a9794bd6e4d558bcc9fc5d1256afa5054}{Set\+Depth\+Func}} (GLenum func)
+\item 
+void \doxymbox{\hyperlink{classGLContext_af6366da40f448159c0040f63c1b66d74}{Set\+Blend}} (bool enable)
+\item 
+void \doxymbox{\hyperlink{classGLContext_a05051a9bd0488019f70adcc6877d0776}{Set\+Cull\+Face}} (bool enable)
+\item 
+void \doxymbox{\hyperlink{classGLContext_ad36dcd0ab3e22c8830a22bda8164b126}{Set\+Cull\+Mode}} (GLenum mode)
+\item 
+void \doxymbox{\hyperlink{classGLContext_a676721c81dcf2f9d2765a60fb0673fb8}{Set\+Viewport}} (int x, int y, int width, int height)
+\item 
+void \doxymbox{\hyperlink{classGLContext_a6f53437b150e756a90d3ddd2af6762a5}{Draw\+Arrays}} (GLenum mode, GLint first, GLsizei count)
+\item 
+void \doxymbox{\hyperlink{classGLContext_a2c3a12077aded43cd7e6a980c11a781d}{Draw\+Elements}} (GLenum mode, GLsizei count, GLenum type, const void \texorpdfstring{$\ast$}{*}indices)
+\item 
+void \doxymbox{\hyperlink{classGLContext_a53f2e54699ee944cfadbd821593e29b0}{Clear}} (GLbitfield mask)
+\item 
+void \doxymbox{\hyperlink{classGLContext_a1c4812b67a7b672b4e1c1567338ddb78}{Clear\+Color}} (float r, float g, float b, float a)
+\item 
+const Stats \& \doxymbox{\hyperlink{classGLContext_a3287410e5bf35f0c7336518518fc29d7}{Get\+Stats}} () const
+\item 
+void \doxymbox{\hyperlink{classGLContext_af012edae1b2c7adada2eafb65927d2f9}{Reset\+Stats}} ()
+\item 
+const State \& \doxymbox{\hyperlink{classGLContext_a3ed8cc540363a85a0eba654a08e188de}{Get\+State}} () const
+\item 
+void \doxymbox{\hyperlink{classGLContext_af2702470c70c2127ec25f03abcbf9148}{Log\+Stats}} () const
+\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{classGLContext_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classGLContext_ae1fc10198ed1061c6a8e0f23e0e1c33d}\index{GLContext@{GLContext}!GLContext@{GLContext}}
+\index{GLContext@{GLContext}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{GLContext()}{GLContext()}}
+{\footnotesize\ttfamily \label{classGLContext_ae1fc10198ed1061c6a8e0f23e0e1c33d} 
+GLContext::\+\+GLContext (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+\label{doc-func-members}
+\Hypertarget{classGLContext_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classGLContext_a8da2f7731aedece36e80ec9aa099a0fc}\index{GLContext@{GLContext}!BindEBO@{BindEBO}}
+\index{BindEBO@{BindEBO}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{BindEBO()}{BindEBO()}}
+{\footnotesize\ttfamily \label{classGLContext_a8da2f7731aedece36e80ec9aa099a0fc} 
+void GLContext::\+\+Bind\+EBO (\begin{DoxyParamCaption}\item[{GLuint}]{ebo}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classGLContext_a6b79a5b714c8e92c65fb0f7ccb8bcee4}\index{GLContext@{GLContext}!BindFBO@{BindFBO}}
+\index{BindFBO@{BindFBO}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{BindFBO()}{BindFBO()}}
+{\footnotesize\ttfamily \label{classGLContext_a6b79a5b714c8e92c65fb0f7ccb8bcee4} 
+void GLContext::\+\+Bind\+FBO (\begin{DoxyParamCaption}\item[{GLuint}]{fbo}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classGLContext_ac2355c7b6c06fcd647cf901edfea3133}\index{GLContext@{GLContext}!BindTexture2D@{BindTexture2D}}
+\index{BindTexture2D@{BindTexture2D}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{BindTexture2D()}{BindTexture2D()}}
+{\footnotesize\ttfamily \label{classGLContext_ac2355c7b6c06fcd647cf901edfea3133} 
+void GLContext::\+\+Bind\+Texture2D (\begin{DoxyParamCaption}\item[{GLuint}]{texture}{, }\item[{GLuint}]{slot}{ = {\ttfamily 0}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classGLContext_aba374c75e534c23d3cd7a3016fa683f1}\index{GLContext@{GLContext}!BindVAO@{BindVAO}}
+\index{BindVAO@{BindVAO}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{BindVAO()}{BindVAO()}}
+{\footnotesize\ttfamily \label{classGLContext_aba374c75e534c23d3cd7a3016fa683f1} 
+void GLContext::\+\+Bind\+VAO (\begin{DoxyParamCaption}\item[{GLuint}]{vao}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=344pt]{classGLContext_aba374c75e534c23d3cd7a3016fa683f1_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classGLContext_aa60b0594a052c24626dd6f7c002b8a5c}\index{GLContext@{GLContext}!BindVBO@{BindVBO}}
+\index{BindVBO@{BindVBO}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{BindVBO()}{BindVBO()}}
+{\footnotesize\ttfamily \label{classGLContext_aa60b0594a052c24626dd6f7c002b8a5c} 
+void GLContext::\+\+Bind\+VBO (\begin{DoxyParamCaption}\item[{GLuint}]{vbo}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classGLContext_a53f2e54699ee944cfadbd821593e29b0}\index{GLContext@{GLContext}!Clear@{Clear}}
+\index{Clear@{Clear}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{Clear()}{Clear()}}
+{\footnotesize\ttfamily \label{classGLContext_a53f2e54699ee944cfadbd821593e29b0} 
+void GLContext::\+\+Clear (\begin{DoxyParamCaption}\item[{GLbitfield}]{mask}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classGLContext_a1c4812b67a7b672b4e1c1567338ddb78}\index{GLContext@{GLContext}!ClearColor@{ClearColor}}
+\index{ClearColor@{ClearColor}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{ClearColor()}{ClearColor()}}
+{\footnotesize\ttfamily \label{classGLContext_a1c4812b67a7b672b4e1c1567338ddb78} 
+void GLContext::\+\+Clear\+Color (\begin{DoxyParamCaption}\item[{float}]{r}{, }\item[{float}]{g}{, }\item[{float}]{b}{, }\item[{float}]{a}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classGLContext_a6f53437b150e756a90d3ddd2af6762a5}\index{GLContext@{GLContext}!DrawArrays@{DrawArrays}}
+\index{DrawArrays@{DrawArrays}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{DrawArrays()}{DrawArrays()}}
+{\footnotesize\ttfamily \label{classGLContext_a6f53437b150e756a90d3ddd2af6762a5} 
+void GLContext::\+\+Draw\+Arrays (\begin{DoxyParamCaption}\item[{GLenum}]{mode}{, }\item[{GLint}]{first}{, }\item[{GLsizei}]{count}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classGLContext_a2c3a12077aded43cd7e6a980c11a781d}\index{GLContext@{GLContext}!DrawElements@{DrawElements}}
+\index{DrawElements@{DrawElements}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{DrawElements()}{DrawElements()}}
+{\footnotesize\ttfamily \label{classGLContext_a2c3a12077aded43cd7e6a980c11a781d} 
+void GLContext::\+\+Draw\+Elements (\begin{DoxyParamCaption}\item[{GLenum}]{mode}{, }\item[{GLsizei}]{count}{, }\item[{GLenum}]{type}{, }\item[{const void \texorpdfstring{$\ast$}{*}}]{indices}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classGLContext_a3ed8cc540363a85a0eba654a08e188de}\index{GLContext@{GLContext}!GetState@{GetState}}
+\index{GetState@{GetState}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{GetState()}{GetState()}}
+{\footnotesize\ttfamily \label{classGLContext_a3ed8cc540363a85a0eba654a08e188de} 
+const State \& GLContext::\+\+Get\+State (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classGLContext_a3287410e5bf35f0c7336518518fc29d7}\index{GLContext@{GLContext}!GetStats@{GetStats}}
+\index{GetStats@{GetStats}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{GetStats()}{GetStats()}}
+{\footnotesize\ttfamily \label{classGLContext_a3287410e5bf35f0c7336518518fc29d7} 
+const Stats \& GLContext::\+\+Get\+Stats (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classGLContext_af2702470c70c2127ec25f03abcbf9148}\index{GLContext@{GLContext}!LogStats@{LogStats}}
+\index{LogStats@{LogStats}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{LogStats()}{LogStats()}}
+{\footnotesize\ttfamily \label{classGLContext_af2702470c70c2127ec25f03abcbf9148} 
+void GLContext::\+\+Log\+Stats (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=291pt]{classGLContext_af2702470c70c2127ec25f03abcbf9148_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classGLContext_af012edae1b2c7adada2eafb65927d2f9}\index{GLContext@{GLContext}!ResetStats@{ResetStats}}
+\index{ResetStats@{ResetStats}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{ResetStats()}{ResetStats()}}
+{\footnotesize\ttfamily \label{classGLContext_af012edae1b2c7adada2eafb65927d2f9} 
+void GLContext::\+\+Reset\+Stats (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classGLContext_af6366da40f448159c0040f63c1b66d74}\index{GLContext@{GLContext}!SetBlend@{SetBlend}}
+\index{SetBlend@{SetBlend}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{SetBlend()}{SetBlend()}}
+{\footnotesize\ttfamily \label{classGLContext_af6366da40f448159c0040f63c1b66d74} 
+void GLContext::\+\+Set\+Blend (\begin{DoxyParamCaption}\item[{bool}]{enable}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classGLContext_a05051a9bd0488019f70adcc6877d0776}\index{GLContext@{GLContext}!SetCullFace@{SetCullFace}}
+\index{SetCullFace@{SetCullFace}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{SetCullFace()}{SetCullFace()}}
+{\footnotesize\ttfamily \label{classGLContext_a05051a9bd0488019f70adcc6877d0776} 
+void GLContext::\+\+Set\+Cull\+Face (\begin{DoxyParamCaption}\item[{bool}]{enable}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classGLContext_ad36dcd0ab3e22c8830a22bda8164b126}\index{GLContext@{GLContext}!SetCullMode@{SetCullMode}}
+\index{SetCullMode@{SetCullMode}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{SetCullMode()}{SetCullMode()}}
+{\footnotesize\ttfamily \label{classGLContext_ad36dcd0ab3e22c8830a22bda8164b126} 
+void GLContext::\+\+Set\+Cull\+Mode (\begin{DoxyParamCaption}\item[{GLenum}]{mode}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classGLContext_a9794bd6e4d558bcc9fc5d1256afa5054}\index{GLContext@{GLContext}!SetDepthFunc@{SetDepthFunc}}
+\index{SetDepthFunc@{SetDepthFunc}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{SetDepthFunc()}{SetDepthFunc()}}
+{\footnotesize\ttfamily \label{classGLContext_a9794bd6e4d558bcc9fc5d1256afa5054} 
+void GLContext::\+\+Set\+Depth\+Func (\begin{DoxyParamCaption}\item[{GLenum}]{func}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classGLContext_a679dd59f8ffbb5025f2fdae1eccc9b5e}\index{GLContext@{GLContext}!SetDepthTest@{SetDepthTest}}
+\index{SetDepthTest@{SetDepthTest}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{SetDepthTest()}{SetDepthTest()}}
+{\footnotesize\ttfamily \label{classGLContext_a679dd59f8ffbb5025f2fdae1eccc9b5e} 
+void GLContext::\+\+Set\+Depth\+Test (\begin{DoxyParamCaption}\item[{bool}]{enable}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classGLContext_a676721c81dcf2f9d2765a60fb0673fb8}\index{GLContext@{GLContext}!SetViewport@{SetViewport}}
+\index{SetViewport@{SetViewport}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{SetViewport()}{SetViewport()}}
+{\footnotesize\ttfamily \label{classGLContext_a676721c81dcf2f9d2765a60fb0673fb8} 
+void GLContext::\+\+Set\+Viewport (\begin{DoxyParamCaption}\item[{int}]{x}{, }\item[{int}]{y}{, }\item[{int}]{width}{, }\item[{int}]{height}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classGLContext_a6db4ecb10a6f94299ab1068b1129bef3}\index{GLContext@{GLContext}!UnbindVAO@{UnbindVAO}}
+\index{UnbindVAO@{UnbindVAO}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{UnbindVAO()}{UnbindVAO()}}
+{\footnotesize\ttfamily \label{classGLContext_a6db4ecb10a6f94299ab1068b1129bef3} 
+void GLContext::\+\+Unbind\+VAO (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=344pt]{classGLContext_a6db4ecb10a6f94299ab1068b1129bef3_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classGLContext_a6279e5c309226ca14502eaf8eeafa2c0}\index{GLContext@{GLContext}!UseShader@{UseShader}}
+\index{UseShader@{UseShader}!GLContext@{GLContext}}
+\doxysubsubsection{\texorpdfstring{UseShader()}{UseShader()}}
+{\footnotesize\ttfamily \label{classGLContext_a6279e5c309226ca14502eaf8eeafa2c0} 
+void GLContext::\+\+Use\+Shader (\begin{DoxyParamCaption}\item[{GLuint}]{shader}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+rendering/\+core/\+\doxymbox{\hyperlink{GLContext_8cppm}{GLContext.\+cppm}}\end{DoxyCompactItemize}

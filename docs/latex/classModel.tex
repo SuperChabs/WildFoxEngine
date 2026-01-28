@@ -1,0 +1,146 @@
+\doxysection{Model Class Reference}
+\hypertarget{classModel}{}\label{classModel}\index{Model@{Model}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{classModel_ac455fa8d2babc9ea4d344d585a505ed5}{Model}} (const std::\+string \&path)
+\item 
+void \doxymbox{\hyperlink{classModel_adda3a9b14a21ee0e182684c7edf03b92}{Add\+Mesh}} (\doxymbox{\hyperlink{classMesh}{Mesh}} \&\&mesh)
+\item 
+void \doxymbox{\hyperlink{classModel_a7a964ada49ca89bd28b23b7d87b6ede4}{Add\+Mesh}} (std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classMesh}{Mesh}} $>$ mesh)
+\item 
+std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classMesh}{Mesh}} $>$ \doxymbox{\hyperlink{classModel_a8ada82f12f7593c525626fe8f83586c2}{Get\+Mesh}} (size\+\_\+t index)
+\item 
+const std::\+vector$<$ std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classMesh}{Mesh}} $>$ $>$ \& \doxymbox{\hyperlink{classModel_aaff26f120ade50436e67ee6bbd9e3c9f}{Get\+Meshes}} () const
+\item 
+void \doxymbox{\hyperlink{classModel_a5527e5eba2247e54a8ddf22c62c50f21}{Draw}} (\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \&shader\+Manager, const std::\+string \&shader\+Name)
+\item 
+void \doxymbox{\hyperlink{classModel_a2caf87a4dbe7997c941724ebd6f365ad}{Set\+Color}} (const glm::\+vec3 \&color)
+\item 
+void \doxymbox{\hyperlink{classModel_acc02d0602869b8f6a0ef27a24de06b85}{Set\+Textures}} (const std::\+vector$<$ \doxymbox{\hyperlink{classTexture}{Texture}} $>$ \&textures)
+\item 
+void \doxymbox{\hyperlink{classModel_a35f8173ab741b1047e612c198b1d6672}{Set\+Material\+For\+All}} (std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classMaterial}{Material}} $>$ material)
+\item 
+size\+\_\+t \doxymbox{\hyperlink{classModel_a6ef9717cfa6a3d1796039c6d94b43a72}{Get\+Mesh\+Count}} () const
+\item 
+const std::\+string \& \doxymbox{\hyperlink{classModel_a387c3594bb4f7d4f997b5e649e7eb641}{Get\+Name}} () const
+\item 
+const std::\+string \& \doxymbox{\hyperlink{classModel_a0885f9a6553274d661150f34d123de93}{Get\+Filepath}} () const
+\item 
+void \doxymbox{\hyperlink{classModel_ac6fba40b37ccdff724226b284edc43bb}{Set\+Name}} (const std::\+string \&n)
+\item 
+void \doxymbox{\hyperlink{classModel_ad5da73b20746102f875ccd5b2e125d0d}{Set\+Filepath}} (const std::\+string \&path)
+\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{classModel_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classModel_ac455fa8d2babc9ea4d344d585a505ed5}\index{Model@{Model}!Model@{Model}}
+\index{Model@{Model}!Model@{Model}}
+\doxysubsubsection{\texorpdfstring{Model()}{Model()}}
+{\footnotesize\ttfamily \label{classModel_ac455fa8d2babc9ea4d344d585a505ed5} 
+Model::\+\+Model (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{path}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\label{doc-func-members}
+\Hypertarget{classModel_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classModel_adda3a9b14a21ee0e182684c7edf03b92}\index{Model@{Model}!AddMesh@{AddMesh}}
+\index{AddMesh@{AddMesh}!Model@{Model}}
+\doxysubsubsection{\texorpdfstring{AddMesh()}{AddMesh()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classModel_adda3a9b14a21ee0e182684c7edf03b92} 
+void Model::\+\+Add\+Mesh (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{classMesh}{Mesh}} \&\&}]{mesh}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classModel_adda3a9b14a21ee0e182684c7edf03b92_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classModel_a7a964ada49ca89bd28b23b7d87b6ede4}\index{Model@{Model}!AddMesh@{AddMesh}}
+\index{AddMesh@{AddMesh}!Model@{Model}}
+\doxysubsubsection{\texorpdfstring{AddMesh()}{AddMesh()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classModel_a7a964ada49ca89bd28b23b7d87b6ede4} 
+void Model::\+\+Add\+Mesh (\begin{DoxyParamCaption}\item[{std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classMesh}{Mesh}} $>$}]{mesh}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classModel_a5527e5eba2247e54a8ddf22c62c50f21}\index{Model@{Model}!Draw@{Draw}}
+\index{Draw@{Draw}!Model@{Model}}
+\doxysubsubsection{\texorpdfstring{Draw()}{Draw()}}
+{\footnotesize\ttfamily \label{classModel_a5527e5eba2247e54a8ddf22c62c50f21} 
+void Model::\+\+Draw (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \&}]{shader\+Manager}{, }\item[{const std::\+string \&}]{shader\+Name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classModel_a0885f9a6553274d661150f34d123de93}\index{Model@{Model}!GetFilepath@{GetFilepath}}
+\index{GetFilepath@{GetFilepath}!Model@{Model}}
+\doxysubsubsection{\texorpdfstring{GetFilepath()}{GetFilepath()}}
+{\footnotesize\ttfamily \label{classModel_a0885f9a6553274d661150f34d123de93} 
+const std::\+string \& Model::\+\+Get\+Filepath (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classModel_a8ada82f12f7593c525626fe8f83586c2}\index{Model@{Model}!GetMesh@{GetMesh}}
+\index{GetMesh@{GetMesh}!Model@{Model}}
+\doxysubsubsection{\texorpdfstring{GetMesh()}{GetMesh()}}
+{\footnotesize\ttfamily \label{classModel_a8ada82f12f7593c525626fe8f83586c2} 
+std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classMesh}{Mesh}} $>$ Model::\+\+Get\+Mesh (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{index}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classModel_a6ef9717cfa6a3d1796039c6d94b43a72}\index{Model@{Model}!GetMeshCount@{GetMeshCount}}
+\index{GetMeshCount@{GetMeshCount}!Model@{Model}}
+\doxysubsubsection{\texorpdfstring{GetMeshCount()}{GetMeshCount()}}
+{\footnotesize\ttfamily \label{classModel_a6ef9717cfa6a3d1796039c6d94b43a72} 
+size\+\_\+t Model::\+\+Get\+Mesh\+Count (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classModel_a6ef9717cfa6a3d1796039c6d94b43a72_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classModel_aaff26f120ade50436e67ee6bbd9e3c9f}\index{Model@{Model}!GetMeshes@{GetMeshes}}
+\index{GetMeshes@{GetMeshes}!Model@{Model}}
+\doxysubsubsection{\texorpdfstring{GetMeshes()}{GetMeshes()}}
+{\footnotesize\ttfamily \label{classModel_aaff26f120ade50436e67ee6bbd9e3c9f} 
+const std::\+vector$<$ std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classMesh}{Mesh}} $>$ $>$ \& Model::\+\+Get\+Meshes (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classModel_a387c3594bb4f7d4f997b5e649e7eb641}\index{Model@{Model}!GetName@{GetName}}
+\index{GetName@{GetName}!Model@{Model}}
+\doxysubsubsection{\texorpdfstring{GetName()}{GetName()}}
+{\footnotesize\ttfamily \label{classModel_a387c3594bb4f7d4f997b5e649e7eb641} 
+const std::\+string \& Model::\+\+Get\+Name (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classModel_a2caf87a4dbe7997c941724ebd6f365ad}\index{Model@{Model}!SetColor@{SetColor}}
+\index{SetColor@{SetColor}!Model@{Model}}
+\doxysubsubsection{\texorpdfstring{SetColor()}{SetColor()}}
+{\footnotesize\ttfamily \label{classModel_a2caf87a4dbe7997c941724ebd6f365ad} 
+void Model::\+\+Set\+Color (\begin{DoxyParamCaption}\item[{const glm::\+vec3 \&}]{color}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classModel_ad5da73b20746102f875ccd5b2e125d0d}\index{Model@{Model}!SetFilepath@{SetFilepath}}
+\index{SetFilepath@{SetFilepath}!Model@{Model}}
+\doxysubsubsection{\texorpdfstring{SetFilepath()}{SetFilepath()}}
+{\footnotesize\ttfamily \label{classModel_ad5da73b20746102f875ccd5b2e125d0d} 
+void Model::\+\+Set\+Filepath (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{path}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classModel_a35f8173ab741b1047e612c198b1d6672}\index{Model@{Model}!SetMaterialForAll@{SetMaterialForAll}}
+\index{SetMaterialForAll@{SetMaterialForAll}!Model@{Model}}
+\doxysubsubsection{\texorpdfstring{SetMaterialForAll()}{SetMaterialForAll()}}
+{\footnotesize\ttfamily \label{classModel_a35f8173ab741b1047e612c198b1d6672} 
+void Model::\+\+Set\+Material\+For\+All (\begin{DoxyParamCaption}\item[{std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classMaterial}{Material}} $>$}]{material}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classModel_ac6fba40b37ccdff724226b284edc43bb}\index{Model@{Model}!SetName@{SetName}}
+\index{SetName@{SetName}!Model@{Model}}
+\doxysubsubsection{\texorpdfstring{SetName()}{SetName()}}
+{\footnotesize\ttfamily \label{classModel_ac6fba40b37ccdff724226b284edc43bb} 
+void Model::\+\+Set\+Name (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{n}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classModel_acc02d0602869b8f6a0ef27a24de06b85}\index{Model@{Model}!SetTextures@{SetTextures}}
+\index{SetTextures@{SetTextures}!Model@{Model}}
+\doxysubsubsection{\texorpdfstring{SetTextures()}{SetTextures()}}
+{\footnotesize\ttfamily \label{classModel_acc02d0602869b8f6a0ef27a24de06b85} 
+void Model::\+\+Set\+Textures (\begin{DoxyParamCaption}\item[{const std::\+vector$<$ \doxymbox{\hyperlink{classTexture}{Texture}} $>$ \&}]{textures}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+resource/\+model/\+\doxymbox{\hyperlink{Model_8cppm}{Model.\+cppm}}\end{DoxyCompactItemize}

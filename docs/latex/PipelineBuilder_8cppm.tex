@@ -1,0 +1,62 @@
+\doxysection{/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+rendering/\+pipeline/\+\+Pipeline\+Builder.cppm File Reference}
+\hypertarget{PipelineBuilder_8cppm}{}\label{PipelineBuilder_8cppm}\index{/home/tymur52/WildFoxEngine/src/rendering/pipeline/PipelineBuilder.cppm@{/home/tymur52/WildFoxEngine/src/rendering/pipeline/PipelineBuilder.cppm}}
+{\ttfamily \+\#include $<$glad/\+glad.\+h$>$}\newline
+{\ttfamily \+\#include $<$memory$>$}\newline
+{\ttfamily \+\#include $<$string$>$}\newline
+{\ttfamily import WFE.\+Core.\+Logger;}\newline
+{\ttfamily import WFE.\+ECS.\+ECSWorld;}\newline
+{\ttfamily import WFE.\+Resource.\+Shader.\+Shader\+Manager;}\newline
+{\ttfamily import WFE.\+Rendering.\+Pipeline.\+Forward\+Pipeline;}\newline
+{\ttfamily import WFE.\+Rendering.\+Core.\+GLContext;}\newline
+{\ttfamily import WFE.\+Rendering.\+Pipeline.\+Render\+Pipeline;}\newline
+Include dependency graph for Pipeline\+Builder.\+cppm:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{PipelineBuilder_8cppm__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \doxymbox{\hyperlink{classPipelineBuilder}{Pipeline\+Builder}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum class \doxymbox{\hyperlink{PipelineBuilder_8cppm_a9232558a2a69950ad6c60a99827b7ccd}{Pipeline\+Type}} \{ \doxymbox{\hyperlink{PipelineBuilder_8cppm_a9232558a2a69950ad6c60a99827b7ccdabfec72bb37910c61f36b6c29a1f7ec31}{FORWARD}}
+, \doxymbox{\hyperlink{PipelineBuilder_8cppm_a9232558a2a69950ad6c60a99827b7ccdae3d9a2ed4146353ae729818f8bcc329d}{DEFERRED}}
+, \doxymbox{\hyperlink{PipelineBuilder_8cppm_a9232558a2a69950ad6c60a99827b7ccda72baef04098f035e8a320b03ad197818}{CUSTOM}}
+ \}
+\end{DoxyCompactItemize}
+
+
+\label{doc-enum-members}
+\Hypertarget{PipelineBuilder_8cppm_doc-enum-members}
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{PipelineBuilder_8cppm_a9232558a2a69950ad6c60a99827b7ccd}\index{PipelineBuilder.cppm@{PipelineBuilder.cppm}!PipelineType@{PipelineType}}
+\index{PipelineType@{PipelineType}!PipelineBuilder.cppm@{PipelineBuilder.cppm}}
+\doxysubsubsection{\texorpdfstring{PipelineType}{PipelineType}}
+{\footnotesize\ttfamily \label{PipelineBuilder_8cppm_a9232558a2a69950ad6c60a99827b7ccd} 
+enum class \doxymbox{\hyperlink{PipelineBuilder_8cppm_a9232558a2a69950ad6c60a99827b7ccd}{Pipeline\+Type}}\hspace{0.3cm}{\ttfamily [export]}, {\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{FORWARD@{FORWARD}!PipelineBuilder.cppm@{PipelineBuilder.cppm}}
+\index{PipelineBuilder.cppm@{PipelineBuilder.cppm}!FORWARD@{FORWARD}}
+}\Hypertarget{PipelineBuilder_8cppm_a9232558a2a69950ad6c60a99827b7ccdabfec72bb37910c61f36b6c29a1f7ec31}\label{PipelineBuilder_8cppm_a9232558a2a69950ad6c60a99827b7ccdabfec72bb37910c61f36b6c29a1f7ec31} 
+FORWARD&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{DEFERRED@{DEFERRED}!PipelineBuilder.cppm@{PipelineBuilder.cppm}}
+\index{PipelineBuilder.cppm@{PipelineBuilder.cppm}!DEFERRED@{DEFERRED}}
+}\Hypertarget{PipelineBuilder_8cppm_a9232558a2a69950ad6c60a99827b7ccdae3d9a2ed4146353ae729818f8bcc329d}\label{PipelineBuilder_8cppm_a9232558a2a69950ad6c60a99827b7ccdae3d9a2ed4146353ae729818f8bcc329d} 
+DEFERRED&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CUSTOM@{CUSTOM}!PipelineBuilder.cppm@{PipelineBuilder.cppm}}
+\index{PipelineBuilder.cppm@{PipelineBuilder.cppm}!CUSTOM@{CUSTOM}}
+}\Hypertarget{PipelineBuilder_8cppm_a9232558a2a69950ad6c60a99827b7ccda72baef04098f035e8a320b03ad197818}\label{PipelineBuilder_8cppm_a9232558a2a69950ad6c60a99827b7ccda72baef04098f035e8a320b03ad197818} 
+CUSTOM&\\
+\hline
+
+\end{DoxyEnumFields}

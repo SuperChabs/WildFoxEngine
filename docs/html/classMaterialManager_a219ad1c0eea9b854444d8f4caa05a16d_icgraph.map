@@ -1,0 +1,9 @@
+<map id="MaterialManager::CreateColorMaterial" name="MaterialManager::CreateColorMaterial">
+<area shape="rect" id="Node000001" title=" " alt="" coords="435,35,630,77"/>
+<area shape="rect" id="Node000002" href="$classMaterialManager.html#a860d71e00d466e7b8261d1e0b106c90c" title=" " alt="" coords="188,5,387,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="417,43,387,41,387,36,422,42"/>
+<area shape="rect" id="Node000004" href="$classSceneSerializer.html#a74d4103932c7de8568cef65a53971e53" title=" " alt="" coords="195,72,380,99"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="422,69,381,77,380,72,417,70"/>
+<area shape="rect" id="Node000003" href="$classEngine.html#ae482abae3a0c90ef02350a1d0a414db0" title=" " alt="" coords="5,13,140,40"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="170,27,141,29,140,24,175,26"/>
+</map>

@@ -1,0 +1,151 @@
+\doxysection{Shadow\+Pass Class Reference}
+\hypertarget{classShadowPass}{}\label{classShadowPass}\index{ShadowPass@{ShadowPass}}
+
+
+Inheritance diagram for Shadow\+Pass:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=154pt]{classShadowPass__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Shadow\+Pass:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=265pt]{classShadowPass__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{classShadowPass_a8b3526e07d38cbe9d3c2692188e48b13}{Shadow\+Pass}} (\doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*}ctx, \doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}sm)
+\item 
+\doxymbox{\hyperlink{classShadowPass_ab430b8290a0194ee4f5f1b8adc1f416c}{\texorpdfstring{$\sim$}{\string~}\+Shadow\+Pass}} ()
+\item 
+void \doxymbox{\hyperlink{classShadowPass_ac96ac8378a77bfea4bf3e688a66e6230}{Setup}} () override
+\item 
+void \doxymbox{\hyperlink{classShadowPass_aaa464904fbd868c62277265e64cf951f}{Execute}} (\doxymbox{\hyperlink{classCamera}{Camera}} \&camera, const glm::\+mat4 \&projection) override
+\item 
+void \doxymbox{\hyperlink{classShadowPass_a91c561d59f6f02652c263a7246436de9}{Cleanup}} () override
+\item 
+GLuint \doxymbox{\hyperlink{classShadowPass_a99aeac29f9ba04cf0f62b422e8895ee2}{Get\+Shadow\+Map}} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \doxymbox{\hyperlink{classRenderPass}{Render\+Pass}}}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{classRenderPass_af78cb299781cbb67319c5887942024d2}{Render\+Pass}} (const std::\+string \&n, \doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*}ctx, \doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}sm)
+\item 
+virtual \doxymbox{\hyperlink{classRenderPass_a01478f3a9140caee9422d22b9ace54d8}{\texorpdfstring{$\sim$}{\string~}\+Render\+Pass}} ()=default
+\item 
+void \doxymbox{\hyperlink{classRenderPass_a16262c95f0b903fd73f3e680133e327e}{Set\+Enabled}} (bool e)
+\item 
+bool \doxymbox{\hyperlink{classRenderPass_a21f7697652119e448e051c9f695ebd59}{Is\+Enabled}} () const
+\item 
+const std::\+string \& \doxymbox{\hyperlink{classRenderPass_a5acbf0cd5539eac48a277b5a0033242a}{Get\+Name}} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \doxymbox{\hyperlink{classRenderPass}{Render\+Pass}}}
+\begin{DoxyCompactItemize}
+\item 
+std::\+string \doxymbox{\hyperlink{classRenderPass_a798c0eec824f424db666e2ebeee8aefd}{name}}
+\item 
+\doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classRenderPass_ab6201cca28590e27962af76dc7b42975}{context}}
+\item 
+\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classRenderPass_af7521307ed050e36f31a6f5e89bf587b}{shader\+Manager}}
+\item 
+bool \doxymbox{\hyperlink{classRenderPass_a1e887a5961c6da86e175c2cf24a44cfb}{enabled}} = true
+\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{classShadowPass_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classShadowPass_a8b3526e07d38cbe9d3c2692188e48b13}\index{ShadowPass@{ShadowPass}!ShadowPass@{ShadowPass}}
+\index{ShadowPass@{ShadowPass}!ShadowPass@{ShadowPass}}
+\doxysubsubsection{\texorpdfstring{ShadowPass()}{ShadowPass()}}
+{\footnotesize\ttfamily \label{classShadowPass_a8b3526e07d38cbe9d3c2692188e48b13} 
+Shadow\+Pass::\+\+Shadow\+Pass (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*}}]{ctx}{, }\item[{\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}}]{sm}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShadowPass_a8b3526e07d38cbe9d3c2692188e48b13_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classShadowPass_ab430b8290a0194ee4f5f1b8adc1f416c}\index{ShadowPass@{ShadowPass}!````~ShadowPass@{\texorpdfstring{$\sim$}{\string~}ShadowPass}}
+\index{````~ShadowPass@{\texorpdfstring{$\sim$}{\string~}ShadowPass}!ShadowPass@{ShadowPass}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}ShadowPass()}{\string~ShadowPass()}}
+{\footnotesize\ttfamily \label{classShadowPass_ab430b8290a0194ee4f5f1b8adc1f416c} 
+Shadow\+Pass::\+\texorpdfstring{$\sim$}{\string~}\+Shadow\+Pass (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\label{doc-func-members}
+\Hypertarget{classShadowPass_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classShadowPass_a91c561d59f6f02652c263a7246436de9}\index{ShadowPass@{ShadowPass}!Cleanup@{Cleanup}}
+\index{Cleanup@{Cleanup}!ShadowPass@{ShadowPass}}
+\doxysubsubsection{\texorpdfstring{Cleanup()}{Cleanup()}}
+{\footnotesize\ttfamily \label{classShadowPass_a91c561d59f6f02652c263a7246436de9} 
+void Shadow\+Pass::\+\+Cleanup (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \doxymbox{\hyperlink{classRenderPass_abc9846c5fec2fb3a547e8d7f2124044b}{Render\+Pass}}.
+
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=348pt]{classShadowPass_a91c561d59f6f02652c263a7246436de9_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classShadowPass_aaa464904fbd868c62277265e64cf951f}\index{ShadowPass@{ShadowPass}!Execute@{Execute}}
+\index{Execute@{Execute}!ShadowPass@{ShadowPass}}
+\doxysubsubsection{\texorpdfstring{Execute()}{Execute()}}
+{\footnotesize\ttfamily \label{classShadowPass_aaa464904fbd868c62277265e64cf951f} 
+void Shadow\+Pass::\+\+Execute (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{classCamera}{Camera}} \&}]{camera}{, }\item[{const glm::\+mat4 \&}]{projection}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \doxymbox{\hyperlink{classRenderPass_a85d731d498dda3f3a179abc71f1f8da6}{Render\+Pass}}.
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=348pt]{classShadowPass_aaa464904fbd868c62277265e64cf951f_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classShadowPass_a99aeac29f9ba04cf0f62b422e8895ee2}\index{ShadowPass@{ShadowPass}!GetShadowMap@{GetShadowMap}}
+\index{GetShadowMap@{GetShadowMap}!ShadowPass@{ShadowPass}}
+\doxysubsubsection{\texorpdfstring{GetShadowMap()}{GetShadowMap()}}
+{\footnotesize\ttfamily \label{classShadowPass_a99aeac29f9ba04cf0f62b422e8895ee2} 
+GLuint Shadow\+Pass::\+\+Get\+Shadow\+Map (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classShadowPass_ac96ac8378a77bfea4bf3e688a66e6230}\index{ShadowPass@{ShadowPass}!Setup@{Setup}}
+\index{Setup@{Setup}!ShadowPass@{ShadowPass}}
+\doxysubsubsection{\texorpdfstring{Setup()}{Setup()}}
+{\footnotesize\ttfamily \label{classShadowPass_ac96ac8378a77bfea4bf3e688a66e6230} 
+void Shadow\+Pass::\+\+Setup (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \doxymbox{\hyperlink{classRenderPass_a445313b8aa3bea369d76ff19d467d39d}{Render\+Pass}}.
+
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=337pt]{classShadowPass_ac96ac8378a77bfea4bf3e688a66e6230_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+rendering/\+passes/\+\doxymbox{\hyperlink{ShadowPass_8cppm}{Shadow\+Pass.\+cppm}}\end{DoxyCompactItemize}

@@ -1,0 +1,6 @@
+<map id="PrimitivesFactory::CreatePrimitive" name="PrimitivesFactory::CreatePrimitive">
+<area shape="rect" id="Node000001" title=" " alt="" coords="239,29,370,72"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="336,13,325,10,304,8,285,10,273,15,269,21,270,30,265,27,263,19,270,10,284,5,304,3,327,5,341,14"/>
+<area shape="rect" id="Node000002" href="$classSceneSerializer.html#a74d4103932c7de8568cef65a53971e53" title=" " alt="" coords="5,37,191,64"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="221,51,191,53,191,48,226,50"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="IconPanel::Render" name="IconPanel::Render">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,135,57"/>
+<area shape="rect" id="Node000002" href="$classECSWorld.html#acfade1daca793fe5aa8d0ffa407ae88f" title=" " alt="" coords="184,5,362,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="134,33,171,31,166,32,135,39"/>
+<area shape="rect" id="Node000003" href="$classECSWorld.html#aab445a0a81e5df39c6f5c2329547f333" title=" " alt="" coords="183,56,364,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="135,49,170,56,164,56,135,55"/>
+</map>

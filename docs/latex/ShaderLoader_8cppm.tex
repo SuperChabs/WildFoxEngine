@@ -1,0 +1,87 @@
+\doxysection{/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+resource/\+shader/\+\+Shader\+Loader.cppm File Reference}
+\hypertarget{ShaderLoader_8cppm}{}\label{ShaderLoader_8cppm}\index{/home/tymur52/WildFoxEngine/src/resource/shader/ShaderLoader.cppm@{/home/tymur52/WildFoxEngine/src/resource/shader/ShaderLoader.cppm}}
+{\ttfamily \+\#include $<$string$>$}\newline
+{\ttfamily \+\#include $<$fstream$>$}\newline
+{\ttfamily \+\#include $<$sstream$>$}\newline
+{\ttfamily \+\#include $<$utility$>$}\newline
+{\ttfamily \+\#include $<$filesystem$>$}\newline
+{\ttfamily import WFE.\+Core.\+Logger;}\newline
+Include dependency graph for Shader\+Loader.\+cppm:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ShaderLoader_8cppm__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \doxymbox{\hyperlink{structShaderSource}{Shader\+Source}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std::\+string \doxymbox{\hyperlink{ShaderLoader_8cppm_a12651834a8ea476fe4c6c791daf104ea}{File\+To\+String}} (const std::\+string \&path)
+\item 
+\doxymbox{\hyperlink{structShaderSource}{Shader\+Source}} \doxymbox{\hyperlink{ShaderLoader_8cppm_a454cfdcea932501c0652bc7409abfafa}{Load\+Shader}} (const char \texorpdfstring{$\ast$}{*}shader\+Name, bool is\+Geometry=false)
+\item 
+\doxymbox{\hyperlink{structShaderSource}{Shader\+Source}} \doxymbox{\hyperlink{ShaderLoader_8cppm_a1c29c03611d2250a266be7c11f1afcfc}{Load\+Shader}} (const std::\+string vs, const std::\+string fs, const std::\+string gs)
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{ShaderLoader_8cppm_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{ShaderLoader_8cppm_a12651834a8ea476fe4c6c791daf104ea}\index{ShaderLoader.cppm@{ShaderLoader.cppm}!FileToString@{FileToString}}
+\index{FileToString@{FileToString}!ShaderLoader.cppm@{ShaderLoader.cppm}}
+\doxysubsubsection{\texorpdfstring{FileToString()}{FileToString()}}
+{\footnotesize\ttfamily \label{ShaderLoader_8cppm_a12651834a8ea476fe4c6c791daf104ea} 
+std::\+string File\+To\+String (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{path}{}\end{DoxyParamCaption})}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=251pt]{ShaderLoader_8cppm_a12651834a8ea476fe4c6c791daf104ea_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ShaderLoader_8cppm_a12651834a8ea476fe4c6c791daf104ea_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{ShaderLoader_8cppm_a454cfdcea932501c0652bc7409abfafa}\index{ShaderLoader.cppm@{ShaderLoader.cppm}!LoadShader@{LoadShader}}
+\index{LoadShader@{LoadShader}!ShaderLoader.cppm@{ShaderLoader.cppm}}
+\doxysubsubsection{\texorpdfstring{LoadShader()}{LoadShader()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{ShaderLoader_8cppm_a454cfdcea932501c0652bc7409abfafa} 
+\doxymbox{\hyperlink{structShaderSource}{Shader\+Source}} Load\+Shader (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{shader\+Name}{, }\item[{bool}]{is\+Geometry}{ = {\ttfamily false}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [export]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ShaderLoader_8cppm_a454cfdcea932501c0652bc7409abfafa_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ShaderLoader_8cppm_a454cfdcea932501c0652bc7409abfafa_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{ShaderLoader_8cppm_a1c29c03611d2250a266be7c11f1afcfc}\index{ShaderLoader.cppm@{ShaderLoader.cppm}!LoadShader@{LoadShader}}
+\index{LoadShader@{LoadShader}!ShaderLoader.cppm@{ShaderLoader.cppm}}
+\doxysubsubsection{\texorpdfstring{LoadShader()}{LoadShader()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{ShaderLoader_8cppm_a1c29c03611d2250a266be7c11f1afcfc} 
+\doxymbox{\hyperlink{structShaderSource}{Shader\+Source}} Load\+Shader (\begin{DoxyParamCaption}\item[{const std::\+string}]{vs}{, }\item[{const std::\+string}]{fs}{, }\item[{const std::\+string}]{gs}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [export]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ShaderLoader_8cppm_a1c29c03611d2250a266be7c11f1afcfc_cgraph}
+\end{center}
+\end{figure}

@@ -1,0 +1,188 @@
+\doxysection{Render\+Pipeline Class Reference}
+\hypertarget{classRenderPipeline}{}\label{classRenderPipeline}\index{RenderPipeline@{RenderPipeline}}
+
+
+Inheritance diagram for Render\+Pipeline:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=166pt]{classRenderPipeline__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Render\+Pipeline:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=265pt]{classRenderPipeline__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{classRenderPipeline_a172dbf6a01c4df6f91f7eeffabb88539}{Render\+Pipeline}} (const std::\+string \&n, \doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*}ctx, \doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}sm)
+\item 
+virtual \doxymbox{\hyperlink{classRenderPipeline_aea23e5f1ca5745c3d2098867f24e59b5}{\texorpdfstring{$\sim$}{\string~}\+Render\+Pipeline}} ()=default
+\item 
+virtual void \doxymbox{\hyperlink{classRenderPipeline_a99473e01757654220a768b24fa8f588f}{Initialize}} ()=0
+\item 
+virtual void \doxymbox{\hyperlink{classRenderPipeline_a4b12675ac846b55cc2fa115efbd4c29f}{Execute}} (\doxymbox{\hyperlink{classCamera}{Camera}} \&camera, int width, int height)
+\item 
+void \doxymbox{\hyperlink{classRenderPipeline_a5c5e17156d4b04f6943c6e39b928043a}{Add\+Pass}} (std::\+unique\+\_\+ptr$<$ \doxymbox{\hyperlink{classRenderPass}{Render\+Pass}} $>$ pass)
+\item 
+\doxymbox{\hyperlink{classRenderPass}{Render\+Pass}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classRenderPipeline_ae8813675959e9388f3d53df1418e013f}{Get\+Pass}} (const std::\+string \&pass\+Name)
+\item 
+const std::\+string \& \doxymbox{\hyperlink{classRenderPipeline_aaff50222c7a4d550eaf1a7a675c4fe85}{Get\+Name}} () const
+\item 
+size\+\_\+t \doxymbox{\hyperlink{classRenderPipeline_a407c88cb3cb3a9db32490c014570b85d}{Get\+Pass\+Count}} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std::\+string \doxymbox{\hyperlink{classRenderPipeline_a4c9bb441a44b6af2dd73fcb363f3e251}{name}}
+\item 
+std::\+vector$<$ std::\+unique\+\_\+ptr$<$ \doxymbox{\hyperlink{classRenderPass}{Render\+Pass}} $>$ $>$ \doxymbox{\hyperlink{classRenderPipeline_a8fdfdc61044d65e9bddf3124525fa468}{passes}}
+\item 
+\doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classRenderPipeline_af29e62ab2ed9d0ccda0ee7ee6567dcfd}{context}}
+\item 
+\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classRenderPipeline_a037ddf2f08e72a0f29afdac8ef81a15a}{shader\+Manager}}
+\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{classRenderPipeline_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classRenderPipeline_a172dbf6a01c4df6f91f7eeffabb88539}\index{RenderPipeline@{RenderPipeline}!RenderPipeline@{RenderPipeline}}
+\index{RenderPipeline@{RenderPipeline}!RenderPipeline@{RenderPipeline}}
+\doxysubsubsection{\texorpdfstring{RenderPipeline()}{RenderPipeline()}}
+{\footnotesize\ttfamily \label{classRenderPipeline_a172dbf6a01c4df6f91f7eeffabb88539} 
+Render\+Pipeline::\+\+Render\+Pipeline (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{n}{, }\item[{\doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*}}]{ctx}{, }\item[{\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}}]{sm}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=337pt]{classRenderPipeline_a172dbf6a01c4df6f91f7eeffabb88539_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classRenderPipeline_a172dbf6a01c4df6f91f7eeffabb88539_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classRenderPipeline_aea23e5f1ca5745c3d2098867f24e59b5}\index{RenderPipeline@{RenderPipeline}!````~RenderPipeline@{\texorpdfstring{$\sim$}{\string~}RenderPipeline}}
+\index{````~RenderPipeline@{\texorpdfstring{$\sim$}{\string~}RenderPipeline}!RenderPipeline@{RenderPipeline}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}RenderPipeline()}{\string~RenderPipeline()}}
+{\footnotesize\ttfamily \label{classRenderPipeline_aea23e5f1ca5745c3d2098867f24e59b5} 
+virtual Render\+Pipeline::\+\texorpdfstring{$\sim$}{\string~}\+Render\+Pipeline (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}}
+
+
+
+\label{doc-func-members}
+\Hypertarget{classRenderPipeline_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classRenderPipeline_a5c5e17156d4b04f6943c6e39b928043a}\index{RenderPipeline@{RenderPipeline}!AddPass@{AddPass}}
+\index{AddPass@{AddPass}!RenderPipeline@{RenderPipeline}}
+\doxysubsubsection{\texorpdfstring{AddPass()}{AddPass()}}
+{\footnotesize\ttfamily \label{classRenderPipeline_a5c5e17156d4b04f6943c6e39b928043a} 
+void Render\+Pipeline::\+\+Add\+Pass (\begin{DoxyParamCaption}\item[{std::\+unique\+\_\+ptr$<$ \doxymbox{\hyperlink{classRenderPass}{Render\+Pass}} $>$}]{pass}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=311pt]{classRenderPipeline_a5c5e17156d4b04f6943c6e39b928043a_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classRenderPipeline_a5c5e17156d4b04f6943c6e39b928043a_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classRenderPipeline_a4b12675ac846b55cc2fa115efbd4c29f}\index{RenderPipeline@{RenderPipeline}!Execute@{Execute}}
+\index{Execute@{Execute}!RenderPipeline@{RenderPipeline}}
+\doxysubsubsection{\texorpdfstring{Execute()}{Execute()}}
+{\footnotesize\ttfamily \label{classRenderPipeline_a4b12675ac846b55cc2fa115efbd4c29f} 
+virtual void Render\+Pipeline::\+\+Execute (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{classCamera}{Camera}} \&}]{camera}{, }\item[{int}]{width}{, }\item[{int}]{height}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=337pt]{classRenderPipeline_a4b12675ac846b55cc2fa115efbd4c29f_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classRenderPipeline_aaff50222c7a4d550eaf1a7a675c4fe85}\index{RenderPipeline@{RenderPipeline}!GetName@{GetName}}
+\index{GetName@{GetName}!RenderPipeline@{RenderPipeline}}
+\doxysubsubsection{\texorpdfstring{GetName()}{GetName()}}
+{\footnotesize\ttfamily \label{classRenderPipeline_aaff50222c7a4d550eaf1a7a675c4fe85} 
+const std::\+string \& Render\+Pipeline::\+\+Get\+Name (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classRenderPipeline_ae8813675959e9388f3d53df1418e013f}\index{RenderPipeline@{RenderPipeline}!GetPass@{GetPass}}
+\index{GetPass@{GetPass}!RenderPipeline@{RenderPipeline}}
+\doxysubsubsection{\texorpdfstring{GetPass()}{GetPass()}}
+{\footnotesize\ttfamily \label{classRenderPipeline_ae8813675959e9388f3d53df1418e013f} 
+\doxymbox{\hyperlink{classRenderPass}{Render\+Pass}} \texorpdfstring{$\ast$}{*} Render\+Pipeline::\+\+Get\+Pass (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{pass\+Name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classRenderPipeline_a407c88cb3cb3a9db32490c014570b85d}\index{RenderPipeline@{RenderPipeline}!GetPassCount@{GetPassCount}}
+\index{GetPassCount@{GetPassCount}!RenderPipeline@{RenderPipeline}}
+\doxysubsubsection{\texorpdfstring{GetPassCount()}{GetPassCount()}}
+{\footnotesize\ttfamily \label{classRenderPipeline_a407c88cb3cb3a9db32490c014570b85d} 
+size\+\_\+t Render\+Pipeline::\+\+Get\+Pass\+Count (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classRenderPipeline_a407c88cb3cb3a9db32490c014570b85d_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classRenderPipeline_a99473e01757654220a768b24fa8f588f}\index{RenderPipeline@{RenderPipeline}!Initialize@{Initialize}}
+\index{Initialize@{Initialize}!RenderPipeline@{RenderPipeline}}
+\doxysubsubsection{\texorpdfstring{Initialize()}{Initialize()}}
+{\footnotesize\ttfamily \label{classRenderPipeline_a99473e01757654220a768b24fa8f588f} 
+virtual void Render\+Pipeline::\+\+Initialize (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \doxymbox{\hyperlink{classForwardPipeline_a65d30384c1f198e3882751208f17e8e2}{Forward\+Pipeline}}.
+
+
+
+\label{doc-variable-members}
+\Hypertarget{classRenderPipeline_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classRenderPipeline_af29e62ab2ed9d0ccda0ee7ee6567dcfd}\index{RenderPipeline@{RenderPipeline}!context@{context}}
+\index{context@{context}!RenderPipeline@{RenderPipeline}}
+\doxysubsubsection{\texorpdfstring{context}{context}}
+{\footnotesize\ttfamily \label{classRenderPipeline_af29e62ab2ed9d0ccda0ee7ee6567dcfd} 
+\doxymbox{\hyperlink{classGLContext}{GLContext}}\texorpdfstring{$\ast$}{*} Render\+Pipeline::\+context\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRenderPipeline_a4c9bb441a44b6af2dd73fcb363f3e251}\index{RenderPipeline@{RenderPipeline}!name@{name}}
+\index{name@{name}!RenderPipeline@{RenderPipeline}}
+\doxysubsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily \label{classRenderPipeline_a4c9bb441a44b6af2dd73fcb363f3e251} 
+std::\+string Render\+Pipeline::\+name\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRenderPipeline_a8fdfdc61044d65e9bddf3124525fa468}\index{RenderPipeline@{RenderPipeline}!passes@{passes}}
+\index{passes@{passes}!RenderPipeline@{RenderPipeline}}
+\doxysubsubsection{\texorpdfstring{passes}{passes}}
+{\footnotesize\ttfamily \label{classRenderPipeline_a8fdfdc61044d65e9bddf3124525fa468} 
+std::\+vector$<$std::\+unique\+\_\+ptr$<$\doxymbox{\hyperlink{classRenderPass}{Render\+Pass}}$>$ $>$ Render\+Pipeline::\+passes\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRenderPipeline_a037ddf2f08e72a0f29afdac8ef81a15a}\index{RenderPipeline@{RenderPipeline}!shaderManager@{shaderManager}}
+\index{shaderManager@{shaderManager}!RenderPipeline@{RenderPipeline}}
+\doxysubsubsection{\texorpdfstring{shaderManager}{shaderManager}}
+{\footnotesize\ttfamily \label{classRenderPipeline_a037ddf2f08e72a0f29afdac8ef81a15a} 
+\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}}\texorpdfstring{$\ast$}{*} Render\+Pipeline::\+shader\+Manager\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+rendering/\+pipeline/\+\doxymbox{\hyperlink{RenderPipeline_8cppm}{Render\+Pipeline.\+cppm}}\end{DoxyCompactItemize}

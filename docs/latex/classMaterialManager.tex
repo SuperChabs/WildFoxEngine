@@ -1,0 +1,185 @@
+\doxysection{Material\+Manager Class Reference}
+\hypertarget{classMaterialManager}{}\label{classMaterialManager}\index{MaterialManager@{MaterialManager}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{classMaterialManager_a42034f7864f200349daea3b653b23fb4}{Material\+Manager}} (\doxymbox{\hyperlink{classTextureManager}{Texture\+Manager}} \texorpdfstring{$\ast$}{*}tm)
+\item 
+void \doxymbox{\hyperlink{classMaterialManager_a860d71e00d466e7b8261d1e0b106c90c}{Load\+Material\+Configs}} ()
+\item 
+std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classMaterial}{Material}} $>$ \doxymbox{\hyperlink{classMaterialManager_a219ad1c0eea9b854444d8f4caa05a16d}{Create\+Color\+Material}} (const std::\+string name, const glm::\+vec3 \&color)
+\item 
+std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classMaterial}{Material}} $>$ \doxymbox{\hyperlink{classMaterialManager_a5d9b8942914bf33c0de610ceea14fe2c}{Create\+Texture\+Material}} (const std::\+string name, const std::\+string diffuse\+Path, const std::\+string specular\+Path="{}"{}, const std::\+string normal\+Path="{}"{}, const std::\+string height\+Path="{}"{})
+\item 
+std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classMaterial}{Material}} $>$ \doxymbox{\hyperlink{classMaterialManager_a236d52c0ca0db7c29bba1014b75c2a17}{Get\+Material}} (const std::\+string \&name)
+\item 
+bool \doxymbox{\hyperlink{classMaterialManager_a45b7f1551160adaf960e972c3a1239dc}{Has\+Material}} (const std::\+string \&name) const
+\item 
+void \doxymbox{\hyperlink{classMaterialManager_aebc3300eceabcc973e91ca1a6051fb67}{Remove\+Material}} (const std::\+string \&name)
+\item 
+void \doxymbox{\hyperlink{classMaterialManager_acecb920b898b481397f1fcfc844a535d}{Clear\+Materials}} ()
+\item 
+size\+\_\+t \doxymbox{\hyperlink{classMaterialManager_ad44c9c2be968c871f5e1b109ab9ac54e}{Get\+Materials\+Count}} () const
+\item 
+const std::\+unordered\+\_\+map$<$ std::\+string, std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classMaterial}{Material}} $>$ $>$ \& \doxymbox{\hyperlink{classMaterialManager_aa7313b456f41df678bc00be0a0cfc298}{Get\+Materials\+Map}} () const
+\item 
+std::\+vector$<$ std::\+string $>$ \doxymbox{\hyperlink{classMaterialManager_a864ad40e9f1ca4f2be8126b36c7859ff}{Get\+Material\+Names}} () const
+\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{classMaterialManager_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classMaterialManager_a42034f7864f200349daea3b653b23fb4}\index{MaterialManager@{MaterialManager}!MaterialManager@{MaterialManager}}
+\index{MaterialManager@{MaterialManager}!MaterialManager@{MaterialManager}}
+\doxysubsubsection{\texorpdfstring{MaterialManager()}{MaterialManager()}}
+{\footnotesize\ttfamily \label{classMaterialManager_a42034f7864f200349daea3b653b23fb4} 
+Material\+Manager::\+\+Material\+Manager (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{classTextureManager}{Texture\+Manager}} \texorpdfstring{$\ast$}{*}}]{tm}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\label{doc-func-members}
+\Hypertarget{classMaterialManager_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classMaterialManager_acecb920b898b481397f1fcfc844a535d}\index{MaterialManager@{MaterialManager}!ClearMaterials@{ClearMaterials}}
+\index{ClearMaterials@{ClearMaterials}!MaterialManager@{MaterialManager}}
+\doxysubsubsection{\texorpdfstring{ClearMaterials()}{ClearMaterials()}}
+{\footnotesize\ttfamily \label{classMaterialManager_acecb920b898b481397f1fcfc844a535d} 
+void Material\+Manager::\+\+Clear\+Materials (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=340pt]{classMaterialManager_acecb920b898b481397f1fcfc844a535d_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classMaterialManager_a219ad1c0eea9b854444d8f4caa05a16d}\index{MaterialManager@{MaterialManager}!CreateColorMaterial@{CreateColorMaterial}}
+\index{CreateColorMaterial@{CreateColorMaterial}!MaterialManager@{MaterialManager}}
+\doxysubsubsection{\texorpdfstring{CreateColorMaterial()}{CreateColorMaterial()}}
+{\footnotesize\ttfamily \label{classMaterialManager_a219ad1c0eea9b854444d8f4caa05a16d} 
+std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classMaterial}{Material}} $>$ Material\+Manager::\+\+Create\+Color\+Material (\begin{DoxyParamCaption}\item[{const std::\+string}]{name}{, }\item[{const glm::\+vec3 \&}]{color}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=330pt]{classMaterialManager_a219ad1c0eea9b854444d8f4caa05a16d_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classMaterialManager_a219ad1c0eea9b854444d8f4caa05a16d_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classMaterialManager_a5d9b8942914bf33c0de610ceea14fe2c}\index{MaterialManager@{MaterialManager}!CreateTextureMaterial@{CreateTextureMaterial}}
+\index{CreateTextureMaterial@{CreateTextureMaterial}!MaterialManager@{MaterialManager}}
+\doxysubsubsection{\texorpdfstring{CreateTextureMaterial()}{CreateTextureMaterial()}}
+{\footnotesize\ttfamily \label{classMaterialManager_a5d9b8942914bf33c0de610ceea14fe2c} 
+std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classMaterial}{Material}} $>$ Material\+Manager::\+\+Create\+Texture\+Material (\begin{DoxyParamCaption}\item[{const std::\+string}]{name}{, }\item[{const std::\+string}]{diffuse\+Path}{, }\item[{const std::\+string}]{specular\+Path}{ = {\ttfamily "{}"{}}, }\item[{const std::\+string}]{normal\+Path}{ = {\ttfamily "{}"{}}, }\item[{const std::\+string}]{height\+Path}{ = {\ttfamily "{}"{}}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=339pt]{classMaterialManager_a5d9b8942914bf33c0de610ceea14fe2c_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classMaterialManager_a5d9b8942914bf33c0de610ceea14fe2c_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classMaterialManager_a236d52c0ca0db7c29bba1014b75c2a17}\index{MaterialManager@{MaterialManager}!GetMaterial@{GetMaterial}}
+\index{GetMaterial@{GetMaterial}!MaterialManager@{MaterialManager}}
+\doxysubsubsection{\texorpdfstring{GetMaterial()}{GetMaterial()}}
+{\footnotesize\ttfamily \label{classMaterialManager_a236d52c0ca0db7c29bba1014b75c2a17} 
+std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classMaterial}{Material}} $>$ Material\+Manager::\+\+Get\+Material (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=327pt]{classMaterialManager_a236d52c0ca0db7c29bba1014b75c2a17_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classMaterialManager_a236d52c0ca0db7c29bba1014b75c2a17_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classMaterialManager_a864ad40e9f1ca4f2be8126b36c7859ff}\index{MaterialManager@{MaterialManager}!GetMaterialNames@{GetMaterialNames}}
+\index{GetMaterialNames@{GetMaterialNames}!MaterialManager@{MaterialManager}}
+\doxysubsubsection{\texorpdfstring{GetMaterialNames()}{GetMaterialNames()}}
+{\footnotesize\ttfamily \label{classMaterialManager_a864ad40e9f1ca4f2be8126b36c7859ff} 
+std::\+vector$<$ std::\+string $>$ Material\+Manager::\+\+Get\+Material\+Names (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classMaterialManager_a864ad40e9f1ca4f2be8126b36c7859ff_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classMaterialManager_ad44c9c2be968c871f5e1b109ab9ac54e}\index{MaterialManager@{MaterialManager}!GetMaterialsCount@{GetMaterialsCount}}
+\index{GetMaterialsCount@{GetMaterialsCount}!MaterialManager@{MaterialManager}}
+\doxysubsubsection{\texorpdfstring{GetMaterialsCount()}{GetMaterialsCount()}}
+{\footnotesize\ttfamily \label{classMaterialManager_ad44c9c2be968c871f5e1b109ab9ac54e} 
+size\+\_\+t Material\+Manager::\+\+Get\+Materials\+Count (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classMaterialManager_aa7313b456f41df678bc00be0a0cfc298}\index{MaterialManager@{MaterialManager}!GetMaterialsMap@{GetMaterialsMap}}
+\index{GetMaterialsMap@{GetMaterialsMap}!MaterialManager@{MaterialManager}}
+\doxysubsubsection{\texorpdfstring{GetMaterialsMap()}{GetMaterialsMap()}}
+{\footnotesize\ttfamily \label{classMaterialManager_aa7313b456f41df678bc00be0a0cfc298} 
+const std::\+unordered\+\_\+map$<$ std::\+string, std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classMaterial}{Material}} $>$ $>$ \& Material\+Manager::\+\+Get\+Materials\+Map (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classMaterialManager_a45b7f1551160adaf960e972c3a1239dc}\index{MaterialManager@{MaterialManager}!HasMaterial@{HasMaterial}}
+\index{HasMaterial@{HasMaterial}!MaterialManager@{MaterialManager}}
+\doxysubsubsection{\texorpdfstring{HasMaterial()}{HasMaterial()}}
+{\footnotesize\ttfamily \label{classMaterialManager_a45b7f1551160adaf960e972c3a1239dc} 
+bool Material\+Manager::\+\+Has\+Material (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{name}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classMaterialManager_a860d71e00d466e7b8261d1e0b106c90c}\index{MaterialManager@{MaterialManager}!LoadMaterialConfigs@{LoadMaterialConfigs}}
+\index{LoadMaterialConfigs@{LoadMaterialConfigs}!MaterialManager@{MaterialManager}}
+\doxysubsubsection{\texorpdfstring{LoadMaterialConfigs()}{LoadMaterialConfigs()}}
+{\footnotesize\ttfamily \label{classMaterialManager_a860d71e00d466e7b8261d1e0b106c90c} 
+void Material\+Manager::\+\+Load\+Material\+Configs (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classMaterialManager_a860d71e00d466e7b8261d1e0b106c90c_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classMaterialManager_a860d71e00d466e7b8261d1e0b106c90c_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classMaterialManager_aebc3300eceabcc973e91ca1a6051fb67}\index{MaterialManager@{MaterialManager}!RemoveMaterial@{RemoveMaterial}}
+\index{RemoveMaterial@{RemoveMaterial}!MaterialManager@{MaterialManager}}
+\doxysubsubsection{\texorpdfstring{RemoveMaterial()}{RemoveMaterial()}}
+{\footnotesize\ttfamily \label{classMaterialManager_aebc3300eceabcc973e91ca1a6051fb67} 
+void Material\+Manager::\+\+Remove\+Material (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=348pt]{classMaterialManager_aebc3300eceabcc973e91ca1a6051fb67_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+resource/\+material/\+\doxymbox{\hyperlink{MaterialManager_8cppm}{Material\+Manager.\+cppm}}\end{DoxyCompactItemize}

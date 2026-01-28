@@ -1,0 +1,17 @@
+<map id="ECSWorld::GetComponent" name="ECSWorld::GetComponent">
+<area shape="rect" id="Node000001" title=" " alt="" coords="217,157,395,184"/>
+<area shape="rect" id="Node000002" href="$classIconPanel.html#ad80225df7a7a85824bcf54176e31fef1" title=" " alt="" coords="22,5,152,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="281,146,233,96,201,69,167,46,144,35,143,30,170,42,204,65,236,92,286,145"/>
+<area shape="rect" id="Node000003" href="$classLightPanel.html#a808754cbd13dbaa30beafc45f87cfe78" title=" " alt="" coords="21,56,153,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="268,149,222,124,168,97,139,86,138,81,170,92,224,119,273,148"/>
+<area shape="rect" id="Node000004" href="$classMaterialPanel.html#abf0c5def9aa9ed773e1f93c4e36b593e" title=" " alt="" coords="12,107,162,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="228,155,148,137,147,131,233,152"/>
+<area shape="rect" id="Node000005" href="$classRotationPanel.html#a3ef140968b65d93499ffc5f0ea4add39" title=" " alt="" coords="10,157,164,184"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="199,172,165,173,163,168,204,169"/>
+<area shape="rect" id="Node000006" href="$classTagPanel.html#adf695571c4cc592ab162d702cd131bfc" title=" " alt="" coords="24,208,150,235"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="228,190,149,210,147,205,232,186"/>
+<area shape="rect" id="Node000007" href="$classTransformPanel.html#aecf3790bece1e391e36edd88548affe6" title=" " alt="" coords="5,259,169,285"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="273,191,224,222,170,249,139,260,137,256,168,244,222,218,268,194"/>
+<area shape="rect" id="Node000008" href="$classRenderSystem.html#aa8b5500a8f89b3dae59efb1c06b55689" title=" " alt="" coords="8,309,166,336"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="286,195,236,249,204,276,170,300,145,311,143,306,167,295,201,272,233,245,281,197"/>
+</map>

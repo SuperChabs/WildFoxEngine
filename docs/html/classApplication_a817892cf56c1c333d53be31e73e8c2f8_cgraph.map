@@ -1,0 +1,9 @@
+<map id="Application::Shutdown" name="Application::Shutdown">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,56,157,83"/>
+<area shape="rect" id="Node000002" href="$classLogger.html#ab72dd0825c1a37f2289da714562a722f" title=" " alt="" coords="244,5,334,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="138,53,232,32,227,34,140,58"/>
+<area shape="rect" id="Node000003" href="$classApplication.html#a89b744989406cce3ded3aca5bf211147" title=" " alt="" coords="205,56,373,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="157,67,192,69,186,70,157,72"/>
+<area shape="rect" id="Node000004" href="$classLogger.html#a2bce3c7f19d1b4b7ddff5ec605416282" title=" " alt="" coords="217,107,360,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="139,81,219,102,214,103,139,86"/>
+</map>

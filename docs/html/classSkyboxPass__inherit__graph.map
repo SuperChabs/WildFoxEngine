@@ -1,0 +1,5 @@
+<map id="SkyboxPass" name="SkyboxPass">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,80,101,107"/>
+<area shape="rect" id="Node000002" href="$classRenderPass.html" title=" " alt="" coords="6,5,100,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="55,46,56,80,50,79,51,50"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="/home/tymur52/WildFoxEngine/src/ECS/components/Transform.cppm" name="/home/tymur52/WildFoxEngine/src/ECS/components/Transform.cppm">
+<area shape="rect" id="Node000001" title=" " alt="" coords="10,5,259,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,96,98,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,48,77,87,74,83,110,50"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="121,96,312,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="156,46,196,85,190,85,154,51"/>
+</map>

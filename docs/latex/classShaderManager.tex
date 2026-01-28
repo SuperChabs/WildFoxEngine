@@ -1,0 +1,348 @@
+\doxysection{Shader\+Manager Class Reference}
+\hypertarget{classShaderManager}{}\label{classShaderManager}\index{ShaderManager@{ShaderManager}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{classShaderManager_a7603399f16432b94223b9fa78f74fb87}{\texorpdfstring{$\sim$}{\string~}\+Shader\+Manager}} ()
+\item 
+void \doxymbox{\hyperlink{classShaderManager_af81bfd402f285838eb5f746ade6afc59}{Load}} ()
+\item 
+bool \doxymbox{\hyperlink{classShaderManager_a8d1b74b3614ee4553f769c6cc93b0d80}{Reload}} (const std::\+string \&name)
+\item 
+void \doxymbox{\hyperlink{classShaderManager_ac9cf29eb3f890d27af7d6cad56a66af2}{Reload\+All}} ()
+\item 
+void \doxymbox{\hyperlink{classShaderManager_afab931db5d7869c2b634b1bb0f60052a}{Un\+Load}} (const std::\+string \&name)
+\item 
+void \doxymbox{\hyperlink{classShaderManager_af626108663f3ced1980347ac411d7a53}{Bind}} (const std::\+string \&name)
+\item 
+void \doxymbox{\hyperlink{classShaderManager_aa636ed56997166733687d2a042537d2a}{Unbind}} ()
+\item 
+void \doxymbox{\hyperlink{classShaderManager_a7749c6be401b1ef9f497bf644d162066}{Clear\+All}} ()
+\item 
+void \doxymbox{\hyperlink{classShaderManager_ada06e31c0d32e5a7c4ac375ebdbd3974}{Set\+Bool}} (const std::\+string \&shader\+Name, const std::\+string \&variable\+Name, bool v) const
+\item 
+void \doxymbox{\hyperlink{classShaderManager_a08dfaf698708b7a49a2268134a6f6280}{Set\+Int}} (const std::\+string \&shader\+Name, const std::\+string \&variable\+Name, int v) const
+\item 
+void \doxymbox{\hyperlink{classShaderManager_a58e8a11bda281a43ee59edacc12dc51a}{Set\+Float}} (const std::\+string \&shader\+Name, const std::\+string \&variable\+Name, float v) const
+\item 
+void \doxymbox{\hyperlink{classShaderManager_a8a92adc876ec130b1ffd233a14fb3e1e}{Set\+Vec2}} (const std::\+string \&shader\+Name, const std::\+string \&variable\+Name, const glm::\+vec2 \&v) const
+\item 
+void \doxymbox{\hyperlink{classShaderManager_aa75687a222903807115a035363f1e0c5}{Set\+Vec3}} (const std::\+string \&shader\+Name, const std::\+string \&variable\+Name, const glm::\+vec3 \&v) const
+\item 
+void \doxymbox{\hyperlink{classShaderManager_aa35a52f4f39234cbed3a0f1d59d0d350}{Set\+Vec4}} (const std::\+string \&shader\+Name, const std::\+string \&variable\+Name, const glm::\+vec4 \&v) const
+\item 
+void \doxymbox{\hyperlink{classShaderManager_a5fef82069569ba64bfc64ace28e66075}{Set\+Mat4}} (const std::\+string \&shader\+Name, const std::\+string \&variable\+Name, const glm::\+mat4 \&m) const
+\item 
+\doxymbox{\hyperlink{structShaderObj}{Shader\+Obj}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classShaderManager_a6f745bab19beb9466f9474a8ba037185}{Get\+Shader}} (const std::\+string \&name) const
+\item 
+GLuint \doxymbox{\hyperlink{classShaderManager_a1027c875faa356cefb84c1e6626e4179}{Get\+Current\+Shader}} ()
+\item 
+size\+\_\+t \doxymbox{\hyperlink{classShaderManager_a8acac0240bf5bf1eb6f9507521718863}{Get\+Count}} ()
+\item 
+const std::\+unordered\+\_\+map$<$ std::\+string, std::\+unique\+\_\+ptr$<$ \doxymbox{\hyperlink{structShaderObj}{Shader\+Obj}} $>$ $>$ \& \doxymbox{\hyperlink{classShaderManager_afb96dd2bc63ffe46561eb1c2ade9be12}{Get\+Shader\+Map}} () const
+\item 
+bool \doxymbox{\hyperlink{classShaderManager_aaee4d9be09635c496dcec5509a2ab6fa}{Is\+Shader\+Valid}} (const std::\+string \&name) const
+\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{classShaderManager_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classShaderManager_a7603399f16432b94223b9fa78f74fb87}\index{ShaderManager@{ShaderManager}!````~ShaderManager@{\texorpdfstring{$\sim$}{\string~}ShaderManager}}
+\index{````~ShaderManager@{\texorpdfstring{$\sim$}{\string~}ShaderManager}!ShaderManager@{ShaderManager}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}ShaderManager()}{\string~ShaderManager()}}
+{\footnotesize\ttfamily \label{classShaderManager_a7603399f16432b94223b9fa78f74fb87} 
+Shader\+Manager::\+\texorpdfstring{$\sim$}{\string~}\+Shader\+Manager (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_a7603399f16432b94223b9fa78f74fb87_cgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classShaderManager_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classShaderManager_af626108663f3ced1980347ac411d7a53}\index{ShaderManager@{ShaderManager}!Bind@{Bind}}
+\index{Bind@{Bind}!ShaderManager@{ShaderManager}}
+\doxysubsubsection{\texorpdfstring{Bind()}{Bind()}}
+{\footnotesize\ttfamily \label{classShaderManager_af626108663f3ced1980347ac411d7a53} 
+void Shader\+Manager::\+\+Bind (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_af626108663f3ced1980347ac411d7a53_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_af626108663f3ced1980347ac411d7a53_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classShaderManager_a7749c6be401b1ef9f497bf644d162066}\index{ShaderManager@{ShaderManager}!ClearAll@{ClearAll}}
+\index{ClearAll@{ClearAll}!ShaderManager@{ShaderManager}}
+\doxysubsubsection{\texorpdfstring{ClearAll()}{ClearAll()}}
+{\footnotesize\ttfamily \label{classShaderManager_a7749c6be401b1ef9f497bf644d162066} 
+void Shader\+Manager::\+\+Clear\+All (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_a7749c6be401b1ef9f497bf644d162066_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classShaderManager_a8acac0240bf5bf1eb6f9507521718863}\index{ShaderManager@{ShaderManager}!GetCount@{GetCount}}
+\index{GetCount@{GetCount}!ShaderManager@{ShaderManager}}
+\doxysubsubsection{\texorpdfstring{GetCount()}{GetCount()}}
+{\footnotesize\ttfamily \label{classShaderManager_a8acac0240bf5bf1eb6f9507521718863} 
+size\+\_\+t Shader\+Manager::\+\+Get\+Count (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classShaderManager_a1027c875faa356cefb84c1e6626e4179}\index{ShaderManager@{ShaderManager}!GetCurrentShader@{GetCurrentShader}}
+\index{GetCurrentShader@{GetCurrentShader}!ShaderManager@{ShaderManager}}
+\doxysubsubsection{\texorpdfstring{GetCurrentShader()}{GetCurrentShader()}}
+{\footnotesize\ttfamily \label{classShaderManager_a1027c875faa356cefb84c1e6626e4179} 
+GLuint Shader\+Manager::\+\+Get\+Current\+Shader (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classShaderManager_a6f745bab19beb9466f9474a8ba037185}\index{ShaderManager@{ShaderManager}!GetShader@{GetShader}}
+\index{GetShader@{GetShader}!ShaderManager@{ShaderManager}}
+\doxysubsubsection{\texorpdfstring{GetShader()}{GetShader()}}
+{\footnotesize\ttfamily \label{classShaderManager_a6f745bab19beb9466f9474a8ba037185} 
+\doxymbox{\hyperlink{structShaderObj}{Shader\+Obj}} \texorpdfstring{$\ast$}{*} Shader\+Manager::\+\+Get\+Shader (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{name}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_a6f745bab19beb9466f9474a8ba037185_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classShaderManager_afb96dd2bc63ffe46561eb1c2ade9be12}\index{ShaderManager@{ShaderManager}!GetShaderMap@{GetShaderMap}}
+\index{GetShaderMap@{GetShaderMap}!ShaderManager@{ShaderManager}}
+\doxysubsubsection{\texorpdfstring{GetShaderMap()}{GetShaderMap()}}
+{\footnotesize\ttfamily \label{classShaderManager_afb96dd2bc63ffe46561eb1c2ade9be12} 
+const std::\+unordered\+\_\+map$<$ std::\+string, std::\+unique\+\_\+ptr$<$ \doxymbox{\hyperlink{structShaderObj}{Shader\+Obj}} $>$ $>$ \& Shader\+Manager::\+\+Get\+Shader\+Map (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classShaderManager_aaee4d9be09635c496dcec5509a2ab6fa}\index{ShaderManager@{ShaderManager}!IsShaderValid@{IsShaderValid}}
+\index{IsShaderValid@{IsShaderValid}!ShaderManager@{ShaderManager}}
+\doxysubsubsection{\texorpdfstring{IsShaderValid()}{IsShaderValid()}}
+{\footnotesize\ttfamily \label{classShaderManager_aaee4d9be09635c496dcec5509a2ab6fa} 
+bool Shader\+Manager::\+\+Is\+Shader\+Valid (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{name}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_aaee4d9be09635c496dcec5509a2ab6fa_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classShaderManager_af81bfd402f285838eb5f746ade6afc59}\index{ShaderManager@{ShaderManager}!Load@{Load}}
+\index{Load@{Load}!ShaderManager@{ShaderManager}}
+\doxysubsubsection{\texorpdfstring{Load()}{Load()}}
+{\footnotesize\ttfamily \label{classShaderManager_af81bfd402f285838eb5f746ade6afc59} 
+void Shader\+Manager::\+\+Load (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_af81bfd402f285838eb5f746ade6afc59_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=328pt]{classShaderManager_af81bfd402f285838eb5f746ade6afc59_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classShaderManager_a8d1b74b3614ee4553f769c6cc93b0d80}\index{ShaderManager@{ShaderManager}!Reload@{Reload}}
+\index{Reload@{Reload}!ShaderManager@{ShaderManager}}
+\doxysubsubsection{\texorpdfstring{Reload()}{Reload()}}
+{\footnotesize\ttfamily \label{classShaderManager_a8d1b74b3614ee4553f769c6cc93b0d80} 
+bool Shader\+Manager::\+\+Reload (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_a8d1b74b3614ee4553f769c6cc93b0d80_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classShaderManager_ac9cf29eb3f890d27af7d6cad56a66af2}\index{ShaderManager@{ShaderManager}!ReloadAll@{ReloadAll}}
+\index{ReloadAll@{ReloadAll}!ShaderManager@{ShaderManager}}
+\doxysubsubsection{\texorpdfstring{ReloadAll()}{ReloadAll()}}
+{\footnotesize\ttfamily \label{classShaderManager_ac9cf29eb3f890d27af7d6cad56a66af2} 
+void Shader\+Manager::\+\+Reload\+All (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_ac9cf29eb3f890d27af7d6cad56a66af2_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classShaderManager_ada06e31c0d32e5a7c4ac375ebdbd3974}\index{ShaderManager@{ShaderManager}!SetBool@{SetBool}}
+\index{SetBool@{SetBool}!ShaderManager@{ShaderManager}}
+\doxysubsubsection{\texorpdfstring{SetBool()}{SetBool()}}
+{\footnotesize\ttfamily \label{classShaderManager_ada06e31c0d32e5a7c4ac375ebdbd3974} 
+void Shader\+Manager::\+\+Set\+Bool (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{shader\+Name}{, }\item[{const std::\+string \&}]{variable\+Name}{, }\item[{bool}]{v}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_ada06e31c0d32e5a7c4ac375ebdbd3974_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=317pt]{classShaderManager_ada06e31c0d32e5a7c4ac375ebdbd3974_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classShaderManager_a58e8a11bda281a43ee59edacc12dc51a}\index{ShaderManager@{ShaderManager}!SetFloat@{SetFloat}}
+\index{SetFloat@{SetFloat}!ShaderManager@{ShaderManager}}
+\doxysubsubsection{\texorpdfstring{SetFloat()}{SetFloat()}}
+{\footnotesize\ttfamily \label{classShaderManager_a58e8a11bda281a43ee59edacc12dc51a} 
+void Shader\+Manager::\+\+Set\+Float (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{shader\+Name}{, }\item[{const std::\+string \&}]{variable\+Name}{, }\item[{float}]{v}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_a58e8a11bda281a43ee59edacc12dc51a_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_a58e8a11bda281a43ee59edacc12dc51a_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classShaderManager_a08dfaf698708b7a49a2268134a6f6280}\index{ShaderManager@{ShaderManager}!SetInt@{SetInt}}
+\index{SetInt@{SetInt}!ShaderManager@{ShaderManager}}
+\doxysubsubsection{\texorpdfstring{SetInt()}{SetInt()}}
+{\footnotesize\ttfamily \label{classShaderManager_a08dfaf698708b7a49a2268134a6f6280} 
+void Shader\+Manager::\+\+Set\+Int (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{shader\+Name}{, }\item[{const std::\+string \&}]{variable\+Name}{, }\item[{int}]{v}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_a08dfaf698708b7a49a2268134a6f6280_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_a08dfaf698708b7a49a2268134a6f6280_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classShaderManager_a5fef82069569ba64bfc64ace28e66075}\index{ShaderManager@{ShaderManager}!SetMat4@{SetMat4}}
+\index{SetMat4@{SetMat4}!ShaderManager@{ShaderManager}}
+\doxysubsubsection{\texorpdfstring{SetMat4()}{SetMat4()}}
+{\footnotesize\ttfamily \label{classShaderManager_a5fef82069569ba64bfc64ace28e66075} 
+void Shader\+Manager::\+\+Set\+Mat4 (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{shader\+Name}{, }\item[{const std::\+string \&}]{variable\+Name}{, }\item[{const glm::\+mat4 \&}]{m}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_a5fef82069569ba64bfc64ace28e66075_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_a5fef82069569ba64bfc64ace28e66075_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classShaderManager_a8a92adc876ec130b1ffd233a14fb3e1e}\index{ShaderManager@{ShaderManager}!SetVec2@{SetVec2}}
+\index{SetVec2@{SetVec2}!ShaderManager@{ShaderManager}}
+\doxysubsubsection{\texorpdfstring{SetVec2()}{SetVec2()}}
+{\footnotesize\ttfamily \label{classShaderManager_a8a92adc876ec130b1ffd233a14fb3e1e} 
+void Shader\+Manager::\+\+Set\+Vec2 (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{shader\+Name}{, }\item[{const std::\+string \&}]{variable\+Name}{, }\item[{const glm::\+vec2 \&}]{v}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_a8a92adc876ec130b1ffd233a14fb3e1e_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classShaderManager_aa75687a222903807115a035363f1e0c5}\index{ShaderManager@{ShaderManager}!SetVec3@{SetVec3}}
+\index{SetVec3@{SetVec3}!ShaderManager@{ShaderManager}}
+\doxysubsubsection{\texorpdfstring{SetVec3()}{SetVec3()}}
+{\footnotesize\ttfamily \label{classShaderManager_aa75687a222903807115a035363f1e0c5} 
+void Shader\+Manager::\+\+Set\+Vec3 (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{shader\+Name}{, }\item[{const std::\+string \&}]{variable\+Name}{, }\item[{const glm::\+vec3 \&}]{v}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_aa75687a222903807115a035363f1e0c5_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_aa75687a222903807115a035363f1e0c5_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classShaderManager_aa35a52f4f39234cbed3a0f1d59d0d350}\index{ShaderManager@{ShaderManager}!SetVec4@{SetVec4}}
+\index{SetVec4@{SetVec4}!ShaderManager@{ShaderManager}}
+\doxysubsubsection{\texorpdfstring{SetVec4()}{SetVec4()}}
+{\footnotesize\ttfamily \label{classShaderManager_aa35a52f4f39234cbed3a0f1d59d0d350} 
+void Shader\+Manager::\+\+Set\+Vec4 (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{shader\+Name}{, }\item[{const std::\+string \&}]{variable\+Name}{, }\item[{const glm::\+vec4 \&}]{v}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_aa35a52f4f39234cbed3a0f1d59d0d350_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classShaderManager_aa636ed56997166733687d2a042537d2a}\index{ShaderManager@{ShaderManager}!Unbind@{Unbind}}
+\index{Unbind@{Unbind}!ShaderManager@{ShaderManager}}
+\doxysubsubsection{\texorpdfstring{Unbind()}{Unbind()}}
+{\footnotesize\ttfamily \label{classShaderManager_aa636ed56997166733687d2a042537d2a} 
+void Shader\+Manager::\+\+Unbind (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_aa636ed56997166733687d2a042537d2a_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classShaderManager_afab931db5d7869c2b634b1bb0f60052a}\index{ShaderManager@{ShaderManager}!UnLoad@{UnLoad}}
+\index{UnLoad@{UnLoad}!ShaderManager@{ShaderManager}}
+\doxysubsubsection{\texorpdfstring{UnLoad()}{UnLoad()}}
+{\footnotesize\ttfamily \label{classShaderManager_afab931db5d7869c2b634b1bb0f60052a} 
+void Shader\+Manager::\+\+Un\+Load (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classShaderManager_afab931db5d7869c2b634b1bb0f60052a_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+resource/\+shader/\+\doxymbox{\hyperlink{ShaderManager_8cppm}{Shader\+Manager.\+cppm}}\end{DoxyCompactItemize}

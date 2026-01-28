@@ -1,0 +1,201 @@
+\doxysection{ECSWorld Class Reference}
+\hypertarget{classECSWorld}{}\label{classECSWorld}\index{ECSWorld@{ECSWorld}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{classECSWorld_ae9d15eeec418c602e5d1db1e7229fee0}{ECSWorld}} ()
+\item 
+\doxymbox{\hyperlink{classECSWorld_a9386386edadbceae8a12348929ae3f1d}{\texorpdfstring{$\sim$}{\string~}\+ECSWorld}} ()
+\item 
+entt::\+entity \doxymbox{\hyperlink{classECSWorld_a8600d3a3d2c2739511b12bc370a978cc}{Create\+Entity}} (const std::\+string \&name="{}Entity"{})
+\item 
+void \doxymbox{\hyperlink{classECSWorld_aa20a166b31a1ae5e306cede160e52335}{Destroy\+Entity}} (entt::\+entity entity)
+\item 
+bool \doxymbox{\hyperlink{classECSWorld_a7aa3091306fa22ce2bd5a4108a95209e}{Is\+Valid}} (entt::\+entity entity) const
+\item 
+{\footnotesize template$<$typename T, typename... Args$>$ }\\T \& \doxymbox{\hyperlink{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}{Add\+Component}} (entt::\+entity entity, Args \&\&... args)
+\item 
+{\footnotesize template$<$typename T$>$ }\\T \& \doxymbox{\hyperlink{classECSWorld_acfade1daca793fe5aa8d0ffa407ae88f}{Get\+Component}} (entt::\+entity entity)
+\item 
+{\footnotesize template$<$typename T$>$ }\\bool \doxymbox{\hyperlink{classECSWorld_aab445a0a81e5df39c6f5c2329547f333}{Has\+Component}} (entt::\+entity entity) const
+\item 
+{\footnotesize template$<$typename T$>$ }\\void \doxymbox{\hyperlink{classECSWorld_a7a9267e7f466d85d84d0167ca280ad2f}{Remove\+Component}} (entt::\+entity entity)
+\item 
+{\footnotesize template$<$typename... Components$>$ }\\auto \doxymbox{\hyperlink{classECSWorld_a6ede4d306ab2d89418ccb863956920c8}{View}} ()
+\item 
+{\footnotesize template$<$typename... Components, typename Func$>$ }\\void \doxymbox{\hyperlink{classECSWorld_a44a332aed1bcdfd430c70ddf0af5767e}{Each}} (Func \&\&func)
+\item 
+void \doxymbox{\hyperlink{classECSWorld_a109523b68021abd5f9e2749d0d8a1e4a}{Clear}} ()
+\item 
+size\+\_\+t \doxymbox{\hyperlink{classECSWorld_a07a9a637113a7f535021504a7a7b0db3}{Get\+Entity\+Count}} () const
+\item 
+entt::\+registry \& \doxymbox{\hyperlink{classECSWorld_a8a9f8f6a662ec56eee2b9329903ef4a5}{Get\+Registry}} ()
+\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{classECSWorld_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classECSWorld_ae9d15eeec418c602e5d1db1e7229fee0}\index{ECSWorld@{ECSWorld}!ECSWorld@{ECSWorld}}
+\index{ECSWorld@{ECSWorld}!ECSWorld@{ECSWorld}}
+\doxysubsubsection{\texorpdfstring{ECSWorld()}{ECSWorld()}}
+{\footnotesize\ttfamily \label{classECSWorld_ae9d15eeec418c602e5d1db1e7229fee0} 
+ECSWorld::\+\+ECSWorld (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=297pt]{classECSWorld_ae9d15eeec418c602e5d1db1e7229fee0_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classECSWorld_a9386386edadbceae8a12348929ae3f1d}\index{ECSWorld@{ECSWorld}!````~ECSWorld@{\texorpdfstring{$\sim$}{\string~}ECSWorld}}
+\index{````~ECSWorld@{\texorpdfstring{$\sim$}{\string~}ECSWorld}!ECSWorld@{ECSWorld}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}ECSWorld()}{\string~ECSWorld()}}
+{\footnotesize\ttfamily \label{classECSWorld_a9386386edadbceae8a12348929ae3f1d} 
+ECSWorld::\+\texorpdfstring{$\sim$}{\string~}\+ECSWorld (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=327pt]{classECSWorld_a9386386edadbceae8a12348929ae3f1d_cgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classECSWorld_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16}\index{ECSWorld@{ECSWorld}!AddComponent@{AddComponent}}
+\index{AddComponent@{AddComponent}!ECSWorld@{ECSWorld}}
+\doxysubsubsection{\texorpdfstring{AddComponent()}{AddComponent()}}
+{\footnotesize\ttfamily \label{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16} 
+template$<$typename T, typename... Args$>$ \\
+T \& ECSWorld::\+\+Add\+Component (\begin{DoxyParamCaption}\item[{entt::\+entity}]{entity}{, }\item[{Args \&\&...}]{args}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classECSWorld_a5ff09e6e04469d3bc4d5128eb6241c16_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classECSWorld_a109523b68021abd5f9e2749d0d8a1e4a}\index{ECSWorld@{ECSWorld}!Clear@{Clear}}
+\index{Clear@{Clear}!ECSWorld@{ECSWorld}}
+\doxysubsubsection{\texorpdfstring{Clear()}{Clear()}}
+{\footnotesize\ttfamily \label{classECSWorld_a109523b68021abd5f9e2749d0d8a1e4a} 
+void ECSWorld::\+\+Clear (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=327pt]{classECSWorld_a109523b68021abd5f9e2749d0d8a1e4a_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classECSWorld_a8600d3a3d2c2739511b12bc370a978cc}\index{ECSWorld@{ECSWorld}!CreateEntity@{CreateEntity}}
+\index{CreateEntity@{CreateEntity}!ECSWorld@{ECSWorld}}
+\doxysubsubsection{\texorpdfstring{CreateEntity()}{CreateEntity()}}
+{\footnotesize\ttfamily \label{classECSWorld_a8600d3a3d2c2739511b12bc370a978cc} 
+entt::\+entity ECSWorld::\+\+Create\+Entity (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{name}{ = {\ttfamily "{}Entity"{}}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=306pt]{classECSWorld_a8600d3a3d2c2739511b12bc370a978cc_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classECSWorld_aa20a166b31a1ae5e306cede160e52335}\index{ECSWorld@{ECSWorld}!DestroyEntity@{DestroyEntity}}
+\index{DestroyEntity@{DestroyEntity}!ECSWorld@{ECSWorld}}
+\doxysubsubsection{\texorpdfstring{DestroyEntity()}{DestroyEntity()}}
+{\footnotesize\ttfamily \label{classECSWorld_aa20a166b31a1ae5e306cede160e52335} 
+void ECSWorld::\+\+Destroy\+Entity (\begin{DoxyParamCaption}\item[{entt::\+entity}]{entity}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classECSWorld_a44a332aed1bcdfd430c70ddf0af5767e}\index{ECSWorld@{ECSWorld}!Each@{Each}}
+\index{Each@{Each}!ECSWorld@{ECSWorld}}
+\doxysubsubsection{\texorpdfstring{Each()}{Each()}}
+{\footnotesize\ttfamily \label{classECSWorld_a44a332aed1bcdfd430c70ddf0af5767e} 
+template$<$typename... Components, typename Func$>$ \\
+void ECSWorld::\+\+Each (\begin{DoxyParamCaption}\item[{Func \&\&}]{func}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=344pt]{classECSWorld_a44a332aed1bcdfd430c70ddf0af5767e_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classECSWorld_acfade1daca793fe5aa8d0ffa407ae88f}\index{ECSWorld@{ECSWorld}!GetComponent@{GetComponent}}
+\index{GetComponent@{GetComponent}!ECSWorld@{ECSWorld}}
+\doxysubsubsection{\texorpdfstring{GetComponent()}{GetComponent()}}
+{\footnotesize\ttfamily \label{classECSWorld_acfade1daca793fe5aa8d0ffa407ae88f} 
+template$<$typename T$>$ \\
+T \& ECSWorld::\+\+Get\+Component (\begin{DoxyParamCaption}\item[{entt::\+entity}]{entity}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classECSWorld_acfade1daca793fe5aa8d0ffa407ae88f_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classECSWorld_a07a9a637113a7f535021504a7a7b0db3}\index{ECSWorld@{ECSWorld}!GetEntityCount@{GetEntityCount}}
+\index{GetEntityCount@{GetEntityCount}!ECSWorld@{ECSWorld}}
+\doxysubsubsection{\texorpdfstring{GetEntityCount()}{GetEntityCount()}}
+{\footnotesize\ttfamily \label{classECSWorld_a07a9a637113a7f535021504a7a7b0db3} 
+size\+\_\+t ECSWorld::\+\+Get\+Entity\+Count (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classECSWorld_a8a9f8f6a662ec56eee2b9329903ef4a5}\index{ECSWorld@{ECSWorld}!GetRegistry@{GetRegistry}}
+\index{GetRegistry@{GetRegistry}!ECSWorld@{ECSWorld}}
+\doxysubsubsection{\texorpdfstring{GetRegistry()}{GetRegistry()}}
+{\footnotesize\ttfamily \label{classECSWorld_a8a9f8f6a662ec56eee2b9329903ef4a5} 
+entt::\+registry \& ECSWorld::\+\+Get\+Registry (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classECSWorld_aab445a0a81e5df39c6f5c2329547f333}\index{ECSWorld@{ECSWorld}!HasComponent@{HasComponent}}
+\index{HasComponent@{HasComponent}!ECSWorld@{ECSWorld}}
+\doxysubsubsection{\texorpdfstring{HasComponent()}{HasComponent()}}
+{\footnotesize\ttfamily \label{classECSWorld_aab445a0a81e5df39c6f5c2329547f333} 
+template$<$typename T$>$ \\
+bool ECSWorld::\+\+Has\+Component (\begin{DoxyParamCaption}\item[{entt::\+entity}]{entity}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classECSWorld_aab445a0a81e5df39c6f5c2329547f333_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classECSWorld_a7aa3091306fa22ce2bd5a4108a95209e}\index{ECSWorld@{ECSWorld}!IsValid@{IsValid}}
+\index{IsValid@{IsValid}!ECSWorld@{ECSWorld}}
+\doxysubsubsection{\texorpdfstring{IsValid()}{IsValid()}}
+{\footnotesize\ttfamily \label{classECSWorld_a7aa3091306fa22ce2bd5a4108a95209e} 
+bool ECSWorld::\+\+Is\+Valid (\begin{DoxyParamCaption}\item[{entt::\+entity}]{entity}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=342pt]{classECSWorld_a7aa3091306fa22ce2bd5a4108a95209e_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classECSWorld_a7a9267e7f466d85d84d0167ca280ad2f}\index{ECSWorld@{ECSWorld}!RemoveComponent@{RemoveComponent}}
+\index{RemoveComponent@{RemoveComponent}!ECSWorld@{ECSWorld}}
+\doxysubsubsection{\texorpdfstring{RemoveComponent()}{RemoveComponent()}}
+{\footnotesize\ttfamily \label{classECSWorld_a7a9267e7f466d85d84d0167ca280ad2f} 
+template$<$typename T$>$ \\
+void ECSWorld::\+\+Remove\+Component (\begin{DoxyParamCaption}\item[{entt::\+entity}]{entity}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classECSWorld_a6ede4d306ab2d89418ccb863956920c8}\index{ECSWorld@{ECSWorld}!View@{View}}
+\index{View@{View}!ECSWorld@{ECSWorld}}
+\doxysubsubsection{\texorpdfstring{View()}{View()}}
+{\footnotesize\ttfamily \label{classECSWorld_a6ede4d306ab2d89418ccb863956920c8} 
+template$<$typename... Components$>$ \\
+auto ECSWorld::\+\+View (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+\+ECS/\+\doxymbox{\hyperlink{World_8cppm}{World.\+cppm}}\end{DoxyCompactItemize}

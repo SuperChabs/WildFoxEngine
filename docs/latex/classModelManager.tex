@@ -1,0 +1,165 @@
+\doxysection{Model\+Manager Class Reference}
+\hypertarget{classModelManager}{}\label{classModelManager}\index{ModelManager@{ModelManager}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{classModelManager_ab9bee567bd727cedef4750f8ba638a68}{Model\+Manager}} ()=default
+\item 
+\doxymbox{\hyperlink{classModelManager_a93f4eea50036cc5453014234aa921c7c}{\texorpdfstring{$\sim$}{\string~}\+Model\+Manager}} ()
+\item 
+std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classModel}{Model}} $>$ \doxymbox{\hyperlink{classModelManager_ac60b765a65d015e353352f0e345d9e24}{Load}} (const std::\+string \&filepath)
+\item 
+std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classModel}{Model}} $>$ \doxymbox{\hyperlink{classModelManager_a2a586cee77bf909f90afedd752248e60}{Get}} (const std::\+string \&filepath)
+\item 
+void \doxymbox{\hyperlink{classModelManager_a061300118a54169d78fa95b0443a8a3d}{Unload}} (const std::\+string \&filepath)
+\item 
+void \doxymbox{\hyperlink{classModelManager_a8595dd7037b9302e73fd752d8216b5e1}{Cleanup\+Unused}} ()
+\item 
+void \doxymbox{\hyperlink{classModelManager_aa842900cc4a369a85ff6e2e4a21f93b7}{Unload\+All}} ()
+\item 
+bool \doxymbox{\hyperlink{classModelManager_a7f5a0951d7b75fab049c7c89532bdb27}{Is\+Loaded}} (const std::\+string \&filepath) const
+\item 
+size\+\_\+t \doxymbox{\hyperlink{classModelManager_a4c503d736bece17d51191359357de242}{Get\+Loaded\+Count}} () const
+\item 
+std::\+vector$<$ std::\+string $>$ \doxymbox{\hyperlink{classModelManager_a835b9fcecffe003de3c61d3d3f979ab0}{Get\+Loaded\+Model\+Names}} () const
+\item 
+void \doxymbox{\hyperlink{classModelManager_ae78880b98dd4a3dba9dccc81e3d92de3}{Set\+Assets\+Path}} (const std::\+string \&path)
+\item 
+const std::\+string \& \doxymbox{\hyperlink{classModelManager_a3b9565d66ab72a90eeeff12eef907874}{Get\+Assets\+Path}} () const
+\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{classModelManager_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classModelManager_ab9bee567bd727cedef4750f8ba638a68}\index{ModelManager@{ModelManager}!ModelManager@{ModelManager}}
+\index{ModelManager@{ModelManager}!ModelManager@{ModelManager}}
+\doxysubsubsection{\texorpdfstring{ModelManager()}{ModelManager()}}
+{\footnotesize\ttfamily \label{classModelManager_ab9bee567bd727cedef4750f8ba638a68} 
+Model\+Manager::\+\+Model\+Manager (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\Hypertarget{classModelManager_a93f4eea50036cc5453014234aa921c7c}\index{ModelManager@{ModelManager}!````~ModelManager@{\texorpdfstring{$\sim$}{\string~}ModelManager}}
+\index{````~ModelManager@{\texorpdfstring{$\sim$}{\string~}ModelManager}!ModelManager@{ModelManager}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}ModelManager()}{\string~ModelManager()}}
+{\footnotesize\ttfamily \label{classModelManager_a93f4eea50036cc5453014234aa921c7c} 
+Model\+Manager::\+\texorpdfstring{$\sim$}{\string~}\+Model\+Manager (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classModelManager_a93f4eea50036cc5453014234aa921c7c_cgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classModelManager_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classModelManager_a8595dd7037b9302e73fd752d8216b5e1}\index{ModelManager@{ModelManager}!CleanupUnused@{CleanupUnused}}
+\index{CleanupUnused@{CleanupUnused}!ModelManager@{ModelManager}}
+\doxysubsubsection{\texorpdfstring{CleanupUnused()}{CleanupUnused()}}
+{\footnotesize\ttfamily \label{classModelManager_a8595dd7037b9302e73fd752d8216b5e1} 
+void Model\+Manager::\+\+Cleanup\+Unused (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=339pt]{classModelManager_a8595dd7037b9302e73fd752d8216b5e1_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classModelManager_a2a586cee77bf909f90afedd752248e60}\index{ModelManager@{ModelManager}!Get@{Get}}
+\index{Get@{Get}!ModelManager@{ModelManager}}
+\doxysubsubsection{\texorpdfstring{Get()}{Get()}}
+{\footnotesize\ttfamily \label{classModelManager_a2a586cee77bf909f90afedd752248e60} 
+std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classModel}{Model}} $>$ Model\+Manager::\+\+Get (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{filepath}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=285pt]{classModelManager_a2a586cee77bf909f90afedd752248e60_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classModelManager_a3b9565d66ab72a90eeeff12eef907874}\index{ModelManager@{ModelManager}!GetAssetsPath@{GetAssetsPath}}
+\index{GetAssetsPath@{GetAssetsPath}!ModelManager@{ModelManager}}
+\doxysubsubsection{\texorpdfstring{GetAssetsPath()}{GetAssetsPath()}}
+{\footnotesize\ttfamily \label{classModelManager_a3b9565d66ab72a90eeeff12eef907874} 
+const std::\+string \& Model\+Manager::\+\+Get\+Assets\+Path (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classModelManager_a4c503d736bece17d51191359357de242}\index{ModelManager@{ModelManager}!GetLoadedCount@{GetLoadedCount}}
+\index{GetLoadedCount@{GetLoadedCount}!ModelManager@{ModelManager}}
+\doxysubsubsection{\texorpdfstring{GetLoadedCount()}{GetLoadedCount()}}
+{\footnotesize\ttfamily \label{classModelManager_a4c503d736bece17d51191359357de242} 
+size\+\_\+t Model\+Manager::\+\+Get\+Loaded\+Count (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classModelManager_a835b9fcecffe003de3c61d3d3f979ab0}\index{ModelManager@{ModelManager}!GetLoadedModelNames@{GetLoadedModelNames}}
+\index{GetLoadedModelNames@{GetLoadedModelNames}!ModelManager@{ModelManager}}
+\doxysubsubsection{\texorpdfstring{GetLoadedModelNames()}{GetLoadedModelNames()}}
+{\footnotesize\ttfamily \label{classModelManager_a835b9fcecffe003de3c61d3d3f979ab0} 
+std::\+vector$<$ std::\+string $>$ Model\+Manager::\+\+Get\+Loaded\+Model\+Names (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classModelManager_a7f5a0951d7b75fab049c7c89532bdb27}\index{ModelManager@{ModelManager}!IsLoaded@{IsLoaded}}
+\index{IsLoaded@{IsLoaded}!ModelManager@{ModelManager}}
+\doxysubsubsection{\texorpdfstring{IsLoaded()}{IsLoaded()}}
+{\footnotesize\ttfamily \label{classModelManager_a7f5a0951d7b75fab049c7c89532bdb27} 
+bool Model\+Manager::\+\+Is\+Loaded (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{filepath}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classModelManager_ac60b765a65d015e353352f0e345d9e24}\index{ModelManager@{ModelManager}!Load@{Load}}
+\index{Load@{Load}!ModelManager@{ModelManager}}
+\doxysubsubsection{\texorpdfstring{Load()}{Load()}}
+{\footnotesize\ttfamily \label{classModelManager_ac60b765a65d015e353352f0e345d9e24} 
+std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classModel}{Model}} $>$ Model\+Manager::\+\+Load (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{filepath}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classModelManager_ac60b765a65d015e353352f0e345d9e24_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classModelManager_ae78880b98dd4a3dba9dccc81e3d92de3}\index{ModelManager@{ModelManager}!SetAssetsPath@{SetAssetsPath}}
+\index{SetAssetsPath@{SetAssetsPath}!ModelManager@{ModelManager}}
+\doxysubsubsection{\texorpdfstring{SetAssetsPath()}{SetAssetsPath()}}
+{\footnotesize\ttfamily \label{classModelManager_ae78880b98dd4a3dba9dccc81e3d92de3} 
+void Model\+Manager::\+\+Set\+Assets\+Path (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{path}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classModelManager_a061300118a54169d78fa95b0443a8a3d}\index{ModelManager@{ModelManager}!Unload@{Unload}}
+\index{Unload@{Unload}!ModelManager@{ModelManager}}
+\doxysubsubsection{\texorpdfstring{Unload()}{Unload()}}
+{\footnotesize\ttfamily \label{classModelManager_a061300118a54169d78fa95b0443a8a3d} 
+void Model\+Manager::\+\+Unload (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{filepath}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=300pt]{classModelManager_a061300118a54169d78fa95b0443a8a3d_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classModelManager_aa842900cc4a369a85ff6e2e4a21f93b7}\index{ModelManager@{ModelManager}!UnloadAll@{UnloadAll}}
+\index{UnloadAll@{UnloadAll}!ModelManager@{ModelManager}}
+\doxysubsubsection{\texorpdfstring{UnloadAll()}{UnloadAll()}}
+{\footnotesize\ttfamily \label{classModelManager_aa842900cc4a369a85ff6e2e4a21f93b7} 
+void Model\+Manager::\+\+Unload\+All (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=311pt]{classModelManager_aa842900cc4a369a85ff6e2e4a21f93b7_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classModelManager_aa842900cc4a369a85ff6e2e4a21f93b7_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+resource/\+model/\+\doxymbox{\hyperlink{ModelManager_8cppm}{Model\+Manager.\+cppm}}\end{DoxyCompactItemize}

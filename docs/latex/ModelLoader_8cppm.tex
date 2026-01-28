@@ -1,0 +1,140 @@
+\doxysection{/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+resource/\+model/\+\+Model\+Loader.cppm File Reference}
+\hypertarget{ModelLoader_8cppm}{}\label{ModelLoader_8cppm}\index{/home/tymur52/WildFoxEngine/src/resource/model/ModelLoader.cppm@{/home/tymur52/WildFoxEngine/src/resource/model/ModelLoader.cppm}}
+{\ttfamily \+\#include $<$vector$>$}\newline
+{\ttfamily \+\#include $<$string$>$}\newline
+{\ttfamily \+\#include $<$glad/\+glad.\+h$>$}\newline
+{\ttfamily \+\#include $<$glm/\+glm.\+hpp$>$}\newline
+{\ttfamily \+\#include $<$stb\+\_\+image.\+h$>$}\newline
+{\ttfamily \+\#include $<$assimp/\+\+Importer.\+hpp$>$}\newline
+{\ttfamily \+\#include $<$assimp/\+scene.\+h$>$}\newline
+{\ttfamily \+\#include $<$assimp/\+postprocess.\+h$>$}\newline
+{\ttfamily \+\#include $<$assimp/\+mesh.\+h$>$}\newline
+{\ttfamily import WFE.\+Core.\+Logger;}\newline
+{\ttfamily import WFE.\+Rendering.\+Mesh\+Data;}\newline
+{\ttfamily import WFE.\+Scene.\+Mesh;}\newline
+{\ttfamily import WFE.\+Resource.\+Model.\+Model;}\newline
+Include dependency graph for Model\+Loader.\+cppm:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ModelLoader_8cppm__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{ModelLoader_8cppm_ab78526cca6ca1ac0a6fac37c05561c14}{Process\+Node}} (ai\+Node \texorpdfstring{$\ast$}{*}node, const ai\+Scene \texorpdfstring{$\ast$}{*}scene, \doxymbox{\hyperlink{classModel}{Model}} \texorpdfstring{$\ast$}{*}model, const std::\+string \&directory)
+\item 
+\doxymbox{\hyperlink{classMesh}{Mesh}} \doxymbox{\hyperlink{ModelLoader_8cppm_a5dfb59d1ff7bac6303f92530182b13e4}{Process\+Mesh}} (ai\+Mesh \texorpdfstring{$\ast$}{*}mesh, const ai\+Scene \texorpdfstring{$\ast$}{*}scene, const std::\+string \&directory)
+\item 
+std::\+vector$<$ \doxymbox{\hyperlink{classTexture}{Texture}} $>$ \doxymbox{\hyperlink{ModelLoader_8cppm_aa97893adcee3ccec766caf3ca43bd69e}{Load\+Material\+Textures}} (ai\+Material \texorpdfstring{$\ast$}{*}mat, ai\+Texture\+Type type, const std::\+string \&type\+Name, const std::\+string \&directory)
+\item 
+unsigned int \doxymbox{\hyperlink{ModelLoader_8cppm_a6e150fa04bda00c2fef2e26dcafc9cd2}{Texture\+From\+File}} (const char \texorpdfstring{$\ast$}{*}path, const std::\+string \&directory)
+\item 
+\doxymbox{\hyperlink{classModel}{Model}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{ModelLoader_8cppm_a677a48f30835598f5480e2a4e2dfa1bc}{Load\+Model\+From\+File}} (const std::\+string \&path)
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{ModelLoader_8cppm_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{ModelLoader_8cppm_aa97893adcee3ccec766caf3ca43bd69e}\index{ModelLoader.cppm@{ModelLoader.cppm}!LoadMaterialTextures@{LoadMaterialTextures}}
+\index{LoadMaterialTextures@{LoadMaterialTextures}!ModelLoader.cppm@{ModelLoader.cppm}}
+\doxysubsubsection{\texorpdfstring{LoadMaterialTextures()}{LoadMaterialTextures()}}
+{\footnotesize\ttfamily \label{ModelLoader_8cppm_aa97893adcee3ccec766caf3ca43bd69e} 
+std::\+vector$<$ \doxymbox{\hyperlink{classTexture}{Texture}} $>$ Load\+Material\+Textures (\begin{DoxyParamCaption}\item[{ai\+Material \texorpdfstring{$\ast$}{*}}]{mat}{, }\item[{ai\+Texture\+Type}]{type}{, }\item[{const std::\+string \&}]{type\+Name}{, }\item[{const std::\+string \&}]{directory}{}\end{DoxyParamCaption})}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ModelLoader_8cppm_aa97893adcee3ccec766caf3ca43bd69e_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ModelLoader_8cppm_aa97893adcee3ccec766caf3ca43bd69e_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{ModelLoader_8cppm_a677a48f30835598f5480e2a4e2dfa1bc}\index{ModelLoader.cppm@{ModelLoader.cppm}!LoadModelFromFile@{LoadModelFromFile}}
+\index{LoadModelFromFile@{LoadModelFromFile}!ModelLoader.cppm@{ModelLoader.cppm}}
+\doxysubsubsection{\texorpdfstring{LoadModelFromFile()}{LoadModelFromFile()}}
+{\footnotesize\ttfamily \label{ModelLoader_8cppm_a677a48f30835598f5480e2a4e2dfa1bc} 
+\doxymbox{\hyperlink{classModel}{Model}} \texorpdfstring{$\ast$}{*} Load\+Model\+From\+File (\begin{DoxyParamCaption}\item[{const std::\+string \&}]{path}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [export]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ModelLoader_8cppm_a677a48f30835598f5480e2a4e2dfa1bc_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=324pt]{ModelLoader_8cppm_a677a48f30835598f5480e2a4e2dfa1bc_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{ModelLoader_8cppm_a5dfb59d1ff7bac6303f92530182b13e4}\index{ModelLoader.cppm@{ModelLoader.cppm}!ProcessMesh@{ProcessMesh}}
+\index{ProcessMesh@{ProcessMesh}!ModelLoader.cppm@{ModelLoader.cppm}}
+\doxysubsubsection{\texorpdfstring{ProcessMesh()}{ProcessMesh()}}
+{\footnotesize\ttfamily \label{ModelLoader_8cppm_a5dfb59d1ff7bac6303f92530182b13e4} 
+\doxymbox{\hyperlink{classMesh}{Mesh}} Process\+Mesh (\begin{DoxyParamCaption}\item[{ai\+Mesh \texorpdfstring{$\ast$}{*}}]{mesh}{, }\item[{const ai\+Scene \texorpdfstring{$\ast$}{*}}]{scene}{, }\item[{const std::\+string \&}]{directory}{}\end{DoxyParamCaption})}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ModelLoader_8cppm_a5dfb59d1ff7bac6303f92530182b13e4_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ModelLoader_8cppm_a5dfb59d1ff7bac6303f92530182b13e4_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{ModelLoader_8cppm_ab78526cca6ca1ac0a6fac37c05561c14}\index{ModelLoader.cppm@{ModelLoader.cppm}!ProcessNode@{ProcessNode}}
+\index{ProcessNode@{ProcessNode}!ModelLoader.cppm@{ModelLoader.cppm}}
+\doxysubsubsection{\texorpdfstring{ProcessNode()}{ProcessNode()}}
+{\footnotesize\ttfamily \label{ModelLoader_8cppm_ab78526cca6ca1ac0a6fac37c05561c14} 
+void Process\+Node (\begin{DoxyParamCaption}\item[{ai\+Node \texorpdfstring{$\ast$}{*}}]{node}{, }\item[{const ai\+Scene \texorpdfstring{$\ast$}{*}}]{scene}{, }\item[{\doxymbox{\hyperlink{classModel}{Model}} \texorpdfstring{$\ast$}{*}}]{model}{, }\item[{const std::\+string \&}]{directory}{}\end{DoxyParamCaption})}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ModelLoader_8cppm_ab78526cca6ca1ac0a6fac37c05561c14_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ModelLoader_8cppm_ab78526cca6ca1ac0a6fac37c05561c14_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{ModelLoader_8cppm_a6e150fa04bda00c2fef2e26dcafc9cd2}\index{ModelLoader.cppm@{ModelLoader.cppm}!TextureFromFile@{TextureFromFile}}
+\index{TextureFromFile@{TextureFromFile}!ModelLoader.cppm@{ModelLoader.cppm}}
+\doxysubsubsection{\texorpdfstring{TextureFromFile()}{TextureFromFile()}}
+{\footnotesize\ttfamily \label{ModelLoader_8cppm_a6e150fa04bda00c2fef2e26dcafc9cd2} 
+unsigned int Texture\+From\+File (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{path}{, }\item[{const std::\+string \&}]{directory}{}\end{DoxyParamCaption})}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=270pt]{ModelLoader_8cppm_a6e150fa04bda00c2fef2e26dcafc9cd2_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ModelLoader_8cppm_a6e150fa04bda00c2fef2e26dcafc9cd2_icgraph}
+\end{center}
+\end{figure}

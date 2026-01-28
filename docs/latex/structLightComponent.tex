@@ -1,0 +1,172 @@
+\doxysection{Light\+Component Struct Reference}
+\hypertarget{structLightComponent}{}\label{structLightComponent}\index{LightComponent@{LightComponent}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{structLightComponent_adc84363bf040bce2deab98a39cd58969}{Light\+Component}} ()=default
+\item 
+\doxymbox{\hyperlink{structLightComponent_afc359e9b15100b952fa50e2e4d8dc085}{Light\+Component}} (\doxymbox{\hyperlink{Light_8cppm_adc3ec8293e6a97ebe43f0196b9a7f638}{Light\+Type}} t)
+\item 
+void \doxymbox{\hyperlink{structLightComponent_a882c785c7348f02476de49c134425696}{Sync\+With\+Transform}} (const \doxymbox{\hyperlink{structTransformComponent}{Transform\+Component}} \&transform)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{Light_8cppm_adc3ec8293e6a97ebe43f0196b9a7f638}{Light\+Type}} \doxymbox{\hyperlink{structLightComponent_a9a3ac80974325b66dd71dd08bbabe04d}{type}} = \doxymbox{\hyperlink{Light_8cppm_adc3ec8293e6a97ebe43f0196b9a7f638ab6f2249394a4def60a78b342dcc925b9}{Light\+Type::\+\+DIRECTIONAL}}
+\item 
+glm::\+vec3 \doxymbox{\hyperlink{structLightComponent_a666f3ca89bd729ff10e3d675ea6172c2}{position}} \{0.\+0f, 5.\+0f, 0.\+0f\}
+\item 
+glm::\+vec3 \doxymbox{\hyperlink{structLightComponent_ab636f546c6ffa8e1be81bd938fe28bdc}{direction}} \{0.\+0f, -\/1.\+0f, 0.\+0f\}
+\item 
+glm::\+vec3 \doxymbox{\hyperlink{structLightComponent_a43b3f645957d8601428366e56ff6c8c3}{ambient}} \{0.\+2f, 0.\+2f, 0.\+2f\}
+\item 
+glm::\+vec3 \doxymbox{\hyperlink{structLightComponent_a49b8f775bded7b4889f550e08106f73e}{diffuse}} \{0.\+8f, 0.\+8f, 0.\+8f\}
+\item 
+glm::\+vec3 \doxymbox{\hyperlink{structLightComponent_ad229d71fb12ed968b4487d5ca7c66e18}{specular}} \{1.\+0f, 1.\+0f, 1.\+0f\}
+\item 
+float \doxymbox{\hyperlink{structLightComponent_a9f90a93fd09511fd414e77e153d87678}{intensity}} = 1.\+0f
+\item 
+bool \doxymbox{\hyperlink{structLightComponent_a669bc9d9b73dc855e63c77ba61fce275}{is\+Active}} = true
+\item 
+bool \doxymbox{\hyperlink{structLightComponent_a571ec3f3330a7b7b54ee9223c86d163d}{cast\+Shadows}} = true
+\item 
+float \doxymbox{\hyperlink{structLightComponent_aa4952319349a090618026528ea38842c}{constant}} = 1.\+0f
+\item 
+float \doxymbox{\hyperlink{structLightComponent_a81673580d7cb071aefa5b47751e4087d}{linear}} = 0.\+09f
+\item 
+float \doxymbox{\hyperlink{structLightComponent_aef799aacefd4e3c660b91c9125505241}{quadratic}} = 0.\+032f
+\item 
+float \doxymbox{\hyperlink{structLightComponent_a3b105ba16e8c93a5d8d390966f3063b7}{radius}} = 50.\+0f
+\item 
+float \doxymbox{\hyperlink{structLightComponent_aa8183e5e925d75718e19a97ba97bb0f0}{inner\+Cutoff}} = 12.\+5f
+\item 
+float \doxymbox{\hyperlink{structLightComponent_a43f4aad78c6ad840d9191b103eed7057}{outer\+Cutoff}} = 17.\+5f
+\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{structLightComponent_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{structLightComponent_adc84363bf040bce2deab98a39cd58969}\index{LightComponent@{LightComponent}!LightComponent@{LightComponent}}
+\index{LightComponent@{LightComponent}!LightComponent@{LightComponent}}
+\doxysubsubsection{\texorpdfstring{LightComponent()}{LightComponent()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{structLightComponent_adc84363bf040bce2deab98a39cd58969} 
+Light\+Component::\+\+Light\+Component (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\Hypertarget{structLightComponent_afc359e9b15100b952fa50e2e4d8dc085}\index{LightComponent@{LightComponent}!LightComponent@{LightComponent}}
+\index{LightComponent@{LightComponent}!LightComponent@{LightComponent}}
+\doxysubsubsection{\texorpdfstring{LightComponent()}{LightComponent()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{structLightComponent_afc359e9b15100b952fa50e2e4d8dc085} 
+Light\+Component::\+\+Light\+Component (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{Light_8cppm_adc3ec8293e6a97ebe43f0196b9a7f638}{Light\+Type}}}]{t}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\label{doc-func-members}
+\Hypertarget{structLightComponent_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{structLightComponent_a882c785c7348f02476de49c134425696}\index{LightComponent@{LightComponent}!SyncWithTransform@{SyncWithTransform}}
+\index{SyncWithTransform@{SyncWithTransform}!LightComponent@{LightComponent}}
+\doxysubsubsection{\texorpdfstring{SyncWithTransform()}{SyncWithTransform()}}
+{\footnotesize\ttfamily \label{structLightComponent_a882c785c7348f02476de49c134425696} 
+void Light\+Component::\+\+Sync\+With\+Transform (\begin{DoxyParamCaption}\item[{const \doxymbox{\hyperlink{structTransformComponent}{Transform\+Component}} \&}]{transform}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\label{doc-variable-members}
+\Hypertarget{structLightComponent_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structLightComponent_a43b3f645957d8601428366e56ff6c8c3}\index{LightComponent@{LightComponent}!ambient@{ambient}}
+\index{ambient@{ambient}!LightComponent@{LightComponent}}
+\doxysubsubsection{\texorpdfstring{ambient}{ambient}}
+{\footnotesize\ttfamily \label{structLightComponent_a43b3f645957d8601428366e56ff6c8c3} 
+glm::\+vec3 Light\+Component::\+ambient \{0.\+2f, 0.\+2f, 0.\+2f\}}
+
+\Hypertarget{structLightComponent_a571ec3f3330a7b7b54ee9223c86d163d}\index{LightComponent@{LightComponent}!castShadows@{castShadows}}
+\index{castShadows@{castShadows}!LightComponent@{LightComponent}}
+\doxysubsubsection{\texorpdfstring{castShadows}{castShadows}}
+{\footnotesize\ttfamily \label{structLightComponent_a571ec3f3330a7b7b54ee9223c86d163d} 
+bool Light\+Component::\+cast\+Shadows = true}
+
+\Hypertarget{structLightComponent_aa4952319349a090618026528ea38842c}\index{LightComponent@{LightComponent}!constant@{constant}}
+\index{constant@{constant}!LightComponent@{LightComponent}}
+\doxysubsubsection{\texorpdfstring{constant}{constant}}
+{\footnotesize\ttfamily \label{structLightComponent_aa4952319349a090618026528ea38842c} 
+float Light\+Component::\+constant = 1.\+0f}
+
+\Hypertarget{structLightComponent_a49b8f775bded7b4889f550e08106f73e}\index{LightComponent@{LightComponent}!diffuse@{diffuse}}
+\index{diffuse@{diffuse}!LightComponent@{LightComponent}}
+\doxysubsubsection{\texorpdfstring{diffuse}{diffuse}}
+{\footnotesize\ttfamily \label{structLightComponent_a49b8f775bded7b4889f550e08106f73e} 
+glm::\+vec3 Light\+Component::\+diffuse \{0.\+8f, 0.\+8f, 0.\+8f\}}
+
+\Hypertarget{structLightComponent_ab636f546c6ffa8e1be81bd938fe28bdc}\index{LightComponent@{LightComponent}!direction@{direction}}
+\index{direction@{direction}!LightComponent@{LightComponent}}
+\doxysubsubsection{\texorpdfstring{direction}{direction}}
+{\footnotesize\ttfamily \label{structLightComponent_ab636f546c6ffa8e1be81bd938fe28bdc} 
+glm::\+vec3 Light\+Component::\+direction \{0.\+0f, -\/1.\+0f, 0.\+0f\}}
+
+\Hypertarget{structLightComponent_aa8183e5e925d75718e19a97ba97bb0f0}\index{LightComponent@{LightComponent}!innerCutoff@{innerCutoff}}
+\index{innerCutoff@{innerCutoff}!LightComponent@{LightComponent}}
+\doxysubsubsection{\texorpdfstring{innerCutoff}{innerCutoff}}
+{\footnotesize\ttfamily \label{structLightComponent_aa8183e5e925d75718e19a97ba97bb0f0} 
+float Light\+Component::\+inner\+Cutoff = 12.\+5f}
+
+\Hypertarget{structLightComponent_a9f90a93fd09511fd414e77e153d87678}\index{LightComponent@{LightComponent}!intensity@{intensity}}
+\index{intensity@{intensity}!LightComponent@{LightComponent}}
+\doxysubsubsection{\texorpdfstring{intensity}{intensity}}
+{\footnotesize\ttfamily \label{structLightComponent_a9f90a93fd09511fd414e77e153d87678} 
+float Light\+Component::\+intensity = 1.\+0f}
+
+\Hypertarget{structLightComponent_a669bc9d9b73dc855e63c77ba61fce275}\index{LightComponent@{LightComponent}!isActive@{isActive}}
+\index{isActive@{isActive}!LightComponent@{LightComponent}}
+\doxysubsubsection{\texorpdfstring{isActive}{isActive}}
+{\footnotesize\ttfamily \label{structLightComponent_a669bc9d9b73dc855e63c77ba61fce275} 
+bool Light\+Component::\+is\+Active = true}
+
+\Hypertarget{structLightComponent_a81673580d7cb071aefa5b47751e4087d}\index{LightComponent@{LightComponent}!linear@{linear}}
+\index{linear@{linear}!LightComponent@{LightComponent}}
+\doxysubsubsection{\texorpdfstring{linear}{linear}}
+{\footnotesize\ttfamily \label{structLightComponent_a81673580d7cb071aefa5b47751e4087d} 
+float Light\+Component::\+linear = 0.\+09f}
+
+\Hypertarget{structLightComponent_a43f4aad78c6ad840d9191b103eed7057}\index{LightComponent@{LightComponent}!outerCutoff@{outerCutoff}}
+\index{outerCutoff@{outerCutoff}!LightComponent@{LightComponent}}
+\doxysubsubsection{\texorpdfstring{outerCutoff}{outerCutoff}}
+{\footnotesize\ttfamily \label{structLightComponent_a43f4aad78c6ad840d9191b103eed7057} 
+float Light\+Component::\+outer\+Cutoff = 17.\+5f}
+
+\Hypertarget{structLightComponent_a666f3ca89bd729ff10e3d675ea6172c2}\index{LightComponent@{LightComponent}!position@{position}}
+\index{position@{position}!LightComponent@{LightComponent}}
+\doxysubsubsection{\texorpdfstring{position}{position}}
+{\footnotesize\ttfamily \label{structLightComponent_a666f3ca89bd729ff10e3d675ea6172c2} 
+glm::\+vec3 Light\+Component::\+position \{0.\+0f, 5.\+0f, 0.\+0f\}}
+
+\Hypertarget{structLightComponent_aef799aacefd4e3c660b91c9125505241}\index{LightComponent@{LightComponent}!quadratic@{quadratic}}
+\index{quadratic@{quadratic}!LightComponent@{LightComponent}}
+\doxysubsubsection{\texorpdfstring{quadratic}{quadratic}}
+{\footnotesize\ttfamily \label{structLightComponent_aef799aacefd4e3c660b91c9125505241} 
+float Light\+Component::\+quadratic = 0.\+032f}
+
+\Hypertarget{structLightComponent_a3b105ba16e8c93a5d8d390966f3063b7}\index{LightComponent@{LightComponent}!radius@{radius}}
+\index{radius@{radius}!LightComponent@{LightComponent}}
+\doxysubsubsection{\texorpdfstring{radius}{radius}}
+{\footnotesize\ttfamily \label{structLightComponent_a3b105ba16e8c93a5d8d390966f3063b7} 
+float Light\+Component::\+radius = 50.\+0f}
+
+\Hypertarget{structLightComponent_ad229d71fb12ed968b4487d5ca7c66e18}\index{LightComponent@{LightComponent}!specular@{specular}}
+\index{specular@{specular}!LightComponent@{LightComponent}}
+\doxysubsubsection{\texorpdfstring{specular}{specular}}
+{\footnotesize\ttfamily \label{structLightComponent_ad229d71fb12ed968b4487d5ca7c66e18} 
+glm::\+vec3 Light\+Component::\+specular \{1.\+0f, 1.\+0f, 1.\+0f\}}
+
+\Hypertarget{structLightComponent_a9a3ac80974325b66dd71dd08bbabe04d}\index{LightComponent@{LightComponent}!type@{type}}
+\index{type@{type}!LightComponent@{LightComponent}}
+\doxysubsubsection{\texorpdfstring{type}{type}}
+{\footnotesize\ttfamily \label{structLightComponent_a9a3ac80974325b66dd71dd08bbabe04d} 
+\doxymbox{\hyperlink{Light_8cppm_adc3ec8293e6a97ebe43f0196b9a7f638}{Light\+Type}} Light\+Component::\+type = \doxymbox{\hyperlink{Light_8cppm_adc3ec8293e6a97ebe43f0196b9a7f638ab6f2249394a4def60a78b342dcc925b9}{Light\+Type::\+\+DIRECTIONAL}}}
+
+
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+\+ECS/\+components/\+\doxymbox{\hyperlink{Lighting_8cppm}{Lighting.\+cppm}}\end{DoxyCompactItemize}

@@ -1,0 +1,7 @@
+<map id="LightPanel::Render" name="LightPanel::Render">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,138,57"/>
+<area shape="rect" id="Node000002" href="$classECSWorld.html#acfade1daca793fe5aa8d0ffa407ae88f" title=" " alt="" coords="187,5,366,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,33,174,31,169,32,138,38"/>
+<area shape="rect" id="Node000003" href="$classECSWorld.html#aab445a0a81e5df39c6f5c2329547f333" title=" " alt="" coords="186,56,367,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="138,49,173,56,168,56,138,55"/>
+</map>

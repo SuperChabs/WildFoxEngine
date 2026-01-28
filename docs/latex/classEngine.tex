@@ -1,0 +1,225 @@
+\doxysection{Engine Class Reference}
+\hypertarget{classEngine}{}\label{classEngine}\index{Engine@{Engine}}
+
+
+Inheritance diagram for Engine:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=144pt]{classEngine__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Engine:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=144pt]{classEngine__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{classEngine_a55e31d355fb9e287aa3bcd26bccf31d5}{Engine}} (int w, int h, const std::\+string \&title)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \doxymbox{\hyperlink{classApplication}{Application}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual \doxymbox{\hyperlink{classApplication_a20573928a0d53fb96d929513bc5acde6}{\texorpdfstring{$\sim$}{\string~}\+Application}} ()
+\begin{DoxyCompactList}\small\item\em Destructor Releases all resources used by the application. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{classApplication_afaeec66a8591b6d88049b260133d13fc}{Application}} (const \doxymbox{\hyperlink{classApplication}{Application}} \&)=delete
+\item 
+\doxymbox{\hyperlink{classApplication}{Application}} \& \doxymbox{\hyperlink{classApplication_a4bddd891168e3adc56dfd505ac41af7f}{operator=}} (const \doxymbox{\hyperlink{classApplication}{Application}} \&)=delete
+\item 
+\doxymbox{\hyperlink{classApplication_a7b5be0a8e4df05ca7ceb2d3d7d275278}{Application}} (\doxymbox{\hyperlink{classApplication}{Application}} \&\&)=delete
+\item 
+\doxymbox{\hyperlink{classApplication}{Application}} \& \doxymbox{\hyperlink{classApplication_aa909176412a911bcedb36005049c7bcf}{operator=}} (\doxymbox{\hyperlink{classApplication}{Application}} \&\&)=delete
+\item 
+bool \doxymbox{\hyperlink{classApplication_a00d10eb756046bb9a02494ca7362013e}{Initialize}} ()
+\item 
+void \doxymbox{\hyperlink{classApplication_aaf09cd6cb412086dc039e28cdb059f0d}{Run}} ()
+\begin{DoxyCompactList}\small\item\em Starts the main application loop. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{classApplication_a817892cf56c1c333d53be31e73e8c2f8}{Shutdown}} ()
+\item 
+void \doxymbox{\hyperlink{classApplication_ac017244251b5c3b1b6b808c6c8815a4b}{Stop}} ()
+\begin{DoxyCompactList}\small\item\em Closes the application Stops the main loop. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{classWindow}{Window}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classApplication_a14e8be0e5dfb4c6de42b15622a033251}{Get\+Window}} () const
+\item 
+\doxymbox{\hyperlink{classInput}{Input}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classApplication_a47f0da0c4b6e0fa69c77d59e72b3db89}{Get\+Input}} () const
+\item 
+\doxymbox{\hyperlink{classTime}{Time}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classApplication_a3297cb672b1b4e0d57561448f50831dc}{Get\+Time}} () const
+\item 
+\doxymbox{\hyperlink{classCamera}{Camera}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classApplication_a70353d15b3ea525cdccbdc8bbf3a693b}{Get\+Camera}} () const
+\item 
+\doxymbox{\hyperlink{classRenderer}{Renderer}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classApplication_a752a05cac1ac260d2602f3b67aee40d2}{Get\+Renderer}} () const
+\item 
+\doxymbox{\hyperlink{classTextureManager}{Texture\+Manager}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classApplication_aced35a27b0ebf537f22c3a1dfa4a3582}{Get\+Texture\+Manager}} () const
+\item 
+\doxymbox{\hyperlink{classImGuiManager}{Im\+Gui\+Manager}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classApplication_a83dd8235e82d641cc752a30191af26b2}{Get\+Im\+Gui\+Manager}} () const
+\item 
+\doxymbox{\hyperlink{classMaterialManager}{Material\+Manager}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classApplication_a910f4af892e4e10a37fa638067cd8cff}{Get\+Material\+Manager}} () const
+\item 
+\doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classApplication_a399c885f8acb1cd08362c5c2aa00363f}{Get\+ECSWorld}} () const
+\item 
+\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classApplication_a077842c627ee3d592ebebb9e4394ba34}{Get\+Shader\+Manager}} () const
+\item 
+\doxymbox{\hyperlink{classModelManager}{Model\+Manager}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classApplication_a020833795d61b04e38b061aff8850694}{Get\+Model\+Manager}} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{classEngine_ae482abae3a0c90ef02350a1d0a414db0}{On\+Initialize}} () override
+\item 
+void \doxymbox{\hyperlink{classEngine_aa60a6ac74074fe6ea7cd4f95246d3389}{On\+Update}} (float delta\+Time) override
+\begin{DoxyCompactList}\small\item\em Updates the application state. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{classEngine_ab2cc692b49470b1554661eb75bf4d688}{On\+Render}} () override
+\begin{DoxyCompactList}\small\item\em Renders the scene. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{classEngine_aeb88272997528d668c07624d10c40cf3}{On\+Shutdown}} () override
+\item 
+void \doxymbox{\hyperlink{classEngine_a08ae57a21e3da54edaa155dac5c874fe}{Render\+UI}} () override
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \doxymbox{\hyperlink{classApplication}{Application}}}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{classApplication_a2ad4d646064502c4f06288c1c50dfed9}{Application}} (int width, int height, const std::\+string \&title)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{classApplication_ae0c217efce9cc91c82635a7e063335f1}{Set\+Renderer}} (std::\+unique\+\_\+ptr$<$ \doxymbox{\hyperlink{classRenderer}{Renderer}} $>$ r)
+\item 
+void \doxymbox{\hyperlink{classApplication_a01253895212687040691231260a99cf8}{Set\+Camera\+Control\+Mode}} (bool enabled)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Attributes inherited from \doxymbox{\hyperlink{classApplication}{Application}}}
+\begin{DoxyCompactItemize}
+\item 
+bool \doxymbox{\hyperlink{classApplication_a79daf89d62f495515f41ff3406072125}{camera\+Control\+Enabled}}
+\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{classEngine_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classEngine_a55e31d355fb9e287aa3bcd26bccf31d5}\index{Engine@{Engine}!Engine@{Engine}}
+\index{Engine@{Engine}!Engine@{Engine}}
+\doxysubsubsection{\texorpdfstring{Engine()}{Engine()}}
+{\footnotesize\ttfamily \label{classEngine_a55e31d355fb9e287aa3bcd26bccf31d5} 
+Engine::\+\+Engine (\begin{DoxyParamCaption}\item[{int}]{w}{, }\item[{int}]{h}{, }\item[{const std::\+string \&}]{title}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classEngine_a55e31d355fb9e287aa3bcd26bccf31d5_cgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classEngine_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classEngine_ae482abae3a0c90ef02350a1d0a414db0}\index{Engine@{Engine}!OnInitialize@{OnInitialize}}
+\index{OnInitialize@{OnInitialize}!Engine@{Engine}}
+\doxysubsubsection{\texorpdfstring{OnInitialize()}{OnInitialize()}}
+{\footnotesize\ttfamily \label{classEngine_ae482abae3a0c90ef02350a1d0a414db0} 
+void Engine::\+\+On\+Initialize (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \doxymbox{\hyperlink{classApplication_aedb062b933ee2d38ef7569799d000d31}{Application}}.
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classEngine_ae482abae3a0c90ef02350a1d0a414db0_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classEngine_ab2cc692b49470b1554661eb75bf4d688}\index{Engine@{Engine}!OnRender@{OnRender}}
+\index{OnRender@{OnRender}!Engine@{Engine}}
+\doxysubsubsection{\texorpdfstring{OnRender()}{OnRender()}}
+{\footnotesize\ttfamily \label{classEngine_ab2cc692b49470b1554661eb75bf4d688} 
+void Engine::\+\+On\+Render (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Renders the scene. 
+
+\begin{DoxyNote}{Note}
+Called every frame after \doxylink{classEngine_aa60a6ac74074fe6ea7cd4f95246d3389}{On\+Update()} 
+\end{DoxyNote}
+
+
+Reimplemented from \doxymbox{\hyperlink{classApplication_ac787b62c857b3e4790e007c644acf74d}{Application}}.
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=338pt]{classEngine_ab2cc692b49470b1554661eb75bf4d688_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classEngine_aeb88272997528d668c07624d10c40cf3}\index{Engine@{Engine}!OnShutdown@{OnShutdown}}
+\index{OnShutdown@{OnShutdown}!Engine@{Engine}}
+\doxysubsubsection{\texorpdfstring{OnShutdown()}{OnShutdown()}}
+{\footnotesize\ttfamily \label{classEngine_aeb88272997528d668c07624d10c40cf3} 
+void Engine::\+\+On\+Shutdown (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \doxymbox{\hyperlink{classApplication_a89b744989406cce3ded3aca5bf211147}{Application}}.
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classEngine_aeb88272997528d668c07624d10c40cf3_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classEngine_aa60a6ac74074fe6ea7cd4f95246d3389}\index{Engine@{Engine}!OnUpdate@{OnUpdate}}
+\index{OnUpdate@{OnUpdate}!Engine@{Engine}}
+\doxysubsubsection{\texorpdfstring{OnUpdate()}{OnUpdate()}}
+{\footnotesize\ttfamily \label{classEngine_aa60a6ac74074fe6ea7cd4f95246d3389} 
+void Engine::\+\+On\+Update (\begin{DoxyParamCaption}\item[{float}]{delta\+Time}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Updates the application state. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em delta\+Time} & \doxylink{classTime}{Time} elapsed since the last frame in seconds \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \doxymbox{\hyperlink{classApplication_a312f3fc11fd52d661ac520f2ae51f568}{Application}}.
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=344pt]{classEngine_aa60a6ac74074fe6ea7cd4f95246d3389_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{classEngine_a08ae57a21e3da54edaa155dac5c874fe}\index{Engine@{Engine}!RenderUI@{RenderUI}}
+\index{RenderUI@{RenderUI}!Engine@{Engine}}
+\doxysubsubsection{\texorpdfstring{RenderUI()}{RenderUI()}}
+{\footnotesize\ttfamily \label{classEngine_a08ae57a21e3da54edaa155dac5c874fe} 
+void Engine::\+\+Render\+UI (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \doxymbox{\hyperlink{classApplication_acf59a238e9570b49d80756cde3c3f849}{Application}}.
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classEngine_a08ae57a21e3da54edaa155dac5c874fe_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+\doxymbox{\hyperlink{Engine_8cppm}{Engine.\+cppm}}\end{DoxyCompactItemize}

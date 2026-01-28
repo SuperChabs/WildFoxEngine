@@ -1,0 +1,7 @@
+<map id="TagPanel::Render" name="TagPanel::Render">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,131,57"/>
+<area shape="rect" id="Node000002" href="$classECSWorld.html#acfade1daca793fe5aa8d0ffa407ae88f" title=" " alt="" coords="180,5,358,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="131,34,167,31,162,33,132,39"/>
+<area shape="rect" id="Node000003" href="$classECSWorld.html#aab445a0a81e5df39c6f5c2329547f333" title=" " alt="" coords="179,56,360,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="131,49,166,56,161,56,131,55"/>
+</map>

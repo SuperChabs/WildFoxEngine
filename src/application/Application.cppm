@@ -26,6 +26,21 @@ import WFE.Resource.Model.ModelManager;
 
 import WFE.UI.ImGuiManager;
 
+/// @file Application.hpp
+/// @brief Main application class for the WildFoxEngine
+/// @author 0x00
+/// @date 2026-01-28
+
+/**
+ * @class Application
+ * @brief Core engine class that manages the application lifecycle
+ * 
+ * Responsibilities:
+ * - Engine initialization
+ * - Main render loop
+ * - Event handling
+ * - Resource loading
+ */
 export class Application 
 {
 private:
@@ -44,7 +59,7 @@ private:
     ConsoleLogger console;
     FileLogger file;
 
-    bool isRunning;
+    bool isRunning; ///< Whether the application is currently running
     bool showUI;
     
     void ProcessInput()
@@ -167,6 +182,12 @@ private:
 protected:
     bool cameraControlEnabled;
 
+    /**
+     * @brief Constructor
+     * @param title Window title
+     * @param width Window width in pixels
+     * @param height Window height in pixels
+     */
     Application(int width, int height, const std::string& title)
         : window(nullptr), input(nullptr), time(nullptr), camera(nullptr),
             renderer(nullptr), textureManager(nullptr), isRunning(false), 
@@ -178,7 +199,17 @@ protected:
     }
 
     virtual void OnInitialize() {}
+
+    /**
+     * @brief Updates the application state
+     * @param deltaTime Time elapsed since the last frame in seconds
+     */
     virtual void OnUpdate(float deltaTime) {}
+
+    /**
+     * @brief Renders the scene
+     * @note Called every frame after OnUpdate()
+     */
     virtual void OnRender() {}
     virtual void OnShutdown() {}
 
@@ -207,6 +238,10 @@ protected:
     }
 
 public:
+    /**
+     * @brief Destructor
+     * Releases all resources used by the application
+     */
     virtual ~Application()
     {
         Shutdown();
@@ -267,6 +302,10 @@ public:
         return true;
     }
 
+    /**
+     * @brief Starts the main application loop
+     * @note Calls OnUpdate() and OnRender() every frame
+     */
     void Run()
     {
         isRunning = true;
@@ -299,6 +338,10 @@ public:
         Logger::Log(LogLevel::INFO, "Application shutdown complete");
     }
 
+    /**
+     * @brief Closes the application
+     * Stops the main loop
+     */
     void Stop() 
     { 
         isRunning = false; 

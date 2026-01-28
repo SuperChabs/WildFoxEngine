@@ -1,0 +1,5 @@
+<map id="Application::Shutdown" name="Application::Shutdown">
+<area shape="rect" id="Node000001" title=" " alt="" coords="219,5,370,32"/>
+<area shape="rect" id="Node000002" href="$classApplication.html#a20573928a0d53fb96d929513bc5acde6" title="Destructor Releases all resources used by the application." alt="" coords="5,5,171,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,19,171,21,171,16,206,19"/>
+</map>

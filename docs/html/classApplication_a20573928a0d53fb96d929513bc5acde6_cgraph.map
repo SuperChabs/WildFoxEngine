@@ -1,0 +1,11 @@
+<map id="Application::~Application" name="Application::~Application">
+<area shape="rect" id="Node000001" title="Destructor Releases all resources used by the application." alt="" coords="5,56,171,83"/>
+<area shape="rect" id="Node000002" href="$classApplication.html#a817892cf56c1c333d53be31e73e8c2f8" title=" " alt="" coords="219,56,370,83"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,67,206,69,201,70,171,72"/>
+<area shape="rect" id="Node000003" href="$classLogger.html#ab72dd0825c1a37f2289da714562a722f" title=" " alt="" coords="458,5,547,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="352,53,440,34,445,32,353,58"/>
+<area shape="rect" id="Node000004" href="$classApplication.html#a89b744989406cce3ded3aca5bf211147" title=" " alt="" coords="418,56,586,83"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="370,67,405,69,400,70,371,72"/>
+<area shape="rect" id="Node000005" href="$classLogger.html#a2bce3c7f19d1b4b7ddff5ec605416282" title=" " alt="" coords="430,107,574,133"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="353,81,433,102,427,102,352,86"/>
+</map>

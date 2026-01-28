@@ -1,0 +1,63 @@
+\doxysection{/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+rendering/\+primitive/\+\+Primitives\+Factory.cppm File Reference}
+\hypertarget{PrimitivesFactory_8cppm}{}\label{PrimitivesFactory_8cppm}\index{/home/tymur52/WildFoxEngine/src/rendering/primitive/PrimitivesFactory.cppm@{/home/tymur52/WildFoxEngine/src/rendering/primitive/PrimitivesFactory.cppm}}
+{\ttfamily \+\#include $<$string$>$}\newline
+{\ttfamily \+\#include $<$memory$>$}\newline
+{\ttfamily \+\#include $<$utility$>$}\newline
+{\ttfamily \+\#include $<$glm/\+glm.\+hpp$>$}\newline
+{\ttfamily import WFE.\+Core.\+Logger;}\newline
+{\ttfamily import WFE.\+Scene.\+Mesh;}\newline
+{\ttfamily import WFE.\+Rendering.\+Primitive.\+Primitive\+Generator;}\newline
+{\ttfamily import WFE.\+Resource.\+Material.\+Material;}\newline
+{\ttfamily import WFE.\+Rendering.\+Mesh\+Data;}\newline
+{\ttfamily import WFE.\+Rendering.\+Mesh\+Renderer;}\newline
+Include dependency graph for Primitives\+Factory.\+cppm:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{PrimitivesFactory_8cppm__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \doxymbox{\hyperlink{classPrimitivesFactory}{Primitives\+Factory}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum class \doxymbox{\hyperlink{PrimitivesFactory_8cppm_a240c1924416689e5700ff0d9f30539d9}{Primitive\+Type}} \{ \doxymbox{\hyperlink{PrimitivesFactory_8cppm_a240c1924416689e5700ff0d9f30539d9afbfd6568f88d940b586c9ddf8f68236d}{CUBE}}
+, \doxymbox{\hyperlink{PrimitivesFactory_8cppm_a240c1924416689e5700ff0d9f30539d9ac88da92039291f825814816096db2ea2}{QUAD}}
+, \doxymbox{\hyperlink{PrimitivesFactory_8cppm_a240c1924416689e5700ff0d9f30539d9aad6990fc23cd957328515fde2db852a3}{PLANE}}
+ \}
+\end{DoxyCompactItemize}
+
+
+\label{doc-enum-members}
+\Hypertarget{PrimitivesFactory_8cppm_doc-enum-members}
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{PrimitivesFactory_8cppm_a240c1924416689e5700ff0d9f30539d9}\index{PrimitivesFactory.cppm@{PrimitivesFactory.cppm}!PrimitiveType@{PrimitiveType}}
+\index{PrimitiveType@{PrimitiveType}!PrimitivesFactory.cppm@{PrimitivesFactory.cppm}}
+\doxysubsubsection{\texorpdfstring{PrimitiveType}{PrimitiveType}}
+{\footnotesize\ttfamily \label{PrimitivesFactory_8cppm_a240c1924416689e5700ff0d9f30539d9} 
+enum class \doxymbox{\hyperlink{PrimitivesFactory_8cppm_a240c1924416689e5700ff0d9f30539d9}{Primitive\+Type}}\hspace{0.3cm}{\ttfamily [export]}, {\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CUBE@{CUBE}!PrimitivesFactory.cppm@{PrimitivesFactory.cppm}}
+\index{PrimitivesFactory.cppm@{PrimitivesFactory.cppm}!CUBE@{CUBE}}
+}\Hypertarget{PrimitivesFactory_8cppm_a240c1924416689e5700ff0d9f30539d9afbfd6568f88d940b586c9ddf8f68236d}\label{PrimitivesFactory_8cppm_a240c1924416689e5700ff0d9f30539d9afbfd6568f88d940b586c9ddf8f68236d} 
+CUBE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{QUAD@{QUAD}!PrimitivesFactory.cppm@{PrimitivesFactory.cppm}}
+\index{PrimitivesFactory.cppm@{PrimitivesFactory.cppm}!QUAD@{QUAD}}
+}\Hypertarget{PrimitivesFactory_8cppm_a240c1924416689e5700ff0d9f30539d9ac88da92039291f825814816096db2ea2}\label{PrimitivesFactory_8cppm_a240c1924416689e5700ff0d9f30539d9ac88da92039291f825814816096db2ea2} 
+QUAD&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{PLANE@{PLANE}!PrimitivesFactory.cppm@{PrimitivesFactory.cppm}}
+\index{PrimitivesFactory.cppm@{PrimitivesFactory.cppm}!PLANE@{PLANE}}
+}\Hypertarget{PrimitivesFactory_8cppm_a240c1924416689e5700ff0d9f30539d9aad6990fc23cd957328515fde2db852a3}\label{PrimitivesFactory_8cppm_a240c1924416689e5700ff0d9f30539d9aad6990fc23cd957328515fde2db852a3} 
+PLANE&\\
+\hline
+
+\end{DoxyEnumFields}

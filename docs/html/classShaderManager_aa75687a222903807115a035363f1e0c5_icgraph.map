@@ -1,0 +1,7 @@
+<map id="ShaderManager::SetVec3" name="ShaderManager::SetVec3">
+<area shape="rect" id="Node000001" title=" " alt="" coords="198,31,368,57"/>
+<area shape="rect" id="Node000002" href="$classMaterial.html#abaa177fd9abf91f726fa349458501431" title=" " alt="" coords="27,5,128,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="180,32,128,28,128,22,185,31"/>
+<area shape="rect" id="Node000003" href="$classLightSystem.html#aa9465e5384d89105265a2f9860364637" title=" " alt="" coords="5,56,150,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="180,57,151,63,150,58,185,56"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="Light::Light" name="Light::Light">
+<area shape="rect" id="Node000001" title=" " alt="" coords="235,72,320,99"/>
+<area shape="rect" id="Node000002" href="$classDirectionalLight.html#abcb907cdfc66619af6c31fa3f29edf6e" title=" " alt="" coords="5,5,187,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="217,68,164,51,164,46,222,66"/>
+<area shape="rect" id="Node000003" href="$classPointLight.html#afbf4163cd3be5d94391365fa1aad92c2" title=" " alt="" coords="23,72,169,99"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="216,86,169,88,169,83,221,85"/>
+<area shape="rect" id="Node000004" href="$classSpotLight.html#ab93472f1d815f95486d8509c0bb36983" title=" " alt="" coords="26,123,166,149"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="222,101,147,125,146,119,217,102"/>
+</map>

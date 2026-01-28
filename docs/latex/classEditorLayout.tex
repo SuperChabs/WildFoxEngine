@@ -1,0 +1,114 @@
+\doxysection{Editor\+Layout Class Reference}
+\hypertarget{classEditorLayout}{}\label{classEditorLayout}\index{EditorLayout@{EditorLayout}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{classEditorLayout_ac436713c028afe298b4580b37ea25ca4}{Editor\+Layout}} ()
+\item 
+void \doxymbox{\hyperlink{classEditorLayout_a98d43b65d5cb35d6c5ca6d70ea521391}{Render\+Editor}} (\doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \texorpdfstring{$\ast$}{*}ecs, \doxymbox{\hyperlink{classCamera}{Camera}} \texorpdfstring{$\ast$}{*}camera, \doxymbox{\hyperlink{classRenderer}{Renderer}} \texorpdfstring{$\ast$}{*}renderer, \doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}shader\+Manager, \doxymbox{\hyperlink{classMaterialManager}{Material\+Manager}} \texorpdfstring{$\ast$}{*}material\+Manager)
+\item 
+Im\+Vec2 \doxymbox{\hyperlink{classEditorLayout_a22e449762e1ce1260e9626268fac5f19}{Get\+Viewport\+Size}} () const
+\item 
+Im\+Vec2 \doxymbox{\hyperlink{classEditorLayout_a54be62c18c92605eafea70d96dc3fc0f}{Get\+Viewport\+Pos}} () const
+\item 
+bool \doxymbox{\hyperlink{classEditorLayout_aea02f6eaba03975498f90dba9af34e7a}{Is\+Viewport\+Hovered}} () const
+\item 
+bool \doxymbox{\hyperlink{classEditorLayout_af35a285877bd412f3182f4cc9251641b}{Is\+Viewport\+Focused}} () const
+\item 
+entt::\+entity \doxymbox{\hyperlink{classEditorLayout_a2f18d4e3bc7d0d65926700fe1b0a3abf}{Get\+Selected\+Entity}} () const
+\item 
+\doxymbox{\hyperlink{structShaderObj}{Shader\+Obj}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classEditorLayout_acc0b7c964419c71440464ad0e3592ce8}{Get\+Selected\+Shader}} () const
+\item 
+std::\+string \doxymbox{\hyperlink{classEditorLayout_a28e36fd39430b43c4dec15ce563c2ae2}{Get\+Selected\+Material}} () const
+\item 
+\doxymbox{\hyperlink{classFramebuffer}{Framebuffer}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classEditorLayout_a3ef1a4909625f7fcb6b14d66d6580010}{Get\+Framebuffer}} () const
+\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{classEditorLayout_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classEditorLayout_ac436713c028afe298b4580b37ea25ca4}\index{EditorLayout@{EditorLayout}!EditorLayout@{EditorLayout}}
+\index{EditorLayout@{EditorLayout}!EditorLayout@{EditorLayout}}
+\doxysubsubsection{\texorpdfstring{EditorLayout()}{EditorLayout()}}
+{\footnotesize\ttfamily \label{classEditorLayout_ac436713c028afe298b4580b37ea25ca4} 
+Editor\+Layout::\+\+Editor\+Layout (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=315pt]{classEditorLayout_ac436713c028afe298b4580b37ea25ca4_cgraph}
+\end{center}
+\end{figure}
+
+
+\label{doc-func-members}
+\Hypertarget{classEditorLayout_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classEditorLayout_a3ef1a4909625f7fcb6b14d66d6580010}\index{EditorLayout@{EditorLayout}!GetFramebuffer@{GetFramebuffer}}
+\index{GetFramebuffer@{GetFramebuffer}!EditorLayout@{EditorLayout}}
+\doxysubsubsection{\texorpdfstring{GetFramebuffer()}{GetFramebuffer()}}
+{\footnotesize\ttfamily \label{classEditorLayout_a3ef1a4909625f7fcb6b14d66d6580010} 
+\doxymbox{\hyperlink{classFramebuffer}{Framebuffer}} \texorpdfstring{$\ast$}{*} Editor\+Layout::\+\+Get\+Framebuffer (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classEditorLayout_a2f18d4e3bc7d0d65926700fe1b0a3abf}\index{EditorLayout@{EditorLayout}!GetSelectedEntity@{GetSelectedEntity}}
+\index{GetSelectedEntity@{GetSelectedEntity}!EditorLayout@{EditorLayout}}
+\doxysubsubsection{\texorpdfstring{GetSelectedEntity()}{GetSelectedEntity()}}
+{\footnotesize\ttfamily \label{classEditorLayout_a2f18d4e3bc7d0d65926700fe1b0a3abf} 
+entt::\+entity Editor\+Layout::\+\+Get\+Selected\+Entity (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classEditorLayout_a28e36fd39430b43c4dec15ce563c2ae2}\index{EditorLayout@{EditorLayout}!GetSelectedMaterial@{GetSelectedMaterial}}
+\index{GetSelectedMaterial@{GetSelectedMaterial}!EditorLayout@{EditorLayout}}
+\doxysubsubsection{\texorpdfstring{GetSelectedMaterial()}{GetSelectedMaterial()}}
+{\footnotesize\ttfamily \label{classEditorLayout_a28e36fd39430b43c4dec15ce563c2ae2} 
+std::\+string Editor\+Layout::\+\+Get\+Selected\+Material (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classEditorLayout_acc0b7c964419c71440464ad0e3592ce8}\index{EditorLayout@{EditorLayout}!GetSelectedShader@{GetSelectedShader}}
+\index{GetSelectedShader@{GetSelectedShader}!EditorLayout@{EditorLayout}}
+\doxysubsubsection{\texorpdfstring{GetSelectedShader()}{GetSelectedShader()}}
+{\footnotesize\ttfamily \label{classEditorLayout_acc0b7c964419c71440464ad0e3592ce8} 
+\doxymbox{\hyperlink{structShaderObj}{Shader\+Obj}} \texorpdfstring{$\ast$}{*} Editor\+Layout::\+\+Get\+Selected\+Shader (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classEditorLayout_a54be62c18c92605eafea70d96dc3fc0f}\index{EditorLayout@{EditorLayout}!GetViewportPos@{GetViewportPos}}
+\index{GetViewportPos@{GetViewportPos}!EditorLayout@{EditorLayout}}
+\doxysubsubsection{\texorpdfstring{GetViewportPos()}{GetViewportPos()}}
+{\footnotesize\ttfamily \label{classEditorLayout_a54be62c18c92605eafea70d96dc3fc0f} 
+Im\+Vec2 Editor\+Layout::\+\+Get\+Viewport\+Pos (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classEditorLayout_a22e449762e1ce1260e9626268fac5f19}\index{EditorLayout@{EditorLayout}!GetViewportSize@{GetViewportSize}}
+\index{GetViewportSize@{GetViewportSize}!EditorLayout@{EditorLayout}}
+\doxysubsubsection{\texorpdfstring{GetViewportSize()}{GetViewportSize()}}
+{\footnotesize\ttfamily \label{classEditorLayout_a22e449762e1ce1260e9626268fac5f19} 
+Im\+Vec2 Editor\+Layout::\+\+Get\+Viewport\+Size (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classEditorLayout_af35a285877bd412f3182f4cc9251641b}\index{EditorLayout@{EditorLayout}!IsViewportFocused@{IsViewportFocused}}
+\index{IsViewportFocused@{IsViewportFocused}!EditorLayout@{EditorLayout}}
+\doxysubsubsection{\texorpdfstring{IsViewportFocused()}{IsViewportFocused()}}
+{\footnotesize\ttfamily \label{classEditorLayout_af35a285877bd412f3182f4cc9251641b} 
+bool Editor\+Layout::\+\+Is\+Viewport\+Focused (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classEditorLayout_aea02f6eaba03975498f90dba9af34e7a}\index{EditorLayout@{EditorLayout}!IsViewportHovered@{IsViewportHovered}}
+\index{IsViewportHovered@{IsViewportHovered}!EditorLayout@{EditorLayout}}
+\doxysubsubsection{\texorpdfstring{IsViewportHovered()}{IsViewportHovered()}}
+{\footnotesize\ttfamily \label{classEditorLayout_aea02f6eaba03975498f90dba9af34e7a} 
+bool Editor\+Layout::\+\+Is\+Viewport\+Hovered (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classEditorLayout_a98d43b65d5cb35d6c5ca6d70ea521391}\index{EditorLayout@{EditorLayout}!RenderEditor@{RenderEditor}}
+\index{RenderEditor@{RenderEditor}!EditorLayout@{EditorLayout}}
+\doxysubsubsection{\texorpdfstring{RenderEditor()}{RenderEditor()}}
+{\footnotesize\ttfamily \label{classEditorLayout_a98d43b65d5cb35d6c5ca6d70ea521391} 
+void Editor\+Layout::\+\+Render\+Editor (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \texorpdfstring{$\ast$}{*}}]{ecs}{, }\item[{\doxymbox{\hyperlink{classCamera}{Camera}} \texorpdfstring{$\ast$}{*}}]{camera}{, }\item[{\doxymbox{\hyperlink{classRenderer}{Renderer}} \texorpdfstring{$\ast$}{*}}]{renderer}{, }\item[{\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}}]{shader\+Manager}{, }\item[{\doxymbox{\hyperlink{classMaterialManager}{Material\+Manager}} \texorpdfstring{$\ast$}{*}}]{material\+Manager}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the call graph for this function:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=317pt]{classEditorLayout_a98d43b65d5cb35d6c5ca6d70ea521391_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+\+UI/\+\doxymbox{\hyperlink{EditorLayout_8cppm}{Editor\+Layout.\+cppm}}\end{DoxyCompactItemize}

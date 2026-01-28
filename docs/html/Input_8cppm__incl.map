@@ -1,0 +1,13 @@
+<map id="/home/tymur52/WildFoxEngine/src/core/Input.cppm" name="/home/tymur52/WildFoxEngine/src/core/Input.cppm">
+<area shape="rect" id="Node000001" title=" " alt="" coords="189,5,389,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,96,90,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="227,51,101,93,99,88,226,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="114,96,219,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="260,48,199,90,197,85,255,49"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="243,96,335,123"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="291,47,291,82,287,79,287,51"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="359,96,427,123"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="316,46,367,87,362,86,315,51"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="451,96,561,123"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="345,46,461,90,455,90,344,51"/>
+</map>

@@ -1,0 +1,53 @@
+\doxysection{/\+home/\+tymur52/\+\+Wild\+Fox\+Engine/\+src/\+core/\+\+Command\+Manager.cppm File Reference}
+\hypertarget{CommandManager_8cppm}{}\label{CommandManager_8cppm}\index{/home/tymur52/WildFoxEngine/src/core/CommandManager.cppm@{/home/tymur52/WildFoxEngine/src/core/CommandManager.cppm}}
+{\ttfamily \+\#include $<$unordered\+\_\+map$>$}\newline
+{\ttfamily \+\#include $<$functional$>$}\newline
+{\ttfamily \+\#include $<$string$>$}\newline
+{\ttfamily \+\#include $<$variant$>$}\newline
+{\ttfamily \+\#include $<$glm/\+glm.\+hpp$>$}\newline
+{\ttfamily import WFE.\+Core.\+Camera;}\newline
+{\ttfamily import WFE.\+Core.\+Logger;}\newline
+Include dependency graph for Command\+Manager.\+cppm:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{CommandManager_8cppm__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \doxymbox{\hyperlink{classCommandManager}{Command\+Manager}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+using \doxymbox{\hyperlink{CommandManager_8cppm_ab335a1114ac519da9bac844eef98946b}{Command\+Arg}} = std::\+variant$<$int, bool, float, std::\+string, glm::\+vec3, glm::\+mat4, \doxymbox{\hyperlink{classCamera}{Camera}}\texorpdfstring{$\ast$}{*}$>$
+\item 
+using \doxymbox{\hyperlink{CommandManager_8cppm_a51e26f1359c84c6593e0d675d9e68e6f}{Command\+Args}} = std::\+vector$<$\doxymbox{\hyperlink{CommandManager_8cppm_ab335a1114ac519da9bac844eef98946b}{Command\+Arg}}$>$
+\item 
+using \doxymbox{\hyperlink{CommandManager_8cppm_acc6698526f089e0255c749a05941768d}{Command\+Fn}} = std::\+function$<$void(const \doxymbox{\hyperlink{CommandManager_8cppm_a51e26f1359c84c6593e0d675d9e68e6f}{Command\+Args}}\&)$>$
+\end{DoxyCompactItemize}
+
+
+\label{doc-typedef-members}
+\Hypertarget{CommandManager_8cppm_doc-typedef-members}
+\doxysubsection{Typedef Documentation}
+\Hypertarget{CommandManager_8cppm_ab335a1114ac519da9bac844eef98946b}\index{CommandManager.cppm@{CommandManager.cppm}!CommandArg@{CommandArg}}
+\index{CommandArg@{CommandArg}!CommandManager.cppm@{CommandManager.cppm}}
+\doxysubsubsection{\texorpdfstring{CommandArg}{CommandArg}}
+{\footnotesize\ttfamily \label{CommandManager_8cppm_ab335a1114ac519da9bac844eef98946b} 
+using \doxymbox{\hyperlink{CommandManager_8cppm_ab335a1114ac519da9bac844eef98946b}{Command\+Arg}} = std::\+variant$<$int, bool, float, std::\+string, glm::\+vec3, glm::\+mat4, \doxymbox{\hyperlink{classCamera}{Camera}}\texorpdfstring{$\ast$}{*}$>$\hspace{0.3cm}{\ttfamily [export]}}
+
+\Hypertarget{CommandManager_8cppm_a51e26f1359c84c6593e0d675d9e68e6f}\index{CommandManager.cppm@{CommandManager.cppm}!CommandArgs@{CommandArgs}}
+\index{CommandArgs@{CommandArgs}!CommandManager.cppm@{CommandManager.cppm}}
+\doxysubsubsection{\texorpdfstring{CommandArgs}{CommandArgs}}
+{\footnotesize\ttfamily \label{CommandManager_8cppm_a51e26f1359c84c6593e0d675d9e68e6f} 
+using \doxymbox{\hyperlink{CommandManager_8cppm_a51e26f1359c84c6593e0d675d9e68e6f}{Command\+Args}} = std::\+vector$<$\doxymbox{\hyperlink{CommandManager_8cppm_ab335a1114ac519da9bac844eef98946b}{Command\+Arg}}$>$\hspace{0.3cm}{\ttfamily [export]}}
+
+\Hypertarget{CommandManager_8cppm_acc6698526f089e0255c749a05941768d}\index{CommandManager.cppm@{CommandManager.cppm}!CommandFn@{CommandFn}}
+\index{CommandFn@{CommandFn}!CommandManager.cppm@{CommandManager.cppm}}
+\doxysubsubsection{\texorpdfstring{CommandFn}{CommandFn}}
+{\footnotesize\ttfamily \label{CommandManager_8cppm_acc6698526f089e0255c749a05941768d} 
+using \doxymbox{\hyperlink{CommandManager_8cppm_acc6698526f089e0255c749a05941768d}{Command\+Fn}} = std::\+function$<$void(const \doxymbox{\hyperlink{CommandManager_8cppm_a51e26f1359c84c6593e0d675d9e68e6f}{Command\+Args}}\&)$>$\hspace{0.3cm}{\ttfamily [export]}}
+

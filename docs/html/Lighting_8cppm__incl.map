@@ -1,0 +1,16 @@
+<map id="/home/tymur52/WildFoxEngine/src/ECS/components/Lighting.cppm" name="/home/tymur52/WildFoxEngine/src/ECS/components/Lighting.cppm">
+<area shape="rect" id="Node000001" title=" " alt="" coords="146,5,382,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="143,171,235,197"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="248,47,217,97,205,127,197,157,193,154,200,125,212,95,244,50"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="326,171,517,197"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="382,40,428,61,448,76,465,95,471,111,468,129,447,162,444,157,463,127,465,112,460,97,444,80,425,66,382,46"/>
+<area shape="rect" id="Node000004" href="$Transform_8cppm.html" title=" " alt="" coords="226,96,451,123"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="284,46,319,85,314,84,282,51"/>
+<area shape="rect" id="Node000005" href="$Light_8cppm.html" title=" " alt="" coords="5,96,152,123"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="214,51,123,92,120,87,218,47"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="315,123,230,166,228,161,310,124"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="354,121,398,161,393,160,352,126"/>
+<area shape="poly" id="edge7_Node000005_Node000002" title=" " alt="" coords="99,121,160,161,155,163,97,126"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="52,171,105,197"/>
+<area shape="poly" id="edge8_Node000005_Node000006" title=" " alt="" coords="80,121,81,156,76,154,77,125"/>
+</map>

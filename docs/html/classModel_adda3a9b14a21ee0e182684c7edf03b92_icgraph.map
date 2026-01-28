@@ -1,0 +1,10 @@
+<map id="Model::AddMesh" name="Model::AddMesh">
+<area shape="rect" id="Node000001" title=" " alt="" coords="527,29,647,56"/>
+<area shape="rect" id="Node000002" href="$ModelLoader_8cppm.html#ab78526cca6ca1ac0a6fac37c05561c14" title=" " alt="" coords="379,29,479,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="509,43,480,45,480,40,514,43"/>
+<area shape="poly" id="edge4_Node000002_Node000002" title=" " alt="" coords="454,13,446,10,429,8,413,10,404,15,402,20,406,30,402,28,397,21,400,11,411,5,429,3,448,5,460,15"/>
+<area shape="rect" id="Node000003" href="$ModelLoader_8cppm.html#a677a48f30835598f5480e2a4e2dfa1bc" title=" " alt="" coords="196,29,331,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="361,43,331,45,331,40,366,43"/>
+<area shape="rect" id="Node000004" href="$classModelManager.html#ac60b765a65d015e353352f0e345d9e24" title=" " alt="" coords="5,29,148,56"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="178,43,148,45,148,40,183,43"/>
+</map>
