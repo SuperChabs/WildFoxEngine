@@ -174,6 +174,12 @@ public:
         return material;
     }
 
+    void AddMaterial(std::shared_ptr<Material> material)
+    {
+        if (material)
+            materials[material->GetName()] = material;
+    }
+
     std::shared_ptr<Material> GetMaterial(const std::string& name)
     {
         auto it = materials.find(name);
@@ -238,12 +244,6 @@ private:
         auto defaultMat = std::make_shared<Material>(glm::vec3(1.0f, 1.0f, 1.0f), "default");
         materials["default"] = defaultMat;
 
-        materials["red"] = std::make_shared<Material>(glm::vec3(1.0f, 0.0f, 0.0f), "red");
-        materials["green"] = std::make_shared<Material>(glm::vec3(0.0f, 1.0f, 0.0f), "green");
-        materials["blue"] = std::make_shared<Material>(glm::vec3(0.0f, 0.0f, 1.0f), "blue");
-        materials["yellow"] = std::make_shared<Material>(glm::vec3(1.0f, 1.0f, 0.0f), "yellow");
-        materials["cyan"] = std::make_shared<Material>(glm::vec3(0.0f, 1.0f, 1.0f), "cyan");
-        materials["magenta"] = std::make_shared<Material>(glm::vec3(1.0f, 0.0f, 1.0f), "magenta");
         materials["gray"] = std::make_shared<Material>(glm::vec3(0.5f, 0.5f, 0.5f), "gray");
 
         Logger::Log(LogLevel::INFO, LogCategory::RENDERING, "Default materials created");

@@ -90,4 +90,6 @@ public:
             glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(vertexCount));
         VAO->Unbind(); 
     }
+
+    size_t GetVertexCount() const { return vertexCount; }
 };

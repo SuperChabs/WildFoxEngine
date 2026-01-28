@@ -271,6 +271,7 @@ public:
         ecsWorld = std::make_unique<ECSWorld>();
         shaderManager = std::make_unique<ShaderManager>();
         modelManager = std::make_unique<ModelManager>();
+        modelManager->SetMaterialManager(materialManager.get());
         
         Logger::Log(LogLevel::DEBUG, "ShaderManager address: " + 
             std::to_string(reinterpret_cast<uintptr_t>(shaderManager.get())));

@@ -1,41 +1,11 @@
 {
     "material": [
         {
-            "name": "default_white",
-            "type": "color",
-            "color": [1.0, 1.0, 1.0]
-        },
-        {
-            "name": "red_material",
-            "type": "color",
-            "color": [1.0, 0.0, 0.0]
-        },
-        {
-            "name": "blue_material",
-            "type": "color",
-            "color": [0.0, 0.0, 1.0]
-        },
-        {
-            "name": "green_material",
-            "type": "color",
-            "color": [0.0, 1.0, 0.0]
-        },
-        {
             "name": "bricks",
             "type": "texture",
             "diffuse": "textures/bricks2.jpg",
             "normal":  "textures/bricks2_normal.jpg",
             "height":  "textures/bricks2_disp.jpg"
-        },
-        {
-            "name": "gold_material",
-            "type": "color",
-            "color": [1.0, 0.84, 0.0]
-        },
-        {
-            "name": "silver_material",
-            "type": "color",
-            "color": [0.75, 0.75, 0.75]
         },
         {
             "name": "rust_metal",

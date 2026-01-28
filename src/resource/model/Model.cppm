@@ -3,6 +3,7 @@ module;
 #include <vector>
 #include <string>
 #include <memory>
+#include <cstddef>
 
 #include <glm/glm.hpp>
 
@@ -66,18 +67,24 @@ public:
                 mesh->Draw(shaderManager, shaderName);
     }
 
-    void SetColor(const glm::vec3& color) 
-    {
-        for (auto& mesh : meshes) 
-            if (mesh)
-                mesh->SetColor(color);
-    }
+    // void SetColor(const glm::vec3& color) 
+    // {
+    //     for (auto& mesh : meshes) 
+    //         if (mesh)
+    //             mesh->SetColor(color);
+    // }
 
     void SetTextures(const std::vector<Texture>& textures)
     {
         for (auto& mesh : meshes) 
             if (mesh)
                 mesh->SetTextures(textures);
+    }
+
+    void SetMaterial(std::shared_ptr<Material> material, size_t index)
+    {
+        if (meshes[index])
+            meshes[index]->SetMaterial(material);
     }
 
     void SetMaterialForAll(std::shared_ptr<Material> material) 

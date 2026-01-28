@@ -25,13 +25,13 @@ public:
     Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
     {
         meshRenderer = std::make_unique<MeshRenderer>(vertices, indices);
-        material = std::make_unique<Material>(textures);    
+        // material = std::make_unique<Material>(textures);    
     }
 
     Mesh(MeshRenderer* MeshRendererPtr, Material* materialPtr)
     {
         meshRenderer = std::unique_ptr<MeshRenderer>(MeshRendererPtr);
-        material = std::unique_ptr<Material>(materialPtr);
+        // material = std::unique_ptr<Material>(materialPtr);
     }
 
     void Draw(ShaderManager& shaderManager, const std::string& name)

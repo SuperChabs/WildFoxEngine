@@ -10,6 +10,8 @@ export module WFE.Resource.Model.ModelManager;
 
 import WFE.Resource.Model.Model;
 import WFE.Resource.Model.ModelLoader;
+import WFE.Resource.Material.MaterialManager;
+import WFE.Resource.Material.Material;
 import WFE.Core.Logger;
 
 export class ModelManager 
@@ -17,6 +19,7 @@ export class ModelManager
 private:
     std::unordered_map<std::string, std::shared_ptr<Model>> loadedModels;
     std::string assetsPath = "../assets/objects/";
+    MaterialManager* materialManager = nullptr;
 
 public:
     ModelManager() = default;
@@ -24,6 +27,11 @@ public:
     ~ModelManager() 
     {
         UnloadAll();
+    }
+    
+    void SetMaterialManager(MaterialManager* mm)
+    {
+        materialManager = mm;
     }
 
     std::shared_ptr<Model> Load(const std::string& filepath) 
@@ -36,8 +44,15 @@ public:
             return it->second;
         }
         
+        if (!materialManager)
+        {
+            Logger::Log(LogLevel::ERROR, 
+                "MaterialManager not set in ModelManager!");
+            return nullptr;
+        }
+        
         std::string fullPath = assetsPath + filepath;
-        Model* rawModel = LoadModelFromFile(fullPath);
+        Model* rawModel = LoadModelFromFile(fullPath, *materialManager);
         
         if (!rawModel) 
         {
@@ -121,7 +136,8 @@ public:
             loadedModels.clear();
         }
     }
-    
+
+
     bool IsLoaded(const std::string& filepath) const 
     {
         return loadedModels.find(filepath) != loadedModels.end();
