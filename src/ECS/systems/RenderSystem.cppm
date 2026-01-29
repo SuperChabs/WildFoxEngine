@@ -34,7 +34,8 @@ public:
         {
             if (!vis.isActive || !vis.visible) return;
             
-            shaderManager.SetMat4(name, "model", transform.GetModelMatrix());
+            glm::mat4 modelMatrix = world.GetGlobalTransform(entity);
+            shaderManager.SetMat4(name, "model", modelMatrix);
         
             if (matComp.material)
             {

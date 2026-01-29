@@ -1,4 +1,3 @@
-// src/resource/model/ModelManager.cppm
 module;
 
 #include <unordered_map>
@@ -13,6 +12,7 @@ import WFE.Resource.Model.ModelLoader;
 import WFE.Resource.Material.MaterialManager;
 import WFE.Resource.Material.Material;
 import WFE.Core.Logger;
+import WFE.ECS.ECSWorld;
 
 export class ModelManager 
 {
@@ -71,6 +71,43 @@ public:
         return model;
     }
     
+    std::shared_ptr<Model> LoadWithECS(const std::string& filepath, ECSWorld* world) 
+    {
+        auto it = loadedModels.find(filepath);
+        if (it != loadedModels.end()) 
+        {
+            Logger::Log(LogLevel::INFO, 
+                "Model already loaded (from cache): " + filepath);
+            return it->second;
+        }
+        
+        if (!materialManager)
+        {
+            Logger::Log(LogLevel::ERROR, 
+                "MaterialManager not set in ModelManager!");
+            return nullptr;
+        }
+        
+        std::string fullPath = assetsPath + filepath;
+        Model* rawModel = LoadModelFromFile(fullPath, *materialManager, world);
+        
+        if (!rawModel) 
+        {
+            Logger::Log(LogLevel::ERROR, 
+                "Failed to load model: " + filepath);
+            return nullptr;
+        }
+        
+        std::shared_ptr<Model> model(rawModel);
+        loadedModels[filepath] = model;
+        
+        Logger::Log(LogLevel::INFO, 
+            "Model cached: " + filepath + 
+            " (total models: " + std::to_string(loadedModels.size()) + ")");
+        
+        return model;
+    }
+
     std::shared_ptr<Model> Get(const std::string& filepath) 
     {
         auto it = loadedModels.find(filepath);

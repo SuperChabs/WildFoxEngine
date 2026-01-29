@@ -1,0 +1,61 @@
+# MTL file - created by a modified js OBJExporter
+
+newmtl TX_Body
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000
+illum 1
+Pr 0.821115
+Pds 1
+Pl 1
+Ka 1 1 1
+Kd 1 1 1
+Ke 0 0 0
+map_Kd TX_Body.png
+
+newmtl TX_Face
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000
+illum 1
+Pr 0.821115
+Pds 1
+Pl 1
+Ka 1 1 1
+Kd 1 1 1
+Ke 0 0 0
+map_Kd TX_Face.png
+
+newmtl TX_EarsTail
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000
+illum 1
+Pr 0.821115
+Pds 1
+Pl 1
+Ka 1 1 1
+Kd 1 1 1
+Ke 0 0 0
+map_Kd TX_EarsTail.png
+
+newmtl ShortSocks
+Tr 1
+Tf 1.0000 1.0000 1.0000
+illum 1
+Pr 0.821115
+Pds 1
+Pl 1
+Ka 1 1 1
+Kd 1 1 1
+Ke 0 0 0
+map_Kd ShortSocks.png
+
+newmtl SweaterDress
+Tr 1
+Tf 1.0000 1.0000 1.0000
+illum 1
+Pr 0.821115
+Pds 1
+Pl 1
+Ka 1 1 1
+Kd 1 1 1
+Ke 0 0 0
+map_Kd SweaterDress.png

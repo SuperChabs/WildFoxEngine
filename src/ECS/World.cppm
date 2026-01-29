@@ -1,6 +1,7 @@
 module;
 
 #include <entt.hpp>
+#include <glm/glm.hpp>
 #include <string>
 #include <cstdint>
 
@@ -97,4 +98,82 @@ public:
     }
     
     entt::registry& GetRegistry() { return registry; }
+
+    std::vector<entt::entity> GetChildren(entt::entity entity)
+    {
+        if (!IsValid(entity) || !HasComponent<HierarchyComponent>(entity))
+            return {};
+        
+        return GetComponent<HierarchyComponent>(entity).children;
+    }
+    
+    entt::entity GetParent(entt::entity entity)
+    {
+        if (!IsValid(entity) || !HasComponent<HierarchyComponent>(entity))
+            return entt::null;
+        
+        return GetComponent<HierarchyComponent>(entity).parent;
+    }
+    
+    glm::mat4 GetGlobalTransform(entt::entity entity)
+    {
+        if (!IsValid(entity) || !HasComponent<TransformComponent>(entity))
+            return glm::mat4(1.0f);
+        
+        auto& transform = GetComponent<TransformComponent>(entity);
+        glm::mat4 localTransform = transform.GetModelMatrix();
+        
+        if (HasComponent<HierarchyComponent>(entity))
+        {
+            auto& hierarchy = GetComponent<HierarchyComponent>(entity);
+            if (hierarchy.HasParent())
+            {
+                glm::mat4 parentTransform = GetGlobalTransform(hierarchy.parent);
+                return parentTransform * localTransform;
+            }
+        }
+        
+        return localTransform;
+    }
+
+    void SetParent(entt::entity child, entt::entity parent)
+    {
+        if (!IsValid(child) || !IsValid(parent))
+            return;
+        
+        if (!HasComponent<HierarchyComponent>(child))
+            AddComponent<HierarchyComponent>(child);
+        
+        if (!HasComponent<HierarchyComponent>(parent))
+            AddComponent<HierarchyComponent>(parent);
+        
+        auto& childHierarchy = GetComponent<HierarchyComponent>(child);
+        auto& parentHierarchy = GetComponent<HierarchyComponent>(parent);
+        
+        if (childHierarchy.HasParent())
+        {
+            auto& oldParentHierarchy = GetComponent<HierarchyComponent>(childHierarchy.parent);
+            oldParentHierarchy.RemoveChild(child);
+        }
+        
+        childHierarchy.parent = parent;
+        parentHierarchy.AddChild(child);
+        
+        Logger::Log(LogLevel::DEBUG, "Set parent relationship");
+    }
+    
+    void ClearParent(entt::entity child)
+    {
+        if (!IsValid(child) || !HasComponent<HierarchyComponent>(child))
+            return;
+        
+        auto& childHierarchy = GetComponent<HierarchyComponent>(child);
+        
+        if (childHierarchy.HasParent())
+        {
+            auto& parentHierarchy = GetComponent<HierarchyComponent>(childHierarchy.parent);
+            parentHierarchy.RemoveChild(child);
+            childHierarchy.parent = entt::null;
+        }
+    }
 };

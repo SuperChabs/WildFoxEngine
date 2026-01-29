@@ -9,6 +9,7 @@ module;
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <stb_image.h>
+#include <entt.hpp>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -23,6 +24,8 @@ import WFE.Rendering.MeshData;
 import WFE.Core.Logger;
 import WFE.Resource.Material.MaterialManager;
 import WFE.Resource.Material.Material;
+import WFE.ECS.ECSWorld;
+import WFE.ECS.Components;
 
 /// @file ModelLoader.cppm
 /// @brief Models mesh loader
@@ -33,7 +36,8 @@ static std::unordered_map<std::string, unsigned int> loadedTexturesCache;
 static int globalMeshCounter = 0;
 
 void ProcessNode(aiNode* node, const aiScene* scene, Model* model, 
-                 const std::string& directory, MaterialManager& materialManager);
+                 const std::string& directory, MaterialManager& materialManager,
+                 ECSWorld* world = nullptr, entt::entity parentEntity = entt::null);
 std::shared_ptr<Mesh> ProcessMesh(aiMesh* mesh, const aiScene* scene, 
                  const std::string& directory, MaterialManager& materialManager, int meshIndex);
 std::vector<Texture> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, 
@@ -43,8 +47,12 @@ unsigned int TextureFromFile(const char* path, const std::string& directory);
 /**
  * @brief Model loader function
  */
-export Model* LoadModelFromFile(const std::string& path, MaterialManager& materialManager) 
+export Model* LoadModelFromFile(const std::string& path, MaterialManager& materialManager, ECSWorld* world = nullptr) 
 {
+    Logger::Log(LogLevel::INFO, "=== LoadModelFromFile START ===");
+    Logger::Log(LogLevel::INFO, "Path: " + path);
+    Logger::Log(LogLevel::INFO, "World pointer: " + std::string(world ? "OK" : "NULL"));
+    
     Assimp::Importer importer;
     
     const aiScene* scene = importer.ReadFile(path, 
@@ -61,38 +69,124 @@ export Model* LoadModelFromFile(const std::string& path, MaterialManager& materi
     }
     
     std::string directory = path.substr(0, path.find_last_of('/'));
+    Logger::Log(LogLevel::INFO, "Directory: " + directory);
     
     Model* model = new Model(path);
     
+    entt::entity rootEntity = entt::null;
+    if (world)
+    {
+        Logger::Log(LogLevel::INFO, "Creating root entity...");
+        rootEntity = world->CreateEntity(model->GetName() + "_Root");
+        world->AddComponent<TransformComponent>(rootEntity, glm::vec3(0, 0, -5), glm::vec3(0), glm::vec3(1));
+        world->AddComponent<VisibilityComponent>(rootEntity, true);
+        world->AddComponent<HierarchyComponent>(rootEntity);
+        
+        Logger::Log(LogLevel::INFO, "✓ Root entity created: " + model->GetName() + "_Root");
+    }
+    else
+    {
+        Logger::Log(LogLevel::WARNING, "World is NULL, skipping entity creation");
+    }
+    
     globalMeshCounter = 0;
     
-    ProcessNode(scene->mRootNode, scene, model, directory, materialManager);
+    Logger::Log(LogLevel::INFO, "Starting ProcessNode...");
+    ProcessNode(scene->mRootNode, scene, model, directory, materialManager, world, rootEntity);
     
     Logger::Log(LogLevel::INFO, 
         "Model loaded: " + path + " (" + 
         std::to_string(model->GetMeshCount()) + " meshes)");
     
+    if (world && rootEntity != entt::null)
+    {
+        auto children = world->GetChildren(rootEntity);
+        Logger::Log(LogLevel::INFO, 
+            "Root entity has " + std::to_string(children.size()) + " children");
+    }
+    
     loadedTexturesCache.clear();
+    
+    Logger::Log(LogLevel::INFO, "=== LoadModelFromFile END ===\n");
     
     return model;
 }
 
 void ProcessNode(aiNode* node, const aiScene* scene, Model* model, 
-                 const std::string& directory, MaterialManager& materialManager)
+                 const std::string& directory, MaterialManager& materialManager,
+                 ECSWorld* world, entt::entity parentEntity)
 {
-    static int meshCounter = 0;
+    Logger::Log(LogLevel::INFO, "ProcessNode: " + std::string(node->mName.C_Str()));
+    Logger::Log(LogLevel::INFO, "  Meshes in this node: " + std::to_string(node->mNumMeshes));
+    Logger::Log(LogLevel::INFO, "  World: " + std::string(world ? "OK" : "NULL"));
+    Logger::Log(LogLevel::INFO, "  Parent entity valid: " + std::string(parentEntity != entt::null ? "YES" : "NO"));
     
     for (unsigned int i = 0; i < node->mNumMeshes; i++) 
     {
+        Logger::Log(LogLevel::INFO, "  Processing mesh " + std::to_string(i) + "...");
+        
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
         std::shared_ptr<Mesh> processedMesh = ProcessMesh(mesh, scene, directory, 
-                                                           materialManager, meshCounter++);
+                                                           materialManager, 
+                                                           globalMeshCounter);
         model->AddMesh(processedMesh);
+        
+        Logger::Log(LogLevel::INFO, "  Mesh added to model (total: " + std::to_string(model->GetMeshCount()) + ")");
+        
+        if (world && parentEntity != entt::null)
+        {
+            std::string meshName = model->GetName() + "_Mesh_" + std::to_string(globalMeshCounter);
+            Logger::Log(LogLevel::INFO, "  Creating entity: " + meshName);
+            
+            entt::entity meshEntity = world->CreateEntity(meshName);
+            
+            world->AddComponent<TransformComponent>(meshEntity, glm::vec3(0), glm::vec3(0), glm::vec3(1));
+            world->AddComponent<MeshComponent>(meshEntity, processedMesh);
+            
+            auto meshMaterial = processedMesh->GetMaterial();
+            if (meshMaterial)
+            {
+                world->AddComponent<MaterialComponent>(meshEntity, meshMaterial);
+                Logger::Log(LogLevel::INFO, "  Material added to entity");
+            }
+            else
+            {
+                Logger::Log(LogLevel::WARNING, "  No material found for mesh");
+            }
+            
+            world->AddComponent<VisibilityComponent>(meshEntity, true);
+            
+            Logger::Log(LogLevel::INFO, "  Setting parent relationship...");
+            world->SetParent(meshEntity, parentEntity);
+            
+            auto parent = world->GetParent(meshEntity);
+            if (parent == parentEntity)
+            {
+                Logger::Log(LogLevel::INFO, "  ✓ Parent set successfully");
+            }
+            else
+            {
+                Logger::Log(LogLevel::ERROR, "  ✗ Failed to set parent!");
+            }
+            
+            auto children = world->GetChildren(parentEntity);
+            Logger::Log(LogLevel::INFO, "  Parent now has " + std::to_string(children.size()) + " children");
+        }
+        else
+        {
+            if (!world)
+                Logger::Log(LogLevel::WARNING, "  World is NULL, skipping entity creation");
+            if (parentEntity == entt::null)
+                Logger::Log(LogLevel::WARNING, "  Parent entity is null, skipping entity creation");
+        }
+        
+        globalMeshCounter++;
     }
     
+    Logger::Log(LogLevel::INFO, "  Processing " + std::to_string(node->mNumChildren) + " child nodes...");
     for (unsigned int i = 0; i < node->mNumChildren; i++) 
     {
-        ProcessNode(node->mChildren[i], scene, model, directory, materialManager);
+        ProcessNode(node->mChildren[i], scene, model, directory, materialManager, world, parentEntity);
     }
 }
 

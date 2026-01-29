@@ -48,7 +48,7 @@ public:
         
         if (selectedEntity != entt::null && ecs->IsValid(selectedEntity))
         {
-            RenderEntityInspector(ecs, selectedEntity, materialManager);
+            RenderEntityInspector(ecs, selectedEntity, materialManager, selectedEntity);
         }
         else if (selectedShader != nullptr && shaderManager != nullptr)
         {
@@ -67,13 +67,51 @@ public:
 
 private:
     void RenderEntityInspector(ECSWorld* ecs, entt::entity entity, 
-                               MaterialManager* materialManager)
+                               MaterialManager* materialManager, entt::entity selectedEntity)
     {
         ImGui::Text("Entity");
         ImGui::Separator();
         
         tagPanel.Render(ecs, entity);
         
+        if (ImGui::CollapsingHeader("Hierarchy"))
+        {
+            entt::entity parent = ecs->GetParent(selectedEntity);
+            if (parent != entt::null)
+            {
+                auto& parentTag = ecs->GetComponent<TagComponent>(parent);
+                ImGui::Text("Parent: %s", parentTag.name.c_str());
+                
+                if (ImGui::Button("Clear Parent"))
+                {
+                    ecs->ClearParent(selectedEntity);
+                }
+            }
+            else
+            {
+                ImGui::Text("Parent: None");
+            }
+            
+            ImGui::Spacing();
+            
+            auto children = ecs->GetChildren(selectedEntity);
+            ImGui::Text("Children: %zu", children.size());
+            
+            if (!children.empty())
+            {
+                ImGui::Indent();
+                for (auto child : children)
+                {
+                    if (ecs->IsValid(child))
+                    {
+                        auto& childTag = ecs->GetComponent<TagComponent>(child);
+                        ImGui::BulletText("%s", childTag.name.c_str());
+                    }
+                }
+                ImGui::Unindent();
+            }
+        }
+
         ImGui::Spacing();
         ImGui::Separator();
         
@@ -81,7 +119,7 @@ private:
         rotationPanel.Render(ecs, entity);
         materialPanel.Render(ecs, entity, materialManager);
         lightPanel.Render(ecs, entity);
-        iconPanel.Render(ecs, entity); 
+        iconPanel.Render(ecs, entity);
     }
     
     void RenderShaderInspector(ShaderObj* shader, ShaderManager* shaderManager)

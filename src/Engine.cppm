@@ -397,67 +397,81 @@ private:
         CommandManager::RegisterCommand("onLoadModel",
         [this](const CommandArgs& args) 
         {
+            Logger::Log(LogLevel::INFO, "=== onLoadModel command called ===");
+            
             if (args.empty())
             {
                 Logger::Log(LogLevel::ERROR, "onLoadModel requires filepath argument");
                 return;
             }
-
+            
             std::string filepath = std::get<std::string>(args[0]);
-            Logger::Log(LogLevel::INFO, "Loading model: " + filepath);
-
-            auto model = GetModelManager()->Load(filepath);
-
+            Logger::Log(LogLevel::INFO, "Filepath: " + filepath);
+            
+            if (!GetModelManager())
+            {
+                Logger::Log(LogLevel::ERROR, "ModelManager is NULL!");
+                return;
+            }
+            
+            if (!GetECSWorld())
+            {
+                Logger::Log(LogLevel::ERROR, "ECSWorld is NULL!");
+                return;
+            }
+            
+            Logger::Log(LogLevel::INFO, "Calling LoadWithECS...");
+            auto model = GetModelManager()->LoadWithECS(filepath, GetECSWorld());
+            
             if (!model) 
             {
                 Logger::Log(LogLevel::ERROR, "Failed to load model: " + filepath);
                 return;
             }
-
-            Logger::Log(LogLevel::INFO, "Model loaded: " + model->GetName() + 
-                " (" + std::to_string(model->GetMeshCount()) + " meshes)");
-
-            for (size_t i = 0; i < model->GetMeshCount(); ++i) 
-            {
-                auto entityName = model->GetName() + "_Mesh_" + std::to_string(i);
-                auto entity = GetECSWorld()->CreateEntity(entityName);
-
-                Logger::Log(LogLevel::INFO, "Creating entity: " + entityName);
-
-                // Transform
-                GetECSWorld()->AddComponent<TransformComponent>(entity, 
-                    glm::vec3(0, 0, -5), glm::vec3(0), glm::vec3(1));
-                Logger::Log(LogLevel::DEBUG, "TransformComponent added");
-
-                // Mesh
-                auto mesh = model->GetMesh(i);
-                GetECSWorld()->AddComponent<MeshComponent>(entity, mesh);
-                Logger::Log(LogLevel::DEBUG, "MeshComponent added with " + 
-                    std::to_string(mesh->GetMeshRenderer()->GetVertexCount()) + " vertices");
-
-                // Material
-                auto material = mesh->GetMaterial();
-                if (!material)
-                {
-                    Logger::Log(LogLevel::WARNING, "Mesh " + std::to_string(i) + 
-                        " has no material, using default");
-                    material = GetMaterialManager()->GetMaterial("default");
-                }
-                else
-                {
-                    Logger::Log(LogLevel::INFO, "Material assigned: " + material->GetName() +
-                        " (using color: " + (material->IsUsingColor() ? "YES" : "NO") + ")");
-                }
-                GetECSWorld()->AddComponent<MaterialComponent>(entity, material);
-
-                // Visibility
-                GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
-                Logger::Log(LogLevel::DEBUG, "VisibilityComponent added");
-            }
-
+            
             Logger::Log(LogLevel::INFO, 
-                "All model entities created: " + model->GetName() + 
-                " (" + std::to_string(model->GetMeshCount()) + " meshes)");
+                "Model loaded successfully with " + std::to_string(model->GetMeshCount()) + " meshes");
+            
+            Logger::Log(LogLevel::INFO, "Total entities in world: " + std::to_string(GetECSWorld()->GetEntityCount()));
+            Logger::Log(LogLevel::INFO, "=== onLoadModel command complete ===\n");
+
+            // for (size_t i = 0; i < model->GetMeshCount(); ++i) 
+            // {
+            //     auto entityName = model->GetName() + "_Mesh_" + std::to_string(i);
+            //     auto entity = GetECSWorld()->CreateEntity(entityName);
+
+            //     Logger::Log(LogLevel::INFO, "Creating entity: " + entityName);
+
+            //     GetECSWorld()->AddComponent<TransformComponent>(entity, 
+            //         glm::vec3(0, 0, -5), glm::vec3(0), glm::vec3(1));
+            //     Logger::Log(LogLevel::DEBUG, "TransformComponent added");
+
+            //     auto mesh = model->GetMesh(i);
+            //     GetECSWorld()->AddComponent<MeshComponent>(entity, mesh);
+            //     Logger::Log(LogLevel::DEBUG, "MeshComponent added with " + 
+            //         std::to_string(mesh->GetMeshRenderer()->GetVertexCount()) + " vertices");
+
+            //     auto material = mesh->GetMaterial();
+            //     if (!material)
+            //     {
+            //         Logger::Log(LogLevel::WARNING, "Mesh " + std::to_string(i) + 
+            //             " has no material, using default");
+            //         material = GetMaterialManager()->GetMaterial("default");
+            //     }
+            //     else
+            //     {
+            //         Logger::Log(LogLevel::INFO, "Material assigned: " + material->GetName() +
+            //             " (using color: " + (material->IsUsingColor() ? "YES" : "NO") + ")");
+            //     }
+            //     GetECSWorld()->AddComponent<MaterialComponent>(entity, material);
+
+            //     GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
+            //     Logger::Log(LogLevel::DEBUG, "VisibilityComponent added");
+            // }
+
+            // Logger::Log(LogLevel::INFO, 
+            //     "All model entities created: " + model->GetName() + 
+            //     " (" + std::to_string(model->GetMeshCount()) + " meshes)");
         });
     }
 };
