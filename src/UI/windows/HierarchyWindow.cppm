@@ -3,7 +3,9 @@ module;
 #include <imgui.h>
 #include <entt.hpp>
 #include <glm/glm.hpp>
+#include "entity/fwd.hpp"
 
+#include <cstdint>
 #include <string>
 #include <cstring>
 
@@ -64,26 +66,35 @@ private:
         ecs->Each<TagComponent, IDComponent>(
             [&](entt::entity entity, TagComponent& tag, IDComponent& id) 
         {
-            ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf | 
-                                      ImGuiTreeNodeFlags_NoTreePushOnOpen;
+            // ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf | 
+            //                           ImGuiTreeNodeFlags_NoTreePushOnOpen;
 
-            if (selectedEntity == entity)
-                flags |= ImGuiTreeNodeFlags_Selected;
+            // if (selectedEntity == entity)
+            //     flags |= ImGuiTreeNodeFlags_Selected;
 
-            std::string label = tag.name + " [" + std::to_string(id.id) + "]";
+            // std::string label = tag.name + " [" + std::to_string(id.id) + "]";
 
-            ImGui::TreeNodeEx((void*)(intptr_t)entity, flags, "%s", label.c_str());
+            // ImGui::TreeNodeEx((void*)(intptr_t)entity, flags, "%s", label.c_str());
 
-            if (ImGui::IsItemClicked())
-                selectedEntity = entity;
+            // if (ImGui::IsItemClicked())
+            //     selectedEntity = entity;
 
-            if (ImGui::BeginPopupContextItem())
+            // if (ImGui::BeginPopupContextItem())
+            // {
+            //     if (ImGui::MenuItem("Delete"))
+            //         entityToDelete = entity;
+
+            //     ImGui::EndPopup();
+            // }
+
+            if (ecs->HasComponent<HierarchyComponent>(entity))
             {
-                if (ImGui::MenuItem("Delete"))
-                    entityToDelete = entity;
-
-                ImGui::EndPopup();
+                auto& hierarchy = ecs->GetComponent<HierarchyComponent>(entity);
+                if (hierarchy.HasParent())
+                    return;
             }
+            
+            RenderEntityTree(entity, ecs, entityToDelete);
         });
 
         if (entityToDelete != entt::null)
@@ -91,6 +102,64 @@ private:
             ecs->DestroyEntity(entityToDelete);
             if (selectedEntity == entityToDelete)
                 selectedEntity = entt::null;
+        }
+    }
+
+    void RenderEntityTree(entt::entity entity, ECSWorld* ecs, entt::entity& entityToDelete)
+    {
+        if (!ecs->IsValid(entity))
+            return;
+
+        auto& tag = ecs->GetComponent<TagComponent>(entity);
+        auto& id = ecs->GetComponent<IDComponent>(entity);
+
+        bool hasChildren = false;
+        if (ecs->HasComponent<HierarchyComponent>(entity))
+        {
+            auto& hierarchy = ecs->GetComponent<HierarchyComponent>(entity);
+            hasChildren = hierarchy.HasCildren();
+        }
+
+        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow |
+                                   ImGuiTreeNodeFlags_OpenOnDoubleClick |
+                                   ImGuiTreeNodeFlags_SpanAvailWidth;
+
+        if (!hasChildren)
+            flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+
+        if (selectedEntity == entity)
+            flags |= ImGuiTreeNodeFlags_Selected;
+
+        std::string label = tag.name;
+
+        bool nodeOpen = ImGui::TreeNodeEx((void*)(intptr_t)entity, flags, "%s", label.c_str());
+
+        if (ImGui::IsItemClicked())
+            selectedEntity = entity;
+
+        if (ImGui::BeginPopupContextItem())
+        {
+            if (ImGui::MenuItem("Delete"))
+                entityToDelete = entity;
+
+            ImGui::Separator();
+
+            if (ImGui::MenuItem("Create Child"))
+            {
+                auto child = ecs->CreateEntity("New Entity");
+                ecs->SetParent(child, entity);
+            }
+
+            ImGui::EndPopup();
+        }
+
+        if (nodeOpen && hasChildren)
+        {
+            auto& hierarchy = ecs->GetComponent<HierarchyComponent>(entity);
+            for (auto child : hierarchy.children)
+                RenderEntityTree(child, ecs, entityToDelete);
+
+            ImGui::TreePop();
         }
     }
     

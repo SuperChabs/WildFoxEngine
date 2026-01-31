@@ -12,6 +12,7 @@ export module WFE.Resource.Model.Model;
 import WFE.Scene.Mesh;
 import WFE.Resource.Shader.ShaderManager;
 import WFE.Resource.Material.Material;
+import WFE.Resource.Model.ModelNode;
 import WFE.Rendering.MeshData;
 
 /// @file Model.cppm
@@ -22,6 +23,8 @@ import WFE.Rendering.MeshData;
 export class Model
 {
     std::vector<std::shared_ptr<Mesh>> meshes;
+    std::shared_ptr<ModelNode> rootNode;
+
     std::string filepath;
     std::string name;
 
@@ -36,6 +39,8 @@ public:
             name = path.substr(lastSlash + 1, lastDot - lastSlash - 1);
         else
             name = path;
+
+        rootNode = std::make_shared<ModelNode>("Root");
     }
 
     void AddMesh(Mesh&& mesh)
@@ -97,7 +102,9 @@ public:
     size_t GetMeshCount() const { return meshes.size(); }
     const std::string& GetName() const { return name; }
     const std::string& GetFilepath() const { return filepath; }
+    std::shared_ptr<ModelNode> GetRootNode() const { return rootNode; }
     
     void SetName(const std::string& n) { name = n; }
     void SetFilepath(const std::string& path) { filepath = path; }
+    void SetRootNode(std::shared_ptr<ModelNode> node) { rootNode = node; }
 };

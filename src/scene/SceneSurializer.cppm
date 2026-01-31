@@ -20,6 +20,7 @@ import WFE.Resource.Material.MaterialManager;
 import WFE.Resource.Texture.TextureManager;
 import WFE.Rendering.Primitive.PrimitivesFactory;
 import WFE.Scene.Mesh;
+import WFE.UI.ImGuiManager;
 
 using json = nlohmann::json;
 namespace fs = std::filesystem;
@@ -48,12 +49,11 @@ public:
         json sceneData;
         
         sceneData["scene"]["name"] = "MyScene";
-        sceneData["scene"]["version"] = "1.0";
         sceneData["scene"]["timestamp"] = GetCurrentTimestamp();
         
         sceneData["scene"]["camera"] = SerializeCamera();
-        
         sceneData["scene"]["entities"] = json::array();
+        sceneData["scene"]["theme"] = ImGuiManager::Instance().GetTheme();
         
         world->Each<IDComponent, TagComponent>(
             [&](entt::entity entity, IDComponent& id, TagComponent& tag) 
@@ -176,7 +176,7 @@ public:
             
             sceneData["scene"]["entities"].push_back(entityData);
         });
-        
+
         std::ofstream file(filepath);
         if (!file.is_open())
         {
@@ -226,6 +226,11 @@ public:
         
         if (sceneData["scene"].contains("camera"))
             DeserializeCamera(sceneData["scene"]["camera"]);
+
+        // if (sceneData["scene"].contains("theme"))
+        // {
+        //     std::string themeStr = sceneData["scene"]["theme"];
+        // }
         
         int loadedCount = 0;
         for (auto& entityData : sceneData["scene"]["entities"])

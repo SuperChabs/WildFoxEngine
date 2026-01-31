@@ -1,4 +1,3 @@
-// src/resource/model/ModelLoader.cppm
 module;
 
 #include <vector>
@@ -15,10 +14,12 @@ module;
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <assimp/mesh.h>
+#include <assimp/matrix4x4.h>
 
 export module WFE.Resource.Model.ModelLoader;
 
 import WFE.Resource.Model.Model;
+import WFE.Resource.Model.ModelNode;
 import WFE.Scene.Mesh;
 import WFE.Rendering.MeshData;
 import WFE.Core.Logger;
@@ -35,14 +36,49 @@ import WFE.ECS.Components;
 static std::unordered_map<std::string, unsigned int> loadedTexturesCache;
 static int globalMeshCounter = 0;
 
-void ProcessNode(aiNode* node, const aiScene* scene, Model* model, 
-                 const std::string& directory, MaterialManager& materialManager,
-                 ECSWorld* world = nullptr, entt::entity parentEntity = entt::null);
-std::shared_ptr<Mesh> ProcessMesh(aiMesh* mesh, const aiScene* scene, 
-                 const std::string& directory, MaterialManager& materialManager, int meshIndex);
-std::vector<Texture> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, 
-                                          const std::string& typeName, const std::string& directory);
+std::shared_ptr<ModelNode> ProcessNode(
+    aiNode* node, 
+    const aiScene* scene, 
+    Model* model, 
+    const std::string& directory, 
+    MaterialManager& materialManager,
+    ECSWorld* world = nullptr, 
+    entt::entity parentEntity = entt::null
+);
+
+std::shared_ptr<Mesh> ProcessMesh(
+    aiMesh* mesh, 
+    const aiScene* scene, 
+    const std::string& directory,
+    MaterialManager& materialManager, 
+    int meshIndex
+);
+
+std::vector<Texture> LoadMaterialTextures(
+    aiMaterial* mat, 
+    aiTextureType type, 
+    const std::string& typeName, 
+    const std::string& directory
+);
+
 unsigned int TextureFromFile(const char* path, const std::string& directory);
+
+void DecomposeTransform(
+    const glm::mat4& transform, 
+    glm::vec3& position, 
+    glm::vec3& rotation, 
+    glm::vec3& scale
+);
+
+glm::mat4 ConvertAssimpMatrix(const aiMatrix4x4 from)
+{
+    glm::mat4 to;
+    to[0][0] = from.a1; to[1][0] = from.a2; to[2][0] = from.a3; to[3][0] = from.a4;
+    to[0][1] = from.b1; to[1][1] = from.b2; to[2][1] = from.b3; to[3][1] = from.b4;
+    to[0][2] = from.c1; to[1][2] = from.c2; to[2][2] = from.c3; to[3][2] = from.c4;
+    to[0][3] = from.d1; to[1][3] = from.d2; to[2][3] = from.d3; to[3][3] = from.d4;
+    return to;
+}
 
 /**
  * @brief Model loader function
@@ -82,7 +118,7 @@ export Model* LoadModelFromFile(const std::string& path, MaterialManager& materi
         world->AddComponent<VisibilityComponent>(rootEntity, true);
         world->AddComponent<HierarchyComponent>(rootEntity);
         
-        Logger::Log(LogLevel::INFO, "✓ Root entity created: " + model->GetName() + "_Root");
+        Logger::Log(LogLevel::INFO, "Root entity created: " + model->GetName() + "_Root");
     }
     else
     {
@@ -92,7 +128,17 @@ export Model* LoadModelFromFile(const std::string& path, MaterialManager& materi
     globalMeshCounter = 0;
     
     Logger::Log(LogLevel::INFO, "Starting ProcessNode...");
-    ProcessNode(scene->mRootNode, scene, model, directory, materialManager, world, rootEntity);
+    std::shared_ptr<ModelNode> rootNode = ProcessNode(
+        scene->mRootNode, 
+        scene, 
+        model, 
+        directory, 
+        materialManager, 
+        world, 
+        rootEntity
+    );
+    
+    model->SetRootNode(rootNode);
     
     Logger::Log(LogLevel::INFO, 
         "Model loaded: " + path + " (" + 
@@ -112,82 +158,78 @@ export Model* LoadModelFromFile(const std::string& path, MaterialManager& materi
     return model;
 }
 
-void ProcessNode(aiNode* node, const aiScene* scene, Model* model, 
-                 const std::string& directory, MaterialManager& materialManager,
-                 ECSWorld* world, entt::entity parentEntity)
+std::shared_ptr<ModelNode>  ProcessNode(aiNode* node, 
+                 const aiScene* scene, 
+                 Model* model, 
+                 const std::string& directory, 
+                 MaterialManager& materialManager,
+                 ECSWorld* world, 
+                 entt::entity parentEntity)
 {
     Logger::Log(LogLevel::INFO, "ProcessNode: " + std::string(node->mName.C_Str()));
     Logger::Log(LogLevel::INFO, "  Meshes in this node: " + std::to_string(node->mNumMeshes));
     Logger::Log(LogLevel::INFO, "  World: " + std::string(world ? "OK" : "NULL"));
     Logger::Log(LogLevel::INFO, "  Parent entity valid: " + std::string(parentEntity != entt::null ? "YES" : "NO"));
     
+    glm::mat4 transform = ConvertAssimpMatrix(node->mTransformation);
+    auto modelNode = std::make_shared<ModelNode>(
+        std::string(node->mName.C_Str()), 
+        transform
+    );
+    
     for (unsigned int i = 0; i < node->mNumMeshes; i++) 
     {
-        Logger::Log(LogLevel::INFO, "  Processing mesh " + std::to_string(i) + "...");
-        
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        std::shared_ptr<Mesh> processedMesh = ProcessMesh(mesh, scene, directory, 
-                                                           materialManager, 
-                                                           globalMeshCounter);
-        model->AddMesh(processedMesh);
         
-        Logger::Log(LogLevel::INFO, "  Mesh added to model (total: " + std::to_string(model->GetMeshCount()) + ")");
+        std::shared_ptr<Mesh> processedMesh = ProcessMesh(
+            mesh, scene, directory, materialManager, globalMeshCounter
+        );
+        
+        int meshIndex = model->GetMeshCount();
+        model->AddMesh(processedMesh);
+        modelNode->meshIndices.push_back(meshIndex);
         
         if (world && parentEntity != entt::null)
         {
-            std::string meshName = model->GetName() + "_Mesh_" + std::to_string(globalMeshCounter);
-            Logger::Log(LogLevel::INFO, "  Creating entity: " + meshName);
+            std::string meshName = model->GetName() + "_" + 
+                                 std::string(node->mName.C_Str()) + "_Mesh_" + 
+                                 std::to_string(globalMeshCounter);
             
             entt::entity meshEntity = world->CreateEntity(meshName);
             
-            world->AddComponent<TransformComponent>(meshEntity, glm::vec3(0), glm::vec3(0), glm::vec3(1));
+            glm::vec3 position, rotation, scale;
+            DecomposeTransform(transform, position, rotation, scale);
+            
+            world->AddComponent<TransformComponent>(meshEntity, position, rotation, scale);
             world->AddComponent<MeshComponent>(meshEntity, processedMesh);
             
             auto meshMaterial = processedMesh->GetMaterial();
             if (meshMaterial)
-            {
                 world->AddComponent<MaterialComponent>(meshEntity, meshMaterial);
-                Logger::Log(LogLevel::INFO, "  Material added to entity");
-            }
-            else
-            {
-                Logger::Log(LogLevel::WARNING, "  No material found for mesh");
-            }
             
             world->AddComponent<VisibilityComponent>(meshEntity, true);
-            
-            Logger::Log(LogLevel::INFO, "  Setting parent relationship...");
             world->SetParent(meshEntity, parentEntity);
-            
-            auto parent = world->GetParent(meshEntity);
-            if (parent == parentEntity)
-            {
-                Logger::Log(LogLevel::INFO, "  ✓ Parent set successfully");
-            }
-            else
-            {
-                Logger::Log(LogLevel::ERROR, "  ✗ Failed to set parent!");
-            }
-            
-            auto children = world->GetChildren(parentEntity);
-            Logger::Log(LogLevel::INFO, "  Parent now has " + std::to_string(children.size()) + " children");
-        }
-        else
-        {
-            if (!world)
-                Logger::Log(LogLevel::WARNING, "  World is NULL, skipping entity creation");
-            if (parentEntity == entt::null)
-                Logger::Log(LogLevel::WARNING, "  Parent entity is null, skipping entity creation");
         }
         
         globalMeshCounter++;
     }
     
-    Logger::Log(LogLevel::INFO, "  Processing " + std::to_string(node->mNumChildren) + " child nodes...");
     for (unsigned int i = 0; i < node->mNumChildren; i++) 
     {
-        ProcessNode(node->mChildren[i], scene, model, directory, materialManager, world, parentEntity);
+        std::shared_ptr<ModelNode> childNode = ProcessNode(
+            node->mChildren[i], 
+            scene, 
+            model, 
+            directory, 
+            materialManager, 
+            world, 
+            parentEntity
+        );
+        
+        modelNode->AddChild(childNode);
     }
+    
+    return modelNode;
 }
 
 std::shared_ptr<Mesh> ProcessMesh(
@@ -293,21 +335,21 @@ std::shared_ptr<Mesh> ProcessMesh(
     {
         Logger::Log(LogLevel::INFO, "Setting material to mesh...");
         createdMesh->SetMaterial(meshMaterial);
-        Logger::Log(LogLevel::INFO, "✓ Material successfully set to mesh! (textures: " + std::to_string(textures.size()) + ")");
+        Logger::Log(LogLevel::INFO, "Material successfully set to mesh! (textures: " + std::to_string(textures.size()) + ")");
 
         auto checkMaterial = createdMesh->GetMaterial();
         if (checkMaterial)
         {
-            Logger::Log(LogLevel::INFO, "✓ Verified: Material is set (name: " + checkMaterial->GetName() + ", type: " + checkMaterial->GetType() + ", using color: " + (checkMaterial->IsUsingColor() ? "YES" : "NO") + ")");
+            Logger::Log(LogLevel::INFO, "Verified: Material is set (name: " + checkMaterial->GetName() + ", type: " + checkMaterial->GetType() + ", using color: " + (checkMaterial->IsUsingColor() ? "YES" : "NO") + ")");
         }
         else
         {
-            Logger::Log(LogLevel::ERROR, "✗ ERROR: Material is NULL after SetMaterial!");
+            Logger::Log(LogLevel::ERROR, "Material is NULL after SetMaterial!");
         }
     }
     else
     {
-        Logger::Log(LogLevel::ERROR, "✗ ERROR: meshMaterial is NULL, cannot set material!");
+        Logger::Log(LogLevel::ERROR, "MeshMaterial is NULL, cannot set material!");
     }
 
     Logger::Log(LogLevel::INFO, "=== Mesh #" + std::to_string(meshIndex) + " processing complete ===\n");
@@ -415,4 +457,26 @@ unsigned int TextureFromFile(const char* path, const std::string& directory)
     }
 
     return textureID;
+}
+
+void DecomposeTransform(const glm::mat4& transform, 
+                       glm::vec3& position, 
+                       glm::vec3& rotation, 
+                       glm::vec3& scale)
+{
+    position = glm::vec3(transform[3]);
+    
+    scale.x = glm::length(glm::vec3(transform[0]));
+    scale.y = glm::length(glm::vec3(transform[1]));
+    scale.z = glm::length(glm::vec3(transform[2]));
+    
+    glm::mat3 rotMat;
+    rotMat[0] = glm::vec3(transform[0]) / scale.x;
+    rotMat[1] = glm::vec3(transform[1]) / scale.y;
+    rotMat[2] = glm::vec3(transform[2]) / scale.z;
+    
+    rotation.y = glm::degrees(atan2(rotMat[0][2], rotMat[2][2]));
+    rotation.x = glm::degrees(atan2(-rotMat[1][2], 
+                 sqrt(rotMat[1][0] * rotMat[1][0] + rotMat[1][1] * rotMat[1][1])));
+    rotation.z = glm::degrees(atan2(rotMat[1][0], rotMat[1][1]));
 }

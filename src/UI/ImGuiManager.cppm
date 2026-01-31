@@ -14,12 +14,22 @@ import WFE.UI.Theme;
 export class ImGuiManager 
 {
 private:
+    ImGuiManager(const ImGuiManager&) = delete;
+    ImGuiManager& operator=(const ImGuiManager&) = delete;
+
     bool initialized;
+    ThemeStyle theme = ThemeStyle::Dark;
     
 public:
     ImGuiManager() : initialized(false) {}
     ~ImGuiManager() { Shutdown(); }
     
+    static ImGuiManager& Instance()
+    {
+        static ImGuiManager instance;
+        return instance;
+    }
+
     bool Initialize(GLFWwindow* window)
     {
         if (initialized) 
@@ -33,7 +43,7 @@ public:
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Docking
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Multi-Viewport
         
-        Theme::ApplyTheme(ThemeStyle::Custom);
+        Theme::ApplyTheme(theme);
 
         ImGuiStyle& style = ImGui::GetStyle();
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
@@ -103,4 +113,7 @@ public:
     }
     
     bool IsInitialized() const { return initialized; }
+
+    void SetTheme(ThemeStyle t) { theme = t; }
+    ThemeStyle GetTheme() const { return theme; }
 };

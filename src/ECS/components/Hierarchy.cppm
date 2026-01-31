@@ -5,8 +5,12 @@ module;
 #include <entt.hpp>
 #include "entity/fwd.hpp"
 
-
 export module WFE.ECS.Components.Hierarchy;
+
+/**
+ * @brief Hierarchy component
+ * Responsible for Parent-Child something
+ */
 
 export struct HierarchyComponent
 {

@@ -47,17 +47,11 @@ public:
         ImGui::Begin("Inspector", &isOpen);
         
         if (selectedEntity != entt::null && ecs->IsValid(selectedEntity))
-        {
             RenderEntityInspector(ecs, selectedEntity, materialManager, selectedEntity);
-        }
         else if (selectedShader != nullptr && shaderManager != nullptr)
-        {
             RenderShaderInspector(selectedShader, shaderManager);
-        }
         else
-        {
             RenderEmptyState();
-        }
         
         ImGui::End();
     }

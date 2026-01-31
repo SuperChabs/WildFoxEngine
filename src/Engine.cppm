@@ -32,6 +32,9 @@ import WFE.Rendering.Renderer;
 /// @author SuperChabs
 /// @date 2026-01-28
 
+/**
+ * 
+ */
 export class Engine : public Application 
 {
 private:
@@ -43,6 +46,11 @@ private:
     std::unique_ptr<SceneSerializer> sceneSerializer;
 
 protected:
+    /**
+     * @brief Initialize game engine
+     * Initialize Skybox, Renderer and other stuff that wasn't initialized
+     * in Application class
+     */
     void OnInitialize() override
     {
         Logger::Log(LogLevel::INFO, "Initializing WFE...");
@@ -104,40 +112,47 @@ protected:
         rotationSystem->Update(*GetECSWorld(), deltaTime);
     }
 
-void OnRender() override
-{
-    if (editorLayout && editorLayout->GetFramebuffer())
+    /**
+     * @brief Render scene into framebuffer
+     */
+    void OnRender() override
     {
-        Framebuffer* fb = editorLayout->GetFramebuffer();
-        ImVec2 viewportSize = editorLayout->GetViewportSize();
-        
-        fb->Bind();
-        
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LESS);
-        
-        GetRenderer()->BeginFrame();
-        
-        if (viewportSize.x > 0 && viewportSize.y > 0)
+        if (editorLayout && editorLayout->GetFramebuffer())
         {
-            GetRenderer()->Render(
-                *GetCamera(), 
-                static_cast<int>(viewportSize.x), 
-                static_cast<int>(viewportSize.y)
-            );
+            Framebuffer* fb = editorLayout->GetFramebuffer();
+            ImVec2 viewportSize = editorLayout->GetViewportSize();
+            
+            fb->Bind();
+            
+            glEnable(GL_DEPTH_TEST);
+            glDepthFunc(GL_LESS);
+            
+            GetRenderer()->BeginFrame();
+            
+            if (viewportSize.x > 0 && viewportSize.y > 0)
+            {
+                GetRenderer()->Render(
+                    *GetCamera(), 
+                    static_cast<int>(viewportSize.x), 
+                    static_cast<int>(viewportSize.y)
+                );
+            }
+            
+            GetRenderer()->EndFrame();
+            
+            fb->Unbind();
         }
         
-        GetRenderer()->EndFrame();
-        
-        fb->Unbind();
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glViewport(0, 0, GetWindow()->GetWidth(), GetWindow()->GetHeight());
+        glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDisable(GL_DEPTH_TEST); 
     }
-    
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glViewport(0, 0, GetWindow()->GetWidth(), GetWindow()->GetHeight());
-    glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glDisable(GL_DEPTH_TEST); 
-}
+
+    /**
+     * @brief Shutdown classes needed to shutdown by hand
+     */
     void OnShutdown() override
     {
         Logger::Log(LogLevel::INFO, "Shutting down engine...");
@@ -148,6 +163,9 @@ void OnRender() override
         Logger::Log(LogLevel::INFO, "Engine shutdown complete!");
     }
 
+    /**
+     * @brief Render User Interface
+     */
     void RenderUI() override
     {    
         if (!editorLayout)

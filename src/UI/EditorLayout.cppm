@@ -123,7 +123,7 @@ private:
             );
         
         if (showProperties)
-            propertiesWindow.Render(camera);
+            propertiesWindow.Render(camera, renderer);
         
         if (showConsole)
             consoleWindow.Render();

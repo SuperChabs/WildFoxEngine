@@ -2,6 +2,8 @@ module;
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <memory>
 #include <chrono>
 #include <variant>
@@ -18,6 +20,7 @@ import WFE.ECS.Systems;
 import WFE.Core.Camera;
 import WFE.Core.Logger;
 import WFE.Core.CommandManager;
+import WFE.Rendering.Grid;
 
 export struct RendererConfig
 {
@@ -58,6 +61,8 @@ private:
     std::unique_ptr<RenderSystem> renderSystem;
     std::unique_ptr<LightSystem> lightSystem;
     std::unique_ptr<IconRenderSystem> iconRenderSystem;
+
+    std::unique_ptr<Grid> grid;
     
     ShaderManager* shaderManager;
     ECSWorld* world;
@@ -88,6 +93,11 @@ public:
         
         renderSystem = std::make_unique<RenderSystem>();
         lightSystem = std::make_unique<LightSystem>();
+
+        grid = std::make_unique<Grid>();
+        grid->SetGridScale(1.0f);
+        grid->SetFadeDistance(100.0f);
+        grid->SetFadeStart(50.0f); 
         
         RegisterRenderCommands();
         
@@ -132,6 +142,9 @@ public:
             
             return false;
         }
+        
+        if (!shaderManager->GetShader("grid"))
+            Logger::Log(LogLevel::WARNING, "Grid shader not loaded!");
         
         lastFPSUpdate = Clock::now();
         
@@ -214,6 +227,19 @@ public:
         Logger::Log(LogLevel::INFO, "Renderer shutdown");
     }
     
+    void RenderGrid(Camera& camera, int width, int height)
+    {
+        if (!grid || !grid->IsEnabled()) return;
+        
+        glm::mat4 projection = glm::perspective(
+            glm::radians(camera.GetZoom()),
+            static_cast<float>(width) / static_cast<float>(height),
+            0.1f, 1000.0f
+        );
+        
+        grid->Render(*shaderManager, camera, projection);
+    }
+
     void SetClearColor(const glm::vec4& color)
     {
         config.clearColor = color;
@@ -252,6 +278,7 @@ public:
     
     ECSWorld* GetWorld() { return world; }
     ShaderManager* GetShaderManager() { return shaderManager; }
+    Grid* GetGrid() { return grid.get(); }
     
     bool IsInitialized() const { return initialized; }
 
@@ -333,6 +360,22 @@ private:
             iconRenderSystem->Update(*world, *shaderManager, shaderName, *camera);
             
             shaderManager->Unbind();
+        });
+
+        CommandManager::RegisterCommand("Renderer_RenderGrid",
+        [this](const CommandArgs& args) 
+        {
+            if (args.size() < 3)
+            {
+                Logger::Log(LogLevel::ERROR, "Renderer_RenderGrid requires 3 args");
+                return;
+            }
+            
+            auto* camera = std::get<Camera*>(args[0]);
+            int width = std::get<int>(args[1]);
+            int height = std::get<int>(args[2]);
+            
+            RenderGrid(*camera, width, height);
         });
         
         Logger::Log(LogLevel::INFO, "Render commands registered in CommandManager");
