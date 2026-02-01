@@ -13,7 +13,7 @@ import WFE.Rendering.Passes.GeometryPass;
 import WFE.Rendering.Passes.SkyboxPass;
 import WFE.Rendering.Passes.UIPass;
 import WFE.Rendering.Passes.ShadowPass;
-import WFE.Rendering.Passes.GridPass;
+// import WFE.Rendering.Passes.GridPass;
 import WFE.ECS.ECSWorld;
 import WFE.Core.Logger;
 import WFE.Rendering.Core.GLContext;
@@ -54,11 +54,6 @@ public:
         AddPass(std::move(skyboxPass));
         Logger::Log(LogLevel::DEBUG, "SkyboxPass created");
 
-        /// grid pass
-        auto gridPass = std::make_unique<GridPass>(context, shaderManager);
-        AddPass(std::move(gridPass));
-        Logger::Log(LogLevel::DEBUG, "GridPass created");
-
         /// geometry pass
         Logger::Log(LogLevel::DEBUG, "Creating GeometryPass...");
         auto geometryPass = std::make_unique<GeometryPass>(
@@ -67,6 +62,11 @@ public:
         AddPass(std::move(geometryPass));
         Logger::Log(LogLevel::DEBUG, "GeometryPass created");
         
+        /// grid pass
+        // auto gridPass = std::make_unique<GridPass>(context, shaderManager);
+        // AddPass(std::move(gridPass));
+        // Logger::Log(LogLevel::DEBUG, "GridPass created");
+
         /// ui pass2
         Logger::Log(LogLevel::DEBUG, "Creating UIPass...");
         auto uiPass = std::make_unique<UIPass>(

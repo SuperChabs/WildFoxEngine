@@ -108,7 +108,7 @@ private:
     void RenderWindows(ECSWorld* ecs, Camera* camera, Renderer* renderer,
                       ShaderManager* shaderManager, MaterialManager* materialManager)
     {
-        viewportWindow.Render(framebuffer.get());
+        viewportWindow.Render(framebuffer.get(), ecs, camera, GetSelectedEntity());
         
         if (showHierarchy)
             hierarchyWindow.Render(ecs, shaderManager, materialManager);

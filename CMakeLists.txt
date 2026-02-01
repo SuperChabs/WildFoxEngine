@@ -46,6 +46,20 @@ target_include_directories(imgui PUBLIC ${IMGUI_INCLUDE_DIRS})
 target_link_libraries(imgui PUBLIC glad)
 target_compile_definitions(imgui PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLAD)
 
+# ========== ImGuizmo ==========
+set(IMGUIZMO_DIR ${CMAKE_SOURCE_DIR}/vendor/imguizmo)
+set(IMGUIZMO_SOURCES
+    ${IMGUIZMO_DIR}/ImSequencer.cpp
+    ${IMGUIZMO_DIR}/ImGuizmo.cpp 
+    ${IMGUIZMO_DIR}/ImGradient.cpp 
+    ${IMGUIZMO_DIR}/ImCurveEdit.cpp 
+    ${IMGUIZMO_DIR}/GraphEditor.cpp 
+)
+add_library(imguizmo STATIC ${IMGUIZMO_SOURCES})
+
+target_include_directories(imguizmo PUBLIC ${IMGUIZMO_DIR})
+target_link_libraries(imguizmo PUBLIC imgui)
+
 # ========== Magic_enum =============
 add_library(magic_enum INTERFACE)
 target_include_directories(magic_enum INTERFACE ${CMAKE_SOURCE_DIR}/vendor/magic_enum/include)
@@ -93,7 +107,7 @@ endif()
 
 message(STATUS "=== Founded files ===")
 message(STATUS "C++ files: ${WildFoxEngine_SOURCES}")
-message(STATUS "Heanders: ${WildFoxEngine_ALL_HEADERS}")
+message(STATUS "Headers: ${WildFoxEngine_ALL_HEADERS}")
 
 add_executable(${PROJECT_NAME} 
     ${WildFoxEngine_SOURCES}
@@ -128,6 +142,7 @@ target_link_libraries(${PROJECT_NAME}
     stb_image
     assimp
     imgui
+    imguizmo
     magic_enum
     entt
     nfd

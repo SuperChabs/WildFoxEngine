@@ -130,6 +130,10 @@ public:
     }
 
     mat4 GetViewMatrix() const {return glm::lookAt(position, position + front, up);}
+    mat4 GetProjectionMatrix(float aspectRatio) const 
+    {
+        return glm::perspective(glm::radians(zoom), aspectRatio, 0.1f, 1000.0f);
+    }
 
     vec3 GetPosition() const {return position;}
     vec3 GetFront()    const {return front;}

@@ -1,4 +1,4 @@
-#version 330 core
+/*#version 330 core
 
 out vec4 FragColor;
 
@@ -17,6 +17,9 @@ uniform vec3 axisXColor;
 uniform vec3 axisZColor;
 
 uniform float lineThickness;
+
+uniform mat4 projection;
+uniform mat4 view;
 
 float ComputeDepth(vec3 pos, mat4 projection, mat4 view)
 {
@@ -61,7 +64,7 @@ void main()
     
     vec3 fragPos3D = nearPoint + t * (farPoint - nearPoint);
     
-    gl_FragDepth = ComputeDepth(fragPos3D, mat4(1.0), mat4(1.0));
+    // gl_FragDepth = ComputeDepth(fragPos3D, projection, view);
     
     float distanceFromCamera = length(cameraPos - fragPos3D);
     
@@ -75,4 +78,15 @@ void main()
         discard;
     
     FragColor = gridColor;
+}*/
+
+#version 330 core
+in vec2 vPos;
+out vec4 FragColor;
+
+void main()
+{
+    float g = step(0.95, abs(sin(vPos.x * 10.0)) * abs(sin(vPos.y * 10.0)));
+    FragColor = vec4(vec3(g), 1.0);
 }
+

@@ -1,6 +1,14 @@
 module;
 
 #include <imgui.h>
+#include <ImGuizmo.h>
+#include <entt.hpp>
+#include "entity/entity.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/matrix_decompose.hpp>
 
 #include <string>
 #include <cstdint>
@@ -9,6 +17,9 @@ export module WFE.UI.Windows.ViewportWindow;
 
 import WFE.Core.Logger;
 import WFE.Rendering.Core.Framebuffer;
+import WFE.ECS.ECSWorld;
+import WFE.ECS.Components;
+import WFE.Core.Camera;
 
 export class ViewportWindow 
 {
@@ -19,8 +30,10 @@ private:
     bool isHovered = false;
     bool isFocused = false;
 
+    int m_GizmoOperation = ImGuizmo::TRANSLATE;
+
 public:
-    void Render(Framebuffer* framebuffer) 
+    void Render(Framebuffer* framebuffer, ECSWorld* ecs, Camera* camera, entt::entity selectedEntity) 
     {
         if (!isOpen) return;
         
@@ -32,6 +45,13 @@ public:
 
         isHovered = ImGui::IsWindowHovered();
         isFocused = ImGui::IsWindowFocused();
+
+        if (isFocused) 
+        {
+            if (ImGui::IsKeyPressed(ImGuiKey_W)) m_GizmoOperation = ImGuizmo::TRANSLATE;
+            if (ImGui::IsKeyPressed(ImGuiKey_E)) m_GizmoOperation = ImGuizmo::ROTATE;
+            if (ImGui::IsKeyPressed(ImGuiKey_R)) m_GizmoOperation = ImGuizmo::SCALE;
+        }
 
         ImVec2 size = ImGui::GetContentRegionAvail();
 
@@ -60,6 +80,35 @@ public:
                 {0, 1},
                 {1, 0}
             );
+
+            // Gizmos
+            if (selectedEntity != entt::null && ecs)
+            {
+                ImGuizmo::SetOrthographic(false);
+                ImGuizmo::SetDrawlist();
+
+                ImGuizmo::SetRect(viewportPos.x, viewportPos.y, viewportSize.x, viewportSize.y);
+                
+                // Camera
+                float aspect = size.x / size.y;
+                glm::mat4 cameraView = camera->GetViewMatrix();
+                glm::mat4 cameraProj = camera->GetProjectionMatrix(aspect);
+
+                // Entity
+                auto& tc = ecs->GetComponent<TransformComponent>(selectedEntity);
+                glm::mat4 transform = tc.GetModelMatrix();
+
+                ImGuizmo::Manipulate(
+                    glm::value_ptr(cameraView),
+                    glm::value_ptr(cameraProj),
+                    (ImGuizmo::OPERATION)m_GizmoOperation, 
+                    ImGuizmo::LOCAL,
+                    glm::value_ptr(transform)
+                );
+
+                if (ImGuizmo::IsUsing())
+                    UpdateTransformFromMatrix(tc, transform); 
+            }
         }
         else
         {
@@ -77,4 +126,20 @@ public:
     bool IsFocused() const { return isFocused; }
     
     void SetOpen(bool open) { isOpen = open; }
+    void SetGizmoOperation(int op) { m_GizmoOperation = op; }
+
+private:
+    void UpdateTransformFromMatrix(TransformComponent& tc, const glm::mat4& matrix) 
+    {
+        glm::vec3 skew;
+        glm::vec4 perspective;
+        glm::quat orientation;
+        
+        glm::decompose(matrix, tc.scale, orientation, tc.position, skew, perspective);
+        
+        glm::vec3 rotationRadians = glm::eulerAngles(orientation);
+        tc.rotation.x = glm::degrees(rotationRadians.x);
+        tc.rotation.y = glm::degrees(rotationRadians.y);
+        tc.rotation.z = glm::degrees(rotationRadians.z);
+    }
 };
