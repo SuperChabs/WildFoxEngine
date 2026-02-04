@@ -1,3 +1,9 @@
 [submodule "vendor/imguizmo"]
 	path = vendor/imguizmo
 	url = https://github.com/CedricGuillemet/ImGuizmo.git
+[submodule "vendor/entt"]
+	path = vendor/entt
+	url = https://github.com/skypjack/entt.git
+[submodule "vendor/nfd"]
+	path = vendor/nfd
+	url = https://github.com/mlabbe/nativefiledialog.git
