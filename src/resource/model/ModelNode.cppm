@@ -4,7 +4,7 @@ module;
 #include <string>
 #include <memory>
 
-#include <entt.hpp>
+#include <entt/entt.hpp>
 #include <glm/glm.hpp>
 
 export module WFE.Resource.Model.ModelNode;

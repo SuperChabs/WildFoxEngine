@@ -1,7 +1,7 @@
 module;
 
 #include <imgui.h>
-#include <entt.hpp>
+#include <entt/entt.hpp>
 
 export module WFE.UI.Panels.IconPanel;
 

@@ -32,15 +32,11 @@ public:
     }
 
 private:
-    /* ===================== STATE ===================== */
-
     bool showOpenModelDialog = false;
     bool showSaveSceneDialog = false;
 
     char modelPath[512]{};
     char scenePath[512]{};
-
-    /* ===================== FILE MENU ===================== */
 
     void RenderFileMenu()
     {
@@ -79,7 +75,6 @@ private:
         ImGui::EndMenu();
     }
 
-    /* ===================== OPEN MODEL DIALOG ===================== */
 
     void RenderOpenModelDialog()
     {
@@ -124,7 +119,6 @@ private:
         }
     }
 
-    /* ===================== SAVE SCENE DIALOG ===================== */
 
     void RenderSaveSceneDialog()
     {
@@ -162,7 +156,6 @@ private:
         }
     }
 
-    /* ===================== CREATE MENU ===================== */
 
     void RenderCreateMenu()
     {
@@ -183,10 +176,12 @@ private:
             ImGui::EndMenu();
         }
 
+        if (ImGui::MenuItem("Camera"))
+            Execute("onCreateCamera");
+
         ImGui::EndMenu();
     }
 
-    /* ===================== VIEW MENU ===================== */
 
     void RenderViewMenu(bool& showHierarchy, bool& showInspector,
                         bool& showProperties, bool& showConsole)
@@ -213,7 +208,6 @@ private:
         ImGui::EndMenu();
     }
 
-    /* ===================== HELPERS ===================== */
 
     void Execute(const char* name)
     {

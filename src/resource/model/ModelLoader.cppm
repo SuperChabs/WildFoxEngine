@@ -8,7 +8,7 @@ module;
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <stb_image.h>
-#include <entt.hpp>
+#include <entt/entt.hpp>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

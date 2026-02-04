@@ -4,6 +4,8 @@ module;
 #include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
 
+#include <entt/entt.hpp>
+
 #include <memory>
 #include <utility>
 
@@ -18,6 +20,8 @@ import WFE.Core.Logging.ConsoleLogger;
 import WFE.Core.Logging.FileLogger;
 import WFE.Core.CommandManager;
 import WFE.ECS.ECSWorld;
+import WFE.ECS.Systems;
+import WFE.ECS.Components;
 import WFE.Rendering.Renderer; 
 import WFE.Resource.Texture.TextureManager;
 import WFE.Resource.Material.MaterialManager;
@@ -55,6 +59,8 @@ private:
     std::unique_ptr<ECSWorld> ecsWorld;
     std::unique_ptr<ShaderManager> shaderManager;
     std::unique_ptr<ModelManager> modelManager;
+    std::unique_ptr<InputControllerSystem> inputControllerSystem;
+    entt::entity mainCameraEntity = entt::null;
     
     ConsoleLogger console;
     FileLogger file;
@@ -99,29 +105,16 @@ private:
             if (CommandManager::HasCommand("onNewScene"))
                 CommandManager::ExecuteCommand("onNewScene", {});
         }
-        
-        if (cameraControlEnabled) 
-        {
-            if (input->IsKeyPressed(Key::KEY_W)) 
-                camera->ProcessKeyboard(FORWARD, time->GetDeltaTime());
-            if (input->IsKeyPressed(Key::KEY_S)) 
-                camera->ProcessKeyboard(BACKWARD, time->GetDeltaTime()); 
-            if (input->IsKeyPressed(Key::KEY_A)) 
-                camera->ProcessKeyboard(LEFT, time->GetDeltaTime());
-            if (input->IsKeyPressed(Key::KEY_D)) 
-                camera->ProcessKeyboard(RIGHT, time->GetDeltaTime());
-
-            if (input->IsKeyPressed(Key::KEY_SPACE)) 
-                camera->ProcessKeyboard(UP, time->GetDeltaTime());
-            if (input->IsKeyPressed(Key::KEY_LEFT_SHIFT)) 
-                camera->ProcessKeyboard(DOWN, time->GetDeltaTime());
-        }
     }
 
     void Update()
     {
         float deltaTime = time->GetDeltaTime();
         
+        inputControllerSystem->Update(*ecsWorld, *input, deltaTime, cameraControlEnabled);
+
+        SyncEntityToCamera();
+
         OnUpdate(deltaTime);
     }
 
@@ -177,6 +170,38 @@ private:
         
         if (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS) 
             app->SetCameraControlMode(!app->cameraControlEnabled);
+    }
+
+    void SyncCameraToEntity()
+    {
+        if (mainCameraEntity == entt::null) return;
+        
+        auto& transform = ecsWorld->GetComponent<TransformComponent>(mainCameraEntity);
+        auto& orientation = ecsWorld->GetComponent<CameraOrientationComponent>(mainCameraEntity);
+        auto& cameraComp = ecsWorld->GetComponent<CameraComponent>(mainCameraEntity);
+        
+        transform.position = camera->GetPosition();
+        orientation.yaw = camera->GetYaw();
+        orientation.pitch = camera->GetPitch();
+        cameraComp.fov = camera->GetZoom();
+        cameraComp.movementSpeed = camera->GetMovementSpeed();
+        cameraComp.mouseSensitivity = camera->GetMouseSensitivity();
+    }
+
+    void SyncEntityToCamera()
+    {
+        if (mainCameraEntity == entt::null) return;
+        
+        auto& transform = ecsWorld->GetComponent<TransformComponent>(mainCameraEntity);
+        auto& orientation = ecsWorld->GetComponent<CameraOrientationComponent>(mainCameraEntity);
+        auto& cameraComp = ecsWorld->GetComponent<CameraComponent>(mainCameraEntity);
+        
+        camera->SetPosition(transform.position);
+        camera->SetYaw(orientation.yaw);
+        camera->SetPitch(orientation.pitch);
+        camera->SetZoom(cameraComp.fov);
+        camera->SetMovementSpeed(cameraComp.movementSpeed);
+        camera->SetMouseSensitivity(cameraComp.mouseSensitivity);
     }
 
 protected:
@@ -272,6 +297,9 @@ public:
         shaderManager = std::make_unique<ShaderManager>();
         modelManager = std::make_unique<ModelManager>();
         modelManager->SetMaterialManager(materialManager.get());
+        inputControllerSystem = std::make_unique<InputControllerSystem>();
+
+        mainCameraEntity = ecsWorld->CreateCamera("Main Camera", true);
         
         Logger::Log(LogLevel::DEBUG, "ShaderManager address: " + 
             std::to_string(reinterpret_cast<uintptr_t>(shaderManager.get())));
@@ -285,6 +313,7 @@ public:
         if (!imGuiManager->Initialize(window->GetGLFWWindow())) 
             return false;
 
+        SyncCameraToEntity();
         SetCameraControlMode(false);  
         
         Logger::AddSink(&console);
@@ -350,6 +379,7 @@ public:
     Window* GetWindow() const { return window.get(); }
     Input* GetInput() const { return input.get(); }
     Time* GetTime() const { return time.get(); }
+    entt::entity GetMainCameraEntity() const { return mainCameraEntity; }
     Camera* GetCamera() const { return camera.get(); }
     Renderer* GetRenderer() const { return renderer.get(); }
     TextureManager* GetTextureManager() const { return textureManager.get(); }

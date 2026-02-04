@@ -4,7 +4,7 @@ module;
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <imgui.h>
-#include <entt.hpp>
+#include <entt/entt.hpp>
 #include <memory>
 #include <string>
 #include <variant>
@@ -176,7 +176,7 @@ protected:
 
         editorLayout->RenderEditor(
             GetECSWorld(), 
-            GetCamera(), 
+            GetMainCameraEntity(),
             GetRenderer(), 
             GetShaderManager(), 
             GetMaterialManager()
@@ -490,6 +490,10 @@ private:
             // Logger::Log(LogLevel::INFO, 
             //     "All model entities created: " + model->GetName() + 
             //     " (" + std::to_string(model->GetMeshCount()) + " meshes)");
+        });
+
+        CommandManager::RegisterCommand("onCreateCamera", [this](const CommandArgs&) {
+            GetECSWorld()->CreateCamera("Camera", false);
         });
     }
 };

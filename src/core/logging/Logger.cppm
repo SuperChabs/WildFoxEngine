@@ -24,6 +24,7 @@ export enum class LogCategory
     CORE,
     RENDERING,
     UI,
+    ECS_SYSTEM,
     OTHER
 };
 

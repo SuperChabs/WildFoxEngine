@@ -5,7 +5,7 @@ module;
 #include <fstream>
 
 #include <glm/glm.hpp>
-#include <entt.hpp>
+#include <entt/entt.hpp>
 
 #include <nlohmann/json.hpp>
 

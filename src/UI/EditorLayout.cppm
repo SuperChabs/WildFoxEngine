@@ -2,7 +2,7 @@ module;
 
 #include <glm/glm.hpp>
 #include <imgui.h>
-#include <entt.hpp>
+#include <entt/entt.hpp>
 
 #include <string>
 #include <cstring>
@@ -52,17 +52,17 @@ public:
         Logger::Log(LogLevel::INFO, "EditorLayout created with Framebuffer");
     }
 
-    void RenderEditor(ECSWorld* ecs, Camera* camera, Renderer* renderer, 
+    void RenderEditor(ECSWorld* ecs, entt::entity cameraEntity, Renderer* renderer, 
                      ShaderManager* shaderManager, MaterialManager* materialManager)
     {
-        if (!ecs || !camera || !renderer || !materialManager)
+        if (!ecs || cameraEntity == entt::null || !renderer || !materialManager)
         {
             Logger::Log(LogLevel::ERROR, "EditorLayout: nullptr passed to RenderEditor");
             return;
         }
 
         RenderDockSpace();
-        RenderWindows(ecs, camera, renderer, shaderManager, materialManager);
+        RenderWindows(ecs, cameraEntity, renderer, shaderManager, materialManager);
     }
     
     ImVec2 GetViewportSize() const { return viewportWindow.GetViewportSize(); }
@@ -105,10 +105,10 @@ private:
         ImGui::End();
     }
 
-    void RenderWindows(ECSWorld* ecs, Camera* camera, Renderer* renderer,
+    void RenderWindows(ECSWorld* ecs, entt::entity cameraEntity, Renderer* renderer,
                       ShaderManager* shaderManager, MaterialManager* materialManager)
     {
-        viewportWindow.Render(framebuffer.get(), ecs, camera, GetSelectedEntity());
+        viewportWindow.Render(framebuffer.get(), ecs, cameraEntity, GetSelectedEntity());
         
         if (showHierarchy)
             hierarchyWindow.Render(ecs, shaderManager, materialManager);
@@ -123,7 +123,7 @@ private:
             );
         
         if (showProperties)
-            propertiesWindow.Render(camera, renderer);
+            propertiesWindow.Render(ecs, cameraEntity, renderer);
         
         if (showConsole)
             consoleWindow.Render();

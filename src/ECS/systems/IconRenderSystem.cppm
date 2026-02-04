@@ -1,7 +1,7 @@
 module;
 
 #include <glad/glad.h>
-#include <entt.hpp>
+#include <entt/entt.hpp>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

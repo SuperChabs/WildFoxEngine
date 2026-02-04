@@ -1,6 +1,6 @@
 module;
 
-#include <entt.hpp>
+#include <entt/entt.hpp>
 #include <glm/glm.hpp>
 #include <string>
 #include <cstdint>
@@ -175,5 +175,33 @@ public:
             parentHierarchy.RemoveChild(child);
             childHierarchy.parent = entt::null;
         }
+    }
+
+    entt::entity CreateCamera(const std::string& name = "Camera", bool setAsMain = false)
+    {
+        auto entity = CreateEntity(name);
+        
+        AddComponent<TransformComponent>(entity, glm::vec3(0, 0, 3), glm::vec3(0), glm::vec3(1));
+        AddComponent<CameraComponent>(entity);
+        AddComponent<CameraOrientationComponent>(entity);
+        
+        auto& camera = GetComponent<CameraComponent>(entity);
+        camera.isMainCamera = setAsMain;
+        
+        Logger::Log(LogLevel::INFO, "Camera entity created: " + name);
+        return entity;
+    }
+
+    entt::entity FindMainCamera()
+    {
+        entt::entity result = entt::null;
+        
+        Each<CameraComponent>([&](entt::entity entity, CameraComponent& cam)
+        {
+            if (cam.isMainCamera && cam.isActive)
+                result = entity;
+        });
+        
+        return result;
     }
 };

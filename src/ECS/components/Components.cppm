@@ -7,3 +7,4 @@ export import WFE.ECS.Components.Rotation;
 export import WFE.ECS.Components.Lighting;
 export import WFE.ECS.Components.Icon;
 export import WFE.ECS.Components.Hierarchy;
+export import WFE.ECS.Components.Camera;

@@ -2,8 +2,8 @@ module;
 
 #include <imgui.h>
 #include <ImGuizmo.h>
-#include <entt.hpp>
-#include "entity/entity.hpp"
+#include <entt/entt.hpp>
+#include "entt/entity/entity.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -33,7 +33,7 @@ private:
     int m_GizmoOperation = ImGuizmo::TRANSLATE;
 
 public:
-    void Render(Framebuffer* framebuffer, ECSWorld* ecs, Camera* camera, entt::entity selectedEntity) 
+    void Render(Framebuffer* framebuffer, ECSWorld* ecs, entt::entity cameraEntity, entt::entity selectedEntity) 
     {
         if (!isOpen) return;
         
@@ -82,22 +82,23 @@ public:
             );
 
             // Gizmos
-            if (selectedEntity != entt::null && ecs)
+            if (selectedEntity != entt::null && ecs && cameraEntity != entt::null)
             {
                 ImGuizmo::SetOrthographic(false);
                 ImGuizmo::SetDrawlist();
-
                 ImGuizmo::SetRect(viewportPos.x, viewportPos.y, viewportSize.x, viewportSize.y);
                 
-                // Camera
+                auto& cameraComp = ecs->GetComponent<CameraComponent>(cameraEntity);
+                auto& cameraTransform = ecs->GetComponent<TransformComponent>(cameraEntity);
+                auto& cameraOrientation = ecs->GetComponent<CameraOrientationComponent>(cameraEntity);
+                
                 float aspect = size.x / size.y;
-                glm::mat4 cameraView = camera->GetViewMatrix();
-                glm::mat4 cameraProj = camera->GetProjectionMatrix(aspect);
-
-                // Entity
+                glm::mat4 cameraView = cameraOrientation.GetViewMatrix(cameraTransform.position);
+                glm::mat4 cameraProj = cameraComp.GetProjectionMatrix(aspect);
+                
                 auto& tc = ecs->GetComponent<TransformComponent>(selectedEntity);
                 glm::mat4 transform = tc.GetModelMatrix();
-
+                
                 ImGuizmo::Manipulate(
                     glm::value_ptr(cameraView),
                     glm::value_ptr(cameraProj),
@@ -105,9 +106,9 @@ public:
                     ImGuizmo::LOCAL,
                     glm::value_ptr(transform)
                 );
-
+                
                 if (ImGuizmo::IsUsing())
-                    UpdateTransformFromMatrix(tc, transform); 
+                    UpdateTransformFromMatrix(tc, transform);
             }
         }
         else

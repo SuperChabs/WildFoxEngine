@@ -1,7 +1,7 @@
 module;
 
 #include <imgui.h>
-#include <entt.hpp>
+#include <entt/entt.hpp>
 #include <glm/glm.hpp>
 
 #include <string>
@@ -20,6 +20,7 @@ import WFE.UI.Panels.RotationPanel;
 import WFE.UI.Panels.MaterialPanel;
 import WFE.UI.Panels.LightPanel;
 import WFE.UI.Panels.IconPanel;
+import WFE.UI.Panels.CameraPanel;
 
 export class InspectorWindow 
 {
@@ -32,6 +33,7 @@ private:
     MaterialPanel materialPanel;
     LightPanel lightPanel;
     IconPanel iconPanel;
+    CameraPanel cameraPanel;
 
 public:
     void Render(ECSWorld* ecs, entt::entity selectedEntity, 
@@ -114,6 +116,7 @@ private:
         materialPanel.Render(ecs, entity, materialManager);
         lightPanel.Render(ecs, entity);
         iconPanel.Render(ecs, entity);
+        cameraPanel.Render(ecs, entity);
     }
     
     void RenderShaderInspector(ShaderObj* shader, ShaderManager* shaderManager)

@@ -65,15 +65,33 @@ add_library(magic_enum INTERFACE)
 target_include_directories(magic_enum INTERFACE ${CMAKE_SOURCE_DIR}/vendor/magic_enum/include)
 
 # ========== ENTT =============
-add_library(entt INTERFACE)
-target_include_directories(entt INTERFACE ${CMAKE_SOURCE_DIR}/vendor/entt/src/entt)
+add_subdirectory(vendor/entt) 
 
 # ========== nlohmann_json =============
 add_library(json INTERFACE)
 target_include_directories(json INTERFACE ${CMAKE_SOURCE_DIR}/vendor/nlohmann_json/include)
 
 # ========== nfd =============
-add_subdirectory(vendor/nfd)
+#find_package(PkgConfig REQUIRED)
+#pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
+#
+#add_library(nfd STATIC
+#    vendor/nfd/src/nfd_common.c
+#    vendor/nfd/src/nfd_gtk.c
+#)
+#
+#target_include_directories(nfd PUBLIC
+#    vendor/nfd/src
+#    ${GTK3_INCLUDE_DIRS}
+#)
+#
+#target_link_libraries(nfd PRIVATE
+#    ${GTK3_LIBRARIES}
+#)
+#
+#target_compile_options(nfd PRIVATE
+#    ${GTK3_CFLAGS_OTHER}
+#)
 
 # ========== WildFoxEngine =============
 include_directories(${IMGUI_INCLUDE_DIRS})
@@ -144,8 +162,8 @@ target_link_libraries(${PROJECT_NAME}
     imgui
     imguizmo
     magic_enum
-    entt
-    nfd
+    EnTT::EnTT
+    #nfd
 )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

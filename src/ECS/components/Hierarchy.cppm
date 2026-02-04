@@ -2,8 +2,8 @@ module;
 
 #include <algorithm>
 #include <vector>
-#include <entt.hpp>
-#include "entity/fwd.hpp"
+#include <entt/entt.hpp>
+#include "entt/entity/fwd.hpp"
 
 export module WFE.ECS.Components.Hierarchy;
 
