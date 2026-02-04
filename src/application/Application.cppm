@@ -111,9 +111,8 @@ private:
     {
         float deltaTime = time->GetDeltaTime();
         
-
-        inputControllerSystem->Update(*ecsWorld, *input, deltaTime, 
-                                      cameraControlEnabled && ShouldAllowCameraControl());
+        bool allowCameraControl = cameraControlEnabled && ShouldAllowCameraControl();
+        inputControllerSystem->Update(*ecsWorld, *input, deltaTime, allowCameraControl);;
 
         OnUpdate(deltaTime);
     }
@@ -176,7 +175,10 @@ private:
             return;
         
         if (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS) 
-            app->SetCameraControlMode(!app->cameraControlEnabled);
+        {
+            if (app->ShouldAllowCameraControl())
+                app->SetCameraControlMode(!app->cameraControlEnabled);
+        }
     }
 
 protected:
