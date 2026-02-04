@@ -14,7 +14,7 @@ export module WFE.Application.Application;
 import WFE.Core.Window; 
 import WFE.Core.Input;
 import WFE.Core.Time;
-import WFE.Core.Camera;
+//import WFE.Core.Camera;
 import WFE.Core.Logger;
 import WFE.Core.Logging.ConsoleLogger;
 import WFE.Core.Logging.FileLogger;
@@ -51,7 +51,7 @@ private:
     std::unique_ptr<Window> window;
     std::unique_ptr<Input> input;
     std::unique_ptr<Time> time;
-    std::unique_ptr<Camera> camera;
+    //std::unique_ptr<Camera> camera;
     std::unique_ptr<Renderer> renderer;
     std::unique_ptr<TextureManager> textureManager;
     std::unique_ptr<ImGuiManager> imGuiManager;
@@ -111,9 +111,8 @@ private:
     {
         float deltaTime = time->GetDeltaTime();
         
-        inputControllerSystem->Update(*ecsWorld, *input, deltaTime, cameraControlEnabled);
 
-        SyncEntityToCamera();
+        inputControllerSystem->Update(*ecsWorld, *input, deltaTime, cameraControlEnabled);
 
         OnUpdate(deltaTime);
     }
@@ -149,7 +148,7 @@ private:
     {
         Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
         
-        if (!app || !app->input || !app->camera)
+        if (!app || !app->input) // || !app->camera
             return;
         
         app->input->UpdateMousePosition(xpos, ypos);
@@ -157,7 +156,14 @@ private:
         if (app->cameraControlEnabled) 
         {
             glm::vec2 delta = app->input->GetMouseDelta();
-            app->camera->ProcessMouseMovement(delta.x, delta.y);
+            auto& orientation = app->ecsWorld->GetComponent<CameraOrientationComponent>(app->mainCameraEntity);
+            auto& config = app->ecsWorld->GetComponent<CameraComponent>(app->mainCameraEntity);
+
+            orientation.yaw   += delta.x * config.mouseSensitivity;
+            orientation.pitch += delta.y * config.mouseSensitivity;
+
+            if (orientation.pitch > 89.0f)  orientation.pitch = 89.0f;
+            if (orientation.pitch < -89.0f) orientation.pitch = -89.0f;
         }
     }
 
@@ -165,43 +171,11 @@ private:
     {
         Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
         
-        if (!app || !app->input || !app->camera)
+        if (!app || !app->input)
             return;
         
         if (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS) 
             app->SetCameraControlMode(!app->cameraControlEnabled);
-    }
-
-    void SyncCameraToEntity()
-    {
-        if (mainCameraEntity == entt::null) return;
-        
-        auto& transform = ecsWorld->GetComponent<TransformComponent>(mainCameraEntity);
-        auto& orientation = ecsWorld->GetComponent<CameraOrientationComponent>(mainCameraEntity);
-        auto& cameraComp = ecsWorld->GetComponent<CameraComponent>(mainCameraEntity);
-        
-        transform.position = camera->GetPosition();
-        orientation.yaw = camera->GetYaw();
-        orientation.pitch = camera->GetPitch();
-        cameraComp.fov = camera->GetZoom();
-        cameraComp.movementSpeed = camera->GetMovementSpeed();
-        cameraComp.mouseSensitivity = camera->GetMouseSensitivity();
-    }
-
-    void SyncEntityToCamera()
-    {
-        if (mainCameraEntity == entt::null) return;
-        
-        auto& transform = ecsWorld->GetComponent<TransformComponent>(mainCameraEntity);
-        auto& orientation = ecsWorld->GetComponent<CameraOrientationComponent>(mainCameraEntity);
-        auto& cameraComp = ecsWorld->GetComponent<CameraComponent>(mainCameraEntity);
-        
-        camera->SetPosition(transform.position);
-        camera->SetYaw(orientation.yaw);
-        camera->SetPitch(orientation.pitch);
-        camera->SetZoom(cameraComp.fov);
-        camera->SetMovementSpeed(cameraComp.movementSpeed);
-        camera->SetMouseSensitivity(cameraComp.mouseSensitivity);
     }
 
 protected:
@@ -214,7 +188,7 @@ protected:
      * @param height Window height in pixels
      */
     Application(int width, int height, const std::string& title)
-        : window(nullptr), input(nullptr), time(nullptr), camera(nullptr),
+        : window(nullptr), input(nullptr), time(nullptr), //camera(nullptr),
             renderer(nullptr), textureManager(nullptr), isRunning(false), 
             showUI(true), cameraControlEnabled(false)
     {
@@ -252,6 +226,8 @@ protected:
         }
     }
 
+    void SetMainCameraEntity(entt::entity newMainCameraEntity) {mainCameraEntity = newMainCameraEntity; }
+
 public:
     /**
      * @brief Destructor
@@ -288,7 +264,7 @@ public:
         
         input = std::make_unique<Input>(window->GetGLFWWindow());
         time = std::make_unique<Time>();
-        camera = std::make_unique<Camera>(glm::vec3(0.0f, 0.0f, 0.0f));
+        //camera = std::make_unique<Camera>(glm::vec3(0.0f, 0.0f, 0.0f));
         renderer = nullptr; // std::make_unique<Renderer>(shaderManager.get(), ecsWorld.get());
         textureManager = std::make_unique<TextureManager>();
         imGuiManager = std::make_unique<ImGuiManager>();
@@ -313,7 +289,6 @@ public:
         if (!imGuiManager->Initialize(window->GetGLFWWindow())) 
             return false;
 
-        SyncCameraToEntity();
         SetCameraControlMode(false);  
         
         Logger::AddSink(&console);
@@ -380,7 +355,7 @@ public:
     Input* GetInput() const { return input.get(); }
     Time* GetTime() const { return time.get(); }
     entt::entity GetMainCameraEntity() const { return mainCameraEntity; }
-    Camera* GetCamera() const { return camera.get(); }
+    // Camera* GetCamera() const { return camera.get(); }
     Renderer* GetRenderer() const { return renderer.get(); }
     TextureManager* GetTextureManager() const { return textureManager.get(); }
     ImGuiManager* GetImGuiManager() const { return imGuiManager.get(); }

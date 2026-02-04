@@ -2,6 +2,8 @@ module;
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <entt/entt.hpp>
+
 #include <vector>
 #include <memory>
 #include <string>
@@ -11,8 +13,9 @@ export module WFE.Rendering.Pipeline.RenderPipeline;
 import WFE.Rendering.Passes.RenderPass;
 import WFE.Rendering.Core.GLContext;
 import WFE.Resource.Shader.ShaderManager;
-import WFE.Core.Camera;
 import WFE.Core.Logger;
+import WFE.ECS.ECSWorld;
+import WFE.ECS.Components;
 
 export class RenderPipeline
 {
@@ -33,17 +36,28 @@ public:
     
     virtual void Initialize() = 0;
     
-    virtual void Execute(Camera& camera, int width, int height)
+    virtual void Execute(ECSWorld& ecs, entt::entity cameraEntity, int width, int height)
     {
-        glm::mat4 projection = glm::perspective(
-            glm::radians(camera.GetZoom()),
-            static_cast<float>(width) / static_cast<float>(height),
-            0.1f, 100.0f
-        );
-        
-        for (auto& pass : passes)
-            if (pass && pass->IsEnabled()) 
-                pass->Execute(camera, projection);
+        if (ecs.HasComponent<CameraComponent>(cameraEntity) && 
+            ecs.HasComponent<TransformComponent>(cameraEntity) &&
+            ecs.HasComponent<CameraOrientationComponent>(cameraEntity))
+        {
+            auto& camera = ecs.GetComponent<CameraComponent>(cameraEntity);
+            auto& transform = ecs.GetComponent<TransformComponent>(cameraEntity);
+            auto& orientation = ecs.GetComponent<CameraOrientationComponent>(cameraEntity);
+
+            float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+            glm::mat4 projection = camera.GetProjectionMatrix(aspectRatio);
+            glm::mat4 view = orientation.GetViewMatrix(transform.position);
+
+            for (auto& pass : passes)
+                if (pass && pass->IsEnabled()) 
+                    pass->Execute(view, projection);
+        }
+        else 
+        {
+            return;
+        }
     }
     
     void AddPass(std::unique_ptr<RenderPass> pass)

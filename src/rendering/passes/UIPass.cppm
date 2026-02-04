@@ -28,7 +28,7 @@ public:
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
     
-    void Execute(Camera& camera, const glm::mat4& projection) override
+    void Execute(const glm::mat4& view, const glm::mat4& projection) override
     {
         if (!enabled) return;
         
@@ -36,7 +36,7 @@ public:
         
         CommandManager::ExecuteCommand("Renderer_RenderUI", 
         {
-            &camera,
+            view,
             projection,
             std::string("icon")
         });

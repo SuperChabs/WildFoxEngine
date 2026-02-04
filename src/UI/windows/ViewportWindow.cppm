@@ -84,31 +84,36 @@ public:
             // Gizmos
             if (selectedEntity != entt::null && ecs && cameraEntity != entt::null)
             {
-                ImGuizmo::SetOrthographic(false);
-                ImGuizmo::SetDrawlist();
-                ImGuizmo::SetRect(viewportPos.x, viewportPos.y, viewportSize.x, viewportSize.y);
-                
-                auto& cameraComp = ecs->GetComponent<CameraComponent>(cameraEntity);
-                auto& cameraTransform = ecs->GetComponent<TransformComponent>(cameraEntity);
-                auto& cameraOrientation = ecs->GetComponent<CameraOrientationComponent>(cameraEntity);
-                
-                float aspect = size.x / size.y;
-                glm::mat4 cameraView = cameraOrientation.GetViewMatrix(cameraTransform.position);
-                glm::mat4 cameraProj = cameraComp.GetProjectionMatrix(aspect);
-                
-                auto& tc = ecs->GetComponent<TransformComponent>(selectedEntity);
-                glm::mat4 transform = tc.GetModelMatrix();
-                
-                ImGuizmo::Manipulate(
-                    glm::value_ptr(cameraView),
-                    glm::value_ptr(cameraProj),
-                    (ImGuizmo::OPERATION)m_GizmoOperation, 
-                    ImGuizmo::LOCAL,
-                    glm::value_ptr(transform)
-                );
-                
-                if (ImGuizmo::IsUsing())
-                    UpdateTransformFromMatrix(tc, transform);
+                if (selectedEntity != entt::null && ecs && 
+                    ecs->IsValid(cameraEntity) && 
+                    ecs->HasComponent<CameraComponent>(cameraEntity)) 
+                {
+                    ImGuizmo::SetOrthographic(false);
+                    ImGuizmo::SetDrawlist();
+                    ImGuizmo::SetRect(viewportPos.x, viewportPos.y, viewportSize.x, viewportSize.y);
+                    
+                    auto& cameraComp = ecs->GetComponent<CameraComponent>(cameraEntity);
+                    auto& cameraTransform = ecs->GetComponent<TransformComponent>(cameraEntity);
+                    auto& cameraOrientation = ecs->GetComponent<CameraOrientationComponent>(cameraEntity);
+                    
+                    float aspect = size.x / size.y;
+                    glm::mat4 cameraView = cameraOrientation.GetViewMatrix(cameraTransform.position);
+                    glm::mat4 cameraProj = cameraComp.GetProjectionMatrix(aspect);
+                    
+                    auto& tc = ecs->GetComponent<TransformComponent>(selectedEntity);
+                    glm::mat4 transform = tc.GetModelMatrix();
+                    
+                    ImGuizmo::Manipulate(
+                        glm::value_ptr(cameraView),
+                        glm::value_ptr(cameraProj),
+                        (ImGuizmo::OPERATION)m_GizmoOperation, 
+                        ImGuizmo::LOCAL,
+                        glm::value_ptr(transform)
+                    );
+                    
+                    if (ImGuizmo::IsUsing())
+                        UpdateTransformFromMatrix(tc, transform);
+                }
             }
         }
         else

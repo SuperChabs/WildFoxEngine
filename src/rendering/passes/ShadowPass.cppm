@@ -39,7 +39,7 @@ public:
         context->Clear(GL_DEPTH_BUFFER_BIT);
     }
     
-    void Execute(Camera& camera, const glm::mat4& projection) override
+    void Execute(const glm::mat4& view, const glm::mat4& projection) override
     {
         if (!enabled) return;
         

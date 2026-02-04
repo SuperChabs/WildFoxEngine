@@ -12,8 +12,6 @@ export module WFE.ECS.Systems.RenderSystem;
 
 import WFE.ECS.Components; 
 import WFE.ECS.ECSWorld;
-
-import WFE.Core.Camera;
 import WFE.Core.Logger;
 
 import WFE.Resource.Shader.ShaderManager;
@@ -21,7 +19,7 @@ import WFE.Resource.Shader.ShaderManager;
 export class RenderSystem 
 {
 public:
-    void Update(ECSWorld& world, ShaderManager& shaderManager, const std::string& name, Camera& camera) 
+    void Update(ECSWorld& world, ShaderManager& shaderManager, const std::string& name) 
     {
         shaderManager.Bind(name);
         

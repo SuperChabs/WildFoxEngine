@@ -12,13 +12,9 @@ export module WFE.ECS.Systems.IconRenderSystem;
 
 import WFE.ECS.Components; 
 import WFE.ECS.ECSWorld;
-
-import WFE.Core.Camera;
 import WFE.Core.Logger;
-
 import WFE.Resource.Shader.ShaderManager; 
 import WFE.Resource.Texture.TextureManager;
-
 import WFE.Rendering.Core.VertexArray;
 import WFE.Rendering.Core.VertexBuffer;
 
@@ -62,7 +58,8 @@ public:
     }
     
     void Update(ECSWorld& world, ShaderManager& shaderManager, 
-                const std::string& shaderName, Camera& camera)
+                const std::string& shaderName, const glm::mat4& view, 
+                const glm::mat4& projection)
     {
         shaderManager.Bind(shaderName);
         
@@ -94,19 +91,17 @@ public:
             
             if (icon.billboardMode)
             {
-                glm::mat4 viewMatrix = camera.GetViewMatrix();
+                model[0][0] = view[0][0];
+                model[0][1] = view[1][0];
+                model[0][2] = view[2][0];
                 
-                model[0][0] = viewMatrix[0][0];
-                model[0][1] = viewMatrix[1][0];
-                model[0][2] = viewMatrix[2][0];
+                model[1][0] = view[0][1];
+                model[1][1] = view[1][1];
+                model[1][2] = view[2][1];
                 
-                model[1][0] = viewMatrix[0][1];
-                model[1][1] = viewMatrix[1][1];
-                model[1][2] = viewMatrix[2][1];
-                
-                model[2][0] = viewMatrix[0][2];
-                model[2][1] = viewMatrix[1][2];
-                model[2][2] = viewMatrix[2][2];
+                model[2][0] = view[0][2];
+                model[2][1] = view[1][2];
+                model[2][2] = view[2][2];
             }
             else
             {

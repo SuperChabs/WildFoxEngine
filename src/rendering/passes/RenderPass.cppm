@@ -26,7 +26,7 @@ public:
     virtual ~RenderPass() = default;
     
     virtual void Setup() {}
-    virtual void Execute(Camera& camera, const glm::mat4& projection) = 0;
+    virtual void Execute(const glm::mat4& view, const glm::mat4& projection) = 0;
     virtual void Cleanup() {}
     
     void SetEnabled(bool e) { enabled = e; }

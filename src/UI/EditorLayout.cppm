@@ -108,7 +108,17 @@ private:
     void RenderWindows(ECSWorld* ecs, entt::entity cameraEntity, Renderer* renderer,
                       ShaderManager* shaderManager, MaterialManager* materialManager)
     {
-        viewportWindow.Render(framebuffer.get(), ecs, cameraEntity, GetSelectedEntity());
+        entt::entity actualCamera = cameraEntity;
+
+        if (ecs && (!ecs->IsValid(actualCamera) || !ecs->HasComponent<CameraComponent>(actualCamera)))
+            {
+                actualCamera = entt::null;
+                auto view = ecs->GetRegistry().view<CameraComponent>();
+                if (!view.empty()) 
+                    actualCamera = view.front();
+            }
+
+        viewportWindow.Render(framebuffer.get(), ecs, actualCamera, GetSelectedEntity());
         
         if (showHierarchy)
             hierarchyWindow.Render(ecs, shaderManager, materialManager);

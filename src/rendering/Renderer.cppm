@@ -3,6 +3,7 @@ module;
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <entt/entt.hpp>
 
 #include <memory>
 #include <chrono>
@@ -162,11 +163,11 @@ public:
         context->Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
     
-    void Render(Camera& camera, int width, int height)
+    void Render(ECSWorld& ecs, entt::entity cameraEntity, int width, int height)
     {
         if (!initialized || !pipeline) return;
         
-        pipeline->Execute(camera, width, height);
+        pipeline->Execute(ecs, cameraEntity, width, height);
     }
     
     void EndFrame()
@@ -310,19 +311,18 @@ private:
                 return;
             }
             
-            auto* camera = std::get<Camera*>(args[0]);
+            const auto& view = std::get<glm::mat4>(args[0]);
             const auto& projection = std::get<glm::mat4>(args[1]);
             const auto& shaderName = std::get<std::string>(args[2]);
             
             shaderManager->Bind(shaderName);
-            
-            glm::mat4 view = camera->GetViewMatrix();
+        
             shaderManager->SetMat4(shaderName, "projection", projection);
             shaderManager->SetMat4(shaderName, "view", view);
-            shaderManager->SetVec3(shaderName, "viewPos", camera->GetPosition());
+            //shaderManager->SetVec3(shaderName, "viewPos", camera->GetPosition());
             
             lightSystem->Update(*world, *shaderManager, shaderName);
-            renderSystem->Update(*world, *shaderManager, shaderName, *camera);
+            renderSystem->Update(*world, *shaderManager, shaderName);
             
             shaderManager->Unbind();
         });
@@ -336,7 +336,7 @@ private:
                 return;
             }
             
-            auto* camera = std::get<Camera*>(args[0]);
+            const auto& view = std::get<glm::mat4>(args[0]);
             const auto& projection = std::get<glm::mat4>(args[1]);
             const auto& shaderName = std::get<std::string>(args[2]);
             
@@ -345,11 +345,10 @@ private:
             
             shaderManager->Bind(shaderName);
             
-            glm::mat4 view = camera->GetViewMatrix();
             shaderManager->SetMat4(shaderName, "projection", projection);
             shaderManager->SetMat4(shaderName, "view", view);
             
-            iconRenderSystem->Update(*world, *shaderManager, shaderName, *camera);
+            iconRenderSystem->Update(*world, *shaderManager, shaderName, view, projection);
             
             shaderManager->Unbind();
         });

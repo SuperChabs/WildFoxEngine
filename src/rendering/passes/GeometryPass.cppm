@@ -36,7 +36,7 @@ public:
         glCullFace(GL_BACK); 
     }
     
-    void Execute(Camera& camera, const glm::mat4& projection) override
+    void Execute(const glm::mat4& view, const glm::mat4& projection) override
     {
         if (!enabled || !world) return;
         
@@ -44,7 +44,7 @@ public:
         
         CommandManager::ExecuteCommand("Renderer_RenderGeometry", 
         {
-            &camera,
+            view,
             projection,
             std::string("basic")
         });

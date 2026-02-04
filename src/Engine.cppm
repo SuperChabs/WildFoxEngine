@@ -88,7 +88,7 @@ protected:
 
         sceneSerializer = std::make_unique<SceneSerializer>(
             GetECSWorld(), 
-            GetCamera()
+            nullptr
         );
 
         InitCommandRegistration();
@@ -109,7 +109,39 @@ protected:
 
     void OnUpdate(float deltaTime) override
     {
+        UpdateMainCamera();
         rotationSystem->Update(*GetECSWorld(), deltaTime);
+    }
+
+    void UpdateMainCamera()
+    {
+        auto* ecs = GetECSWorld();
+        entt::entity current = GetMainCameraEntity();
+
+        if (current == entt::null || !ecs->IsValid(current) || !ecs->HasComponent<CameraComponent>(current))
+        {
+            auto view = ecs->GetRegistry().view<CameraComponent>();
+            if (!view.empty())
+            {
+                entt::entity found = entt::null;
+                for (auto entity : view)
+                {
+                    if (view.get<CameraComponent>(entity).isMainCamera)
+                    {
+                        found = entity;
+                        break;
+                    }
+                }
+                
+                if (found == entt::null) found = view.front();
+                
+                SetMainCameraEntity(found); 
+            }
+            else
+            {
+                SetMainCameraEntity(entt::null);
+            }
+        }
     }
 
     /**
@@ -132,7 +164,8 @@ protected:
             if (viewportSize.x > 0 && viewportSize.y > 0)
             {
                 GetRenderer()->Render(
-                    *GetCamera(), 
+                    *GetECSWorld(),
+                    GetMainCameraEntity(), 
                     static_cast<int>(viewportSize.x), 
                     static_cast<int>(viewportSize.y)
                 );
@@ -381,17 +414,17 @@ private:
             CommandManager::ExecuteCommand("onLoadScene", {std::string("quicksave.json")});
         });
         
-        CommandManager::RegisterCommand("onNewScene",
-        [this](const CommandArgs&) 
-        {
-            GetECSWorld()->Clear();
+        // CommandManager::RegisterCommand("onNewScene",
+        // [this](const CommandArgs&) 
+        // {
+        //     GetECSWorld()->Clear();
             
-            GetCamera()->SetPosition(glm::vec3(0, 0, 0));
-            GetCamera()->SetYaw(-95.0f);
-            GetCamera()->SetPitch(0.0f);
+        //     GetCamera()->SetPosition(glm::vec3(0, 0, 0));
+        //     GetCamera()->SetYaw(-95.0f);
+        //     GetCamera()->SetPitch(0.0f);
             
-            Logger::Log(LogLevel::INFO, "New scene created");
-        });
+        //     Logger::Log(LogLevel::INFO, "New scene created");
+        // });
         
         CommandManager::RegisterCommand("onListScenes",
         [this](const CommandArgs&) 
@@ -492,8 +525,19 @@ private:
             //     " (" + std::to_string(model->GetMeshCount()) + " meshes)");
         });
 
-        CommandManager::RegisterCommand("onCreateCamera", [this](const CommandArgs&) {
-            GetECSWorld()->CreateCamera("Camera", false);
+        CommandManager::RegisterCommand("onCreateCamera", [this](const CommandArgs&) 
+        {
+            auto* ecs = GetECSWorld();
+            auto newCam = ecs->CreateCamera("Camera", false);
+            
+            auto view = ecs->GetRegistry().view<CameraComponent>();
+            if (view.size() == 1)
+            {
+                ecs->GetComponent<CameraComponent>(newCam).isMainCamera = true;
+                SetMainCameraEntity(newCam);
+            }
+            
+            Logger::Log(LogLevel::INFO, "New camera created and assigned as main if needed");
         });
     }
 };

@@ -32,14 +32,14 @@ public:
         shaderManager->Bind("skybox");
     }
     
-    void Execute(Camera& camera, const glm::mat4& projection) override
+    void Execute(const glm::mat4& view, const glm::mat4& projection) override
     {
         if (!enabled) return;
         
         Setup();
         
-        glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
-        shaderManager->SetMat4("skybox", "view", view);
+        glm::mat4 skyboxView = glm::mat4(glm::mat3(view));
+        shaderManager->SetMat4("skybox", "view", skyboxView);
         shaderManager->SetMat4("skybox", "projection", projection);
         
         context->BindVAO(skyboxVAO);
