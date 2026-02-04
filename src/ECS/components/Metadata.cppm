@@ -20,3 +20,12 @@ export struct IDComponent
     IDComponent() = default;
     IDComponent(uint64_t i) : id(i) {}
 };
+
+export struct CameraTypeComponent
+{
+    enum class Type { EDITOR, GAME };
+    Type type = Type::EDITOR;
+    
+    CameraTypeComponent() = default;
+    CameraTypeComponent(Type t) : type(t) {}
+};

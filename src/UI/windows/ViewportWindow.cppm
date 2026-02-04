@@ -33,20 +33,28 @@ private:
     int m_GizmoOperation = ImGuizmo::TRANSLATE;
 
 public:
-    void Render(Framebuffer* framebuffer, ECSWorld* ecs, entt::entity cameraEntity, entt::entity selectedEntity) 
+    void Render(const std::string& label, Framebuffer* framebuffer, ECSWorld* ecs, 
+                entt::entity cameraEntity, entt::entity selectedEntity,
+                bool isPlayMode) 
     {
         if (!isOpen) return;
         
-        ImGui::SetNextWindowPos({300, 10}, ImGuiCond_FirstUseEver);
+        if (label == "Scene")
+            ImGui::SetNextWindowPos({50, 50}, ImGuiCond_FirstUseEver);
+        else if (label == "Game")
+            ImGui::SetNextWindowPos({900, 50}, ImGuiCond_FirstUseEver);
+
         ImGui::SetNextWindowSize({800, 650}, ImGuiCond_FirstUseEver);
         
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {0, 0});
-        ImGui::Begin("Game Viewport", &isOpen);
+
+        std::string windowTitle = label + " Viewport";
+        ImGui::Begin(windowTitle.c_str(), &isOpen);
 
         isHovered = ImGui::IsWindowHovered();
         isFocused = ImGui::IsWindowFocused();
 
-        if (isFocused) 
+        if (isFocused && !isPlayMode) 
         {
             if (ImGui::IsKeyPressed(ImGuiKey_W)) m_GizmoOperation = ImGuizmo::TRANSLATE;
             if (ImGui::IsKeyPressed(ImGuiKey_E)) m_GizmoOperation = ImGuizmo::ROTATE;
@@ -82,7 +90,8 @@ public:
             );
 
             // Gizmos
-            if (selectedEntity != entt::null && ecs && cameraEntity != entt::null)
+            if (label == "Scene" && !isPlayMode && selectedEntity != entt::null && 
+                ecs && cameraEntity != entt::null)
             {
                 if (selectedEntity != entt::null && ecs && 
                     ecs->IsValid(cameraEntity) && 

@@ -36,9 +36,12 @@ private:
     bool showProperties = true;
     bool showConsole = false;
 
-    std::unique_ptr<Framebuffer> framebuffer;
+    std::unique_ptr<Framebuffer> sceneFramebuffer;
+    std::unique_ptr<Framebuffer> gameFramebuffer;
 
-    ViewportWindow viewportWindow;
+    ViewportWindow sceneViewportWindow;
+    ViewportWindow gameViewportWindow;
+
     MenuBarWindow menuBarWindow;
     HierarchyWindow hierarchyWindow;
     PropertiesWindow propertiesWindow;
@@ -48,12 +51,13 @@ private:
 public:
     EditorLayout()
     {
-        framebuffer = std::make_unique<Framebuffer>(1280, 720);
+        sceneFramebuffer = std::make_unique<Framebuffer>(1280, 720);
+        gameFramebuffer = std::make_unique<Framebuffer>(1280, 720);
         Logger::Log(LogLevel::INFO, "EditorLayout created with Framebuffer");
     }
 
     void RenderEditor(ECSWorld* ecs, entt::entity cameraEntity, Renderer* renderer, 
-                     ShaderManager* shaderManager, MaterialManager* materialManager)
+                     ShaderManager* shaderManager, MaterialManager* materialManager, bool isPlayMode)
     {
         if (!ecs || cameraEntity == entt::null || !renderer || !materialManager)
         {
@@ -61,24 +65,29 @@ public:
             return;
         }
 
-        RenderDockSpace();
-        RenderWindows(ecs, cameraEntity, renderer, shaderManager, materialManager);
+        RenderDockSpace(isPlayMode);
+        RenderWindows(ecs, cameraEntity, renderer, shaderManager, materialManager, isPlayMode);
     }
     
-    ImVec2 GetViewportSize() const { return viewportWindow.GetViewportSize(); }
-    ImVec2 GetViewportPos() const { return viewportWindow.GetViewportPos(); }
-    
-    bool IsViewportHovered() const { return viewportWindow.IsHovered(); }
-    bool IsViewportFocused() const { return viewportWindow.IsFocused(); }
+    ImVec2 GetSceneViewportSize() const { return sceneViewportWindow.GetViewportSize(); }
+    ImVec2 GetSceneViewportPos() const { return sceneViewportWindow.GetViewportPos(); }
+    bool IsSceneViewportHovered() const { return sceneViewportWindow.IsHovered(); }
+    bool IsSceneViewportFocused() const { return sceneViewportWindow.IsFocused(); }
+
+    ImVec2 GetGameViewportSize() const { return gameViewportWindow.GetViewportSize(); }
+    ImVec2 GetGameViewportPos() const { return gameViewportWindow.GetViewportPos(); }
+    bool IsGameViewportHovered() const { return gameViewportWindow.IsHovered(); }
+    bool IsGameViewportFocused() const { return gameViewportWindow.IsFocused(); }
 
     entt::entity GetSelectedEntity() const { return hierarchyWindow.GetSelectedEntity(); }
     ShaderObj* GetSelectedShader() const { return hierarchyWindow.GetSelectedShader(); }
     std::string GetSelectedMaterial() const { return hierarchyWindow.GetSelectedMaterial(); }
 
-    Framebuffer* GetFramebuffer() const { return framebuffer.get(); }
+    Framebuffer* GetSceneFramebuffer() const { return sceneFramebuffer.get(); }
+    Framebuffer* GetGameFramebuffer() const { return gameFramebuffer.get(); }
 
 private:
-    void RenderDockSpace()
+    void RenderDockSpace(bool isPlayMode)
     {
         ImGuiViewport* viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(viewport->WorkPos);
@@ -100,13 +109,14 @@ private:
         ImGuiID dockspace_id = ImGui::GetID("MainDockSpace");
         ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
 
-        menuBarWindow.Render(showHierarchy, showInspector, showProperties, showConsole);
+        menuBarWindow.Render(showHierarchy, showInspector, showProperties, showConsole, isPlayMode);
 
         ImGui::End();
     }
 
     void RenderWindows(ECSWorld* ecs, entt::entity cameraEntity, Renderer* renderer,
-                      ShaderManager* shaderManager, MaterialManager* materialManager)
+                      ShaderManager* shaderManager, MaterialManager* materialManager,
+                      bool isPlayMode)
     {
         entt::entity actualCamera = cameraEntity;
 
@@ -118,7 +128,10 @@ private:
                     actualCamera = view.front();
             }
 
-        viewportWindow.Render(framebuffer.get(), ecs, actualCamera, GetSelectedEntity());
+        sceneViewportWindow.Render("Scene", sceneFramebuffer.get(), ecs, actualCamera, 
+                                    GetSelectedEntity(), isPlayMode);
+        gameViewportWindow.Render("Game",gameFramebuffer.get(), ecs, actualCamera, 
+                                    entt::null, isPlayMode);
         
         if (showHierarchy)
             hierarchyWindow.Render(ecs, shaderManager, materialManager);
@@ -155,7 +168,10 @@ private:
         if (!consoleWindow.IsOpen())
             showConsole = false;
             
-        if (!viewportWindow.IsOpen())
-            viewportWindow.SetOpen(true);
+        if (!sceneViewportWindow.IsOpen())
+            sceneViewportWindow.SetOpen(true);
+
+        if (!gameViewportWindow.IsOpen())
+            gameViewportWindow.SetOpen(true);
     }
 };

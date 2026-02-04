@@ -112,7 +112,8 @@ private:
         float deltaTime = time->GetDeltaTime();
         
 
-        inputControllerSystem->Update(*ecsWorld, *input, deltaTime, cameraControlEnabled);
+        inputControllerSystem->Update(*ecsWorld, *input, deltaTime, 
+                                      cameraControlEnabled && ShouldAllowCameraControl());
 
         OnUpdate(deltaTime);
     }
@@ -203,6 +204,8 @@ protected:
     virtual void OnShutdown() {}
 
     virtual void RenderUI() = 0;
+
+    virtual bool ShouldAllowCameraControl() const { return true; }
 
     void SetRenderer(std::unique_ptr<Renderer> r)
     {

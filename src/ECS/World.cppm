@@ -177,7 +177,7 @@ public:
         }
     }
 
-    entt::entity CreateCamera(const std::string& name = "Camera", bool setAsMain = false)
+    entt::entity CreateCamera(const std::string& name = "Camera", bool setAsMain = false, bool isGameCamera = false)
     {
         auto entity = CreateEntity(name);
         
@@ -185,20 +185,37 @@ public:
         AddComponent<CameraComponent>(entity);
         AddComponent<CameraOrientationComponent>(entity);
         
+        auto cameraType = isGameCamera ? CameraTypeComponent::Type::GAME : CameraTypeComponent::Type::EDITOR;
+        AddComponent<CameraTypeComponent>(entity, cameraType);
+        
         auto& camera = GetComponent<CameraComponent>(entity);
         camera.isMainCamera = setAsMain;
         
-        Logger::Log(LogLevel::INFO, "Camera entity created: " + name);
+        Logger::Log(LogLevel::INFO, "Camera entity created: " + name + 
+                    (isGameCamera ? " (GAME)" : " (EDITOR)"));
         return entity;
     }
 
-    entt::entity FindMainCamera()
+    entt::entity FindEditorCamera()
     {
         entt::entity result = entt::null;
         
-        Each<CameraComponent>([&](entt::entity entity, CameraComponent& cam)
+        Each<CameraComponent, CameraTypeComponent>([&](entt::entity entity, CameraComponent& cam, CameraTypeComponent& type)
         {
-            if (cam.isMainCamera && cam.isActive)
+            if (type.type == CameraTypeComponent::Type::EDITOR && cam.isActive)
+                result = entity;
+        });
+        
+        return result;
+    }
+
+    entt::entity FindGameCamera()
+    {
+        entt::entity result = entt::null;
+        
+        Each<CameraComponent, CameraTypeComponent>([&](entt::entity entity, CameraComponent& cam, CameraTypeComponent& type)
+        {
+            if (type.type == CameraTypeComponent::Type::GAME && cam.isActive)
                 result = entity;
         });
         

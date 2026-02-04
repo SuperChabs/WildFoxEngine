@@ -45,6 +45,12 @@ private:
 
     std::unique_ptr<SceneSerializer> sceneSerializer;
 
+    bool isPlayMode = false;
+
+    glm::vec3 savedEditorCameraPos;
+    float savedEditorCameraYaw;
+    float savedEditorCameraPitch;
+
 protected:
     /**
      * @brief Initialize game engine
@@ -103,6 +109,9 @@ protected:
 
         GetShaderManager()->Bind("skybox");
         GetShaderManager()->SetInt("skybox", "skybox", 0);
+
+        auto editorCam = GetECSWorld()->CreateCamera("Editor Camera", true, false);
+        SetMainCameraEntity(editorCam);
         
         Logger::Log(LogLevel::INFO, "Engine initialized successfully");
     }
@@ -110,7 +119,9 @@ protected:
     void OnUpdate(float deltaTime) override
     {
         UpdateMainCamera();
-        rotationSystem->Update(*GetECSWorld(), deltaTime);
+
+        if (isPlayMode)
+            rotationSystem->Update(*GetECSWorld(), deltaTime);
     }
 
     void UpdateMainCamera()
@@ -149,38 +160,54 @@ protected:
      */
     void OnRender() override
     {
-        if (editorLayout && editorLayout->GetFramebuffer())
+        if (!editorLayout)
+            return;
+        
+        entt::entity editorCamera = GetECSWorld()->FindEditorCamera();
+        entt::entity gameCamera = GetECSWorld()->FindGameCamera();
+
+        if (gameCamera == entt::null)
         {
-            Framebuffer* fb = editorLayout->GetFramebuffer();
-            ImVec2 viewportSize = editorLayout->GetViewportSize();
-            
-            fb->Bind();
-            
-            glEnable(GL_DEPTH_TEST);
-            glDepthFunc(GL_LESS);
-            
-            GetRenderer()->BeginFrame();
-            
-            if (viewportSize.x > 0 && viewportSize.y > 0)
-            {
-                GetRenderer()->Render(
-                    *GetECSWorld(),
-                    GetMainCameraEntity(), 
-                    static_cast<int>(viewportSize.x), 
-                    static_cast<int>(viewportSize.y)
-                );
-            }
-            
-            GetRenderer()->EndFrame();
-            
-            fb->Unbind();
+            gameCamera = GetECSWorld()->CreateCamera("Game Camera", false, true);
+            auto& transform = GetECSWorld()->GetComponent<TransformComponent>(gameCamera);
+            transform.position = glm::vec3(0, 5, 10);
         }
+
+        // Scene Framebuffer
+        Framebuffer* sceneFB = editorLayout->GetSceneFramebuffer();
+        ImVec2 sceneViewportSize = editorLayout->GetSceneViewportSize();
+        sceneFB->Bind();
+        GetRenderer()->BeginFrame();
+
+        GetRenderer()->Render(
+            *GetECSWorld(),
+            editorCamera, 
+            static_cast<int>(sceneViewportSize.x), 
+            static_cast<int>(sceneViewportSize.y)
+        );
+
+        GetRenderer()->EndFrame();
+        sceneFB->Unbind();
+
+        // Game Framebuffer
+        Framebuffer* gameFB = editorLayout->GetGameFramebuffer();
+        ImVec2 gameViewportSize = editorLayout->GetGameViewportSize();
+        gameFB->Bind();
+        GetRenderer()->BeginFrame();
+
+        if (gameCamera != entt::null)
+            GetRenderer()->Render(
+                *GetECSWorld(), 
+                gameCamera,             
+                static_cast<int>(gameViewportSize.x), 
+                static_cast<int>(gameViewportSize.y)
+            );
+        
+        GetRenderer()->EndFrame();
+        gameFB->Unbind();
         
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glViewport(0, 0, GetWindow()->GetWidth(), GetWindow()->GetHeight());
-        glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glDisable(GL_DEPTH_TEST); 
+        glClear(GL_COLOR_BUFFER_BIT); 
     }
 
     /**
@@ -212,8 +239,14 @@ protected:
             GetMainCameraEntity(),
             GetRenderer(), 
             GetShaderManager(), 
-            GetMaterialManager()
+            GetMaterialManager(),
+            isPlayMode
         );
+    }
+
+    bool ShouldAllowCameraControl() const override 
+    { 
+        return !isPlayMode; 
     }
 
 public:
@@ -418,11 +451,11 @@ private:
         // [this](const CommandArgs&) 
         // {
         //     GetECSWorld()->Clear();
-            
+        //    
         //     GetCamera()->SetPosition(glm::vec3(0, 0, 0));
         //     GetCamera()->SetYaw(-95.0f);
         //     GetCamera()->SetPitch(0.0f);
-            
+        //  
         //     Logger::Log(LogLevel::INFO, "New scene created");
         // });
         
@@ -538,6 +571,94 @@ private:
             }
             
             Logger::Log(LogLevel::INFO, "New camera created and assigned as main if needed");
+        });
+
+        CommandManager::RegisterCommand("onPlayGame",
+        [this](const CommandArgs&) 
+        {
+            if (isPlayMode)
+            {
+                Logger::Log(LogLevel::WARNING, "Already in play mode");
+                return;
+            }
+            
+            Logger::Log(LogLevel::INFO, "=== ENTERING PLAY MODE ===");
+            
+            auto* ecs = GetECSWorld();
+            entt::entity editorCam = ecs->FindEditorCamera();
+            
+            if (editorCam != entt::null && ecs->IsValid(editorCam))
+            {
+                auto& transform = ecs->GetComponent<TransformComponent>(editorCam);
+                auto& orientation = ecs->GetComponent<CameraOrientationComponent>(editorCam);
+                
+                savedEditorCameraPos = transform.position;
+                savedEditorCameraYaw = orientation.yaw;
+                savedEditorCameraPitch = orientation.pitch;
+                
+                Logger::Log(LogLevel::INFO, "Editor camera state saved");
+            }
+            
+            entt::entity gameCam = ecs->FindGameCamera();
+            if (gameCam != entt::null)
+            {
+                SetMainCameraEntity(gameCam);
+                auto& gameCamComp = ecs->GetComponent<CameraComponent>(gameCam);
+                gameCamComp.isMainCamera = true;
+                
+                if (editorCam != entt::null)
+                {
+                    auto& editorCamComp = ecs->GetComponent<CameraComponent>(editorCam);
+                    editorCamComp.isMainCamera = false;
+                }
+                
+                Logger::Log(LogLevel::INFO, "Switched to Game Camera");
+            }
+            
+            isPlayMode = true;
+            Logger::Log(LogLevel::INFO, "Play mode started");
+        });
+
+        CommandManager::RegisterCommand("onStopGame",
+        [this](const CommandArgs&) 
+        {
+            if (!isPlayMode)
+            {
+                Logger::Log(LogLevel::WARNING, "Not in play mode");
+                return;
+            }
+            
+            Logger::Log(LogLevel::INFO, "=== EXITING PLAY MODE ===");
+            
+            auto* ecs = GetECSWorld();
+            entt::entity editorCam = ecs->FindEditorCamera();
+            
+            if (editorCam != entt::null && ecs->IsValid(editorCam))
+            {
+                auto& transform = ecs->GetComponent<TransformComponent>(editorCam);
+                auto& orientation = ecs->GetComponent<CameraOrientationComponent>(editorCam);
+                
+                transform.position = savedEditorCameraPos;
+                orientation.yaw = savedEditorCameraYaw;
+                orientation.pitch = savedEditorCameraPitch;
+                
+                auto& editorCamComp = ecs->GetComponent<CameraComponent>(editorCam);
+                editorCamComp.isMainCamera = true;
+                
+                SetMainCameraEntity(editorCam);
+                
+                entt::entity gameCam = ecs->FindGameCamera();
+                if (gameCam != entt::null)
+                {
+                    auto& gameCamComp = ecs->GetComponent<CameraComponent>(gameCam);
+                    gameCamComp.isMainCamera = false;
+                }
+                
+                Logger::Log(LogLevel::INFO, "Editor camera state restored");
+            }
+            
+            isPlayMode = false;
+            Logger::Log(LogLevel::INFO, "Play mode stopped");
         });
     }
 };

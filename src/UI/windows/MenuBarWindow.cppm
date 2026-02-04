@@ -16,7 +16,7 @@ export class MenuBarWindow
 {
 public:
     void Render(bool& showHierarchy, bool& showInspector,
-                bool& showProperties, bool& showConsole)
+                bool& showProperties, bool& showConsole, bool isPlayMode)
     {
         if (ImGui::BeginMenuBar())
         {
@@ -24,6 +24,10 @@ public:
             RenderCreateMenu();
             RenderViewMenu(showHierarchy, showInspector,
                            showProperties, showConsole);
+
+            ImGui::Separator();
+            RenderPlayControls(isPlayMode);
+
             ImGui::EndMenuBar();
         }
 
@@ -37,6 +41,37 @@ private:
 
     char modelPath[512]{};
     char scenePath[512]{};
+
+    void RenderPlayControls(bool isPlayMode)
+    {
+        ImGui::Spacing();
+        ImGui::Spacing();
+        
+        if (isPlayMode)
+        {
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.9f, 0.3f, 0.3f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.7f, 0.1f, 0.1f, 1.0f));
+            
+            if (ImGui::Button("■ Stop"))
+                Execute("onStopGame");
+                
+            ImGui::PopStyleColor(3);
+        }
+        else
+        {
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.8f, 0.2f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.9f, 0.3f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.7f, 0.1f, 1.0f));
+            
+            if (ImGui::Button("▶ Play"))
+                Execute("onPlayGame");
+                
+            ImGui::PopStyleColor(3);
+        }
+        
+        ImGui::Spacing();
+    }
 
     void RenderFileMenu()
     {
