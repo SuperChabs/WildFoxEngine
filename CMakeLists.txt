@@ -71,6 +71,19 @@ add_subdirectory(vendor/entt)
 add_library(json INTERFACE)
 target_include_directories(json INTERFACE ${CMAKE_SOURCE_DIR}/vendor/nlohmann_json/include)
 
+# ========== Lua C API =============
+file(GLOB LUA_SOURCES "${CMAKE_SOURCE_DIR}/vendor/lua/lua-5.4.8/src/*.c")
+list(REMOVE_ITEM LUA_SOURCES 
+    "${CMAKE_SOURCE_DIR}/vendor/lua/lua-5.5.0/src/lua.c" 
+    "${CMAKE_SOURCE_DIR}/vendor/lua/lua-5.5.0/src/luac.c"
+)
+
+add_library(lua STATIC ${LUA_SOURCES})
+target_include_directories(lua PUBLIC ${CMAKE_SOURCE_DIR}/vendor/lua/lua-5.4.8/src)
+
+# ========== sol2 =============
+add_subdirectory(vendor/sol2 EXCLUDE_FROM_ALL)
+
 # ========== nfd =============
 #find_package(PkgConfig REQUIRED)
 #pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
@@ -164,6 +177,8 @@ target_link_libraries(${PROJECT_NAME}
     magic_enum
     EnTT::EnTT
     #nfd
+    lua
+    sol2::sol2
 )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
@@ -180,6 +195,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 target_compile_definitions(${PROJECT_NAME} PRIVATE
     ASSETS_PATH="${CMAKE_BINARY_DIR}/assets"
     PROJECT_ROOT="${CMAKE_SOURCE_DIR}"
+    SOL_ALL_SAFETIES_ON=1
 )
 
 include(GNUInstallDirs)
