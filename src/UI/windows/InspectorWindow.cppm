@@ -21,6 +21,7 @@ import WFE.UI.Panels.MaterialPanel;
 import WFE.UI.Panels.LightPanel;
 import WFE.UI.Panels.IconPanel;
 import WFE.UI.Panels.CameraPanel;
+import WFE.UI.Panels.ScriptPanel;
 
 export class InspectorWindow 
 {
@@ -34,6 +35,7 @@ private:
     LightPanel lightPanel;
     IconPanel iconPanel;
     CameraPanel cameraPanel;
+    ScriptPanel scriptPanel;
 
 public:
     void Render(ECSWorld* ecs, entt::entity selectedEntity, 
@@ -117,6 +119,7 @@ private:
         lightPanel.Render(ecs, entity);
         iconPanel.Render(ecs, entity);
         cameraPanel.Render(ecs, entity);
+        scriptPanel.Render(ecs, entity);
     }
     
     void RenderShaderInspector(ShaderObj* shader, ShaderManager* shaderManager)

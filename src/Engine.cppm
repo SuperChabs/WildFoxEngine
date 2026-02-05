@@ -26,11 +26,13 @@ import WFE.ECS.ECSWorld;
 import WFE.ECS.Components;
 import WFE.ECS.Systems;
 import WFE.Rendering.Renderer;
+import WFE.Scripting.LuaBindings;
+import WFE.Scripting.LuaState;
 
 /// @file Engine.cppm
 /// @brief Engine class
 /// @author SuperChabs
-/// @date 2026-01-28
+/// @date 2026-02-05
 
 /**
  * 
@@ -42,6 +44,7 @@ private:
     std::unique_ptr<EditorLayout> editorLayout;
     
     std::unique_ptr<RotationSystem> rotationSystem;
+    std::unique_ptr<ScriptSystem> scriptSystem;
 
     std::unique_ptr<SceneSerializer> sceneSerializer;
 
@@ -91,6 +94,9 @@ protected:
         }
 
         rotationSystem = std::make_unique<RotationSystem>();
+        scriptSystem = std::make_unique<ScriptSystem>();
+
+        InitializeLua();
 
         sceneSerializer = std::make_unique<SceneSerializer>(
             GetECSWorld(), 
@@ -122,6 +128,8 @@ protected:
 
         if (isPlayMode)
             rotationSystem->Update(*GetECSWorld(), deltaTime);
+
+        scriptSystem->Update(*GetECSWorld(), deltaTime);
     }
 
     void UpdateMainCamera()
@@ -255,6 +263,21 @@ public:
     {}
 
 private:
+    void InitializeLua()
+    {
+        Logger::Log(LogLevel::INFO, "Initializing Lua scripting...");
+        
+        try 
+        {
+            InitLua(GetECSWorld());
+            Logger::Log(LogLevel::INFO, "Lua scripting initialized successfully");
+        }
+        catch (const std::exception& e)
+        {
+            Logger::Log(LogLevel::ERROR, "Failed to initialize Lua: " + std::string(e.what()));
+        }
+    }
+
     void InitCommandRegistration()
     {
         CommandManager::RegisterCommand("onCreateCube",
@@ -659,6 +682,87 @@ private:
             
             isPlayMode = false;
             Logger::Log(LogLevel::INFO, "Play mode stopped");
+        });
+
+        CommandManager::RegisterCommand("onAttachScript",
+        [this](const CommandArgs& args)
+        {
+            if (args.empty())
+            {
+                Logger::Log(LogLevel::ERROR,
+                    "onAttachScript requires script path");
+                return;
+            }
+
+            entt::entity selected = editorLayout->GetSelectedEntity();
+            if (selected == entt::null || !GetECSWorld()->IsValid(selected))
+            {
+                Logger::Log(LogLevel::WARNING, "No entity selected");
+                return;
+            }
+
+            std::string scriptPath = std::get<std::string>(args[0]);
+
+            auto* ecs = GetECSWorld();
+
+            if (ecs->HasComponent<ScriptComponent>(selected))
+            {
+                auto& script = ecs->GetComponent<ScriptComponent>(selected);
+
+                script.scriptPath = scriptPath;
+                script.loaded = false;
+                script.failed = false;
+                script.env = {};
+
+                Logger::Log(LogLevel::INFO,
+                    "Script updated: " + scriptPath);
+            }
+            else
+            {
+                auto& script = ecs->AddComponent<ScriptComponent>(selected);
+
+                script.scriptPath = scriptPath;
+                script.loaded = false;
+                script.failed = false;
+
+                Logger::Log(LogLevel::INFO,
+                    "Script attached: " + scriptPath);
+            }
+        });
+
+        CommandManager::RegisterCommand("onRemoveScript",
+        [this](const CommandArgs&) 
+        {
+            entt::entity selected = editorLayout->GetSelectedEntity();
+            if (selected == entt::null || !GetECSWorld()->IsValid(selected))
+            {
+                Logger::Log(LogLevel::WARNING, "No entity selected");
+                return;
+            }
+
+            if (GetECSWorld()->HasComponent<ScriptComponent>(selected))
+            {
+                auto& script = GetECSWorld()->GetComponent<ScriptComponent>(selected);
+                
+                if (script.loaded && script.env["onDestroy"].valid())
+                {
+                    try 
+                    {
+                        script.env["onDestroy"]();
+                    } 
+                    catch (...) 
+                    {
+                        Logger::Log(LogLevel::WARNING, "Error in script onDestroy");
+                    }
+                }
+                
+                GetECSWorld()->RemoveComponent<ScriptComponent>(selected);
+                Logger::Log(LogLevel::INFO, "Script removed from entity");
+            }
+            else
+            {
+                Logger::Log(LogLevel::WARNING, "Entity has no script component");
+            }
         });
     }
 };

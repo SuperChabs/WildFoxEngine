@@ -356,8 +356,8 @@ public:
     
     /// \name Getters
     /// @{
-    Window* GetWindow() const { return window.get(); }
-    Input* GetInput() const { return input.get(); }
+    Window* GetWindow() { return window.get(); }
+    Input* GetInput() { return input.get(); }
     Time* GetTime() const { return time.get(); }
     entt::entity GetMainCameraEntity() const { return mainCameraEntity; }
     // Camera* GetCamera() const { return camera.get(); }

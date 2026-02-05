@@ -6,3 +6,4 @@ export import WFE.ECS.Systems.RenderSystem;
 export import WFE.ECS.Systems.RotationSystem;
 export import WFE.ECS.Systems.CameraSystem;
 export import WFE.ECS.Systems.InputControllerSystem;
+export import WFE.ECS.Systems.ScriptSystem;

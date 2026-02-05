@@ -9,5 +9,7 @@ export struct ScriptComponent
 {
     std::string scriptPath;
     sol::environment env;
-    bool initialized = false;
+    
+    bool loaded = false;
+    bool failed = false;
 };
