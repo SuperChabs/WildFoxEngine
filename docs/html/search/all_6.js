@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['hierarchywindow_0',['HierarchyWindow',['../classHierarchyWindow.html',1,'']]]
+  ['hierarchycomponent_0',['HierarchyComponent',['../structHierarchyComponent.html',1,'']]],
+  ['hierarchywindow_1',['HierarchyWindow',['../classHierarchyWindow.html',1,'']]]
 ];

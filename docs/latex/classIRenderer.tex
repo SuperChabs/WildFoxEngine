@@ -1,0 +1,68 @@
+\doxysection{IRenderer Class Reference}
+\hypertarget{classIRenderer}{}\label{classIRenderer}\index{IRenderer@{IRenderer}}
+
+
+Inheritance diagram for IRenderer:\+
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=139pt]{classIRenderer__inherit__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classIRenderer_a745627822072f1b81015f3e817134b6b}\label{classIRenderer_a745627822072f1b81015f3e817134b6b} 
+virtual bool {\bfseries Initialize} (GLuint skybox\+VAO, GLuint cubemap\+Texture)=0
+\item 
+\Hypertarget{classIRenderer_a036b49f86603db360ccba4cb3764f641}\label{classIRenderer_a036b49f86603db360ccba4cb3764f641} 
+virtual void {\bfseries Begin\+Frame} ()=0
+\item 
+\Hypertarget{classIRenderer_a444d37735a9e222ad13471416e78a327}\label{classIRenderer_a444d37735a9e222ad13471416e78a327} 
+virtual void {\bfseries Render} (\doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \&ecs, entt::\+entity camera\+Entity, int width, int height)=0
+\item 
+\Hypertarget{classIRenderer_a061c81416039d395c94100c9176add72}\label{classIRenderer_a061c81416039d395c94100c9176add72} 
+virtual void {\bfseries End\+Frame} ()=0
+\item 
+\Hypertarget{classIRenderer_a5e7aec30dd11e81aaf249b69777c3bfe}\label{classIRenderer_a5e7aec30dd11e81aaf249b69777c3bfe} 
+virtual void {\bfseries Shutdown} ()=0
+\item 
+\Hypertarget{classIRenderer_aaaee69d76a65d4a9991cb35d18886640}\label{classIRenderer_aaaee69d76a65d4a9991cb35d18886640} 
+virtual void {\bfseries Set\+Clear\+Color} (const glm::\+vec4 \&color)=0
+\item 
+\Hypertarget{classIRenderer_aefb4d4254d7f83e6695dfdfb6d2ad5df}\label{classIRenderer_aefb4d4254d7f83e6695dfdfb6d2ad5df} 
+virtual void {\bfseries Set\+Wireframe} (bool enable)=0
+\item 
+\Hypertarget{classIRenderer_a3c29e3076cded1409ef93678f151f555}\label{classIRenderer_a3c29e3076cded1409ef93678f151f555} 
+virtual void {\bfseries Set\+Enable\+Shadows} (bool enable)=0
+\item 
+\Hypertarget{classIRenderer_ac0a843479eece73935c40774d531d968}\label{classIRenderer_ac0a843479eece73935c40774d531d968} 
+virtual void {\bfseries Set\+Icon\+Render\+System} (std::\+unique\+\_\+ptr$<$ \doxymbox{\hyperlink{classIconRenderSystem}{Icon\+Render\+System}} $>$ sys)=0
+\item 
+\Hypertarget{classIRenderer_ad406809cc805fa01cf55237735c92154}\label{classIRenderer_ad406809cc805fa01cf55237735c92154} 
+virtual \doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Context} ()=0
+\item 
+\Hypertarget{classIRenderer_ab49de30d57c60e430a1a70eb1b5b1ca2}\label{classIRenderer_ab49de30d57c60e430a1a70eb1b5b1ca2} 
+virtual \doxymbox{\hyperlink{classRenderPipeline}{Render\+Pipeline}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Pipeline} ()=0
+\item 
+\Hypertarget{classIRenderer_a1210f6c6ad918deac1e4573e029a440c}\label{classIRenderer_a1210f6c6ad918deac1e4573e029a440c} 
+virtual const \doxymbox{\hyperlink{structRenderStats}{Render\+Stats}} \& {\bfseries Get\+Stats} () const =0
+\item 
+\Hypertarget{classIRenderer_af7da5f3739ad09704393aaf51f038987}\label{classIRenderer_af7da5f3739ad09704393aaf51f038987} 
+virtual \doxymbox{\hyperlink{structRendererConfig}{Renderer\+Config}} \& {\bfseries Get\+Config} ()=0
+\item 
+\Hypertarget{classIRenderer_a4b97151fe2fad49bf0483ae240548d79}\label{classIRenderer_a4b97151fe2fad49bf0483ae240548d79} 
+virtual \doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+World} ()=0
+\item 
+\Hypertarget{classIRenderer_ad7146ec14653c015c226d62a9c1eba59}\label{classIRenderer_ad7146ec14653c015c226d62a9c1eba59} 
+virtual \doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Shader\+Manager} ()=0
+\item 
+\Hypertarget{classIRenderer_a9c090852e70e3e14c3c97dd79ad30a41}\label{classIRenderer_a9c090852e70e3e14c3c97dd79ad30a41} 
+virtual bool {\bfseries Is\+Initialized} () const =0
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+IRenderer.\+cppm\end{DoxyCompactItemize}

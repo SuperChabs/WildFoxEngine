@@ -31,7 +31,7 @@ void \doxymbox{\hyperlink{classForwardPipeline_a65d30384c1f198e3882751208f17e8e2
 \item 
 {\bfseries Render\+Pipeline} (const std::\+string \&n, \doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*}ctx, \doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}sm)
 \item 
-virtual void {\bfseries Execute} (\doxymbox{\hyperlink{classCamera}{Camera}} \&camera, int width, int height)
+virtual void {\bfseries Execute} (\doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \&ecs, entt::\+entity camera\+Entity, int width, int height)
 \item 
 void {\bfseries Add\+Pass} (std::\+unique\+\_\+ptr$<$ \doxymbox{\hyperlink{classRenderPass}{Render\+Pass}} $>$ pass)
 \item 
@@ -64,7 +64,15 @@ std::\+vector$<$ std::\+unique\+\_\+ptr$<$ \doxymbox{\hyperlink{classRenderPass}
 {\footnotesize\ttfamily \label{classForwardPipeline_a65d30384c1f198e3882751208f17e8e2} 
 void Forward\+Pipeline::\+\+Initialize (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
 
+shadow pass
 
+skybox pass
+
+geometry pass
+
+grid pass
+
+ui pass2
 
 Implements \doxymbox{\hyperlink{classRenderPipeline}{Render\+Pipeline}}.
 

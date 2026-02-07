@@ -121,7 +121,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5eccbfb66d4f93d561ddaa6f4eaac3e1" id="r_a5eccbfb66d4f93d561ddaa6f4eaac3e1"><td class="memItemLeft"><a id="a5eccbfb66d4f93d561ddaa6f4eaac3e1" name="a5eccbfb66d4f93d561ddaa6f4eaac3e1"></a>
 &#160;</td><td class="memItemRight"><b>SkyboxPass</b> (<a class="el" href="classGLContext.html">GLContext</a> *ctx, <a class="el" href="classShaderManager.html">ShaderManager</a> *sm, GLuint vao, GLuint cubemap)</td></tr>
 <tr class="memitem:a2970ba28c225274d5962d83db0cc6d9e" id="r_a2970ba28c225274d5962d83db0cc6d9e"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a2970ba28c225274d5962d83db0cc6d9e">Setup</a> () override</td></tr>
-<tr class="memitem:a44b896ed96991382938b82ad28412077" id="r_a44b896ed96991382938b82ad28412077"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a44b896ed96991382938b82ad28412077">Execute</a> (<a class="el" href="classCamera.html">Camera</a> &amp;camera, const glm::mat4 &amp;projection) override</td></tr>
+<tr class="memitem:a8db2b51d420580e8fdc57ec0e08643f2" id="r_a8db2b51d420580e8fdc57ec0e08643f2"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a8db2b51d420580e8fdc57ec0e08643f2">Execute</a> (const glm::mat4 &amp;view, const glm::mat4 &amp;projection) override</td></tr>
 <tr class="memitem:a6fcad98510230f3898c4f91c25fe3e07" id="r_a6fcad98510230f3898c4f91c25fe3e07"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a6fcad98510230f3898c4f91c25fe3e07">Cleanup</a> () override</td></tr>
 <tr class="inherit_header pub_methods_classRenderPass"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classRenderPass')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="classRenderPass.html">RenderPass</a></td></tr>
 <tr class="memitem:af78cb299781cbb67319c5887942024d2 inherit pub_methods_classRenderPass" id="r_af78cb299781cbb67319c5887942024d2"><td class="memItemLeft">
@@ -173,8 +173,8 @@ bool&#160;</td><td class="memItemRight"><b>enabled</b> = true</td></tr>
 
 </div>
 </div>
-<a id="a44b896ed96991382938b82ad28412077" name="a44b896ed96991382938b82ad28412077"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a44b896ed96991382938b82ad28412077">&#9670;&#160;</a></span>Execute()</h2>
+<a id="a8db2b51d420580e8fdc57ec0e08643f2" name="a8db2b51d420580e8fdc57ec0e08643f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8db2b51d420580e8fdc57ec0e08643f2">&#9670;&#160;</a></span>Execute()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -185,7 +185,7 @@ bool&#160;</td><td class="memItemRight"><b>enabled</b> = true</td></tr>
         <tr>
           <td class="memname">void SkyboxPass::Execute </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classCamera.html">Camera</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>camera</em></span>, </td>
+          <td class="paramtype">const glm::mat4 &amp;</td>          <td class="paramname"><span class="paramname"><em>view</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

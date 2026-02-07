@@ -1,3 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$structLightComponent.html" title=" " alt="" coords="5,5,122,32"/>
+<area shape="rect" id="Node000000" href="$classILogSink.html" title=" " alt="" coords="5,31,78,57"/>
+<area shape="rect" id="Node000001" href="$classConsoleLogger.html" title=" " alt="" coords="126,5,234,32"/>
+<area shape="poly" id="edge2_Node000000_Node000001" title=" " alt="" coords="92,32,128,27,123,30,94,37"/>
+<area shape="rect" id="Node000002" href="$classFileLogger.html" title=" " alt="" coords="139,56,220,83"/>
+<area shape="poly" id="edge3_Node000000_Node000002" title=" " alt="" coords="93,51,141,61,136,63,93,56"/>
 </map>

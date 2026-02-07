@@ -98,85 +98,98 @@ $(function(){initNavTree('Engine_8cppm.html','',''); });
 <code>#include &lt;GLFW/glfw3.h&gt;</code><br />
 <code>#include &lt;glm/glm.hpp&gt;</code><br />
 <code>#include &lt;imgui.h&gt;</code><br />
-<code>#include &lt;entt.hpp&gt;</code><br />
+<code>#include &lt;entt/entt.hpp&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
 <code>#include &lt;variant&gt;</code><br />
-<code>import WFE.Rendering.Renderer;</code><br />
+<code>import <a class="el" href="RenderingModule_8cppm.html">WFE.Rendering.RenderingModule</a>;</code><br />
+<code>import WFE.Core.ModuleManager;</code><br />
+<code>import WFE.Scripting.LuaState;</code><br />
 <code>import <a class="el" href="Application_8cppm.html">WFE.Application.Application</a>;</code><br />
 <code>import <a class="el" href="Input_8cppm.html">WFE.Core.Input</a>;</code><br />
-<code>import WFE.Rendering.Core.Framebuffer;</code><br />
-<code>import WFE.ECS.Systems;</code><br />
-<code>import WFE.Scene.Skybox;</code><br />
-<code>import WFE.Core.Logger;</code><br />
-<code>import WFE.Rendering.Light;</code><br />
 <code>import WFE.Rendering.Primitive.PrimitivesFactory;</code><br />
+<code>import WFE.Scripting.LuaBindings;</code><br />
+<code>import WFE.Rendering.Core.Framebuffer;</code><br />
+<code>import WFE.Core.Logger;</code><br />
 <code>import WFE.Scene.Mesh;</code><br />
+<code>import WFE.Rendering.Light;</code><br />
 <code>import WFE.Scene.SceneSurializer;</code><br />
-<code>import WFE.Core.CommandManager;</code><br />
 <code>import WFE.UI.EditorLayout;</code><br />
+<code>import WFE.Core.CommandManager;</code><br />
 <code>import WFE.ECS.ECSWorld;</code><br />
 <code>import WFE.ECS.Components;</code><br />
+<code>import WFE.ECS.Systems;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for Engine.cppm:</div>
 <div class="dyncontent">
 <div class="center"><img src="Engine_8cppm__incl.png" border="0" usemap="#aEngine_8cppm" loading="lazy" alt=""/></div>
 <map name="aEngine_8cppm" id="aEngine_8cppm">
-<area shape="rect" title="Engine class." alt="" coords="782,5,879,32"/>
-<area shape="rect" title=" " alt="" coords="5,229,90,256"/>
-<area shape="poly" title=" " alt="" coords="778,21,641,25,458,34,279,52,207,65,154,82,127,97,109,111,78,156,64,186,55,215,50,213,59,184,73,153,105,108,124,92,152,78,206,60,279,47,458,29,641,20,783,19"/>
-<area shape="rect" title=" " alt="" coords="248,229,354,256"/>
-<area shape="poly" title=" " alt="" coords="779,21,620,29,516,37,408,49,302,66,209,89,169,103,135,119,107,137,88,156,84,168,88,180,106,189,142,201,235,225,231,228,140,206,104,194,84,183,78,168,84,153,104,132,132,114,167,98,207,84,301,61,407,44,516,32,620,24,784,20"/>
-<area shape="rect" title=" " alt="" coords="623,229,715,256"/>
-<area shape="poly" title=" " alt="" coords="823,31,689,219,685,215,819,34"/>
-<area shape="rect" title=" " alt="" coords="1020,80,1083,107"/>
-<area shape="poly" title=" " alt="" coords="869,30,1008,77,1002,77,869,35"/>
-<area shape="rect" title=" " alt="" coords="1107,80,1175,107"/>
-<area shape="poly" title=" " alt="" coords="879,28,1094,79,1089,79,879,33"/>
-<area shape="rect" title=" " alt="" coords="739,229,807,256"/>
-<area shape="poly" title=" " alt="" coords="830,30,821,97,801,182,787,217,784,213,796,181,816,96,827,34"/>
-<area shape="rect" title=" " alt="" coords="814,304,868,331"/>
-<area shape="poly" title=" " alt="" coords="833,30,839,80,844,196,843,290,839,287,838,196,834,80,830,35"/>
-<area shape="rect" title=" " alt="" coords="1199,80,1259,107"/>
-<area shape="poly" title=" " alt="" coords="879,24,1013,44,1186,79,1181,80,1012,49,879,29"/>
-<area shape="rect" href="Application_8cppm.html" title="Main application class for the WildFoxEngine." alt="" coords="422,80,609,107"/>
-<area shape="poly" title=" " alt="" coords="779,32,586,79,585,73,783,30"/>
-<area shape="rect" href="Logger_8cppm_source.html" title=" " alt="" coords="943,229,1069,256"/>
-<area shape="poly" title=" " alt="" coords="874,30,915,49,935,62,952,78,974,111,990,148,1005,215,1001,213,985,149,970,114,948,82,932,66,913,54,873,35"/>
-<area shape="rect" href="Input_8cppm.html" title=" " alt="" coords="99,155,215,181"/>
-<area shape="poly" title=" " alt="" coords="779,25,616,45,513,61,411,83,297,116,202,151,200,146,296,111,410,77,512,56,615,40,784,23"/>
-<area shape="poly" title=" " alt="" coords="419,98,330,106,232,116,145,133,112,144,88,157,76,169,66,184,55,215,50,213,62,181,72,166,85,153,110,139,144,128,231,111,330,100,424,96"/>
-<area shape="poly" title=" " alt="" coords="419,108,335,128,301,141,280,156,274,170,274,184,286,217,281,215,269,185,269,169,276,153,299,136,334,123,424,105"/>
-<area shape="poly" title=" " alt="" coords="576,105,619,123,638,136,655,153,669,183,672,216,668,213,664,184,651,156,635,140,616,128,576,110"/>
-<area shape="poly" title=" " alt="" coords="564,105,621,124,680,152,721,184,755,219,750,218,718,188,677,157,619,129,564,110"/>
-<area shape="rect" title=" " alt="" coords="431,155,483,181"/>
-<area shape="poly" title=" " alt="" coords="507,106,478,145,475,140,503,109"/>
-<area shape="rect" href="Window_8cppm.html" title="Window class handler." alt="" coords="507,155,641,181"/>
-<area shape="poly" title=" " alt="" coords="527,105,557,143,552,142,525,110"/>
-<area shape="poly" title=" " alt="" coords="558,105,952,223,947,225,557,110"/>
-<area shape="rect" href="Time_8cppm.html" title="Time manager." alt="" coords="291,155,407,181"/>
-<area shape="poly" title=" " alt="" coords="484,108,393,151,391,146,489,106"/>
-<area shape="poly" title=" " alt="" coords="451,109,231,154,229,149,454,105"/>
-<area shape="poly" title=" " alt="" coords="504,180,496,184,302,206,216,215,105,232,104,227,215,210,301,200,495,179,509,179"/>
-<area shape="poly" title=" " alt="" coords="524,183,364,227,363,222,529,181"/>
-<area shape="poly" title=" " alt="" coords="577,180,588,218,598,237,612,254,656,282,706,300,756,309,801,316,796,316,755,315,705,305,654,287,608,258,594,240,583,220,574,184"/>
-<area shape="poly" title=" " alt="" coords="642,178,931,228,925,229,642,183"/>
-<area shape="poly" title=" " alt="" coords="980,256,882,301,881,296,975,257"/>
-<area shape="rect" title=" " alt="" coords="892,304,952,331"/>
-<area shape="poly" title=" " alt="" coords="994,256,949,296,947,291,989,257"/>
-<area shape="rect" title=" " alt="" coords="976,304,1036,331"/>
-<area shape="poly" title=" " alt="" coords="1008,255,1008,290,1004,287,1004,258"/>
-<area shape="rect" title=" " alt="" coords="1060,304,1118,331"/>
-<area shape="poly" title=" " alt="" coords="1022,254,1066,294,1061,293,1020,259"/>
-<area shape="rect" title=" " alt="" coords="1142,304,1254,331"/>
-<area shape="poly" title=" " alt="" coords="1040,254,1153,298,1148,298,1039,259"/>
-<area shape="poly" title=" " alt="" coords="343,180,319,218,316,214,338,183"/>
-<area shape="poly" title=" " alt="" coords="136,184,81,223,77,219,139,180"/>
-<area shape="poly" title=" " alt="" coords="182,179,264,221,259,223,182,185"/>
-<area shape="poly" title=" " alt="" coords="216,175,608,230,606,235,215,180"/>
-<area shape="poly" title=" " alt="" coords="215,173,724,227,723,232,215,178"/>
-<area shape="rect" title=" " alt="" coords="114,229,224,256"/>
-<area shape="poly" title=" " alt="" coords="160,179,167,215,162,213,158,184"/>
+<area shape="rect" title="Engine class." alt="" coords="938,5,1035,32"/>
+<area shape="rect" title=" " alt="" coords="604,229,689,256"/>
+<area shape="poly" title=" " alt="" coords="970,32,679,223,677,218,965,33"/>
+<area shape="rect" title=" " alt="" coords="273,229,378,256"/>
+<area shape="poly" title=" " alt="" coords="935,24,724,42,433,70,290,88,165,109,72,132,42,144,25,156,19,168,24,179,258,226,256,231,21,183,14,168,20,153,39,139,71,127,164,104,289,83,432,65,724,36,940,22"/>
+<area shape="rect" title=" " alt="" coords="939,229,1031,256"/>
+<area shape="poly" title=" " alt="" coords="1036,20,1068,26,1102,36,1134,53,1159,78,1174,105,1179,131,1174,156,1159,183,1136,206,1108,223,1077,233,1047,240,1046,235,1076,228,1106,218,1133,202,1155,180,1169,154,1174,131,1169,107,1155,82,1131,58,1100,41,1067,31,1036,25"/>
+<area shape="rect" title=" " alt="" coords="1278,80,1341,107"/>
+<area shape="poly" title=" " alt="" coords="1036,28,1259,77,1265,81,1260,81,1258,83,1036,33"/>
+<area shape="rect" title=" " alt="" coords="1007,155,1102,181"/>
+<area shape="poly" title=" " alt="" coords="994,30,1045,141,1040,139,991,35"/>
+<area shape="rect" title=" " alt="" coords="712,229,781,256"/>
+<area shape="poly" title=" " alt="" coords="1010,30,1054,58,1099,95,1116,117,1126,139,1127,161,1115,183,1092,200,1058,211,1017,219,972,223,878,227,796,232,796,227,877,221,972,217,1017,213,1057,206,1089,195,1111,180,1121,160,1121,140,1111,119,1095,99,1051,62,1009,35"/>
+<area shape="rect" title=" " alt="" coords="424,304,477,331"/>
+<area shape="poly" title=" " alt="" coords="1035,17,1074,21,1115,31,1153,50,1185,78,1200,105,1204,130,1199,155,1185,183,1166,205,1140,224,1106,241,1066,255,972,279,866,296,756,307,652,314,493,319,493,313,652,309,756,302,865,290,971,274,1064,250,1104,236,1137,219,1163,201,1180,180,1193,153,1199,130,1195,107,1180,82,1150,54,1113,36,1073,27,1036,22"/>
+<area shape="rect" title=" " alt="" coords="1364,80,1425,107"/>
+<area shape="poly" title=" " alt="" coords="1035,23,1173,44,1352,79,1346,80,1173,49,1036,29"/>
+<area shape="rect" href="RenderingModule_8cppm.html" title="Module responsible for all graphics and rendering." alt="" coords="421,155,640,181"/>
+<area shape="poly" title=" " alt="" coords="935,20,842,25,726,34,670,41,620,52,579,65,551,82,542,94,536,109,531,141,527,138,531,107,537,92,547,78,577,60,618,46,669,36,726,28,841,20,940,19"/>
+<area shape="rect" href="Logger_8cppm_source.html" title=" " alt="" coords="122,229,248,256"/>
+<area shape="poly" title=" " alt="" coords="935,22,771,29,546,39,321,57,229,68,159,83,74,104,43,121,14,156,9,170,10,182,17,193,29,203,65,218,109,230,105,233,63,223,27,207,13,197,5,184,3,170,10,153,39,117,72,99,158,77,228,63,321,51,545,34,771,23,940,20"/>
+<area shape="rect" href="Application_8cppm.html" title="Main application class for the WildFoxEngine." alt="" coords="561,80,748,107"/>
+<area shape="poly" title=" " alt="" coords="935,31,728,79,727,74,940,30"/>
+<area shape="rect" href="Input_8cppm.html" title=" " alt="" coords="816,155,933,181"/>
+<area shape="poly" title=" " alt="" coords="979,31,895,144,892,140,975,34"/>
+<area shape="poly" title=" " alt="" coords="551,179,616,221,610,220,550,184"/>
+<area shape="poly" title=" " alt="" coords="497,181,376,226,374,221,492,183"/>
+<area shape="poly" title=" " alt="" coords="623,179,926,228,921,229,623,185"/>
+<area shape="poly" title=" " alt="" coords="568,179,700,225,695,225,568,185"/>
+<area shape="poly" title=" " alt="" coords="524,181,495,231,464,292,461,288,491,228,520,183"/>
+<area shape="rect" title=" " alt="" coords="505,229,562,256"/>
+<area shape="poly" title=" " alt="" coords="533,180,534,215,530,212,529,184"/>
+<area shape="poly" title=" " alt="" coords="468,183,261,228,260,223,472,181"/>
+<area shape="poly" title=" " alt="" coords="232,254,411,304,407,306,231,259"/>
+<area shape="rect" title=" " alt="" coords="6,304,66,331"/>
+<area shape="poly" title=" " alt="" coords="160,259,77,299,75,294,158,254"/>
+<area shape="rect" title=" " alt="" coords="90,304,150,331"/>
+<area shape="poly" title=" " alt="" coords="176,255,143,295,139,290,171,258"/>
+<area shape="rect" title=" " alt="" coords="174,304,231,331"/>
+<area shape="poly" title=" " alt="" coords="190,254,198,290,193,288,187,259"/>
+<area shape="rect" title=" " alt="" coords="256,304,368,331"/>
+<area shape="poly" title=" " alt="" coords="208,254,279,296,274,296,207,259"/>
+<area shape="poly" title=" " alt="" coords="656,105,654,181,651,216,647,212,649,181,653,109"/>
+<area shape="poly" title=" " alt="" coords="558,98,414,105,248,116,108,133,60,144,35,156,30,168,35,179,115,198,259,227,256,230,114,203,31,183,25,168,31,153,58,139,107,128,248,111,413,100,563,96"/>
+<area shape="poly" title=" " alt="" coords="749,102,864,122,913,136,947,153,960,166,970,182,982,216,977,213,965,184,956,169,944,157,911,141,862,127,749,108"/>
+<area shape="poly" title=" " alt="" coords="725,105,990,152,995,155,989,155,989,157,725,110"/>
+<area shape="poly" title=" " alt="" coords="664,105,733,217,728,215,661,110"/>
+<area shape="poly" title=" " alt="" coords="558,98,411,105,242,116,98,132,50,144,24,157,17,168,17,178,22,188,33,197,66,212,109,226,104,228,64,217,30,201,18,191,12,180,12,167,21,153,48,139,98,127,242,110,411,100,563,96"/>
+<area shape="rect" title=" " alt="" coords="46,155,98,181"/>
+<area shape="poly" title=" " alt="" coords="558,101,358,119,237,135,114,157,112,152,237,130,358,114,563,98"/>
+<area shape="poly" title=" " alt="" coords="693,105,824,149,819,149,693,110"/>
+<area shape="rect" href="Window_8cppm.html" title="Window class handler." alt="" coords="262,155,396,181"/>
+<area shape="poly" title=" " alt="" coords="595,108,402,153,400,148,600,106"/>
+<area shape="rect" href="Time_8cppm.html" title="Time manager." alt="" coords="122,155,238,181"/>
+<area shape="poly" title=" " alt="" coords="565,110,254,157,253,152,567,105"/>
+<area shape="poly" title=" " alt="" coords="837,181,702,227,700,222,832,182"/>
+<area shape="poly" title=" " alt="" coords="815,180,393,235,392,230,817,175"/>
+<area shape="poly" title=" " alt="" coords="894,179,956,221,951,220,893,184"/>
+<area shape="poly" title=" " alt="" coords="855,181,783,224,781,219,850,183"/>
+<area shape="rect" title=" " alt="" coords="805,229,915,256"/>
+<area shape="poly" title=" " alt="" coords="874,180,867,216,863,212,870,184"/>
+<area shape="poly" title=" " alt="" coords="385,179,592,228,587,229,385,185"/>
+<area shape="poly" title=" " alt="" coords="330,180,329,215,324,212,327,184"/>
+<area shape="poly" title=" " alt="" coords="344,179,391,228,437,292,432,290,387,231,342,184"/>
+<area shape="poly" title=" " alt="" coords="306,181,225,224,223,219,302,183"/>
+<area shape="poly" title=" " alt="" coords="206,179,289,221,284,223,205,185"/>
 </map>
 </div>
 </div>
@@ -189,7 +202,7 @@ Classes</h2></td></tr>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classEngine.html">Engine</a> class. </p>
 <dl class="section author"><dt>Author</dt><dd>SuperChabs </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>2026-01-28 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>2026-02-05 </dd></dl>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <div id="page-nav" class="page-nav-panel">

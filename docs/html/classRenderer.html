@@ -91,44 +91,499 @@ $(function(){initNavTree('classRenderer.html','','classRenderer-members'); });
   <div class="headertitle"><div class="title">Renderer Class Reference<span class="mlabels"><span class="mlabel export">export</span></span><div class="ingroups">module <a class="el" href="module__WFE_8Rendering_8Renderer.html">WFE.Rendering.Renderer</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+<div class="dynheader">
+Inheritance diagram for Renderer:</div>
+<div class="dyncontent">
+<div class="center"><img src="classRenderer__inherit__graph.png" border="0" usemap="#aRenderer_inherit__map" loading="lazy" alt="Inheritance graph"/></div>
+<map name="aRenderer_inherit__map" id="aRenderer_inherit__map">
+<area shape="rect" title=" " alt="" coords="7,80,82,107"/>
+<area shape="rect" href="classIRenderer.html" title=" " alt="" coords="5,5,84,32"/>
+<area shape="poly" title=" " alt="" coords="46,46,47,80,42,79,43,50"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for Renderer:</div>
+<div class="dyncontent">
+<div class="center"><img src="classRenderer__coll__graph.png" border="0" usemap="#aRenderer_coll__map" loading="lazy" alt="Collaboration graph"/></div>
+<map name="aRenderer_coll__map" id="aRenderer_coll__map">
+<area shape="rect" title=" " alt="" coords="7,80,82,107"/>
+<area shape="rect" href="classIRenderer.html" title=" " alt="" coords="5,5,84,32"/>
+<area shape="poly" title=" " alt="" coords="46,46,47,80,42,79,43,50"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a6b53ba455236c4e32d42af13746505e0" id="r_a6b53ba455236c4e32d42af13746505e0"><td class="memItemLeft"><a id="a6b53ba455236c4e32d42af13746505e0" name="a6b53ba455236c4e32d42af13746505e0"></a>
 &#160;</td><td class="memItemRight"><b>Renderer</b> (<a class="el" href="classShaderManager.html">ShaderManager</a> *sm, <a class="el" href="classECSWorld.html">ECSWorld</a> *w)</td></tr>
-<tr class="memitem:a1b18243f51af6b4183d211b8ecc744dc" id="r_a1b18243f51af6b4183d211b8ecc744dc"><td class="memItemLeft"><a id="a1b18243f51af6b4183d211b8ecc744dc" name="a1b18243f51af6b4183d211b8ecc744dc"></a>
-bool&#160;</td><td class="memItemRight"><b>Initialize</b> (GLuint skyboxVAO, GLuint cubemapTexture)</td></tr>
-<tr class="memitem:a7930de5ebe07c0e719c252317854a308" id="r_a7930de5ebe07c0e719c252317854a308"><td class="memItemLeft"><a id="a7930de5ebe07c0e719c252317854a308" name="a7930de5ebe07c0e719c252317854a308"></a>
-void&#160;</td><td class="memItemRight"><b>BeginFrame</b> ()</td></tr>
-<tr class="memitem:ab0e4dbfcb656abdb58cb71d25dfef328" id="r_ab0e4dbfcb656abdb58cb71d25dfef328"><td class="memItemLeft"><a id="ab0e4dbfcb656abdb58cb71d25dfef328" name="ab0e4dbfcb656abdb58cb71d25dfef328"></a>
-void&#160;</td><td class="memItemRight"><b>Render</b> (<a class="el" href="classCamera.html">Camera</a> &amp;camera, int width, int height)</td></tr>
-<tr class="memitem:a1fce0dbe24ac4c04457684d66a506c53" id="r_a1fce0dbe24ac4c04457684d66a506c53"><td class="memItemLeft"><a id="a1fce0dbe24ac4c04457684d66a506c53" name="a1fce0dbe24ac4c04457684d66a506c53"></a>
-void&#160;</td><td class="memItemRight"><b>EndFrame</b> ()</td></tr>
-<tr class="memitem:a1effb02d0aa8ba8fea3ddd236efb7363" id="r_a1effb02d0aa8ba8fea3ddd236efb7363"><td class="memItemLeft"><a id="a1effb02d0aa8ba8fea3ddd236efb7363" name="a1effb02d0aa8ba8fea3ddd236efb7363"></a>
-void&#160;</td><td class="memItemRight"><b>Shutdown</b> ()</td></tr>
-<tr class="memitem:aaf32b2996b3cbeb82e7fda3b3b84b775" id="r_aaf32b2996b3cbeb82e7fda3b3b84b775"><td class="memItemLeft"><a id="aaf32b2996b3cbeb82e7fda3b3b84b775" name="aaf32b2996b3cbeb82e7fda3b3b84b775"></a>
-void&#160;</td><td class="memItemRight"><b>SetClearColor</b> (const glm::vec4 &amp;color)</td></tr>
-<tr class="memitem:af06a9ff330c16187b5fc8f0ec2710d3e" id="r_af06a9ff330c16187b5fc8f0ec2710d3e"><td class="memItemLeft"><a id="af06a9ff330c16187b5fc8f0ec2710d3e" name="af06a9ff330c16187b5fc8f0ec2710d3e"></a>
-void&#160;</td><td class="memItemRight"><b>SetWireframe</b> (bool enable)</td></tr>
-<tr class="memitem:a1bf257627915e52103f58f2cd3584c62" id="r_a1bf257627915e52103f58f2cd3584c62"><td class="memItemLeft"><a id="a1bf257627915e52103f58f2cd3584c62" name="a1bf257627915e52103f58f2cd3584c62"></a>
-void&#160;</td><td class="memItemRight"><b>SetEnableShadows</b> (bool enable)</td></tr>
-<tr class="memitem:a58568b14ed97af1b42941cdc4e694121" id="r_a58568b14ed97af1b42941cdc4e694121"><td class="memItemLeft"><a id="a58568b14ed97af1b42941cdc4e694121" name="a58568b14ed97af1b42941cdc4e694121"></a>
-<a class="el" href="classGLContext.html">GLContext</a> *&#160;</td><td class="memItemRight"><b>GetContext</b> ()</td></tr>
-<tr class="memitem:a66dddd598bc315ab272111c5c2634dd0" id="r_a66dddd598bc315ab272111c5c2634dd0"><td class="memItemLeft"><a id="a66dddd598bc315ab272111c5c2634dd0" name="a66dddd598bc315ab272111c5c2634dd0"></a>
-<a class="el" href="classRenderPipeline.html">RenderPipeline</a> *&#160;</td><td class="memItemRight"><b>GetPipeline</b> ()</td></tr>
-<tr class="memitem:a3d17e00171ed778e12b81313c2e10c27" id="r_a3d17e00171ed778e12b81313c2e10c27"><td class="memItemLeft"><a id="a3d17e00171ed778e12b81313c2e10c27" name="a3d17e00171ed778e12b81313c2e10c27"></a>
-const <a class="el" href="structRenderStats.html">RenderStats</a> &amp;&#160;</td><td class="memItemRight"><b>GetStats</b> () const</td></tr>
-<tr class="memitem:ac816b90cd7f90a4d4d0f8b83d5f3d176" id="r_ac816b90cd7f90a4d4d0f8b83d5f3d176"><td class="memItemLeft"><a id="ac816b90cd7f90a4d4d0f8b83d5f3d176" name="ac816b90cd7f90a4d4d0f8b83d5f3d176"></a>
-<a class="el" href="structRendererConfig.html">RendererConfig</a> &amp;&#160;</td><td class="memItemRight"><b>GetConfig</b> ()</td></tr>
-<tr class="memitem:aa2acf9a121f200a4c41a83869879d4e9" id="r_aa2acf9a121f200a4c41a83869879d4e9"><td class="memItemLeft"><a id="aa2acf9a121f200a4c41a83869879d4e9" name="aa2acf9a121f200a4c41a83869879d4e9"></a>
-void&#160;</td><td class="memItemRight"><b>SetIconRenderSystem</b> (std::unique_ptr&lt; <a class="el" href="classIconRenderSystem.html">IconRenderSystem</a> &gt; sys)</td></tr>
-<tr class="memitem:a99cbc7019d9c72c38e4c15a3f0bdaddf" id="r_a99cbc7019d9c72c38e4c15a3f0bdaddf"><td class="memItemLeft"><a id="a99cbc7019d9c72c38e4c15a3f0bdaddf" name="a99cbc7019d9c72c38e4c15a3f0bdaddf"></a>
-<a class="el" href="classECSWorld.html">ECSWorld</a> *&#160;</td><td class="memItemRight"><b>GetWorld</b> ()</td></tr>
-<tr class="memitem:ae735b45c2dbeb1850edeea2a1c3816b1" id="r_ae735b45c2dbeb1850edeea2a1c3816b1"><td class="memItemLeft"><a id="ae735b45c2dbeb1850edeea2a1c3816b1" name="ae735b45c2dbeb1850edeea2a1c3816b1"></a>
-<a class="el" href="classShaderManager.html">ShaderManager</a> *&#160;</td><td class="memItemRight"><b>GetShaderManager</b> ()</td></tr>
-<tr class="memitem:a7d44150602481e4cdab61318744fa327" id="r_a7d44150602481e4cdab61318744fa327"><td class="memItemLeft"><a id="a7d44150602481e4cdab61318744fa327" name="a7d44150602481e4cdab61318744fa327"></a>
-bool&#160;</td><td class="memItemRight"><b>IsInitialized</b> () const</td></tr>
+<tr class="memitem:a466774a9f8489c9354857087baa269e9" id="r_a466774a9f8489c9354857087baa269e9"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a466774a9f8489c9354857087baa269e9">Initialize</a> (GLuint skyboxVAO, GLuint cubemapTexture) override</td></tr>
+<tr class="memitem:acafbd2688dd720dd959e8f2918359451" id="r_acafbd2688dd720dd959e8f2918359451"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#acafbd2688dd720dd959e8f2918359451">BeginFrame</a> () override</td></tr>
+<tr class="memitem:af31516e0f22697126c38c5a122f6fa14" id="r_af31516e0f22697126c38c5a122f6fa14"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#af31516e0f22697126c38c5a122f6fa14">Render</a> (<a class="el" href="classECSWorld.html">ECSWorld</a> &amp;ecs, entt::entity cameraEntity, int width, int height) override</td></tr>
+<tr class="memitem:a09720da33852155b05a84bf5652698cb" id="r_a09720da33852155b05a84bf5652698cb"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a09720da33852155b05a84bf5652698cb">EndFrame</a> () override</td></tr>
+<tr class="memitem:ae7ce211da12f8338dbc868a6438c793f" id="r_ae7ce211da12f8338dbc868a6438c793f"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ae7ce211da12f8338dbc868a6438c793f">Shutdown</a> () override</td></tr>
+<tr class="memitem:a72b8dc2f733bba978d75294c732415d4" id="r_a72b8dc2f733bba978d75294c732415d4"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a72b8dc2f733bba978d75294c732415d4">SetClearColor</a> (const glm::vec4 &amp;color) override</td></tr>
+<tr class="memitem:ad645759881ee64e59bfdd5e31982f354" id="r_ad645759881ee64e59bfdd5e31982f354"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ad645759881ee64e59bfdd5e31982f354">SetWireframe</a> (bool enable) override</td></tr>
+<tr class="memitem:af887b3d2feae3d3d050d6cb5a48eb644" id="r_af887b3d2feae3d3d050d6cb5a48eb644"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#af887b3d2feae3d3d050d6cb5a48eb644">SetEnableShadows</a> (bool enable) override</td></tr>
+<tr class="memitem:abfbc2a3991bdaa368fa62d9ca5f3fd32" id="r_abfbc2a3991bdaa368fa62d9ca5f3fd32"><td class="memItemLeft"><a class="el" href="classGLContext.html">GLContext</a> *&#160;</td><td class="memItemRight"><a class="el" href="#abfbc2a3991bdaa368fa62d9ca5f3fd32">GetContext</a> () override</td></tr>
+<tr class="memitem:ae24bd567c53023100366cff4ff482a16" id="r_ae24bd567c53023100366cff4ff482a16"><td class="memItemLeft"><a class="el" href="classRenderPipeline.html">RenderPipeline</a> *&#160;</td><td class="memItemRight"><a class="el" href="#ae24bd567c53023100366cff4ff482a16">GetPipeline</a> () override</td></tr>
+<tr class="memitem:a31c446b794e03c067195777f06894d6a" id="r_a31c446b794e03c067195777f06894d6a"><td class="memItemLeft">const <a class="el" href="structRenderStats.html">RenderStats</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a31c446b794e03c067195777f06894d6a">GetStats</a> () const override</td></tr>
+<tr class="memitem:a492da42b99148749828895f1ff2168ad" id="r_a492da42b99148749828895f1ff2168ad"><td class="memItemLeft"><a class="el" href="structRendererConfig.html">RendererConfig</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a492da42b99148749828895f1ff2168ad">GetConfig</a> () override</td></tr>
+<tr class="memitem:a12019b818e663fd7f2c256ccafa55530" id="r_a12019b818e663fd7f2c256ccafa55530"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a12019b818e663fd7f2c256ccafa55530">SetIconRenderSystem</a> (std::unique_ptr&lt; <a class="el" href="classIconRenderSystem.html">IconRenderSystem</a> &gt; sys) override</td></tr>
+<tr class="memitem:a5e008c3d0dbe24af979ef66faeab098f" id="r_a5e008c3d0dbe24af979ef66faeab098f"><td class="memItemLeft"><a class="el" href="classECSWorld.html">ECSWorld</a> *&#160;</td><td class="memItemRight"><a class="el" href="#a5e008c3d0dbe24af979ef66faeab098f">GetWorld</a> () override</td></tr>
+<tr class="memitem:a5e3c74fa03fe02355f03002cd16f0167" id="r_a5e3c74fa03fe02355f03002cd16f0167"><td class="memItemLeft"><a class="el" href="classShaderManager.html">ShaderManager</a> *&#160;</td><td class="memItemRight"><a class="el" href="#a5e3c74fa03fe02355f03002cd16f0167">GetShaderManager</a> () override</td></tr>
+<tr class="memitem:a9cafd6bb984744eb069c00a85c058f97" id="r_a9cafd6bb984744eb069c00a85c058f97"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a9cafd6bb984744eb069c00a85c058f97">IsInitialized</a> () const override</td></tr>
 </table>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="acafbd2688dd720dd959e8f2918359451" name="acafbd2688dd720dd959e8f2918359451"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acafbd2688dd720dd959e8f2918359451">&#9670;&#160;</a></span>BeginFrame()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Renderer::BeginFrame </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIRenderer.html">IRenderer</a>.</p>
+
+</div>
+</div>
+<a id="a09720da33852155b05a84bf5652698cb" name="a09720da33852155b05a84bf5652698cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09720da33852155b05a84bf5652698cb">&#9670;&#160;</a></span>EndFrame()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Renderer::EndFrame </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIRenderer.html">IRenderer</a>.</p>
+
+</div>
+</div>
+<a id="a492da42b99148749828895f1ff2168ad" name="a492da42b99148749828895f1ff2168ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a492da42b99148749828895f1ff2168ad">&#9670;&#160;</a></span>GetConfig()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structRendererConfig.html">RendererConfig</a> &amp; Renderer::GetConfig </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIRenderer.html">IRenderer</a>.</p>
+
+</div>
+</div>
+<a id="abfbc2a3991bdaa368fa62d9ca5f3fd32" name="abfbc2a3991bdaa368fa62d9ca5f3fd32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abfbc2a3991bdaa368fa62d9ca5f3fd32">&#9670;&#160;</a></span>GetContext()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classGLContext.html">GLContext</a> * Renderer::GetContext </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIRenderer.html">IRenderer</a>.</p>
+
+</div>
+</div>
+<a id="ae24bd567c53023100366cff4ff482a16" name="ae24bd567c53023100366cff4ff482a16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae24bd567c53023100366cff4ff482a16">&#9670;&#160;</a></span>GetPipeline()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classRenderPipeline.html">RenderPipeline</a> * Renderer::GetPipeline </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIRenderer.html">IRenderer</a>.</p>
+
+</div>
+</div>
+<a id="a5e3c74fa03fe02355f03002cd16f0167" name="a5e3c74fa03fe02355f03002cd16f0167"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e3c74fa03fe02355f03002cd16f0167">&#9670;&#160;</a></span>GetShaderManager()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classShaderManager.html">ShaderManager</a> * Renderer::GetShaderManager </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIRenderer.html">IRenderer</a>.</p>
+
+</div>
+</div>
+<a id="a31c446b794e03c067195777f06894d6a" name="a31c446b794e03c067195777f06894d6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31c446b794e03c067195777f06894d6a">&#9670;&#160;</a></span>GetStats()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="structRenderStats.html">RenderStats</a> &amp; Renderer::GetStats </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIRenderer.html">IRenderer</a>.</p>
+
+</div>
+</div>
+<a id="a5e008c3d0dbe24af979ef66faeab098f" name="a5e008c3d0dbe24af979ef66faeab098f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e008c3d0dbe24af979ef66faeab098f">&#9670;&#160;</a></span>GetWorld()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classECSWorld.html">ECSWorld</a> * Renderer::GetWorld </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIRenderer.html">IRenderer</a>.</p>
+
+</div>
+</div>
+<a id="a466774a9f8489c9354857087baa269e9" name="a466774a9f8489c9354857087baa269e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a466774a9f8489c9354857087baa269e9">&#9670;&#160;</a></span>Initialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Renderer::Initialize </td>
+          <td>(</td>
+          <td class="paramtype">GLuint</td>          <td class="paramname"><span class="paramname"><em>skyboxVAO</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">GLuint</td>          <td class="paramname"><span class="paramname"><em>cubemapTexture</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIRenderer.html">IRenderer</a>.</p>
+
+</div>
+</div>
+<a id="a9cafd6bb984744eb069c00a85c058f97" name="a9cafd6bb984744eb069c00a85c058f97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9cafd6bb984744eb069c00a85c058f97">&#9670;&#160;</a></span>IsInitialized()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Renderer::IsInitialized </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIRenderer.html">IRenderer</a>.</p>
+
+</div>
+</div>
+<a id="af31516e0f22697126c38c5a122f6fa14" name="af31516e0f22697126c38c5a122f6fa14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af31516e0f22697126c38c5a122f6fa14">&#9670;&#160;</a></span>Render()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Renderer::Render </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classECSWorld.html">ECSWorld</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ecs</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">entt::entity</td>          <td class="paramname"><span class="paramname"><em>cameraEntity</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>width</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>height</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIRenderer.html">IRenderer</a>.</p>
+
+</div>
+</div>
+<a id="a72b8dc2f733bba978d75294c732415d4" name="a72b8dc2f733bba978d75294c732415d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72b8dc2f733bba978d75294c732415d4">&#9670;&#160;</a></span>SetClearColor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Renderer::SetClearColor </td>
+          <td>(</td>
+          <td class="paramtype">const glm::vec4 &amp;</td>          <td class="paramname"><span class="paramname"><em>color</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIRenderer.html">IRenderer</a>.</p>
+
+</div>
+</div>
+<a id="af887b3d2feae3d3d050d6cb5a48eb644" name="af887b3d2feae3d3d050d6cb5a48eb644"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af887b3d2feae3d3d050d6cb5a48eb644">&#9670;&#160;</a></span>SetEnableShadows()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Renderer::SetEnableShadows </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>enable</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIRenderer.html">IRenderer</a>.</p>
+
+</div>
+</div>
+<a id="a12019b818e663fd7f2c256ccafa55530" name="a12019b818e663fd7f2c256ccafa55530"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12019b818e663fd7f2c256ccafa55530">&#9670;&#160;</a></span>SetIconRenderSystem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Renderer::SetIconRenderSystem </td>
+          <td>(</td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classIconRenderSystem.html">IconRenderSystem</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>sys</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIRenderer.html">IRenderer</a>.</p>
+
+</div>
+</div>
+<a id="ad645759881ee64e59bfdd5e31982f354" name="ad645759881ee64e59bfdd5e31982f354"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad645759881ee64e59bfdd5e31982f354">&#9670;&#160;</a></span>SetWireframe()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Renderer::SetWireframe </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>enable</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIRenderer.html">IRenderer</a>.</p>
+
+</div>
+</div>
+<a id="ae7ce211da12f8338dbc868a6438c793f" name="ae7ce211da12f8338dbc868a6438c793f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae7ce211da12f8338dbc868a6438c793f">&#9670;&#160;</a></span>Shutdown()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Renderer::Shutdown </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIRenderer.html">IRenderer</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li><b>Renderer.cppm</b></li>
 </ul>

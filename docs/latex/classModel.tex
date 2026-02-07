@@ -21,11 +21,11 @@ const std::\+vector$<$ std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classMesh}
 \Hypertarget{classModel_a5527e5eba2247e54a8ddf22c62c50f21}\label{classModel_a5527e5eba2247e54a8ddf22c62c50f21} 
 void {\bfseries Draw} (\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \&shader\+Manager, const std::\+string \&shader\+Name)
 \item 
-\Hypertarget{classModel_a2caf87a4dbe7997c941724ebd6f365ad}\label{classModel_a2caf87a4dbe7997c941724ebd6f365ad} 
-void {\bfseries Set\+Color} (const glm::\+vec3 \&color)
-\item 
 \Hypertarget{classModel_acc02d0602869b8f6a0ef27a24de06b85}\label{classModel_acc02d0602869b8f6a0ef27a24de06b85} 
 void {\bfseries Set\+Textures} (const std::\+vector$<$ \doxymbox{\hyperlink{classTexture}{Texture}} $>$ \&textures)
+\item 
+\Hypertarget{classModel_ad924151901ebd35825687b63bc9cf1cb}\label{classModel_ad924151901ebd35825687b63bc9cf1cb} 
+void {\bfseries Set\+Material} (std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classMaterial}{Material}} $>$ material, size\+\_\+t index)
 \item 
 \Hypertarget{classModel_a35f8173ab741b1047e612c198b1d6672}\label{classModel_a35f8173ab741b1047e612c198b1d6672} 
 void {\bfseries Set\+Material\+For\+All} (std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classMaterial}{Material}} $>$ material)
@@ -39,11 +39,17 @@ const std::\+string \& {\bfseries Get\+Name} () const
 \Hypertarget{classModel_a0885f9a6553274d661150f34d123de93}\label{classModel_a0885f9a6553274d661150f34d123de93} 
 const std::\+string \& {\bfseries Get\+Filepath} () const
 \item 
+\Hypertarget{classModel_ae42a48253b9277c0164a76e06518c7f2}\label{classModel_ae42a48253b9277c0164a76e06518c7f2} 
+std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{structModelNode}{Model\+Node}} $>$ {\bfseries Get\+Root\+Node} () const
+\item 
 \Hypertarget{classModel_ac6fba40b37ccdff724226b284edc43bb}\label{classModel_ac6fba40b37ccdff724226b284edc43bb} 
 void {\bfseries Set\+Name} (const std::\+string \&n)
 \item 
 \Hypertarget{classModel_ad5da73b20746102f875ccd5b2e125d0d}\label{classModel_ad5da73b20746102f875ccd5b2e125d0d} 
 void {\bfseries Set\+Filepath} (const std::\+string \&path)
+\item 
+\Hypertarget{classModel_a507ccd525b3bf21389da6c00a142e7c5}\label{classModel_a507ccd525b3bf21389da6c00a142e7c5} 
+void {\bfseries Set\+Root\+Node} (std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{structModelNode}{Model\+Node}} $>$ node)
 \end{DoxyCompactItemize}
 
 

@@ -1,0 +1,200 @@
+\doxysection{Rendering\+Module Class Reference}
+\hypertarget{classRenderingModule}{}\label{classRenderingModule}\index{RenderingModule@{RenderingModule}}
+
+
+Encapsulates all rendering functionality.  
+
+
+
+
+Inheritance diagram for Rendering\+Module:\+
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=172pt]{classRenderingModule__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Rendering\+Module:\+
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=172pt]{classRenderingModule__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{classRenderingModule_a8fc20a957d7251dac68995c8c674860f}{Rendering\+Module}} (GLFWwindow \texorpdfstring{$\ast$}{*}win, \doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \texorpdfstring{$\ast$}{*}ecs)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{classRenderingModule_ad64fb1c41d9b2e73e5dd5ec30becaf6e}{Initialize}} () override
+\begin{DoxyCompactList}\small\item\em Initialize rendering module. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{classRenderingModule_a6be45da973335999b694ab139cdc630b}{Update}} (float delta\+Time) override
+\begin{DoxyCompactList}\small\item\em Update module (called every frame). \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{classRenderingModule_a35f3986f19325062b116f3e858512e2e}{Shutdown}} () override
+\begin{DoxyCompactList}\small\item\em Shutdown module. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ IModule interface}\par
+\begin{DoxyCompactItemize}
+\item 
+const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classRenderingModule_af96f9137b8e57a3f91ce9fe213381ac9}{Get\+Name}} () const override
+\item 
+int \doxymbox{\hyperlink{classRenderingModule_a2585286877e9e3a5d2b3f1131bec855f}{Get\+Priority}} () const override
+\item 
+bool \doxymbox{\hyperlink{classRenderingModule_a721cd7df0bafc9e7489efd07f5ac2267}{Is\+Required}} () const override
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Getters}\par
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classRenderingModule_a3df339dc8576ec8e5378350bd5daf2e6}\label{classRenderingModule_a3df339dc8576ec8e5378350bd5daf2e6} 
+\doxymbox{\hyperlink{classRenderer}{Renderer}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Renderer} ()
+\item 
+\Hypertarget{classRenderingModule_a170d351e158b42f9fe9cfacbe79c0945}\label{classRenderingModule_a170d351e158b42f9fe9cfacbe79c0945} 
+\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Shader\+Manager} ()
+\item 
+\Hypertarget{classRenderingModule_a77ff9647f97568fc597667d4e0a1f7d4}\label{classRenderingModule_a77ff9647f97568fc597667d4e0a1f7d4} 
+\doxymbox{\hyperlink{classTextureManager}{Texture\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Texture\+Manager} ()
+\item 
+\Hypertarget{classRenderingModule_a32445d316af16c2319b122ccbb998372}\label{classRenderingModule_a32445d316af16c2319b122ccbb998372} 
+\doxymbox{\hyperlink{classMaterialManager}{Material\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Material\+Manager} ()
+\item 
+\Hypertarget{classRenderingModule_afee8c78ea461810ddea8126d765aa70d}\label{classRenderingModule_afee8c78ea461810ddea8126d765aa70d} 
+\doxymbox{\hyperlink{classModelManager}{Model\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Model\+Manager} ()
+\item 
+\Hypertarget{classRenderingModule_a77bea7cccb573213487c27aeb70efb58}\label{classRenderingModule_a77bea7cccb573213487c27aeb70efb58} 
+\doxymbox{\hyperlink{classSkybox}{Skybox}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Skybox} ()
+\item 
+\Hypertarget{classRenderingModule_a8b0fe550c6e6fd574bae4fee14dfd2f9}\label{classRenderingModule_a8b0fe550c6e6fd574bae4fee14dfd2f9} 
+bool {\bfseries Is\+Initialized} () const
+\item 
+\Hypertarget{classRenderingModule_afe8e1acc2fc4c0a08d3bc329a6a2319f}\label{classRenderingModule_afe8e1acc2fc4c0a08d3bc329a6a2319f} 
+bool {\bfseries Has\+Open\+GL} () const
+\end{DoxyCompactItemize}
+\end{Indent}
+
+
+\doxysubsection{Detailed Description}
+Encapsulates all rendering functionality. 
+
+Responsibilities:\+
+\begin{DoxyItemize}
+\item Initialize Open\+GL context
+\item Create and manage \doxylink{classRenderer}{Renderer}
+\item Manage resources (shaders, textures, materials, models)
+\item Create \doxylink{classSkybox}{Skybox}
+\item Setup rendering systems 
+\end{DoxyItemize}
+
+\label{doc-constructors}
+\Hypertarget{classRenderingModule_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classRenderingModule_a8fc20a957d7251dac68995c8c674860f}\index{RenderingModule@{RenderingModule}!RenderingModule@{RenderingModule}}
+\index{RenderingModule@{RenderingModule}!RenderingModule@{RenderingModule}}
+\doxysubsubsection{\texorpdfstring{RenderingModule()}{RenderingModule()}}
+{\footnotesize\ttfamily \label{classRenderingModule_a8fc20a957d7251dac68995c8c674860f} 
+Rendering\+Module::\+\+Rendering\+Module (\begin{DoxyParamCaption}\item[{GLFWwindow \texorpdfstring{$\ast$}{*}}]{win}{, }\item[{\doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \texorpdfstring{$\ast$}{*}}]{ecs}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em win} & GLFW window (for Open\+GL context) \\
+\hline
+{\em ecs} & ECS World (for render systems) \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{classRenderingModule_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classRenderingModule_af96f9137b8e57a3f91ce9fe213381ac9}\index{RenderingModule@{RenderingModule}!GetName@{GetName}}
+\index{GetName@{GetName}!RenderingModule@{RenderingModule}}
+\doxysubsubsection{\texorpdfstring{GetName()}{GetName()}}
+{\footnotesize\ttfamily \label{classRenderingModule_af96f9137b8e57a3f91ce9fe213381ac9} 
+const char \texorpdfstring{$\ast$}{*} Rendering\+Module::\+\+Get\+Name (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \doxymbox{\hyperlink{classIModule}{IModule}}.
+
+\Hypertarget{classRenderingModule_a2585286877e9e3a5d2b3f1131bec855f}\index{RenderingModule@{RenderingModule}!GetPriority@{GetPriority}}
+\index{GetPriority@{GetPriority}!RenderingModule@{RenderingModule}}
+\doxysubsubsection{\texorpdfstring{GetPriority()}{GetPriority()}}
+{\footnotesize\ttfamily \label{classRenderingModule_a2585286877e9e3a5d2b3f1131bec855f} 
+int Rendering\+Module::\+\+Get\+Priority (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \doxymbox{\hyperlink{classIModule}{IModule}}.
+
+\Hypertarget{classRenderingModule_ad64fb1c41d9b2e73e5dd5ec30becaf6e}\index{RenderingModule@{RenderingModule}!Initialize@{Initialize}}
+\index{Initialize@{Initialize}!RenderingModule@{RenderingModule}}
+\doxysubsubsection{\texorpdfstring{Initialize()}{Initialize()}}
+{\footnotesize\ttfamily \label{classRenderingModule_ad64fb1c41d9b2e73e5dd5ec30becaf6e} 
+bool Rendering\+Module::\+\+Initialize (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Initialize rendering module. 
+
+\begin{DoxyReturn}{Returns}
+true if successful, false if critical error occurred 
+\end{DoxyReturn}
+
+
+Implements \doxymbox{\hyperlink{classIModule}{IModule}}.
+
+\Hypertarget{classRenderingModule_a721cd7df0bafc9e7489efd07f5ac2267}\index{RenderingModule@{RenderingModule}!IsRequired@{IsRequired}}
+\index{IsRequired@{IsRequired}!RenderingModule@{RenderingModule}}
+\doxysubsubsection{\texorpdfstring{IsRequired()}{IsRequired()}}
+{\footnotesize\ttfamily \label{classRenderingModule_a721cd7df0bafc9e7489efd07f5ac2267} 
+bool Rendering\+Module::\+\+Is\+Required (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \doxymbox{\hyperlink{classIModule}{IModule}}.
+
+\Hypertarget{classRenderingModule_a35f3986f19325062b116f3e858512e2e}\index{RenderingModule@{RenderingModule}!Shutdown@{Shutdown}}
+\index{Shutdown@{Shutdown}!RenderingModule@{RenderingModule}}
+\doxysubsubsection{\texorpdfstring{Shutdown()}{Shutdown()}}
+{\footnotesize\ttfamily \label{classRenderingModule_a35f3986f19325062b116f3e858512e2e} 
+void Rendering\+Module::\+\+Shutdown (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Shutdown module. 
+
+
+
+Implements \doxymbox{\hyperlink{classIModule}{IModule}}.
+
+\Hypertarget{classRenderingModule_a6be45da973335999b694ab139cdc630b}\index{RenderingModule@{RenderingModule}!Update@{Update}}
+\index{Update@{Update}!RenderingModule@{RenderingModule}}
+\doxysubsubsection{\texorpdfstring{Update()}{Update()}}
+{\footnotesize\ttfamily \label{classRenderingModule_a6be45da973335999b694ab139cdc630b} 
+void Rendering\+Module::\+\+Update (\begin{DoxyParamCaption}\item[{float}]{delta\+Time}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Update module (called every frame). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em delta\+Time} & \doxylink{classTime}{Time} since last frame \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \doxymbox{\hyperlink{classIModule}{IModule}}.
+
+
+
+The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{RenderingModule_8cppm}{Rendering\+Module.\+cppm}}\end{DoxyCompactItemize}

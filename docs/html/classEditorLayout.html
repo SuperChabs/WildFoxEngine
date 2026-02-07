@@ -94,24 +94,34 @@ $(function(){initNavTree('classEditorLayout.html','','classEditorLayout-members'
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a98d43b65d5cb35d6c5ca6d70ea521391" id="r_a98d43b65d5cb35d6c5ca6d70ea521391"><td class="memItemLeft"><a id="a98d43b65d5cb35d6c5ca6d70ea521391" name="a98d43b65d5cb35d6c5ca6d70ea521391"></a>
-void&#160;</td><td class="memItemRight"><b>RenderEditor</b> (<a class="el" href="classECSWorld.html">ECSWorld</a> *ecs, <a class="el" href="classCamera.html">Camera</a> *camera, <a class="el" href="classRenderer.html">Renderer</a> *renderer, <a class="el" href="classShaderManager.html">ShaderManager</a> *shaderManager, <a class="el" href="classMaterialManager.html">MaterialManager</a> *materialManager)</td></tr>
-<tr class="memitem:a22e449762e1ce1260e9626268fac5f19" id="r_a22e449762e1ce1260e9626268fac5f19"><td class="memItemLeft"><a id="a22e449762e1ce1260e9626268fac5f19" name="a22e449762e1ce1260e9626268fac5f19"></a>
-ImVec2&#160;</td><td class="memItemRight"><b>GetViewportSize</b> () const</td></tr>
-<tr class="memitem:a54be62c18c92605eafea70d96dc3fc0f" id="r_a54be62c18c92605eafea70d96dc3fc0f"><td class="memItemLeft"><a id="a54be62c18c92605eafea70d96dc3fc0f" name="a54be62c18c92605eafea70d96dc3fc0f"></a>
-ImVec2&#160;</td><td class="memItemRight"><b>GetViewportPos</b> () const</td></tr>
-<tr class="memitem:aea02f6eaba03975498f90dba9af34e7a" id="r_aea02f6eaba03975498f90dba9af34e7a"><td class="memItemLeft"><a id="aea02f6eaba03975498f90dba9af34e7a" name="aea02f6eaba03975498f90dba9af34e7a"></a>
-bool&#160;</td><td class="memItemRight"><b>IsViewportHovered</b> () const</td></tr>
-<tr class="memitem:af35a285877bd412f3182f4cc9251641b" id="r_af35a285877bd412f3182f4cc9251641b"><td class="memItemLeft"><a id="af35a285877bd412f3182f4cc9251641b" name="af35a285877bd412f3182f4cc9251641b"></a>
-bool&#160;</td><td class="memItemRight"><b>IsViewportFocused</b> () const</td></tr>
+<tr class="memitem:aafecf7ce0823cf7d4a9914f700170dce" id="r_aafecf7ce0823cf7d4a9914f700170dce"><td class="memItemLeft"><a id="aafecf7ce0823cf7d4a9914f700170dce" name="aafecf7ce0823cf7d4a9914f700170dce"></a>
+void&#160;</td><td class="memItemRight"><b>RenderEditor</b> (<a class="el" href="classECSWorld.html">ECSWorld</a> *ecs, entt::entity cameraEntity, <a class="el" href="classRenderer.html">Renderer</a> *renderer, <a class="el" href="classShaderManager.html">ShaderManager</a> *shaderManager, <a class="el" href="classMaterialManager.html">MaterialManager</a> *materialManager, bool isPlayMode)</td></tr>
+<tr class="memitem:a7a40364dbac68ca819c648dc3f37a171" id="r_a7a40364dbac68ca819c648dc3f37a171"><td class="memItemLeft"><a id="a7a40364dbac68ca819c648dc3f37a171" name="a7a40364dbac68ca819c648dc3f37a171"></a>
+ImVec2&#160;</td><td class="memItemRight"><b>GetSceneViewportSize</b> () const</td></tr>
+<tr class="memitem:a74a77512c88c4803f0b37042a77eb3af" id="r_a74a77512c88c4803f0b37042a77eb3af"><td class="memItemLeft"><a id="a74a77512c88c4803f0b37042a77eb3af" name="a74a77512c88c4803f0b37042a77eb3af"></a>
+ImVec2&#160;</td><td class="memItemRight"><b>GetSceneViewportPos</b> () const</td></tr>
+<tr class="memitem:ab6f53cf28a137963999a0f51034ded88" id="r_ab6f53cf28a137963999a0f51034ded88"><td class="memItemLeft"><a id="ab6f53cf28a137963999a0f51034ded88" name="ab6f53cf28a137963999a0f51034ded88"></a>
+bool&#160;</td><td class="memItemRight"><b>IsSceneViewportHovered</b> () const</td></tr>
+<tr class="memitem:a10947d59aeecfc6211d4f1a743b19497" id="r_a10947d59aeecfc6211d4f1a743b19497"><td class="memItemLeft"><a id="a10947d59aeecfc6211d4f1a743b19497" name="a10947d59aeecfc6211d4f1a743b19497"></a>
+bool&#160;</td><td class="memItemRight"><b>IsSceneViewportFocused</b> () const</td></tr>
+<tr class="memitem:a8bd1d2e875527ebfc23a5ff6647b8517" id="r_a8bd1d2e875527ebfc23a5ff6647b8517"><td class="memItemLeft"><a id="a8bd1d2e875527ebfc23a5ff6647b8517" name="a8bd1d2e875527ebfc23a5ff6647b8517"></a>
+ImVec2&#160;</td><td class="memItemRight"><b>GetGameViewportSize</b> () const</td></tr>
+<tr class="memitem:a4e867dc2f4d5a22f5152b127329916e4" id="r_a4e867dc2f4d5a22f5152b127329916e4"><td class="memItemLeft"><a id="a4e867dc2f4d5a22f5152b127329916e4" name="a4e867dc2f4d5a22f5152b127329916e4"></a>
+ImVec2&#160;</td><td class="memItemRight"><b>GetGameViewportPos</b> () const</td></tr>
+<tr class="memitem:a609739b9e2a7c4202d78775941e15ac7" id="r_a609739b9e2a7c4202d78775941e15ac7"><td class="memItemLeft"><a id="a609739b9e2a7c4202d78775941e15ac7" name="a609739b9e2a7c4202d78775941e15ac7"></a>
+bool&#160;</td><td class="memItemRight"><b>IsGameViewportHovered</b> () const</td></tr>
+<tr class="memitem:a2d18445df85cb3911d5e0d71b3f456c6" id="r_a2d18445df85cb3911d5e0d71b3f456c6"><td class="memItemLeft"><a id="a2d18445df85cb3911d5e0d71b3f456c6" name="a2d18445df85cb3911d5e0d71b3f456c6"></a>
+bool&#160;</td><td class="memItemRight"><b>IsGameViewportFocused</b> () const</td></tr>
 <tr class="memitem:a2f18d4e3bc7d0d65926700fe1b0a3abf" id="r_a2f18d4e3bc7d0d65926700fe1b0a3abf"><td class="memItemLeft"><a id="a2f18d4e3bc7d0d65926700fe1b0a3abf" name="a2f18d4e3bc7d0d65926700fe1b0a3abf"></a>
 entt::entity&#160;</td><td class="memItemRight"><b>GetSelectedEntity</b> () const</td></tr>
 <tr class="memitem:acc0b7c964419c71440464ad0e3592ce8" id="r_acc0b7c964419c71440464ad0e3592ce8"><td class="memItemLeft"><a id="acc0b7c964419c71440464ad0e3592ce8" name="acc0b7c964419c71440464ad0e3592ce8"></a>
 <a class="el" href="structShaderObj.html">ShaderObj</a> *&#160;</td><td class="memItemRight"><b>GetSelectedShader</b> () const</td></tr>
 <tr class="memitem:a28e36fd39430b43c4dec15ce563c2ae2" id="r_a28e36fd39430b43c4dec15ce563c2ae2"><td class="memItemLeft"><a id="a28e36fd39430b43c4dec15ce563c2ae2" name="a28e36fd39430b43c4dec15ce563c2ae2"></a>
 std::string&#160;</td><td class="memItemRight"><b>GetSelectedMaterial</b> () const</td></tr>
-<tr class="memitem:a3ef1a4909625f7fcb6b14d66d6580010" id="r_a3ef1a4909625f7fcb6b14d66d6580010"><td class="memItemLeft"><a id="a3ef1a4909625f7fcb6b14d66d6580010" name="a3ef1a4909625f7fcb6b14d66d6580010"></a>
-<a class="el" href="classFramebuffer.html">Framebuffer</a> *&#160;</td><td class="memItemRight"><b>GetFramebuffer</b> () const</td></tr>
+<tr class="memitem:a0cd4582e74947dacfc29aa2b62a9dbeb" id="r_a0cd4582e74947dacfc29aa2b62a9dbeb"><td class="memItemLeft"><a id="a0cd4582e74947dacfc29aa2b62a9dbeb" name="a0cd4582e74947dacfc29aa2b62a9dbeb"></a>
+<a class="el" href="classFramebuffer.html">Framebuffer</a> *&#160;</td><td class="memItemRight"><b>GetSceneFramebuffer</b> () const</td></tr>
+<tr class="memitem:aa0b90b3233857409669a7528bb1796d6" id="r_aa0b90b3233857409669a7528bb1796d6"><td class="memItemLeft"><a id="aa0b90b3233857409669a7528bb1796d6" name="aa0b90b3233857409669a7528bb1796d6"></a>
+<a class="el" href="classFramebuffer.html">Framebuffer</a> *&#160;</td><td class="memItemRight"><b>GetGameFramebuffer</b> () const</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li><b>EditorLayout.cppm</b></li>

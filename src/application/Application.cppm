@@ -14,21 +14,21 @@ export module WFE.Application.Application;
 import WFE.Core.Window; 
 import WFE.Core.Input;
 import WFE.Core.Time;
-//import WFE.Core.Camera;
+
 import WFE.Core.Logger;
 import WFE.Core.Logging.ConsoleLogger;
 import WFE.Core.Logging.FileLogger;
+
 import WFE.Core.CommandManager;
 import WFE.ECS.ECSWorld;
 import WFE.ECS.Systems;
 import WFE.ECS.Components;
-import WFE.Rendering.Renderer; 
 import WFE.Resource.Texture.TextureManager;
 import WFE.Resource.Material.MaterialManager;
 import WFE.Resource.Shader.ShaderManager;
 import WFE.Resource.Model.ModelManager;
-
 import WFE.UI.ImGuiManager;
+import WFE.Core.ModuleManager;
 
 /// @file Application.cppm
 /// @brief Main application class for the WildFoxEngine
@@ -51,61 +51,19 @@ private:
     std::unique_ptr<Window> window;
     std::unique_ptr<Input> input;
     std::unique_ptr<Time> time;
-    //std::unique_ptr<Camera> camera;
-    std::unique_ptr<Renderer> renderer;
-    std::unique_ptr<TextureManager> textureManager;
+    
     std::unique_ptr<ImGuiManager> imGuiManager;
-    std::unique_ptr<MaterialManager> materialManager;
     std::unique_ptr<ECSWorld> ecsWorld;
-    std::unique_ptr<ShaderManager> shaderManager;
-    std::unique_ptr<ModelManager> modelManager;
     std::unique_ptr<InputControllerSystem> inputControllerSystem;
+
+    std::unique_ptr<ModuleManager> moduleManager;
+
     entt::entity mainCameraEntity = entt::null;
     
     ConsoleLogger console;
     FileLogger file;
 
     bool isRunning; ///< Whether the application is currently running
-    bool showUI;
-    
-    void ProcessInput()
-    {
-        if (input->IsKeyPressed(Key::KEY_ESCAPE)) 
-            Stop();
-        
-        if (input->IsKeyJustPressed(Key::KEY_F1)) 
-            showUI = !showUI;
-
-        if (input->IsKeyJustPressed(Key::KEY_F5))
-        {
-            shaderManager->ReloadAll();
-            Logger::Log(LogLevel::INFO, "Reloaded all shaders");
-        }
-
-        // Ctrl+S - Quick Save
-        if (input->IsKeyPressed(Key::KEY_LEFT_CONTROL) && 
-            input->IsKeyJustPressed(Key::KEY_S))
-        {
-            if (CommandManager::HasCommand("onQuickSave"))
-                CommandManager::ExecuteCommand("onQuickSave", {});
-        }
-        
-        // Ctrl+L - Quick Load
-        if (input->IsKeyPressed(Key::KEY_LEFT_CONTROL) && 
-            input->IsKeyJustPressed(Key::KEY_L))
-        {
-            if (CommandManager::HasCommand("onQuickLoad"))
-                CommandManager::ExecuteCommand("onQuickLoad", {});
-        }
-        
-        // Ctrl+N - New Scene
-        if (input->IsKeyPressed(Key::KEY_LEFT_CONTROL) && 
-            input->IsKeyJustPressed(Key::KEY_N))
-        {
-            if (CommandManager::HasCommand("onNewScene"))
-                CommandManager::ExecuteCommand("onNewScene", {});
-        }
-    }
 
     void Update()
     {
@@ -183,6 +141,7 @@ private:
 
 protected:
     bool cameraControlEnabled;
+    bool showUI;
 
     /**
      * @brief Constructor
@@ -191,9 +150,9 @@ protected:
      * @param height Window height in pixels
      */
     Application(int width, int height, const std::string& title)
-        : window(nullptr), input(nullptr), time(nullptr), //camera(nullptr),
-            renderer(nullptr), textureManager(nullptr), isRunning(false), 
-            showUI(true), cameraControlEnabled(false)
+        : window(nullptr), input(nullptr), time(nullptr), 
+          isRunning(false), showUI(true), 
+          cameraControlEnabled(false)
     {
         window = std::make_unique<Window>(width, height, title);
 
@@ -208,12 +167,6 @@ protected:
     virtual void RenderUI() = 0;
 
     virtual bool ShouldAllowCameraControl() const { return true; }
-
-    void SetRenderer(std::unique_ptr<Renderer> r)
-    {
-        renderer = std::move(r);
-        Logger::Log(LogLevel::INFO, "Renderer set in Application");
-    }
 
     void SetCameraControlMode(bool enabled)
     {
@@ -269,21 +222,15 @@ public:
         
         input = std::make_unique<Input>(window->GetGLFWWindow());
         time = std::make_unique<Time>();
-        //camera = std::make_unique<Camera>(glm::vec3(0.0f, 0.0f, 0.0f));
-        renderer = nullptr; // std::make_unique<Renderer>(shaderManager.get(), ecsWorld.get());
-        textureManager = std::make_unique<TextureManager>();
+
         imGuiManager = std::make_unique<ImGuiManager>();
-        materialManager = std::make_unique<MaterialManager>(textureManager.get());
         ecsWorld = std::make_unique<ECSWorld>();
-        shaderManager = std::make_unique<ShaderManager>();
-        modelManager = std::make_unique<ModelManager>();
-        modelManager->SetMaterialManager(materialManager.get());
         inputControllerSystem = std::make_unique<InputControllerSystem>();
 
         mainCameraEntity = ecsWorld->CreateCamera("Main Camera", true);
+
+        moduleManager = std::make_unique<ModuleManager>();
         
-        Logger::Log(LogLevel::DEBUG, "ShaderManager address: " + 
-            std::to_string(reinterpret_cast<uintptr_t>(shaderManager.get())));
         Logger::Log(LogLevel::DEBUG, "ECSWorld address: " + 
             std::to_string(reinterpret_cast<uintptr_t>(ecsWorld.get())));
 
@@ -317,8 +264,7 @@ public:
         while (isRunning && !window->ShouldClose())
         {
             time->Update();
-            
-            ProcessInput();
+        
             Update();
             Render();
             
@@ -359,14 +305,11 @@ public:
     Window* GetWindow() { return window.get(); }
     Input* GetInput() { return input.get(); }
     Time* GetTime() const { return time.get(); }
+
     entt::entity GetMainCameraEntity() const { return mainCameraEntity; }
-    // Camera* GetCamera() const { return camera.get(); }
-    Renderer* GetRenderer() const { return renderer.get(); }
-    TextureManager* GetTextureManager() const { return textureManager.get(); }
     ImGuiManager* GetImGuiManager() const { return imGuiManager.get(); }
-    MaterialManager* GetMaterialManager() const { return materialManager.get(); }
     ECSWorld* GetECSWorld() const { return ecsWorld.get(); }
-    ShaderManager* GetShaderManager() const { return shaderManager.get(); }
-    ModelManager* GetModelManager() const { return modelManager.get(); }
+
+    ModuleManager* GetModuleManager() { return moduleManager.get(); }
     /// @}
 };

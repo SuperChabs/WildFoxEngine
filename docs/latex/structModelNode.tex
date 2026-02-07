@@ -1,0 +1,53 @@
+\doxysection{Model\+Node Struct Reference}
+\hypertarget{structModelNode}{}\label{structModelNode}\index{ModelNode@{ModelNode}}
+
+
+Collaboration diagram for Model\+Node:\+
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=197pt]{structModelNode__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structModelNode_a0f139c575a65c3405a16dad49eea8d21}\label{structModelNode_a0f139c575a65c3405a16dad49eea8d21} 
+{\bfseries Model\+Node} (const std::\+string \&n, const glm::\+mat4 \&transform=glm::\+mat4(1.\+0f))
+\item 
+\Hypertarget{structModelNode_abf9f907705283fe34b0a4a487428b700}\label{structModelNode_abf9f907705283fe34b0a4a487428b700} 
+void {\bfseries Add\+Child} (std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{structModelNode}{Model\+Node}} $>$ child)
+\item 
+\Hypertarget{structModelNode_a992ad3bc67854ceb65e4c76dffcb3d03}\label{structModelNode_a992ad3bc67854ceb65e4c76dffcb3d03} 
+glm::\+mat4 {\bfseries Get\+Global\+Transform} () const
+\item 
+\Hypertarget{structModelNode_af9acf48a6f5ace54ce881feaed22e5b3}\label{structModelNode_af9acf48a6f5ace54ce881feaed22e5b3} 
+bool {\bfseries Has\+Children} () const
+\item 
+\Hypertarget{structModelNode_a952e5ef6aadaa8dd5d78b13ffa6efc8c}\label{structModelNode_a952e5ef6aadaa8dd5d78b13ffa6efc8c} 
+bool {\bfseries Has\+Meshes} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structModelNode_ac6ad675cf0ef5237240b3491af8f6ce0}\label{structModelNode_ac6ad675cf0ef5237240b3491af8f6ce0} 
+std::\+string {\bfseries name}
+\item 
+\Hypertarget{structModelNode_a424fe4be3e7f488664fce10273f7a40f}\label{structModelNode_a424fe4be3e7f488664fce10273f7a40f} 
+glm::\+mat4 {\bfseries local\+Transform}
+\item 
+\Hypertarget{structModelNode_a9dbb50fdc2b4bee50a32b86bd860a229}\label{structModelNode_a9dbb50fdc2b4bee50a32b86bd860a229} 
+std::\+vector$<$ int $>$ {\bfseries mesh\+Indices}
+\item 
+\Hypertarget{structModelNode_a8f0077607cb4ba6ddc51639903df286c}\label{structModelNode_a8f0077607cb4ba6ddc51639903df286c} 
+std::\+vector$<$ std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{structModelNode}{Model\+Node}} $>$ $>$ {\bfseries children}
+\item 
+\Hypertarget{structModelNode_ace022719f20265faa42c5fbacb671c62}\label{structModelNode_ace022719f20265faa42c5fbacb671c62} 
+\doxymbox{\hyperlink{structModelNode}{Model\+Node}} \texorpdfstring{$\ast$}{*} {\bfseries parent} = nullptr
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+Model\+Node.\+cppm\end{DoxyCompactItemize}

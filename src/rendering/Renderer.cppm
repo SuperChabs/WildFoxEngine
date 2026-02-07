@@ -11,10 +11,12 @@ module;
 
 export module WFE.Rendering.Renderer;
 
+import WFE.Rendering.IRenderer;
 import WFE.Rendering.Core.GLContext;
 import WFE.Rendering.Core.Framebuffer;
 import WFE.Rendering.Pipeline.RenderPipeline;
 import WFE.Rendering.Pipeline.PipelineBuilder;
+import WFE.Rendering.RenderingTypes;
 import WFE.Resource.Shader.ShaderManager;
 import WFE.ECS.ECSWorld;
 import WFE.ECS.Systems;
@@ -22,39 +24,8 @@ import WFE.Core.Camera;
 import WFE.Core.Logger;
 import WFE.Core.CommandManager;
 
-export struct RendererConfig
+export class Renderer : public IRenderer
 {
-    bool enableDepthTest = true;
-    bool enableCullFace = true;
-    bool enableMultisampling = true;
-    bool enableWireframe = false;
-    glm::vec4 clearColor = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
-    
-    int shadowMapSize = 2048;
-    bool enableShadows = false;
-};
-
-export struct RenderStats
-{
-    int drawCalls = 0;
-    int stateChanges = 0;
-    int vertexCount = 0;
-    int triangleCount = 0;
-    float frameTime = 0.0f;
-    float fps = 0.0f;
-    
-    void Reset()
-    {
-        drawCalls = 0;
-        stateChanges = 0;
-        vertexCount = 0;
-        triangleCount = 0;
-    }
-};
-
-export class Renderer
-{
-private:
     std::unique_ptr<GLContext> context;
     std::unique_ptr<RenderPipeline> pipeline;
     
@@ -99,12 +70,12 @@ public:
         Logger::Log(LogLevel::DEBUG, "  - world: " + std::string(world ? "OK" : "NULL"));
     }
     
-    ~Renderer()
+    ~Renderer() override
     {
         Shutdown();
     }
     
-    bool Initialize(GLuint skyboxVAO, GLuint cubemapTexture)
+    bool Initialize(GLuint skyboxVAO, GLuint cubemapTexture) override
     {
         if (initialized)
         {
@@ -146,7 +117,7 @@ public:
         return true;
     }
     
-    void BeginFrame()
+    void BeginFrame() override
     {
         if (!initialized) return;
         
@@ -163,14 +134,14 @@ public:
         context->Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
     
-    void Render(ECSWorld& ecs, entt::entity cameraEntity, int width, int height)
+    void Render(ECSWorld& ecs, entt::entity cameraEntity, int width, int height) override
     {
         if (!initialized || !pipeline) return;
         
         pipeline->Execute(ecs, cameraEntity, width, height);
     }
     
-    void EndFrame()
+    void EndFrame() override
     {
         if (!initialized) return;
         
@@ -206,7 +177,7 @@ public:
         }
     }
     
-    void Shutdown()
+    void Shutdown() override
     {
         if (!initialized) return;
         
@@ -233,12 +204,12 @@ public:
     //     grid->Render(*shaderManager, camera, projection);
     // }
 
-    void SetClearColor(const glm::vec4& color)
+    void SetClearColor(const glm::vec4& color) override
     {
         config.clearColor = color;
     }
     
-    void SetWireframe(bool enable)
+    void SetWireframe(bool enable) override
     {
         config.enableWireframe = enable;
         if (enable)
@@ -247,7 +218,7 @@ public:
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
     
-    void SetEnableShadows(bool enable)
+    void SetEnableShadows(bool enable) override
     {
         config.enableShadows = enable;
         if (pipeline)
@@ -259,21 +230,21 @@ public:
     }
 
     // Getters
-    GLContext* GetContext() { return context.get(); }
-    RenderPipeline* GetPipeline() { return pipeline.get(); }
-    const RenderStats& GetStats() const { return stats; }
-    RendererConfig& GetConfig() { return config; }
+    GLContext* GetContext() override { return context.get(); }
+    RenderPipeline* GetPipeline() override { return pipeline.get(); }
+    const RenderStats& GetStats() const override { return stats; }
+    RendererConfig& GetConfig() override { return config; }
     
-    void SetIconRenderSystem(std::unique_ptr<IconRenderSystem> sys)
+    void SetIconRenderSystem(std::unique_ptr<IconRenderSystem> sys) override
     {
         iconRenderSystem = std::move(sys);
     }
     
-    ECSWorld* GetWorld() { return world; }
-    ShaderManager* GetShaderManager() { return shaderManager; }
+    ECSWorld* GetWorld() override { return world; }
+    ShaderManager* GetShaderManager() override { return shaderManager; }
     // Grid* GetGrid() { return grid.get(); }
     
-    bool IsInitialized() const { return initialized; }
+    bool IsInitialized() const override { return initialized; }
 
 private:
     void ApplySettings()

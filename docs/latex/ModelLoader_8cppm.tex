@@ -7,16 +7,25 @@ Models mesh loader.
 
 {\ttfamily \+\#include $<$vector$>$}\newline
 {\ttfamily \+\#include $<$string$>$}\newline
+{\ttfamily \+\#include $<$memory$>$}\newline
+{\ttfamily \+\#include $<$unordered\+\_\+map$>$}\newline
 {\ttfamily \+\#include $<$glad/\+glad.\+h$>$}\newline
 {\ttfamily \+\#include $<$glm/\+glm.\+hpp$>$}\newline
 {\ttfamily \+\#include $<$stb\+\_\+image.\+h$>$}\newline
+{\ttfamily \+\#include $<$entt/\+entt.\+hpp$>$}\newline
 {\ttfamily \+\#include $<$assimp/\+\+Importer.\+hpp$>$}\newline
 {\ttfamily \+\#include $<$assimp/\+scene.\+h$>$}\newline
 {\ttfamily \+\#include $<$assimp/\+postprocess.\+h$>$}\newline
 {\ttfamily \+\#include $<$assimp/\+mesh.\+h$>$}\newline
+{\ttfamily \+\#include $<$assimp/\+matrix4x4.\+h$>$}\newline
+{\ttfamily import WFE.\+Resource.\+Material.\+Material;}\newline
+{\ttfamily import WFE.\+Resource.\+Material.\+Material\+Manager;}\newline
 {\ttfamily import WFE.\+Core.\+Logger;}\newline
 {\ttfamily import WFE.\+Rendering.\+Mesh\+Data;}\newline
+{\ttfamily import WFE.\+ECS.\+Components;}\newline
+{\ttfamily import WFE.\+ECS.\+ECSWorld;}\newline
 {\ttfamily import WFE.\+Scene.\+Mesh;}\newline
+{\ttfamily import WFE.\+Resource.\+Model.\+Model\+Node;}\newline
 {\ttfamily import WFE.\+Resource.\+Model.\+Model;}\newline
 Include dependency graph for Model\+Loader.\+cppm:\+
 \nopagebreak
@@ -29,11 +38,11 @@ Include dependency graph for Model\+Loader.\+cppm:\+
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{ModelLoader_8cppm_ab78526cca6ca1ac0a6fac37c05561c14}\label{ModelLoader_8cppm_ab78526cca6ca1ac0a6fac37c05561c14} 
-void {\bfseries Process\+Node} (ai\+Node \texorpdfstring{$\ast$}{*}node, const ai\+Scene \texorpdfstring{$\ast$}{*}scene, \doxymbox{\hyperlink{classModel}{Model}} \texorpdfstring{$\ast$}{*}model, const std::\+string \&directory)
+\Hypertarget{ModelLoader_8cppm_a44ed13fe63810de7a3a528185abd783b}\label{ModelLoader_8cppm_a44ed13fe63810de7a3a528185abd783b} 
+std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{structModelNode}{Model\+Node}} $>$ {\bfseries Process\+Node} (ai\+Node \texorpdfstring{$\ast$}{*}node, const ai\+Scene \texorpdfstring{$\ast$}{*}scene, \doxymbox{\hyperlink{classModel}{Model}} \texorpdfstring{$\ast$}{*}model, const std::\+string \&directory, \doxymbox{\hyperlink{classMaterialManager}{Material\+Manager}} \&material\+Manager, \doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \texorpdfstring{$\ast$}{*}world=nullptr, entt::\+entity parent\+Entity=entt::\+null)
 \item 
-\Hypertarget{ModelLoader_8cppm_a5dfb59d1ff7bac6303f92530182b13e4}\label{ModelLoader_8cppm_a5dfb59d1ff7bac6303f92530182b13e4} 
-\doxymbox{\hyperlink{classMesh}{Mesh}} {\bfseries Process\+Mesh} (ai\+Mesh \texorpdfstring{$\ast$}{*}mesh, const ai\+Scene \texorpdfstring{$\ast$}{*}scene, const std::\+string \&directory)
+\Hypertarget{ModelLoader_8cppm_a4558e5083d915c3a11237996f4b0729f}\label{ModelLoader_8cppm_a4558e5083d915c3a11237996f4b0729f} 
+std::\+shared\+\_\+ptr$<$ \doxymbox{\hyperlink{classMesh}{Mesh}} $>$ {\bfseries Process\+Mesh} (ai\+Mesh \texorpdfstring{$\ast$}{*}mesh, const ai\+Scene \texorpdfstring{$\ast$}{*}scene, const std::\+string \&directory, \doxymbox{\hyperlink{classMaterialManager}{Material\+Manager}} \&material\+Manager, int mesh\+Index)
 \item 
 \Hypertarget{ModelLoader_8cppm_aa97893adcee3ccec766caf3ca43bd69e}\label{ModelLoader_8cppm_aa97893adcee3ccec766caf3ca43bd69e} 
 std::\+vector$<$ \doxymbox{\hyperlink{classTexture}{Texture}} $>$ {\bfseries Load\+Material\+Textures} (ai\+Material \texorpdfstring{$\ast$}{*}mat, ai\+Texture\+Type type, const std::\+string \&type\+Name, const std::\+string \&directory)
@@ -41,8 +50,14 @@ std::\+vector$<$ \doxymbox{\hyperlink{classTexture}{Texture}} $>$ {\bfseries Loa
 \Hypertarget{ModelLoader_8cppm_a6e150fa04bda00c2fef2e26dcafc9cd2}\label{ModelLoader_8cppm_a6e150fa04bda00c2fef2e26dcafc9cd2} 
 unsigned int {\bfseries Texture\+From\+File} (const char \texorpdfstring{$\ast$}{*}path, const std::\+string \&directory)
 \item 
-\Hypertarget{ModelLoader_8cppm_a677a48f30835598f5480e2a4e2dfa1bc}\label{ModelLoader_8cppm_a677a48f30835598f5480e2a4e2dfa1bc} 
-\doxymbox{\hyperlink{classModel}{Model}} \texorpdfstring{$\ast$}{*} {\bfseries Load\+Model\+From\+File} (const std::\+string \&path)
+\Hypertarget{ModelLoader_8cppm_a06c4a175efc1023673d78025da577d87}\label{ModelLoader_8cppm_a06c4a175efc1023673d78025da577d87} 
+void {\bfseries Decompose\+Transform} (const glm::\+mat4 \&transform, glm::\+vec3 \&position, glm::\+vec3 \&rotation, glm::\+vec3 \&scale)
+\item 
+\Hypertarget{ModelLoader_8cppm_acde4cbe62522edab82c90e1c0f0ee373}\label{ModelLoader_8cppm_acde4cbe62522edab82c90e1c0f0ee373} 
+glm::\+mat4 {\bfseries Convert\+Assimp\+Matrix} (const ai\+Matrix4x4 from)
+\item 
+\Hypertarget{ModelLoader_8cppm_aa1798fbe2b5ab9e7bd2dcef01f5dfae9}\label{ModelLoader_8cppm_aa1798fbe2b5ab9e7bd2dcef01f5dfae9} 
+\doxymbox{\hyperlink{classModel}{Model}} \texorpdfstring{$\ast$}{*} {\bfseries Load\+Model\+From\+File} (const std::\+string \&path, \doxymbox{\hyperlink{classMaterialManager}{Material\+Manager}} \&material\+Manager, \doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \texorpdfstring{$\ast$}{*}world=nullptr)
 \begin{DoxyCompactList}\small\item\em \doxylink{classModel}{Model} loader function. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 

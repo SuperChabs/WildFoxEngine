@@ -1,59 +1,228 @@
 \doxysection{Renderer Class Reference}
 \hypertarget{classRenderer}{}\label{classRenderer}\index{Renderer@{Renderer}}
+
+
+Inheritance diagram for Renderer:\+
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=139pt]{classRenderer__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Renderer:\+
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=139pt]{classRenderer__coll__graph}
+\end{center}
+\end{figure}
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classRenderer_a6b53ba455236c4e32d42af13746505e0}\label{classRenderer_a6b53ba455236c4e32d42af13746505e0} 
 {\bfseries Renderer} (\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}sm, \doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \texorpdfstring{$\ast$}{*}w)
 \item 
-\Hypertarget{classRenderer_a1b18243f51af6b4183d211b8ecc744dc}\label{classRenderer_a1b18243f51af6b4183d211b8ecc744dc} 
-bool {\bfseries Initialize} (GLuint skybox\+VAO, GLuint cubemap\+Texture)
+bool \doxymbox{\hyperlink{classRenderer_a466774a9f8489c9354857087baa269e9}{Initialize}} (GLuint skybox\+VAO, GLuint cubemap\+Texture) override
 \item 
-\Hypertarget{classRenderer_a7930de5ebe07c0e719c252317854a308}\label{classRenderer_a7930de5ebe07c0e719c252317854a308} 
-void {\bfseries Begin\+Frame} ()
+void \doxymbox{\hyperlink{classRenderer_acafbd2688dd720dd959e8f2918359451}{Begin\+Frame}} () override
 \item 
-\Hypertarget{classRenderer_ab0e4dbfcb656abdb58cb71d25dfef328}\label{classRenderer_ab0e4dbfcb656abdb58cb71d25dfef328} 
-void {\bfseries Render} (\doxymbox{\hyperlink{classCamera}{Camera}} \&camera, int width, int height)
+void \doxymbox{\hyperlink{classRenderer_af31516e0f22697126c38c5a122f6fa14}{Render}} (\doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \&ecs, entt::\+entity camera\+Entity, int width, int height) override
 \item 
-\Hypertarget{classRenderer_a1fce0dbe24ac4c04457684d66a506c53}\label{classRenderer_a1fce0dbe24ac4c04457684d66a506c53} 
-void {\bfseries End\+Frame} ()
+void \doxymbox{\hyperlink{classRenderer_a09720da33852155b05a84bf5652698cb}{End\+Frame}} () override
 \item 
-\Hypertarget{classRenderer_a1effb02d0aa8ba8fea3ddd236efb7363}\label{classRenderer_a1effb02d0aa8ba8fea3ddd236efb7363} 
-void {\bfseries Shutdown} ()
+void \doxymbox{\hyperlink{classRenderer_ae7ce211da12f8338dbc868a6438c793f}{Shutdown}} () override
 \item 
-\Hypertarget{classRenderer_aaf32b2996b3cbeb82e7fda3b3b84b775}\label{classRenderer_aaf32b2996b3cbeb82e7fda3b3b84b775} 
-void {\bfseries Set\+Clear\+Color} (const glm::\+vec4 \&color)
+void \doxymbox{\hyperlink{classRenderer_a72b8dc2f733bba978d75294c732415d4}{Set\+Clear\+Color}} (const glm::\+vec4 \&color) override
 \item 
-\Hypertarget{classRenderer_af06a9ff330c16187b5fc8f0ec2710d3e}\label{classRenderer_af06a9ff330c16187b5fc8f0ec2710d3e} 
-void {\bfseries Set\+Wireframe} (bool enable)
+void \doxymbox{\hyperlink{classRenderer_ad645759881ee64e59bfdd5e31982f354}{Set\+Wireframe}} (bool enable) override
 \item 
-\Hypertarget{classRenderer_a1bf257627915e52103f58f2cd3584c62}\label{classRenderer_a1bf257627915e52103f58f2cd3584c62} 
-void {\bfseries Set\+Enable\+Shadows} (bool enable)
+void \doxymbox{\hyperlink{classRenderer_af887b3d2feae3d3d050d6cb5a48eb644}{Set\+Enable\+Shadows}} (bool enable) override
 \item 
-\Hypertarget{classRenderer_a58568b14ed97af1b42941cdc4e694121}\label{classRenderer_a58568b14ed97af1b42941cdc4e694121} 
-\doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Context} ()
+\doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classRenderer_abfbc2a3991bdaa368fa62d9ca5f3fd32}{Get\+Context}} () override
 \item 
-\Hypertarget{classRenderer_a66dddd598bc315ab272111c5c2634dd0}\label{classRenderer_a66dddd598bc315ab272111c5c2634dd0} 
-\doxymbox{\hyperlink{classRenderPipeline}{Render\+Pipeline}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Pipeline} ()
+\doxymbox{\hyperlink{classRenderPipeline}{Render\+Pipeline}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classRenderer_ae24bd567c53023100366cff4ff482a16}{Get\+Pipeline}} () override
 \item 
-\Hypertarget{classRenderer_a3d17e00171ed778e12b81313c2e10c27}\label{classRenderer_a3d17e00171ed778e12b81313c2e10c27} 
-const \doxymbox{\hyperlink{structRenderStats}{Render\+Stats}} \& {\bfseries Get\+Stats} () const
+const \doxymbox{\hyperlink{structRenderStats}{Render\+Stats}} \& \doxymbox{\hyperlink{classRenderer_a31c446b794e03c067195777f06894d6a}{Get\+Stats}} () const override
 \item 
-\Hypertarget{classRenderer_ac816b90cd7f90a4d4d0f8b83d5f3d176}\label{classRenderer_ac816b90cd7f90a4d4d0f8b83d5f3d176} 
-\doxymbox{\hyperlink{structRendererConfig}{Renderer\+Config}} \& {\bfseries Get\+Config} ()
+\doxymbox{\hyperlink{structRendererConfig}{Renderer\+Config}} \& \doxymbox{\hyperlink{classRenderer_a492da42b99148749828895f1ff2168ad}{Get\+Config}} () override
 \item 
-\Hypertarget{classRenderer_aa2acf9a121f200a4c41a83869879d4e9}\label{classRenderer_aa2acf9a121f200a4c41a83869879d4e9} 
-void {\bfseries Set\+Icon\+Render\+System} (std::\+unique\+\_\+ptr$<$ \doxymbox{\hyperlink{classIconRenderSystem}{Icon\+Render\+System}} $>$ sys)
+void \doxymbox{\hyperlink{classRenderer_a12019b818e663fd7f2c256ccafa55530}{Set\+Icon\+Render\+System}} (std::\+unique\+\_\+ptr$<$ \doxymbox{\hyperlink{classIconRenderSystem}{Icon\+Render\+System}} $>$ sys) override
 \item 
-\Hypertarget{classRenderer_a99cbc7019d9c72c38e4c15a3f0bdaddf}\label{classRenderer_a99cbc7019d9c72c38e4c15a3f0bdaddf} 
-\doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+World} ()
+\doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classRenderer_a5e008c3d0dbe24af979ef66faeab098f}{Get\+World}} () override
 \item 
-\Hypertarget{classRenderer_ae735b45c2dbeb1850edeea2a1c3816b1}\label{classRenderer_ae735b45c2dbeb1850edeea2a1c3816b1} 
-\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Shader\+Manager} ()
+\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{classRenderer_a5e3c74fa03fe02355f03002cd16f0167}{Get\+Shader\+Manager}} () override
 \item 
-\Hypertarget{classRenderer_a7d44150602481e4cdab61318744fa327}\label{classRenderer_a7d44150602481e4cdab61318744fa327} 
-bool {\bfseries Is\+Initialized} () const
+bool \doxymbox{\hyperlink{classRenderer_a9cafd6bb984744eb069c00a85c058f97}{Is\+Initialized}} () const override
 \end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classRenderer_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classRenderer_acafbd2688dd720dd959e8f2918359451}\index{Renderer@{Renderer}!BeginFrame@{BeginFrame}}
+\index{BeginFrame@{BeginFrame}!Renderer@{Renderer}}
+\doxysubsubsection{\texorpdfstring{BeginFrame()}{BeginFrame()}}
+{\footnotesize\ttfamily \label{classRenderer_acafbd2688dd720dd959e8f2918359451} 
+void Renderer::\+\+Begin\+Frame (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \doxymbox{\hyperlink{classIRenderer}{IRenderer}}.
+
+\Hypertarget{classRenderer_a09720da33852155b05a84bf5652698cb}\index{Renderer@{Renderer}!EndFrame@{EndFrame}}
+\index{EndFrame@{EndFrame}!Renderer@{Renderer}}
+\doxysubsubsection{\texorpdfstring{EndFrame()}{EndFrame()}}
+{\footnotesize\ttfamily \label{classRenderer_a09720da33852155b05a84bf5652698cb} 
+void Renderer::\+\+End\+Frame (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \doxymbox{\hyperlink{classIRenderer}{IRenderer}}.
+
+\Hypertarget{classRenderer_a492da42b99148749828895f1ff2168ad}\index{Renderer@{Renderer}!GetConfig@{GetConfig}}
+\index{GetConfig@{GetConfig}!Renderer@{Renderer}}
+\doxysubsubsection{\texorpdfstring{GetConfig()}{GetConfig()}}
+{\footnotesize\ttfamily \label{classRenderer_a492da42b99148749828895f1ff2168ad} 
+\doxymbox{\hyperlink{structRendererConfig}{Renderer\+Config}} \& Renderer::\+\+Get\+Config (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \doxymbox{\hyperlink{classIRenderer}{IRenderer}}.
+
+\Hypertarget{classRenderer_abfbc2a3991bdaa368fa62d9ca5f3fd32}\index{Renderer@{Renderer}!GetContext@{GetContext}}
+\index{GetContext@{GetContext}!Renderer@{Renderer}}
+\doxysubsubsection{\texorpdfstring{GetContext()}{GetContext()}}
+{\footnotesize\ttfamily \label{classRenderer_abfbc2a3991bdaa368fa62d9ca5f3fd32} 
+\doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*} Renderer::\+\+Get\+Context (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \doxymbox{\hyperlink{classIRenderer}{IRenderer}}.
+
+\Hypertarget{classRenderer_ae24bd567c53023100366cff4ff482a16}\index{Renderer@{Renderer}!GetPipeline@{GetPipeline}}
+\index{GetPipeline@{GetPipeline}!Renderer@{Renderer}}
+\doxysubsubsection{\texorpdfstring{GetPipeline()}{GetPipeline()}}
+{\footnotesize\ttfamily \label{classRenderer_ae24bd567c53023100366cff4ff482a16} 
+\doxymbox{\hyperlink{classRenderPipeline}{Render\+Pipeline}} \texorpdfstring{$\ast$}{*} Renderer::\+\+Get\+Pipeline (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \doxymbox{\hyperlink{classIRenderer}{IRenderer}}.
+
+\Hypertarget{classRenderer_a5e3c74fa03fe02355f03002cd16f0167}\index{Renderer@{Renderer}!GetShaderManager@{GetShaderManager}}
+\index{GetShaderManager@{GetShaderManager}!Renderer@{Renderer}}
+\doxysubsubsection{\texorpdfstring{GetShaderManager()}{GetShaderManager()}}
+{\footnotesize\ttfamily \label{classRenderer_a5e3c74fa03fe02355f03002cd16f0167} 
+\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*} Renderer::\+\+Get\+Shader\+Manager (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \doxymbox{\hyperlink{classIRenderer}{IRenderer}}.
+
+\Hypertarget{classRenderer_a31c446b794e03c067195777f06894d6a}\index{Renderer@{Renderer}!GetStats@{GetStats}}
+\index{GetStats@{GetStats}!Renderer@{Renderer}}
+\doxysubsubsection{\texorpdfstring{GetStats()}{GetStats()}}
+{\footnotesize\ttfamily \label{classRenderer_a31c446b794e03c067195777f06894d6a} 
+const \doxymbox{\hyperlink{structRenderStats}{Render\+Stats}} \& Renderer::\+\+Get\+Stats (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \doxymbox{\hyperlink{classIRenderer}{IRenderer}}.
+
+\Hypertarget{classRenderer_a5e008c3d0dbe24af979ef66faeab098f}\index{Renderer@{Renderer}!GetWorld@{GetWorld}}
+\index{GetWorld@{GetWorld}!Renderer@{Renderer}}
+\doxysubsubsection{\texorpdfstring{GetWorld()}{GetWorld()}}
+{\footnotesize\ttfamily \label{classRenderer_a5e008c3d0dbe24af979ef66faeab098f} 
+\doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \texorpdfstring{$\ast$}{*} Renderer::\+\+Get\+World (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \doxymbox{\hyperlink{classIRenderer}{IRenderer}}.
+
+\Hypertarget{classRenderer_a466774a9f8489c9354857087baa269e9}\index{Renderer@{Renderer}!Initialize@{Initialize}}
+\index{Initialize@{Initialize}!Renderer@{Renderer}}
+\doxysubsubsection{\texorpdfstring{Initialize()}{Initialize()}}
+{\footnotesize\ttfamily \label{classRenderer_a466774a9f8489c9354857087baa269e9} 
+bool Renderer::\+\+Initialize (\begin{DoxyParamCaption}\item[{GLuint}]{skybox\+VAO}{, }\item[{GLuint}]{cubemap\+Texture}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \doxymbox{\hyperlink{classIRenderer}{IRenderer}}.
+
+\Hypertarget{classRenderer_a9cafd6bb984744eb069c00a85c058f97}\index{Renderer@{Renderer}!IsInitialized@{IsInitialized}}
+\index{IsInitialized@{IsInitialized}!Renderer@{Renderer}}
+\doxysubsubsection{\texorpdfstring{IsInitialized()}{IsInitialized()}}
+{\footnotesize\ttfamily \label{classRenderer_a9cafd6bb984744eb069c00a85c058f97} 
+bool Renderer::\+\+Is\+Initialized (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \doxymbox{\hyperlink{classIRenderer}{IRenderer}}.
+
+\Hypertarget{classRenderer_af31516e0f22697126c38c5a122f6fa14}\index{Renderer@{Renderer}!Render@{Render}}
+\index{Render@{Render}!Renderer@{Renderer}}
+\doxysubsubsection{\texorpdfstring{Render()}{Render()}}
+{\footnotesize\ttfamily \label{classRenderer_af31516e0f22697126c38c5a122f6fa14} 
+void Renderer::\+\+Render (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \&}]{ecs}{, }\item[{entt::\+entity}]{camera\+Entity}{, }\item[{int}]{width}{, }\item[{int}]{height}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \doxymbox{\hyperlink{classIRenderer}{IRenderer}}.
+
+\Hypertarget{classRenderer_a72b8dc2f733bba978d75294c732415d4}\index{Renderer@{Renderer}!SetClearColor@{SetClearColor}}
+\index{SetClearColor@{SetClearColor}!Renderer@{Renderer}}
+\doxysubsubsection{\texorpdfstring{SetClearColor()}{SetClearColor()}}
+{\footnotesize\ttfamily \label{classRenderer_a72b8dc2f733bba978d75294c732415d4} 
+void Renderer::\+\+Set\+Clear\+Color (\begin{DoxyParamCaption}\item[{const glm::\+vec4 \&}]{color}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \doxymbox{\hyperlink{classIRenderer}{IRenderer}}.
+
+\Hypertarget{classRenderer_af887b3d2feae3d3d050d6cb5a48eb644}\index{Renderer@{Renderer}!SetEnableShadows@{SetEnableShadows}}
+\index{SetEnableShadows@{SetEnableShadows}!Renderer@{Renderer}}
+\doxysubsubsection{\texorpdfstring{SetEnableShadows()}{SetEnableShadows()}}
+{\footnotesize\ttfamily \label{classRenderer_af887b3d2feae3d3d050d6cb5a48eb644} 
+void Renderer::\+\+Set\+Enable\+Shadows (\begin{DoxyParamCaption}\item[{bool}]{enable}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \doxymbox{\hyperlink{classIRenderer}{IRenderer}}.
+
+\Hypertarget{classRenderer_a12019b818e663fd7f2c256ccafa55530}\index{Renderer@{Renderer}!SetIconRenderSystem@{SetIconRenderSystem}}
+\index{SetIconRenderSystem@{SetIconRenderSystem}!Renderer@{Renderer}}
+\doxysubsubsection{\texorpdfstring{SetIconRenderSystem()}{SetIconRenderSystem()}}
+{\footnotesize\ttfamily \label{classRenderer_a12019b818e663fd7f2c256ccafa55530} 
+void Renderer::\+\+Set\+Icon\+Render\+System (\begin{DoxyParamCaption}\item[{std::\+unique\+\_\+ptr$<$ \doxymbox{\hyperlink{classIconRenderSystem}{Icon\+Render\+System}} $>$}]{sys}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \doxymbox{\hyperlink{classIRenderer}{IRenderer}}.
+
+\Hypertarget{classRenderer_ad645759881ee64e59bfdd5e31982f354}\index{Renderer@{Renderer}!SetWireframe@{SetWireframe}}
+\index{SetWireframe@{SetWireframe}!Renderer@{Renderer}}
+\doxysubsubsection{\texorpdfstring{SetWireframe()}{SetWireframe()}}
+{\footnotesize\ttfamily \label{classRenderer_ad645759881ee64e59bfdd5e31982f354} 
+void Renderer::\+\+Set\+Wireframe (\begin{DoxyParamCaption}\item[{bool}]{enable}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \doxymbox{\hyperlink{classIRenderer}{IRenderer}}.
+
+\Hypertarget{classRenderer_ae7ce211da12f8338dbc868a6438c793f}\index{Renderer@{Renderer}!Shutdown@{Shutdown}}
+\index{Shutdown@{Shutdown}!Renderer@{Renderer}}
+\doxysubsubsection{\texorpdfstring{Shutdown()}{Shutdown()}}
+{\footnotesize\ttfamily \label{classRenderer_ae7ce211da12f8338dbc868a6438c793f} 
+void Renderer::\+\+Shutdown (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \doxymbox{\hyperlink{classIRenderer}{IRenderer}}.
+
 
 
 The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}

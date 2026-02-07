@@ -3,20 +3,32 @@
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classEditorLayout_a98d43b65d5cb35d6c5ca6d70ea521391}\label{classEditorLayout_a98d43b65d5cb35d6c5ca6d70ea521391} 
-void {\bfseries Render\+Editor} (\doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \texorpdfstring{$\ast$}{*}ecs, \doxymbox{\hyperlink{classCamera}{Camera}} \texorpdfstring{$\ast$}{*}camera, \doxymbox{\hyperlink{classRenderer}{Renderer}} \texorpdfstring{$\ast$}{*}renderer, \doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}shader\+Manager, \doxymbox{\hyperlink{classMaterialManager}{Material\+Manager}} \texorpdfstring{$\ast$}{*}material\+Manager)
+\Hypertarget{classEditorLayout_aafecf7ce0823cf7d4a9914f700170dce}\label{classEditorLayout_aafecf7ce0823cf7d4a9914f700170dce} 
+void {\bfseries Render\+Editor} (\doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \texorpdfstring{$\ast$}{*}ecs, entt::\+entity camera\+Entity, \doxymbox{\hyperlink{classRenderer}{Renderer}} \texorpdfstring{$\ast$}{*}renderer, \doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}shader\+Manager, \doxymbox{\hyperlink{classMaterialManager}{Material\+Manager}} \texorpdfstring{$\ast$}{*}material\+Manager, bool is\+Play\+Mode)
 \item 
-\Hypertarget{classEditorLayout_a22e449762e1ce1260e9626268fac5f19}\label{classEditorLayout_a22e449762e1ce1260e9626268fac5f19} 
-Im\+Vec2 {\bfseries Get\+Viewport\+Size} () const
+\Hypertarget{classEditorLayout_a7a40364dbac68ca819c648dc3f37a171}\label{classEditorLayout_a7a40364dbac68ca819c648dc3f37a171} 
+Im\+Vec2 {\bfseries Get\+Scene\+Viewport\+Size} () const
 \item 
-\Hypertarget{classEditorLayout_a54be62c18c92605eafea70d96dc3fc0f}\label{classEditorLayout_a54be62c18c92605eafea70d96dc3fc0f} 
-Im\+Vec2 {\bfseries Get\+Viewport\+Pos} () const
+\Hypertarget{classEditorLayout_a74a77512c88c4803f0b37042a77eb3af}\label{classEditorLayout_a74a77512c88c4803f0b37042a77eb3af} 
+Im\+Vec2 {\bfseries Get\+Scene\+Viewport\+Pos} () const
 \item 
-\Hypertarget{classEditorLayout_aea02f6eaba03975498f90dba9af34e7a}\label{classEditorLayout_aea02f6eaba03975498f90dba9af34e7a} 
-bool {\bfseries Is\+Viewport\+Hovered} () const
+\Hypertarget{classEditorLayout_ab6f53cf28a137963999a0f51034ded88}\label{classEditorLayout_ab6f53cf28a137963999a0f51034ded88} 
+bool {\bfseries Is\+Scene\+Viewport\+Hovered} () const
 \item 
-\Hypertarget{classEditorLayout_af35a285877bd412f3182f4cc9251641b}\label{classEditorLayout_af35a285877bd412f3182f4cc9251641b} 
-bool {\bfseries Is\+Viewport\+Focused} () const
+\Hypertarget{classEditorLayout_a10947d59aeecfc6211d4f1a743b19497}\label{classEditorLayout_a10947d59aeecfc6211d4f1a743b19497} 
+bool {\bfseries Is\+Scene\+Viewport\+Focused} () const
+\item 
+\Hypertarget{classEditorLayout_a8bd1d2e875527ebfc23a5ff6647b8517}\label{classEditorLayout_a8bd1d2e875527ebfc23a5ff6647b8517} 
+Im\+Vec2 {\bfseries Get\+Game\+Viewport\+Size} () const
+\item 
+\Hypertarget{classEditorLayout_a4e867dc2f4d5a22f5152b127329916e4}\label{classEditorLayout_a4e867dc2f4d5a22f5152b127329916e4} 
+Im\+Vec2 {\bfseries Get\+Game\+Viewport\+Pos} () const
+\item 
+\Hypertarget{classEditorLayout_a609739b9e2a7c4202d78775941e15ac7}\label{classEditorLayout_a609739b9e2a7c4202d78775941e15ac7} 
+bool {\bfseries Is\+Game\+Viewport\+Hovered} () const
+\item 
+\Hypertarget{classEditorLayout_a2d18445df85cb3911d5e0d71b3f456c6}\label{classEditorLayout_a2d18445df85cb3911d5e0d71b3f456c6} 
+bool {\bfseries Is\+Game\+Viewport\+Focused} () const
 \item 
 \Hypertarget{classEditorLayout_a2f18d4e3bc7d0d65926700fe1b0a3abf}\label{classEditorLayout_a2f18d4e3bc7d0d65926700fe1b0a3abf} 
 entt::\+entity {\bfseries Get\+Selected\+Entity} () const
@@ -27,8 +39,11 @@ entt::\+entity {\bfseries Get\+Selected\+Entity} () const
 \Hypertarget{classEditorLayout_a28e36fd39430b43c4dec15ce563c2ae2}\label{classEditorLayout_a28e36fd39430b43c4dec15ce563c2ae2} 
 std::\+string {\bfseries Get\+Selected\+Material} () const
 \item 
-\Hypertarget{classEditorLayout_a3ef1a4909625f7fcb6b14d66d6580010}\label{classEditorLayout_a3ef1a4909625f7fcb6b14d66d6580010} 
-\doxymbox{\hyperlink{classFramebuffer}{Framebuffer}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Framebuffer} () const
+\Hypertarget{classEditorLayout_a0cd4582e74947dacfc29aa2b62a9dbeb}\label{classEditorLayout_a0cd4582e74947dacfc29aa2b62a9dbeb} 
+\doxymbox{\hyperlink{classFramebuffer}{Framebuffer}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Scene\+Framebuffer} () const
+\item 
+\Hypertarget{classEditorLayout_aa0b90b3233857409669a7528bb1796d6}\label{classEditorLayout_aa0b90b3233857409669a7528bb1796d6} 
+\doxymbox{\hyperlink{classFramebuffer}{Framebuffer}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Game\+Framebuffer} () const
 \end{DoxyCompactItemize}
 
 

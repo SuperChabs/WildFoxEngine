@@ -118,10 +118,9 @@ Collaboration diagram for RenderPipeline:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a172dbf6a01c4df6f91f7eeffabb88539" id="r_a172dbf6a01c4df6f91f7eeffabb88539"><td class="memItemLeft"><a id="a172dbf6a01c4df6f91f7eeffabb88539" name="a172dbf6a01c4df6f91f7eeffabb88539"></a>
 &#160;</td><td class="memItemRight"><b>RenderPipeline</b> (const std::string &amp;n, <a class="el" href="classGLContext.html">GLContext</a> *ctx, <a class="el" href="classShaderManager.html">ShaderManager</a> *sm)</td></tr>
-<tr class="memitem:a99473e01757654220a768b24fa8f588f" id="r_a99473e01757654220a768b24fa8f588f"><td class="memItemLeft"><a id="a99473e01757654220a768b24fa8f588f" name="a99473e01757654220a768b24fa8f588f"></a>
-virtual void&#160;</td><td class="memItemRight"><b>Initialize</b> ()=0</td></tr>
-<tr class="memitem:a4b12675ac846b55cc2fa115efbd4c29f" id="r_a4b12675ac846b55cc2fa115efbd4c29f"><td class="memItemLeft"><a id="a4b12675ac846b55cc2fa115efbd4c29f" name="a4b12675ac846b55cc2fa115efbd4c29f"></a>
-virtual void&#160;</td><td class="memItemRight"><b>Execute</b> (<a class="el" href="classCamera.html">Camera</a> &amp;camera, int width, int height)</td></tr>
+<tr class="memitem:a99473e01757654220a768b24fa8f588f" id="r_a99473e01757654220a768b24fa8f588f"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#a99473e01757654220a768b24fa8f588f">Initialize</a> ()=0</td></tr>
+<tr class="memitem:a7c029638685bf85617c6234a8fa0d41f" id="r_a7c029638685bf85617c6234a8fa0d41f"><td class="memItemLeft"><a id="a7c029638685bf85617c6234a8fa0d41f" name="a7c029638685bf85617c6234a8fa0d41f"></a>
+virtual void&#160;</td><td class="memItemRight"><b>Execute</b> (<a class="el" href="classECSWorld.html">ECSWorld</a> &amp;ecs, entt::entity cameraEntity, int width, int height)</td></tr>
 <tr class="memitem:a5c5e17156d4b04f6943c6e39b928043a" id="r_a5c5e17156d4b04f6943c6e39b928043a"><td class="memItemLeft"><a id="a5c5e17156d4b04f6943c6e39b928043a" name="a5c5e17156d4b04f6943c6e39b928043a"></a>
 void&#160;</td><td class="memItemRight"><b>AddPass</b> (std::unique_ptr&lt; <a class="el" href="classRenderPass.html">RenderPass</a> &gt; pass)</td></tr>
 <tr class="memitem:ae8813675959e9388f3d53df1418e013f" id="r_ae8813675959e9388f3d53df1418e013f"><td class="memItemLeft"><a id="ae8813675959e9388f3d53df1418e013f" name="ae8813675959e9388f3d53df1418e013f"></a>
@@ -142,6 +141,34 @@ std::vector&lt; std::unique_ptr&lt; <a class="el" href="classRenderPass.html">Re
 <tr class="memitem:a037ddf2f08e72a0f29afdac8ef81a15a" id="r_a037ddf2f08e72a0f29afdac8ef81a15a"><td class="memItemLeft"><a id="a037ddf2f08e72a0f29afdac8ef81a15a" name="a037ddf2f08e72a0f29afdac8ef81a15a"></a>
 <a class="el" href="classShaderManager.html">ShaderManager</a> *&#160;</td><td class="memItemRight"><b>shaderManager</b></td></tr>
 </table>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a99473e01757654220a768b24fa8f588f" name="a99473e01757654220a768b24fa8f588f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99473e01757654220a768b24fa8f588f">&#9670;&#160;</a></span>Initialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void RenderPipeline::Initialize </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel pure-virtual">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classForwardPipeline.html#a65d30384c1f198e3882751208f17e8e2">ForwardPipeline</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li><b>RenderPipeline.cppm</b></li>
 </ul>

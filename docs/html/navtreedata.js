@@ -50,7 +50,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "Application_8cppm.html",
-"structLogData.html"
+"module__WFE_8Rendering_8Passes_8GeometryPass.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

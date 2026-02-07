@@ -106,10 +106,10 @@ std::shared_ptr&lt; <a class="el" href="classMesh.html">Mesh</a> &gt;&#160;</td>
 const std::vector&lt; std::shared_ptr&lt; <a class="el" href="classMesh.html">Mesh</a> &gt; &gt; &amp;&#160;</td><td class="memItemRight"><b>GetMeshes</b> () const</td></tr>
 <tr class="memitem:a5527e5eba2247e54a8ddf22c62c50f21" id="r_a5527e5eba2247e54a8ddf22c62c50f21"><td class="memItemLeft"><a id="a5527e5eba2247e54a8ddf22c62c50f21" name="a5527e5eba2247e54a8ddf22c62c50f21"></a>
 void&#160;</td><td class="memItemRight"><b>Draw</b> (<a class="el" href="classShaderManager.html">ShaderManager</a> &amp;shaderManager, const std::string &amp;shaderName)</td></tr>
-<tr class="memitem:a2caf87a4dbe7997c941724ebd6f365ad" id="r_a2caf87a4dbe7997c941724ebd6f365ad"><td class="memItemLeft"><a id="a2caf87a4dbe7997c941724ebd6f365ad" name="a2caf87a4dbe7997c941724ebd6f365ad"></a>
-void&#160;</td><td class="memItemRight"><b>SetColor</b> (const glm::vec3 &amp;color)</td></tr>
 <tr class="memitem:acc02d0602869b8f6a0ef27a24de06b85" id="r_acc02d0602869b8f6a0ef27a24de06b85"><td class="memItemLeft"><a id="acc02d0602869b8f6a0ef27a24de06b85" name="acc02d0602869b8f6a0ef27a24de06b85"></a>
 void&#160;</td><td class="memItemRight"><b>SetTextures</b> (const std::vector&lt; <a class="el" href="classTexture.html">Texture</a> &gt; &amp;textures)</td></tr>
+<tr class="memitem:ad924151901ebd35825687b63bc9cf1cb" id="r_ad924151901ebd35825687b63bc9cf1cb"><td class="memItemLeft"><a id="ad924151901ebd35825687b63bc9cf1cb" name="ad924151901ebd35825687b63bc9cf1cb"></a>
+void&#160;</td><td class="memItemRight"><b>SetMaterial</b> (std::shared_ptr&lt; <a class="el" href="classMaterial.html">Material</a> &gt; material, size_t index)</td></tr>
 <tr class="memitem:a35f8173ab741b1047e612c198b1d6672" id="r_a35f8173ab741b1047e612c198b1d6672"><td class="memItemLeft"><a id="a35f8173ab741b1047e612c198b1d6672" name="a35f8173ab741b1047e612c198b1d6672"></a>
 void&#160;</td><td class="memItemRight"><b>SetMaterialForAll</b> (std::shared_ptr&lt; <a class="el" href="classMaterial.html">Material</a> &gt; material)</td></tr>
 <tr class="memitem:a6ef9717cfa6a3d1796039c6d94b43a72" id="r_a6ef9717cfa6a3d1796039c6d94b43a72"><td class="memItemLeft"><a id="a6ef9717cfa6a3d1796039c6d94b43a72" name="a6ef9717cfa6a3d1796039c6d94b43a72"></a>
@@ -118,10 +118,14 @@ size_t&#160;</td><td class="memItemRight"><b>GetMeshCount</b> () const</td></tr>
 const std::string &amp;&#160;</td><td class="memItemRight"><b>GetName</b> () const</td></tr>
 <tr class="memitem:a0885f9a6553274d661150f34d123de93" id="r_a0885f9a6553274d661150f34d123de93"><td class="memItemLeft"><a id="a0885f9a6553274d661150f34d123de93" name="a0885f9a6553274d661150f34d123de93"></a>
 const std::string &amp;&#160;</td><td class="memItemRight"><b>GetFilepath</b> () const</td></tr>
+<tr class="memitem:ae42a48253b9277c0164a76e06518c7f2" id="r_ae42a48253b9277c0164a76e06518c7f2"><td class="memItemLeft"><a id="ae42a48253b9277c0164a76e06518c7f2" name="ae42a48253b9277c0164a76e06518c7f2"></a>
+std::shared_ptr&lt; <a class="el" href="structModelNode.html">ModelNode</a> &gt;&#160;</td><td class="memItemRight"><b>GetRootNode</b> () const</td></tr>
 <tr class="memitem:ac6fba40b37ccdff724226b284edc43bb" id="r_ac6fba40b37ccdff724226b284edc43bb"><td class="memItemLeft"><a id="ac6fba40b37ccdff724226b284edc43bb" name="ac6fba40b37ccdff724226b284edc43bb"></a>
 void&#160;</td><td class="memItemRight"><b>SetName</b> (const std::string &amp;n)</td></tr>
 <tr class="memitem:ad5da73b20746102f875ccd5b2e125d0d" id="r_ad5da73b20746102f875ccd5b2e125d0d"><td class="memItemLeft"><a id="ad5da73b20746102f875ccd5b2e125d0d" name="ad5da73b20746102f875ccd5b2e125d0d"></a>
 void&#160;</td><td class="memItemRight"><b>SetFilepath</b> (const std::string &amp;path)</td></tr>
+<tr class="memitem:a507ccd525b3bf21389da6c00a142e7c5" id="r_a507ccd525b3bf21389da6c00a142e7c5"><td class="memItemLeft"><a id="a507ccd525b3bf21389da6c00a142e7c5" name="a507ccd525b3bf21389da6c00a142e7c5"></a>
+void&#160;</td><td class="memItemRight"><b>SetRootNode</b> (std::shared_ptr&lt; <a class="el" href="structModelNode.html">ModelNode</a> &gt; node)</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="Model_8cppm.html">Model.cppm</a></li>

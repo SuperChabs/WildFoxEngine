@@ -24,11 +24,10 @@ Collaboration diagram for Render\+Pipeline:\+\nopagebreak
 \Hypertarget{classRenderPipeline_a172dbf6a01c4df6f91f7eeffabb88539}\label{classRenderPipeline_a172dbf6a01c4df6f91f7eeffabb88539} 
 {\bfseries Render\+Pipeline} (const std::\+string \&n, \doxymbox{\hyperlink{classGLContext}{GLContext}} \texorpdfstring{$\ast$}{*}ctx, \doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*}sm)
 \item 
-\Hypertarget{classRenderPipeline_a99473e01757654220a768b24fa8f588f}\label{classRenderPipeline_a99473e01757654220a768b24fa8f588f} 
-virtual void {\bfseries Initialize} ()=0
+virtual void \doxymbox{\hyperlink{classRenderPipeline_a99473e01757654220a768b24fa8f588f}{Initialize}} ()=0
 \item 
-\Hypertarget{classRenderPipeline_a4b12675ac846b55cc2fa115efbd4c29f}\label{classRenderPipeline_a4b12675ac846b55cc2fa115efbd4c29f} 
-virtual void {\bfseries Execute} (\doxymbox{\hyperlink{classCamera}{Camera}} \&camera, int width, int height)
+\Hypertarget{classRenderPipeline_a7c029638685bf85617c6234a8fa0d41f}\label{classRenderPipeline_a7c029638685bf85617c6234a8fa0d41f} 
+virtual void {\bfseries Execute} (\doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \&ecs, entt::\+entity camera\+Entity, int width, int height)
 \item 
 \Hypertarget{classRenderPipeline_a5c5e17156d4b04f6943c6e39b928043a}\label{classRenderPipeline_a5c5e17156d4b04f6943c6e39b928043a} 
 void {\bfseries Add\+Pass} (std::\+unique\+\_\+ptr$<$ \doxymbox{\hyperlink{classRenderPass}{Render\+Pass}} $>$ pass)
@@ -57,6 +56,21 @@ std::\+vector$<$ std::\+unique\+\_\+ptr$<$ \doxymbox{\hyperlink{classRenderPass}
 \Hypertarget{classRenderPipeline_a037ddf2f08e72a0f29afdac8ef81a15a}\label{classRenderPipeline_a037ddf2f08e72a0f29afdac8ef81a15a} 
 \doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries shader\+Manager}
 \end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{classRenderPipeline_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classRenderPipeline_a99473e01757654220a768b24fa8f588f}\index{RenderPipeline@{RenderPipeline}!Initialize@{Initialize}}
+\index{Initialize@{Initialize}!RenderPipeline@{RenderPipeline}}
+\doxysubsubsection{\texorpdfstring{Initialize()}{Initialize()}}
+{\footnotesize\ttfamily \label{classRenderPipeline_a99473e01757654220a768b24fa8f588f} 
+virtual void Render\+Pipeline::\+\+Initialize (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \doxymbox{\hyperlink{classForwardPipeline_a65d30384c1f198e3882751208f17e8e2}{Forward\+Pipeline}}.
+
 
 
 The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}

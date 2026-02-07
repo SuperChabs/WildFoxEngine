@@ -96,75 +96,97 @@ $(function(){initNavTree('ModelLoader_8cppm.html','',''); });
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;vector&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
+<code>#include &lt;memory&gt;</code><br />
+<code>#include &lt;unordered_map&gt;</code><br />
 <code>#include &lt;glad/glad.h&gt;</code><br />
 <code>#include &lt;glm/glm.hpp&gt;</code><br />
 <code>#include &lt;stb_image.h&gt;</code><br />
+<code>#include &lt;entt/entt.hpp&gt;</code><br />
 <code>#include &lt;assimp/Importer.hpp&gt;</code><br />
 <code>#include &lt;assimp/scene.h&gt;</code><br />
 <code>#include &lt;assimp/postprocess.h&gt;</code><br />
 <code>#include &lt;assimp/mesh.h&gt;</code><br />
+<code>#include &lt;assimp/matrix4x4.h&gt;</code><br />
+<code>import WFE.Resource.Material.Material;</code><br />
+<code>import WFE.Resource.Material.MaterialManager;</code><br />
 <code>import WFE.Core.Logger;</code><br />
 <code>import WFE.Rendering.MeshData;</code><br />
+<code>import WFE.ECS.Components;</code><br />
+<code>import WFE.ECS.ECSWorld;</code><br />
 <code>import WFE.Scene.Mesh;</code><br />
+<code>import WFE.Resource.Model.ModelNode;</code><br />
 <code>import <a class="el" href="Model_8cppm.html">WFE.Resource.Model.Model</a>;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for ModelLoader.cppm:</div>
 <div class="dyncontent">
 <div class="center"><img src="ModelLoader_8cppm__incl.png" border="0" usemap="#aModelLoader_8cppm" loading="lazy" alt=""/></div>
 <map name="aModelLoader_8cppm" id="aModelLoader_8cppm">
-<area shape="rect" title="Models mesh loader." alt="" coords="725,5,855,32"/>
-<area shape="rect" title=" " alt="" coords="471,155,528,181"/>
-<area shape="poly" title=" " alt="" coords="722,23,654,31,579,42,513,58,489,69,473,82,467,95,468,110,482,143,477,141,463,111,462,94,469,78,486,65,511,53,578,36,654,26,727,22"/>
-<area shape="rect" title=" " alt="" coords="393,155,446,181"/>
-<area shape="poly" title=" " alt="" coords="722,25,576,46,507,62,480,71,461,82,449,94,439,109,427,142,423,138,435,107,445,91,458,78,478,67,505,57,575,41,727,24"/>
-<area shape="rect" title=" " alt="" coords="748,80,832,107"/>
-<area shape="poly" title=" " alt="" coords="792,31,792,66,788,63,788,35"/>
-<area shape="rect" title=" " alt="" coords="657,155,750,181"/>
-<area shape="poly" title=" " alt="" coords="778,31,757,55,738,81,723,111,712,142,709,138,718,109,733,79,753,52,773,34"/>
-<area shape="rect" title=" " alt="" coords="856,80,948,107"/>
-<area shape="poly" title=" " alt="" coords="810,30,872,72,867,71,809,35"/>
-<area shape="rect" title=" " alt="" coords="972,80,1112,107"/>
-<area shape="poly" title=" " alt="" coords="834,30,986,75,981,75,834,35"/>
-<area shape="rect" title=" " alt="" coords="1136,80,1249,107"/>
-<area shape="poly" title=" " alt="" coords="856,29,1123,79,1118,79,855,34"/>
-<area shape="rect" title=" " alt="" coords="1274,80,1423,107"/>
-<area shape="poly" title=" " alt="" coords="856,25,1261,79,1256,80,856,31"/>
-<area shape="rect" title=" " alt="" coords="1447,80,1557,107"/>
-<area shape="poly" title=" " alt="" coords="856,22,1105,41,1434,79,1429,80,1104,47,856,27"/>
-<area shape="rect" href="Logger_8cppm_source.html" title=" " alt="" coords="215,80,341,107"/>
-<area shape="poly" title=" " alt="" coords="723,31,357,84,356,78,726,27"/>
-<area shape="rect" href="Model_8cppm.html" title="Model Object Class." alt="" coords="483,80,673,107"/>
-<area shape="poly" title=" " alt="" coords="756,32,630,77,629,72,750,33"/>
-<area shape="poly" title=" " alt="" coords="303,105,384,147,378,147,302,110"/>
-<area shape="rect" title=" " alt="" coords="224,155,284,181"/>
-<area shape="poly" title=" " alt="" coords="276,106,265,142,261,138,272,109"/>
-<area shape="rect" title=" " alt="" coords="308,155,368,181"/>
-<area shape="poly" title=" " alt="" coords="290,105,321,143,316,142,287,110"/>
+<area shape="rect" title="Models mesh loader." alt="" coords="726,5,856,32"/>
 <area shape="rect" title=" " alt="" coords="5,155,63,181"/>
-<area shape="poly" title=" " alt="" coords="236,110,79,156,77,151,235,105"/>
-<area shape="rect" title=" " alt="" coords="87,155,200,181"/>
-<area shape="poly" title=" " alt="" coords="257,107,181,149,179,144,252,108"/>
-<area shape="poly" title=" " alt="" coords="567,106,525,146,523,142,562,108"/>
-<area shape="poly" title=" " alt="" coords="553,107,461,151,460,145,548,108"/>
-<area shape="poly" title=" " alt="" coords="601,105,671,147,666,146,599,110"/>
-<area shape="rect" title=" " alt="" coords="552,155,620,181"/>
-<area shape="poly" title=" " alt="" coords="581,105,585,141,581,137,578,109"/>
+<area shape="poly" title=" " alt="" coords="724,24,369,45,193,61,131,71,95,82,80,94,66,109,47,142,42,139,62,106,76,90,93,78,129,66,192,56,369,39,728,21"/>
+<area shape="rect" title=" " alt="" coords="1553,155,1606,181"/>
+<area shape="poly" title=" " alt="" coords="857,17,1048,19,1289,26,1405,34,1505,45,1580,59,1606,68,1621,78,1629,94,1626,112,1605,146,1602,141,1621,110,1624,95,1617,82,1603,73,1579,64,1504,50,1404,39,1289,32,1048,24,857,22"/>
+<area shape="rect" title=" " alt="" coords="89,155,158,181"/>
+<area shape="poly" title=" " alt="" coords="723,21,566,28,372,37,200,55,141,67,122,74,111,82,104,94,103,109,111,141,106,140,97,109,99,93,107,78,119,70,140,62,199,50,371,32,566,22,728,20"/>
+<area shape="rect" title=" " alt="" coords="334,80,444,107"/>
+<area shape="poly" title=" " alt="" coords="723,32,460,82,459,77,728,31"/>
+<area shape="rect" title=" " alt="" coords="468,80,552,107"/>
+<area shape="poly" title=" " alt="" coords="745,32,568,80,566,75,740,33"/>
+<area shape="rect" title=" " alt="" coords="408,155,500,181"/>
+<area shape="poly" title=" " alt="" coords="750,32,686,56,616,82,491,149,489,144,614,78,684,51,745,33"/>
+<area shape="rect" title=" " alt="" coords="628,80,720,107"/>
+<area shape="poly" title=" " alt="" coords="773,32,708,74,706,69,768,33"/>
+<area shape="rect" title=" " alt="" coords="744,80,838,107"/>
+<area shape="poly" title=" " alt="" coords="793,31,793,66,789,63,790,35"/>
+<area shape="rect" title=" " alt="" coords="863,80,1002,107"/>
+<area shape="poly" title=" " alt="" coords="816,30,897,73,892,72,815,35"/>
+<area shape="rect" title=" " alt="" coords="1027,80,1140,107"/>
+<area shape="poly" title=" " alt="" coords="843,30,1020,76,1015,76,842,35"/>
+<area shape="rect" title=" " alt="" coords="1165,80,1314,107"/>
+<area shape="poly" title=" " alt="" coords="857,28,1152,77,1146,78,857,33"/>
+<area shape="rect" title=" " alt="" coords="1338,80,1448,107"/>
+<area shape="poly" title=" " alt="" coords="857,23,1061,44,1325,79,1320,80,1060,49,857,29"/>
+<area shape="rect" title=" " alt="" coords="1472,80,1607,107"/>
+<area shape="poly" title=" " alt="" coords="857,22,1115,43,1459,80,1454,80,1115,48,857,27"/>
+<area shape="rect" href="Logger_8cppm_source.html" title=" " alt="" coords="1682,80,1808,107"/>
+<area shape="poly" title=" " alt="" coords="857,20,1202,39,1431,56,1664,77,1669,80,1663,80,1663,83,1431,61,1202,44,857,25"/>
+<area shape="rect" href="Model_8cppm.html" title="Model Object Class." alt="" coords="121,80,310,107"/>
+<area shape="poly" title=" " alt="" coords="725,31,326,81,325,76,726,26"/>
+<area shape="poly" title=" " alt="" coords="1718,107,1620,152,1619,146,1713,108"/>
+<area shape="rect" title=" " alt="" coords="1630,155,1691,181"/>
+<area shape="poly" title=" " alt="" coords="1733,106,1688,147,1686,142,1728,108"/>
+<area shape="rect" title=" " alt="" coords="1714,155,1775,181"/>
+<area shape="poly" title=" " alt="" coords="1747,105,1747,141,1743,137,1743,109"/>
+<area shape="rect" title=" " alt="" coords="1799,155,1856,181"/>
+<area shape="poly" title=" " alt="" coords="1760,105,1804,145,1799,143,1758,110"/>
+<area shape="rect" title=" " alt="" coords="1880,155,1993,181"/>
+<area shape="poly" title=" " alt="" coords="1779,105,1892,149,1886,148,1778,110"/>
+<area shape="poly" title=" " alt="" coords="185,110,78,152,76,147,183,105"/>
+<area shape="poly" title=" " alt="" coords="310,103,322,104,690,129,1048,146,1540,166,1534,166,1048,152,690,134,322,109,310,108"/>
+<area shape="poly" title=" " alt="" coords="202,106,152,147,150,143,197,108"/>
+<area shape="poly" title=" " alt="" coords="257,105,400,149,395,150,256,110"/>
+<area shape="rect" title=" " alt="" coords="183,155,248,181"/>
+<area shape="poly" title=" " alt="" coords="217,105,218,140,213,138,213,109"/>
 </map>
 </div>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ab78526cca6ca1ac0a6fac37c05561c14" id="r_ab78526cca6ca1ac0a6fac37c05561c14"><td class="memItemLeft"><a id="ab78526cca6ca1ac0a6fac37c05561c14" name="ab78526cca6ca1ac0a6fac37c05561c14"></a>
-void&#160;</td><td class="memItemRight"><b>ProcessNode</b> (aiNode *node, const aiScene *scene, <a class="el" href="classModel.html">Model</a> *model, const std::string &amp;directory)</td></tr>
-<tr class="memitem:a5dfb59d1ff7bac6303f92530182b13e4" id="r_a5dfb59d1ff7bac6303f92530182b13e4"><td class="memItemLeft"><a id="a5dfb59d1ff7bac6303f92530182b13e4" name="a5dfb59d1ff7bac6303f92530182b13e4"></a>
-<a class="el" href="classMesh.html">Mesh</a>&#160;</td><td class="memItemRight"><b>ProcessMesh</b> (aiMesh *mesh, const aiScene *scene, const std::string &amp;directory)</td></tr>
+<tr class="memitem:a44ed13fe63810de7a3a528185abd783b" id="r_a44ed13fe63810de7a3a528185abd783b"><td class="memItemLeft"><a id="a44ed13fe63810de7a3a528185abd783b" name="a44ed13fe63810de7a3a528185abd783b"></a>
+std::shared_ptr&lt; <a class="el" href="structModelNode.html">ModelNode</a> &gt;&#160;</td><td class="memItemRight"><b>ProcessNode</b> (aiNode *node, const aiScene *scene, <a class="el" href="classModel.html">Model</a> *model, const std::string &amp;directory, <a class="el" href="classMaterialManager.html">MaterialManager</a> &amp;materialManager, <a class="el" href="classECSWorld.html">ECSWorld</a> *world=nullptr, entt::entity parentEntity=entt::null)</td></tr>
+<tr class="memitem:a4558e5083d915c3a11237996f4b0729f" id="r_a4558e5083d915c3a11237996f4b0729f"><td class="memItemLeft"><a id="a4558e5083d915c3a11237996f4b0729f" name="a4558e5083d915c3a11237996f4b0729f"></a>
+std::shared_ptr&lt; <a class="el" href="classMesh.html">Mesh</a> &gt;&#160;</td><td class="memItemRight"><b>ProcessMesh</b> (aiMesh *mesh, const aiScene *scene, const std::string &amp;directory, <a class="el" href="classMaterialManager.html">MaterialManager</a> &amp;materialManager, int meshIndex)</td></tr>
 <tr class="memitem:aa97893adcee3ccec766caf3ca43bd69e" id="r_aa97893adcee3ccec766caf3ca43bd69e"><td class="memItemLeft"><a id="aa97893adcee3ccec766caf3ca43bd69e" name="aa97893adcee3ccec766caf3ca43bd69e"></a>
 std::vector&lt; <a class="el" href="classTexture.html">Texture</a> &gt;&#160;</td><td class="memItemRight"><b>LoadMaterialTextures</b> (aiMaterial *mat, aiTextureType type, const std::string &amp;typeName, const std::string &amp;directory)</td></tr>
 <tr class="memitem:a6e150fa04bda00c2fef2e26dcafc9cd2" id="r_a6e150fa04bda00c2fef2e26dcafc9cd2"><td class="memItemLeft"><a id="a6e150fa04bda00c2fef2e26dcafc9cd2" name="a6e150fa04bda00c2fef2e26dcafc9cd2"></a>
 unsigned int&#160;</td><td class="memItemRight"><b>TextureFromFile</b> (const char *path, const std::string &amp;directory)</td></tr>
-<tr class="memitem:a677a48f30835598f5480e2a4e2dfa1bc" id="r_a677a48f30835598f5480e2a4e2dfa1bc"><td class="memItemLeft"><a id="a677a48f30835598f5480e2a4e2dfa1bc" name="a677a48f30835598f5480e2a4e2dfa1bc"></a>
-<a class="el" href="classModel.html">Model</a> *&#160;</td><td class="memItemRight"><b>LoadModelFromFile</b> (const std::string &amp;path)</td></tr>
-<tr class="memdesc:a677a48f30835598f5480e2a4e2dfa1bc"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classModel.html">Model</a> loader function. <br /></td></tr>
+<tr class="memitem:a06c4a175efc1023673d78025da577d87" id="r_a06c4a175efc1023673d78025da577d87"><td class="memItemLeft"><a id="a06c4a175efc1023673d78025da577d87" name="a06c4a175efc1023673d78025da577d87"></a>
+void&#160;</td><td class="memItemRight"><b>DecomposeTransform</b> (const glm::mat4 &amp;transform, glm::vec3 &amp;position, glm::vec3 &amp;rotation, glm::vec3 &amp;scale)</td></tr>
+<tr class="memitem:acde4cbe62522edab82c90e1c0f0ee373" id="r_acde4cbe62522edab82c90e1c0f0ee373"><td class="memItemLeft"><a id="acde4cbe62522edab82c90e1c0f0ee373" name="acde4cbe62522edab82c90e1c0f0ee373"></a>
+glm::mat4&#160;</td><td class="memItemRight"><b>ConvertAssimpMatrix</b> (const aiMatrix4x4 from)</td></tr>
+<tr class="memitem:aa1798fbe2b5ab9e7bd2dcef01f5dfae9" id="r_aa1798fbe2b5ab9e7bd2dcef01f5dfae9"><td class="memItemLeft"><a id="aa1798fbe2b5ab9e7bd2dcef01f5dfae9" name="aa1798fbe2b5ab9e7bd2dcef01f5dfae9"></a>
+<a class="el" href="classModel.html">Model</a> *&#160;</td><td class="memItemRight"><b>LoadModelFromFile</b> (const std::string &amp;path, <a class="el" href="classMaterialManager.html">MaterialManager</a> &amp;materialManager, <a class="el" href="classECSWorld.html">ECSWorld</a> *world=nullptr)</td></tr>
+<tr class="memdesc:aa1798fbe2b5ab9e7bd2dcef01f5dfae9"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classModel.html">Model</a> loader function. <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Models mesh loader. </p>

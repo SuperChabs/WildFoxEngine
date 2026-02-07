@@ -47,55 +47,54 @@ void {\bfseries Stop} ()
 \begin{DoxyCompactList}\small\item\em Closes the application Stops the main loop. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \begin{DoxyCompactItemize}
 \item 
-\doxymbox{\hyperlink{classWindow}{Window}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Window} () const
+\doxymbox{\hyperlink{classWindow}{Window}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Window} ()
 \item 
-\doxymbox{\hyperlink{classInput}{Input}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Input} () const
+\doxymbox{\hyperlink{classInput}{Input}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Input} ()
 \item 
 \doxymbox{\hyperlink{classTime}{Time}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Time} () const
 \item 
-\doxymbox{\hyperlink{classCamera}{Camera}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Camera} () const
-\item 
-\doxymbox{\hyperlink{classRenderer}{Renderer}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Renderer} () const
-\item 
-\doxymbox{\hyperlink{classTextureManager}{Texture\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Texture\+Manager} () const
+entt::\+entity {\bfseries Get\+Main\+Camera\+Entity} () const
 \item 
 \doxymbox{\hyperlink{classImGuiManager}{Im\+Gui\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Im\+Gui\+Manager} () const
 \item 
-\doxymbox{\hyperlink{classMaterialManager}{Material\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Material\+Manager} () const
-\item 
 \doxymbox{\hyperlink{classECSWorld}{ECSWorld}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+ECSWorld} () const
 \item 
-\doxymbox{\hyperlink{classShaderManager}{Shader\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Shader\+Manager} () const
-\item 
-\doxymbox{\hyperlink{classModelManager}{Model\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Model\+Manager} () const
+\doxymbox{\hyperlink{classModuleManager}{Module\+Manager}} \texorpdfstring{$\ast$}{*} {\bfseries Get\+Module\+Manager} ()
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Protected Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 void \doxymbox{\hyperlink{classEngine_ae482abae3a0c90ef02350a1d0a414db0}{On\+Initialize}} () override
-\item 
+\begin{DoxyCompactList}\small\item\em Initialize game engine Initialize \doxylink{classSkybox}{Skybox}, \doxylink{classRenderer}{Renderer} and other stuff that wasn\textquotesingle{}t initialized in \doxylink{classApplication}{Application} class. \end{DoxyCompactList}\item 
 void \doxymbox{\hyperlink{classEngine_aa60a6ac74074fe6ea7cd4f95246d3389}{On\+Update}} (float delta\+Time) override
 \item 
+\Hypertarget{classEngine_a2dc3ee636775487cc71e5ba674a99441}\label{classEngine_a2dc3ee636775487cc71e5ba674a99441} 
+void {\bfseries Update\+Main\+Camera} ()
+\item 
 void \doxymbox{\hyperlink{classEngine_ab2cc692b49470b1554661eb75bf4d688}{On\+Render}} () override
-\item 
+\begin{DoxyCompactList}\small\item\em Render scene into framebuffer. \end{DoxyCompactList}\item 
 void \doxymbox{\hyperlink{classEngine_aeb88272997528d668c07624d10c40cf3}{On\+Shutdown}} () override
-\item 
+\begin{DoxyCompactList}\small\item\em Shutdown classes needed to shutdown by hand. \end{DoxyCompactList}\item 
 void \doxymbox{\hyperlink{classEngine_a08ae57a21e3da54edaa155dac5c874fe}{Render\+UI}} () override
+\begin{DoxyCompactList}\small\item\em Render User Interface. \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{classEngine_a4cd78d5d95116fbaab2db1e62dab6bab}{Should\+Allow\+Camera\+Control}} () const override
 \end{DoxyCompactItemize}
 \doxysubsection*{Protected Member Functions inherited from \doxymbox{\hyperlink{classApplication}{Application}}}
 \begin{DoxyCompactItemize}
 \item 
 \doxymbox{\hyperlink{classApplication_a2ad4d646064502c4f06288c1c50dfed9}{Application}} (int width, int height, const std::\+string \&title)
 \begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
-void {\bfseries Set\+Renderer} (std::\+unique\+\_\+ptr$<$ \doxymbox{\hyperlink{classRenderer}{Renderer}} $>$ r)
-\item 
 void {\bfseries Set\+Camera\+Control\+Mode} (bool enabled)
+\item 
+void {\bfseries Set\+Main\+Camera\+Entity} (entt::\+entity new\+Main\+Camera\+Entity)
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Additional Inherited Members}
 \doxysubsection*{Protected Attributes inherited from \doxymbox{\hyperlink{classApplication}{Application}}}
 \begin{DoxyCompactItemize}
 \item 
 bool {\bfseries camera\+Control\+Enabled}
+\item 
+bool {\bfseries show\+UI}
 \end{DoxyCompactItemize}
 
 
@@ -110,6 +109,10 @@ void Engine::\+\+On\+Initialize (\begin{DoxyParamCaption}{}{}\end{DoxyParamCapti
 
 
 
+Initialize game engine Initialize \doxylink{classSkybox}{Skybox}, \doxylink{classRenderer}{Renderer} and other stuff that wasn\textquotesingle{}t initialized in \doxylink{classApplication}{Application} class. 
+
+
+
 Reimplemented from \doxymbox{\hyperlink{classApplication}{Application}}.
 
 \Hypertarget{classEngine_ab2cc692b49470b1554661eb75bf4d688}\index{Engine@{Engine}!OnRender@{OnRender}}
@@ -120,6 +123,10 @@ void Engine::\+\+On\+Render (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})
 
 
 
+Render scene into framebuffer. 
+
+
+
 Reimplemented from \doxymbox{\hyperlink{classApplication}{Application}}.
 
 \Hypertarget{classEngine_aeb88272997528d668c07624d10c40cf3}\index{Engine@{Engine}!OnShutdown@{OnShutdown}}
@@ -127,6 +134,10 @@ Reimplemented from \doxymbox{\hyperlink{classApplication}{Application}}.
 \doxysubsubsection{\texorpdfstring{OnShutdown()}{OnShutdown()}}
 {\footnotesize\ttfamily \label{classEngine_aeb88272997528d668c07624d10c40cf3} 
 void Engine::\+\+On\+Shutdown (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Shutdown classes needed to shutdown by hand. 
 
 
 
@@ -150,7 +161,21 @@ void Engine::\+\+Render\+UI (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})
 
 
 
+Render User Interface. 
+
+
+
 Implements \doxymbox{\hyperlink{classApplication}{Application}}.
+
+\Hypertarget{classEngine_a4cd78d5d95116fbaab2db1e62dab6bab}\index{Engine@{Engine}!ShouldAllowCameraControl@{ShouldAllowCameraControl}}
+\index{ShouldAllowCameraControl@{ShouldAllowCameraControl}!Engine@{Engine}}
+\doxysubsubsection{\texorpdfstring{ShouldAllowCameraControl()}{ShouldAllowCameraControl()}}
+{\footnotesize\ttfamily \label{classEngine_a4cd78d5d95116fbaab2db1e62dab6bab} 
+bool Engine::\+\+Should\+Allow\+Camera\+Control (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \doxymbox{\hyperlink{classApplication}{Application}}.
 
 
 

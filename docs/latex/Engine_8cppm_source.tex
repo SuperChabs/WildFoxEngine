@@ -19,428 +19,771 @@
 \DoxyCodeLine{00015\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8Core_8Input}{WFE.Core.Input}};}
 \DoxyCodeLine{00016\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8Core_8CommandManager}{WFE.Core.CommandManager}};}
 \DoxyCodeLine{00017\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8Core_8Logger}{WFE.Core.Logger}};}
-\DoxyCodeLine{00018\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8Scene_8Skybox}{WFE.Scene.Skybox}};}
-\DoxyCodeLine{00019\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8Rendering_8Core_8Framebuffer}{WFE.Rendering.Core.Framebuffer}};}
-\DoxyCodeLine{00020\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8Rendering_8Primitive_8PrimitivesFactory}{WFE.Rendering.Primitive.PrimitivesFactory}};}
-\DoxyCodeLine{00021\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8Rendering_8Light}{WFE.Rendering.Light}};}
-\DoxyCodeLine{00022\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8Scene_8Mesh}{WFE.Scene.Mesh}};}
-\DoxyCodeLine{00023\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8Scene_8SceneSurializer}{WFE.Scene.SceneSurializer}};}
-\DoxyCodeLine{00024\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8UI_8EditorLayout}{WFE.UI.EditorLayout}};}
-\DoxyCodeLine{00025\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8ECS_8ECSWorld}{WFE.ECS.ECSWorld}};}
-\DoxyCodeLine{00026\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8ECS_8Components}{WFE.ECS.Components}};}
-\DoxyCodeLine{00027\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8ECS_8Systems}{WFE.ECS.Systems}};}
-\DoxyCodeLine{00028\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8Rendering_8Renderer}{WFE.Rendering.Renderer}};}
-\DoxyCodeLine{00029\ }
-\DoxyCodeLine{00034\ }
-\DoxyCodeLine{00035\ \textcolor{keyword}{export}\ \textcolor{keyword}{class\ }Engine\ :\ \textcolor{keyword}{public}\ \doxymbox{\hyperlink{classApplication_a2ad4d646064502c4f06288c1c50dfed9}{Application}}\ }
-\DoxyCodeLine{00036\ \{}
-\DoxyCodeLine{00037\ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00038\ \ \ \ \ std::unique\_ptr<Skybox>\ skybox;}
-\DoxyCodeLine{00039\ \ \ \ \ std::unique\_ptr<EditorLayout>\ editorLayout;}
-\DoxyCodeLine{00040\ \ \ \ \ }
-\DoxyCodeLine{00041\ \ \ \ \ std::unique\_ptr<RotationSystem>\ rotationSystem;}
-\DoxyCodeLine{00042\ }
-\DoxyCodeLine{00043\ \ \ \ \ std::unique\_ptr<SceneSerializer>\ sceneSerializer;}
-\DoxyCodeLine{00044\ }
-\DoxyCodeLine{00045\ \textcolor{keyword}{protected}:}
-\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ OnInitialize()\textcolor{keyword}{\ override}}
-\DoxyCodeLine{00047\ \textcolor{keyword}{\ \ \ \ }\{}
-\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Initializing\ WFE..."{}});}
+\DoxyCodeLine{00018\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8Rendering_8Core_8Framebuffer}{WFE.Rendering.Core.Framebuffer}};}
+\DoxyCodeLine{00019\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8Rendering_8Primitive_8PrimitivesFactory}{WFE.Rendering.Primitive.PrimitivesFactory}};}
+\DoxyCodeLine{00020\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8Rendering_8Light}{WFE.Rendering.Light}};}
+\DoxyCodeLine{00021\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8Scene_8Mesh}{WFE.Scene.Mesh}};}
+\DoxyCodeLine{00022\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8Scene_8SceneSurializer}{WFE.Scene.SceneSurializer}};}
+\DoxyCodeLine{00023\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8UI_8EditorLayout}{WFE.UI.EditorLayout}};}
+\DoxyCodeLine{00024\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8ECS_8ECSWorld}{WFE.ECS.ECSWorld}};}
+\DoxyCodeLine{00025\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8ECS_8Components}{WFE.ECS.Components}};}
+\DoxyCodeLine{00026\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8ECS_8Systems}{WFE.ECS.Systems}};}
+\DoxyCodeLine{00027\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8Scripting_8LuaBindings}{WFE.Scripting.LuaBindings}};}
+\DoxyCodeLine{00028\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8Scripting_8LuaState}{WFE.Scripting.LuaState}};}
+\DoxyCodeLine{00029\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8Core_8ModuleManager}{WFE.Core.ModuleManager}};}
+\DoxyCodeLine{00030\ \textcolor{keyword}{import}\ \doxymbox{\hyperlink{module__WFE_8Rendering_8RenderingModule}{WFE.Rendering.RenderingModule}};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00040\ \textcolor{keyword}{export}\ \textcolor{keyword}{class\ }Engine\ :\ \textcolor{keyword}{public}\ \doxymbox{\hyperlink{classApplication_a2ad4d646064502c4f06288c1c50dfed9}{Application}}\ }
+\DoxyCodeLine{00041\ \{}
+\DoxyCodeLine{00042\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00043\ \ \ \ \ std::unique\_ptr<EditorLayout>\ editorLayout;}
+\DoxyCodeLine{00044\ \ \ \ \ }
+\DoxyCodeLine{00045\ \ \ \ \ std::unique\_ptr<RotationSystem>\ rotationSystem;}
+\DoxyCodeLine{00046\ \ \ \ \ std::unique\_ptr<ScriptSystem>\ scriptSystem;}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ std::unique\_ptr<SceneSerializer>\ sceneSerializer;}
 \DoxyCodeLine{00049\ }
-\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ GetShaderManager()-\/>Load();}
-\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ GetMaterialManager()-\/>LoadMaterialConfigs();}
+\DoxyCodeLine{00050\ \ \ \ \ \doxymbox{\hyperlink{classModuleManager}{ModuleManager}}*\ mm;}
+\DoxyCodeLine{00051\ \ \ \ \ \doxymbox{\hyperlink{classRenderingModule}{RenderingModule}}*\ renderingModule;}
 \DoxyCodeLine{00052\ }
-\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ std::vector<std::string>\ faces\ =\ }
-\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/skybox1/right.png"{}},}
-\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/skybox1/left.png"{}},}
-\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/skybox1/top.png"{}},}
-\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/skybox1/bottom.png"{}},}
-\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/skybox1/front.png"{}},}
-\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/skybox1/back.png"{}}}
-\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ cubemapTexture\ =\ GetTextureManager()-\/>LoadCubemap(faces);}
-\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ skybox\ =\ std::make\_unique<Skybox>(cubemapTexture,\ \textcolor{stringliteral}{"{}skybox"{}});}
-\DoxyCodeLine{00065\ }
-\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ renderer\ =\ std::make\_unique<Renderer>(GetShaderManager(),\ GetECSWorld());}
-\DoxyCodeLine{00067\ }
-\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ SetRenderer(std::move(renderer));}
-\DoxyCodeLine{00069\ }
-\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ iconSystem\ =\ std::make\_unique<IconRenderSystem>(GetTextureManager());}
-\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ GetRenderer()-\/>SetIconRenderSystem(std::move(iconSystem));}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{bool}\ isPlayMode\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ glm::vec3\ savedEditorCameraPos;}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{float}\ savedEditorCameraYaw;}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{float}\ savedEditorCameraPitch;}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{classEngine_ae482abae3a0c90ef02350a1d0a414db0}{OnInitialize}}()\textcolor{keyword}{\ override}}
+\DoxyCodeLine{00066\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Initializing\ WFE..."{}});}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ mm\ =\ GetModuleManager();}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ renderingModule\ =\ mm-\/>RegisterModule<\doxymbox{\hyperlink{classRenderingModule}{RenderingModule}}>(GetWindow()-\/>GetGLFWWindow(),\ GetECSWorld());}
 \DoxyCodeLine{00072\ }
-\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!GetRenderer()-\/>\doxymbox{\hyperlink{classApplication_a00d10eb756046bb9a02494ca7362013e}{Initialize}}(skybox-\/>GetVAO(),\ skybox-\/>GetTexture()))}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!renderingModule-\/>IsInitialized())}
 \DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}Failed\ to\ initialize\ Renderer!"{}});}
-\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::WARNING,\ }
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}RenderingModule\ failed\ to\ initialize\ -\/\ running\ headless"{}});}
 \DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00078\ }
-\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ rotationSystem\ =\ std::make\_unique<RotationSystem>();}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ mm-\/>InitializeAll();}
 \DoxyCodeLine{00080\ }
-\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ sceneSerializer\ =\ std::make\_unique<SceneSerializer>(}
-\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld(),\ }
-\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ GetCamera()}
-\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ );}
-\DoxyCodeLine{00085\ }
-\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ InitCommandRegistration();}
-\DoxyCodeLine{00087\ }
-\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Creating\ EditorLayout..."{}});}
-\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ editorLayout\ =\ std::make\_unique<EditorLayout>();}
-\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!editorLayout)}
-\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}Failed\ to\ create\ EditorLayout!"{}});}
-\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
-\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}EditorLayout\ created\ successfully!"{}});}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ auto\ iconSystem\ =\ std::make\_unique<IconRenderSystem>(renderingModule-\/>GetTextureManager());}}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ renderingModule-\/>GetRenderer()-\/>SetIconRenderSystem(std::move(iconSystem));}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ rotationSystem\ =\ std::make\_unique<RotationSystem>();}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ scriptSystem\ =\ std::make\_unique<ScriptSystem>();}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ InitializeLua();}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ sceneSerializer\ =\ std::make\_unique<SceneSerializer>(}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld(),\ }
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{nullptr}}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ InitCommandRegistration();}
 \DoxyCodeLine{00095\ }
-\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ GetShaderManager()-\/>Bind(\textcolor{stringliteral}{"{}skybox"{}});}
-\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ GetShaderManager()-\/>SetInt(\textcolor{stringliteral}{"{}skybox"{}},\ \textcolor{stringliteral}{"{}skybox"{}},\ 0);}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Creating\ EditorLayout..."{}});}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ editorLayout\ =\ std::make\_unique<EditorLayout>();}
 \DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Engine\ initialized\ successfully"{}});}
-\DoxyCodeLine{00100\ \ \ \ \ \}}
-\DoxyCodeLine{00101\ }
-\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{void}\ OnUpdate(\textcolor{keywordtype}{float}\ deltaTime)\textcolor{keyword}{\ override}}
-\DoxyCodeLine{00103\ \textcolor{keyword}{\ \ \ \ }\{}
-\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ rotationSystem-\/>Update(*GetECSWorld(),\ deltaTime);}
-\DoxyCodeLine{00105\ \ \ \ \ \}}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!editorLayout)}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}Failed\ to\ create\ EditorLayout!"{}});}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}EditorLayout\ created\ successfully!"{}});}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ renderingModule-\/>GetShaderManager()-\/>Bind(\textcolor{stringliteral}{"{}skybox"{}});}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ renderingModule-\/>GetShaderManager()-\/>SetInt(\textcolor{stringliteral}{"{}skybox"{}},\ \textcolor{stringliteral}{"{}skybox"{}},\ 0);}
 \DoxyCodeLine{00106\ }
-\DoxyCodeLine{00107\ \textcolor{keywordtype}{void}\ OnRender()\textcolor{keyword}{\ override}}
-\DoxyCodeLine{00108\ \textcolor{keyword}{}\{}
-\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordflow}{if}\ (editorLayout\ \&\&\ editorLayout-\/>GetFramebuffer())}
-\DoxyCodeLine{00110\ \ \ \ \ \{}
-\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classFramebuffer}{Framebuffer}}*\ fb\ =\ editorLayout-\/>GetFramebuffer();}
-\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ ImVec2\ viewportSize\ =\ editorLayout-\/>GetViewportSize();}
-\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ fb-\/>Bind();}
-\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ glEnable(GL\_DEPTH\_TEST);}
-\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ glDepthFunc(GL\_LESS);}
-\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ GetRenderer()-\/>BeginFrame();}
-\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (viewportSize.x\ >\ 0\ \&\&\ viewportSize.y\ >\ 0)}
-\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ GetRenderer()-\/>Render(}
-\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *GetCamera(),\ }
-\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(viewportSize.x),\ }
-\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(viewportSize.y)}
-\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ );}
-\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ GetRenderer()-\/>EndFrame();}
-\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ fb-\/>Unbind();}
-\DoxyCodeLine{00133\ \ \ \ \ \}}
-\DoxyCodeLine{00134\ \ \ \ \ }
-\DoxyCodeLine{00135\ \ \ \ \ glBindFramebuffer(GL\_FRAMEBUFFER,\ 0);}
-\DoxyCodeLine{00136\ \ \ \ \ glViewport(0,\ 0,\ GetWindow()-\/>GetWidth(),\ GetWindow()-\/>GetHeight());}
-\DoxyCodeLine{00137\ \ \ \ \ glClearColor(0.15f,\ 0.15f,\ 0.15f,\ 1.0f);}
-\DoxyCodeLine{00138\ \ \ \ \ glClear(GL\_COLOR\_BUFFER\_BIT);}
-\DoxyCodeLine{00139\ \ \ \ \ glDisable(GL\_DEPTH\_TEST);\ }
-\DoxyCodeLine{00140\ \}}
-\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordtype}{void}\ OnShutdown()\textcolor{keyword}{\ override}}
-\DoxyCodeLine{00142\ \textcolor{keyword}{\ \ \ \ }\{}
-\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Shutting\ down\ engine..."{}});}
-\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ GetRenderer()-\/>Shutdown();}
-\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ GetShaderManager()-\/>ClearAll();}
-\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Engine\ shutdown\ complete!"{}});}
-\DoxyCodeLine{00149\ \ \ \ \ \}}
-\DoxyCodeLine{00150\ }
-\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keywordtype}{void}\ RenderUI()\textcolor{keyword}{\ override}}
-\DoxyCodeLine{00152\ \textcolor{keyword}{\ \ \ \ }\{\ \ \ \ }
-\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!editorLayout)}
-\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}EditorLayout\ is\ null!"{}});}
-\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00158\ }
-\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ editorLayout-\/>RenderEditor(}
-\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld(),\ }
-\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ GetCamera(),\ }
-\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ GetRenderer(),\ }
-\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ GetShaderManager(),\ }
-\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ GetMaterialManager()}
-\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ );}
-\DoxyCodeLine{00166\ \ \ \ \ \}}
-\DoxyCodeLine{00167\ }
-\DoxyCodeLine{00168\ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00169\ \ \ \ \ Engine(\textcolor{keywordtype}{int}\ w,\ \textcolor{keywordtype}{int}\ h,\ \textcolor{keyword}{const}\ std::string\&\ title)}
-\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ :\ \doxymbox{\hyperlink{classApplication_a2ad4d646064502c4f06288c1c50dfed9}{Application}}(w,\ h,\ title)}
-\DoxyCodeLine{00171\ \ \ \ \ \{\}}
-\DoxyCodeLine{00172\ }
-\DoxyCodeLine{00173\ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keywordtype}{void}\ InitCommandRegistration()}
-\DoxyCodeLine{00175\ \ \ \ \ \{}
-\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onCreateCube"{}},}
-\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
-\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ GetECSWorld()-\/>CreateEntity(\textcolor{stringliteral}{"{}Cube"{}});}
-\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structTransformComponent}{TransformComponent}}>(entity,\ glm::vec3(0,\ 0,\ -\/5),\ glm::vec3(0),\ glm::vec3(1));}
-\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ cubeMesh\ =\ PrimitivesFactory::CreatePrimitive(PrimitiveType::CUBE);}
-\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structMeshComponent}{MeshComponent}}>(entity,\ cubeMesh);}
-\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ material\ =\ GetMaterialManager()-\/>GetMaterial(\textcolor{stringliteral}{"{}gray"{}});}
-\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structMaterialComponent}{MaterialComponent}}>(entity,\ material);}
-\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structVisibilityComponent}{VisibilityComponent}}>(entity,\ \textcolor{keyword}{true});}
-\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structRotationComponent}{RotationComponent}}>(entity,\ 50.0f);}
-\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Cube\ entity\ created"{}});}
-\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00193\ }
-\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onCreatePlane"{}},}
-\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
-\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ GetECSWorld()-\/>CreateEntity(\textcolor{stringliteral}{"{}Plane"{}});}
-\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structTransformComponent}{TransformComponent}}>(entity,\ glm::vec3(0,\ 0,\ -\/5),\ glm::vec3(0),\ glm::vec3(1));}
-\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ mesh\ =\ PrimitivesFactory::CreatePrimitive(PrimitiveType::QUAD);}
-\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structMeshComponent}{MeshComponent}}>(entity,\ mesh);}
-\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ material\ =\ GetMaterialManager()-\/>GetMaterial(\textcolor{stringliteral}{"{}gray"{}});}
-\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structMaterialComponent}{MaterialComponent}}>(entity,\ material);}
-\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structVisibilityComponent}{VisibilityComponent}}>(entity,\ \textcolor{keyword}{true});}
-\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structRotationComponent}{RotationComponent}}>(entity,\ 50.0f);}
-\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Cube\ entity\ created"{}});}
-\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00211\ }
-\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onExit"{}},}
-\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
-\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Exit\ requested\ from\ menu"{}});}
-\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_ac017244251b5c3b1b6b808c6c8815a4b}{Stop}}();}
-\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ editorCam\ =\ GetECSWorld()-\/>CreateCamera(\textcolor{stringliteral}{"{}Editor\ Camera"{}},\ \textcolor{keyword}{true},\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ SetMainCameraEntity(editorCam);}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Engine\ initialized\ successfully"{}});}
+\DoxyCodeLine{00111\ \ \ \ \ \}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordtype}{void}\ OnUpdate(\textcolor{keywordtype}{float}\ deltaTime)\textcolor{keyword}{\ override}}
+\DoxyCodeLine{00114\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ mm-\/>UpdateAll(deltaTime);}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ ProcessInput();}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ UpdateMainCamera();}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (isPlayMode)}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ rotationSystem-\/>Update(*GetECSWorld(),\ deltaTime);}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ scriptSystem-\/>Update(*GetECSWorld(),\ deltaTime);}
+\DoxyCodeLine{00125\ \ \ \ \ \}}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordtype}{void}\ UpdateMainCamera()}
+\DoxyCodeLine{00128\ \ \ \ \ \{}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ ecs\ =\ GetECSWorld();}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ entt::entity\ current\ =\ GetMainCameraEntity();}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (current\ ==\ entt::null\ ||\ !ecs-\/>IsValid(current)\ ||\ !ecs-\/>HasComponent<CameraComponent>(current))}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ view\ =\ ecs-\/>GetRegistry().view<CameraComponent>();}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!view.empty())}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ entt::entity\ found\ =\ entt::null;}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ entity\ :\ view)}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (view.get<CameraComponent>(entity).isMainCamera)}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ found\ =\ entity;}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (found\ ==\ entt::null)\ found\ =\ view.front();}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SetMainCameraEntity(found);\ }
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SetMainCameraEntity(entt::null);}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00156\ \ \ \ \ \}}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{classEngine_ab2cc692b49470b1554661eb75bf4d688}{OnRender}}()\textcolor{keyword}{\ override}}
+\DoxyCodeLine{00162\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!editorLayout)}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ entt::entity\ editorCamera\ =\ GetECSWorld()-\/>FindEditorCamera();}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ entt::entity\ gameCamera\ =\ GetECSWorld()-\/>FindGameCamera();}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ renderingModule\ =\ GetModuleManager()-\/>GetModule<\doxymbox{\hyperlink{classRenderingModule}{RenderingModule}}>(\textcolor{stringliteral}{"{}Rendering"{}});}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ renderer\ =\ renderingModule-\/>GetRenderer();}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (gameCamera\ ==\ entt::null)}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ gameCamera\ =\ GetECSWorld()-\/>CreateCamera(\textcolor{stringliteral}{"{}Game\ Camera"{}},\ \textcolor{keyword}{false},\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ transform\ =\ GetECSWorld()-\/>GetComponent<\doxymbox{\hyperlink{structTransformComponent}{TransformComponent}}>(gameCamera);}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ transform.position\ =\ glm::vec3(0,\ 5,\ 10);}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Scene\ Framebuffer}}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classFramebuffer}{Framebuffer}}*\ sceneFB\ =\ editorLayout-\/>GetSceneFramebuffer();}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ ImVec2\ sceneViewportSize\ =\ editorLayout-\/>GetSceneViewportSize();}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ sceneFB-\/>Bind();}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ renderer-\/>BeginFrame();}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ renderer-\/>Render(}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ *GetECSWorld(),}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ editorCamera,\ }
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(sceneViewportSize.x),\ }
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(sceneViewportSize.y)}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ renderer-\/>EndFrame();}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ sceneFB-\/>Unbind();}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Game\ Framebuffer}}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classFramebuffer}{Framebuffer}}*\ gameFB\ =\ editorLayout-\/>GetGameFramebuffer();}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ ImVec2\ gameViewportSize\ =\ editorLayout-\/>GetGameViewportSize();}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ gameFB-\/>Bind();}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ renderer-\/>BeginFrame();}
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (gameCamera\ !=\ entt::null)}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ renderer-\/>Render(}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *GetECSWorld(),\ }
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ gameCamera,\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(gameViewportSize.x),\ }
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(gameViewportSize.y)}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ renderer-\/>EndFrame();}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ gameFB-\/>Unbind();}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ glBindFramebuffer(GL\_FRAMEBUFFER,\ 0);}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ glViewport(0,\ 0,\ GetWindow()-\/>GetWidth(),\ GetWindow()-\/>GetHeight());}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ glClearColor(0.15f,\ 0.15f,\ 0.15f,\ 1.0f);}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ glClear(GL\_COLOR\_BUFFER\_BIT);}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ glDisable(GL\_DEPTH\_TEST);}
+\DoxyCodeLine{00217\ \ \ \ \ \}}
 \DoxyCodeLine{00218\ }
-\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onChangeMeshColor"{}},\ }
-\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&\ args)}
-\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (args.size()\ !=\ 1)}
-\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}onChangeMeshColor\ requires\ 1\ argument:\ color"{}});}
-\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00222\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{classEngine_aeb88272997528d668c07624d10c40cf3}{OnShutdown}}()\textcolor{keyword}{\ override}}
+\DoxyCodeLine{00223\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Shutting\ down\ engine..."{}});}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ mm-\/>ShutdownAll();}
 \DoxyCodeLine{00227\ }
-\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ color\ =\ std::get<glm::vec3>(args[0]);}
-\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ entt::entity\ selected\ =\ editorLayout-\/>GetSelectedEntity();}
-\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (selected\ ==\ entt::null\ ||\ !GetECSWorld()-\/>IsValid(selected))}
-\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::WARNING,\ \textcolor{stringliteral}{"{}No\ entity\ selected"{}});}
-\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00236\ }
-\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (GetECSWorld()-\/>HasComponent<ColorComponent>(selected))}
-\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ colorComp\ =\ GetECSWorld()-\/>GetComponent<\doxymbox{\hyperlink{structColorComponent}{ColorComponent}}>(selected);}
-\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ colorComp.color\ =\ color;}
-\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
-\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structColorComponent}{ColorComponent}}>(selected,\ color);}
-\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00246\ }
-\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (GetECSWorld()-\/>HasComponent<MeshComponent>(selected))}
-\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ meshComp\ =\ GetECSWorld()-\/>GetComponent<\doxymbox{\hyperlink{structMeshComponent}{MeshComponent}}>(selected);}
-\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (meshComp.mesh)}
-\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ meshComp.mesh-\/>SetColor(color);}
-\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00254\ }
-\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onCreateDirectionalLight"{}},}
-\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
-\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ GetECSWorld()-\/>CreateEntity(\textcolor{stringliteral}{"{}Directional\ Light"{}});}
-\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structTransformComponent}{TransformComponent}}>(entity,\ }
-\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3(0,\ 10,\ 0),\ glm::vec3(45,\ 0,\ 0),\ glm::vec3(1));}
-\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structLightComponent}{LightComponent}}>(entity,\ LightType::DIRECTIONAL);}
-\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structVisibilityComponent}{VisibilityComponent}}>(entity,\ \textcolor{keyword}{true});}
-\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structIconComponent}{IconComponent}}>(entity,\ }
-\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/icons/light\_directional.png"{}},\ 0.3f);}
-\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Directional\ light\ created\ with\ icon"{}});}
-\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00267\ }
-\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onCreatePointLight"{}},}
-\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
-\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ GetECSWorld()-\/>CreateEntity(\textcolor{stringliteral}{"{}Point\ Light"{}});}
-\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structTransformComponent}{TransformComponent}}>(entity,\ }
-\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3(0,\ 5,\ 0),\ glm::vec3(0),\ glm::vec3(1));}
-\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structLightComponent}{LightComponent}}>(entity,\ LightType::POINT);}
-\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structVisibilityComponent}{VisibilityComponent}}>(entity,\ \textcolor{keyword}{true});}
-\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structIconComponent}{IconComponent}}>(entity,\ }
-\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/icons/light\_point.png"{}},\ 0.4f);}
-\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Point\ light\ created\ with\ icon"{}});}
-\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00280\ }
-\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onCreateSpotLight"{}},}
-\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
-\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ GetECSWorld()-\/>CreateEntity(\textcolor{stringliteral}{"{}Spot\ Light"{}});}
-\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structTransformComponent}{TransformComponent}}>(entity,\ }
-\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3(0,\ 5,\ 0),\ glm::vec3(45,\ 0,\ 0),\ glm::vec3(1));}
-\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structLightComponent}{LightComponent}}>(entity,\ LightType::SPOT);}
-\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structVisibilityComponent}{VisibilityComponent}}>(entity,\ \textcolor{keyword}{true});}
-\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structIconComponent}{IconComponent}}>(entity,\ }
-\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/icons/light\_spot.png"{}},\ 0.35f);}
-\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Spot\ light\ created\ with\ icon"{}});}
-\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00293\ }
-\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onSaveScene"{}},}
-\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&\ args)\ }
-\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ filename\ =\ \textcolor{stringliteral}{"{}scene.json"{}};}
-\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!args.empty())}
-\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ }
-\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filename\ =\ std::get<std::string>(args[0]);}
-\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{catch}\ (...)\ }
-\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::WARNING,\ \textcolor{stringliteral}{"{}Invalid\ filename\ argument,\ using\ default"{}});}
-\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (filename.find(\textcolor{stringliteral}{"{}.json"{}})\ ==\ std::string::npos)}
-\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filename\ +=\ \textcolor{stringliteral}{"{}.json"{}};}
-\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ success\ =\ sceneSerializer-\/>SaveScene(filename);}
-\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (success)}
-\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}✓\ Scene\ saved\ successfully:\ "{}}\ +\ filename);}
-\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
-\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}✗\ Failed\ to\ save\ scene:\ "{}}\ +\ filename);}
-\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onLoadScene"{}},}
-\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&\ args)\ }
-\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ filename\ =\ \textcolor{stringliteral}{"{}scene.json"{}};}
-\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!args.empty())}
-\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ }
-\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filename\ =\ std::get<std::string>(args[0]);}
-\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{catch}\ (...)\ }
-\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::WARNING,\ \textcolor{stringliteral}{"{}Invalid\ filename\ argument,\ using\ default"{}});}
-\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (filename.find(\textcolor{stringliteral}{"{}.json"{}})\ ==\ std::string::npos)}
-\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filename\ +=\ \textcolor{stringliteral}{"{}.json"{}};}
-\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ success\ =\ sceneSerializer-\/>LoadScene(}
-\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filename,}
-\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GetMaterialManager(),}
-\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GetTextureManager()}
-\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ );}
-\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (success)}
-\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}✓\ Scene\ loaded\ successfully:\ "{}}\ +\ filename);}
-\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
-\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}✗\ Failed\ to\ load\ scene:\ "{}}\ +\ filename);}
-\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onQuickSave"{}},}
-\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
-\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \ \ \ \ CommandManager::ExecuteCommand(\textcolor{stringliteral}{"{}onSaveScene"{}},\ \{std::string(\textcolor{stringliteral}{"{}quicksave.json"{}})\});}
-\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onQuickLoad"{}},}
-\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
-\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ \ \ \ \ CommandManager::ExecuteCommand(\textcolor{stringliteral}{"{}onLoadScene"{}},\ \{std::string(\textcolor{stringliteral}{"{}quicksave.json"{}})\});}
-\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onNewScene"{}},}
-\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
-\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>Clear();}
-\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \ \ \ \ GetCamera()-\/>SetPosition(glm::vec3(0,\ 0,\ 0));}
-\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ \ \ \ \ GetCamera()-\/>SetYaw(-\/95.0f);}
-\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \ \ \ \ GetCamera()-\/>SetPitch(0.0f);}
-\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}New\ scene\ created"{}});}
-\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onListScenes"{}},}
-\DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
-\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ scenes\ =\ sceneSerializer-\/>GetAvailableScenes();}
-\DoxyCodeLine{00382\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (scenes.empty())}
-\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00385\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}No\ saved\ scenes\ found"{}});}
-\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
-\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Available\ scenes\ ("{}}\ +\ }
-\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::to\_string(scenes.size())\ +\ \textcolor{stringliteral}{"{}):"{}});}
-\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ scene\ :\ scenes)}
-\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}\ \ -\/\ "{}}\ +\ scene);}
-\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00396\ }
-\DoxyCodeLine{00397\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onLoadModel"{}},}
-\DoxyCodeLine{00398\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&\ args)\ }
-\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (args.empty())}
-\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}onLoadModel\ requires\ filepath\ argument"{}});}
-\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ filepath\ =\ std::get<std::string>(args[0]);}
-\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Завантаж\ модель\ через\ ModelManager}}
-\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ model\ =\ GetModelManager()-\/>Load(filepath);}
-\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!model)\ }
-\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}Failed\ to\ load\ model:\ "{}}\ +\ filepath);}
-\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Створюємо\ сутності\ для\ кожного\ меша\ моделі}}
-\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ model-\/>GetMeshCount();\ ++i)\ }
-\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ GetECSWorld()-\/>CreateEntity(}
-\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ model-\/>GetName()\ +\ \textcolor{stringliteral}{"{}\_Mesh\_"{}}\ +\ std::to\_string(i));}
-\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Transform}}
-\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structTransformComponent}{TransformComponent}}>(entity,\ }
-\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3(0,\ 0,\ -\/5),\ glm::vec3(0),\ glm::vec3(1));}
-\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Mesh}}
-\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ mesh\ =\ model-\/>GetMesh(i);}
-\DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structMeshComponent}{MeshComponent}}>(entity,\ mesh);}
-\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Material}}
-\DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ material\ =\ GetMaterialManager()-\/>GetMaterial(\textcolor{stringliteral}{"{}default"{}});}
-\DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structMaterialComponent}{MaterialComponent}}>(entity,\ material);}
-\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Visibility}}
-\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<\doxymbox{\hyperlink{structVisibilityComponent}{VisibilityComponent}}>(entity,\ \textcolor{keyword}{true});}
-\DoxyCodeLine{00437\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00438\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00439\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ }
-\DoxyCodeLine{00440\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Model\ entities\ created:\ "{}}\ +\ model-\/>GetName()\ +\ }
-\DoxyCodeLine{00441\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\ ("{}}\ +\ std::to\_string(model-\/>GetMeshCount())\ +\ \textcolor{stringliteral}{"{}\ meshes)"{}});}
-\DoxyCodeLine{00442\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00443\ \ \ \ \ \}}
-\DoxyCodeLine{00444\ \};}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Engine\ shutdown\ complete!"{}});}
+\DoxyCodeLine{00229\ \ \ \ \ \}}
+\DoxyCodeLine{00230\ }
+\DoxyCodeLine{00234\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{classEngine_a08ae57a21e3da54edaa155dac5c874fe}{RenderUI}}()\textcolor{keyword}{\ override}}
+\DoxyCodeLine{00235\ \textcolor{keyword}{\ \ \ \ }\{\ \ \ \ }
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!editorLayout)}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}EditorLayout\ is\ null!"{}});}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ editorLayout-\/>RenderEditor(}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld(),\ }
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ GetMainCameraEntity(),}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ renderingModule-\/>GetRenderer(),\ }
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ renderingModule-\/>GetShaderManager(),\ }
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ renderingModule-\/>GetMaterialManager(),}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ isPlayMode}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00250\ \ \ \ \ \}}
+\DoxyCodeLine{00251\ }
+\DoxyCodeLine{00252\ \ \ \ \ \textcolor{keywordtype}{bool}\ ShouldAllowCameraControl()\textcolor{keyword}{\ const\ override\ }}
+\DoxyCodeLine{00253\ \textcolor{keyword}{\ \ \ \ }\{\ }
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ !isPlayMode;\ }
+\DoxyCodeLine{00255\ \ \ \ \ \}}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00258\ \ \ \ \ Engine(\textcolor{keywordtype}{int}\ w,\ \textcolor{keywordtype}{int}\ h,\ \textcolor{keyword}{const}\ std::string\&\ title)}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ :\ \doxymbox{\hyperlink{classApplication_a2ad4d646064502c4f06288c1c50dfed9}{Application}}(w,\ h,\ title)}
+\DoxyCodeLine{00260\ \ \ \ \ \{\}}
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00262\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00263\ \ \ \ \ \textcolor{keywordtype}{void}\ InitializeLua()}
+\DoxyCodeLine{00264\ \ \ \ \ \{}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Initializing\ Lua\ scripting..."{}});}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ }
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ InitLua(GetECSWorld());}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Lua\ scripting\ initialized\ successfully"{}});}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{catch}\ (\textcolor{keyword}{const}\ std::exception\&\ e)}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}Failed\ to\ initialize\ Lua:\ "{}}\ +\ std::string(e.what()));}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00276\ \ \ \ \ \}}
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00278\ \ \ \ \ \textcolor{keywordtype}{void}\ ProcessInput()}
+\DoxyCodeLine{00279\ \ \ \ \ \{}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (GetInput()-\/>IsKeyPressed(Key::KEY\_ESCAPE))\ }
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_ac017244251b5c3b1b6b808c6c8815a4b}{Stop}}();}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (GetInput()-\/>IsKeyJustPressed(Key::KEY\_F1))\ }
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ showUI\ =\ !showUI;}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (GetInput()-\/>IsKeyJustPressed(Key::KEY\_F5))}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ renderingModule-\/>GetShaderManager()-\/>ReloadAll();}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Reloaded\ all\ shaders"{}});}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00291\ }
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ctrl+S\ -\/\ Quick\ Save}}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (GetInput()-\/>IsKeyPressed(Key::KEY\_LEFT\_CONTROL)\ \&\&\ }
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ GetInput()-\/>IsKeyJustPressed(Key::KEY\_S))}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (CommandManager::HasCommand(\textcolor{stringliteral}{"{}onQuickSave"{}}))}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CommandManager::ExecuteCommand(\textcolor{stringliteral}{"{}onQuickSave"{}},\ \{\});}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ctrl+L\ -\/\ Quick\ Load}}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (GetInput()-\/>IsKeyPressed(Key::KEY\_LEFT\_CONTROL)\ \&\&\ }
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ GetInput()-\/>IsKeyJustPressed(Key::KEY\_L))}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (CommandManager::HasCommand(\textcolor{stringliteral}{"{}onQuickLoad"{}}))}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CommandManager::ExecuteCommand(\textcolor{stringliteral}{"{}onQuickLoad"{}},\ \{\});}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ctrl+N\ -\/\ New\ Scene}}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (GetInput()-\/>IsKeyPressed(Key::KEY\_LEFT\_CONTROL)\ \&\&\ }
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ GetInput()-\/>IsKeyJustPressed(Key::KEY\_N))}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (CommandManager::HasCommand(\textcolor{stringliteral}{"{}onNewScene"{}}))}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CommandManager::ExecuteCommand(\textcolor{stringliteral}{"{}onNewScene"{}},\ \{\});}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00315\ \ \ \ \ \}}
+\DoxyCodeLine{00316\ }
+\DoxyCodeLine{00317\ \ \ \ \ \textcolor{keywordtype}{void}\ InitCommandRegistration()}
+\DoxyCodeLine{00318\ \ \ \ \ \{}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onCreateCube"{}},}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ GetECSWorld()-\/>CreateEntity(\textcolor{stringliteral}{"{}Cube"{}});}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<TransformComponent>(entity,\ glm::vec3(0,\ 0,\ -\/5),\ glm::vec3(0),\ glm::vec3(1));}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ cubeMesh\ =\ PrimitivesFactory::CreatePrimitive(PrimitiveType::CUBE);}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<MeshComponent>(entity,\ cubeMesh);}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ material\ =\ renderingModule-\/>GetMaterialManager()-\/>GetMaterial(\textcolor{stringliteral}{"{}gray"{}});}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<MaterialComponent>(entity,\ material);}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<VisibilityComponent>(entity,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<RotationComponent>(entity,\ 50.0f);}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Cube\ entity\ created"{}});}
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00336\ }
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onCreatePlane"{}},}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ GetECSWorld()-\/>CreateEntity(\textcolor{stringliteral}{"{}Plane"{}});}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<TransformComponent>(entity,\ glm::vec3(0,\ 0,\ -\/5),\ glm::vec3(0),\ glm::vec3(1));}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ mesh\ =\ PrimitivesFactory::CreatePrimitive(PrimitiveType::QUAD);}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<MeshComponent>(entity,\ mesh);}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ material\ =\ renderingModule-\/>GetMaterialManager()-\/>GetMaterial(\textcolor{stringliteral}{"{}gray"{}});}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<MaterialComponent>(entity,\ material);}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<VisibilityComponent>(entity,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<RotationComponent>(entity,\ 50.0f);}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Cube\ entity\ created"{}});}
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00354\ }
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onExit"{}},}
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Exit\ requested\ from\ menu"{}});}
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classApplication_ac017244251b5c3b1b6b808c6c8815a4b}{Stop}}();}
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00361\ }
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onChangeMeshColor"{}},\ }
+\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&\ args)}
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (args.size()\ !=\ 1)}
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}onChangeMeshColor\ requires\ 1\ argument:\ color"{}});}
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00370\ }
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ color\ =\ std::get<glm::vec3>(args[0]);}
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ \ \ \ \ entt::entity\ selected\ =\ editorLayout-\/>GetSelectedEntity();}
+\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (selected\ ==\ entt::null\ ||\ !GetECSWorld()-\/>IsValid(selected))}
+\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::WARNING,\ \textcolor{stringliteral}{"{}No\ entity\ selected"{}});}
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00379\ }
+\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (GetECSWorld()-\/>HasComponent<ColorComponent>(selected))}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00382\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ colorComp\ =\ GetECSWorld()-\/>GetComponent<ColorComponent>(selected);}
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ colorComp.color\ =\ color;}
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00385\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<ColorComponent>(selected,\ color);}
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00389\ }
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (GetECSWorld()-\/>HasComponent<MeshComponent>(selected))}
+\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ meshComp\ =\ GetECSWorld()-\/>GetComponent<MeshComponent>(selected);}
+\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (meshComp.mesh)}
+\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ meshComp.mesh-\/>SetColor(color);}
+\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00396\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00397\ }
+\DoxyCodeLine{00398\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onCreateDirectionalLight"{}},}
+\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ GetECSWorld()-\/>CreateEntity(\textcolor{stringliteral}{"{}Directional\ Light"{}});}
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<TransformComponent>(entity,\ }
+\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3(0,\ 10,\ 0),\ glm::vec3(45,\ 0,\ 0),\ glm::vec3(1));}
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<LightComponent>(entity,\ LightType::DIRECTIONAL);}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<VisibilityComponent>(entity,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<IconComponent>(entity,\ }
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/icons/light\_directional.png"{}},\ 0.3f);}
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Directional\ light\ created\ with\ icon"{}});}
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00410\ }
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onCreatePointLight"{}},}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ GetECSWorld()-\/>CreateEntity(\textcolor{stringliteral}{"{}Point\ Light"{}});}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<TransformComponent>(entity,\ }
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3(0,\ 5,\ 0),\ glm::vec3(0),\ glm::vec3(1));}
+\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<LightComponent>(entity,\ LightType::POINT);}
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<VisibilityComponent>(entity,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<IconComponent>(entity,\ }
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/icons/light\_point.png"{}},\ 0.4f);}
+\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Point\ light\ created\ with\ icon"{}});}
+\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00423\ }
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onCreateSpotLight"{}},}
+\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ entity\ =\ GetECSWorld()-\/>CreateEntity(\textcolor{stringliteral}{"{}Spot\ Light"{}});}
+\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<TransformComponent>(entity,\ }
+\DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ glm::vec3(0,\ 5,\ 0),\ glm::vec3(45,\ 0,\ 0),\ glm::vec3(1));}
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<LightComponent>(entity,\ LightType::SPOT);}
+\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<VisibilityComponent>(entity,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>AddComponent<IconComponent>(entity,\ }
+\DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/textures/icons/light\_spot.png"{}},\ 0.35f);}
+\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Spot\ light\ created\ with\ icon"{}});}
+\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00436\ }
+\DoxyCodeLine{00437\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onSaveScene"{}},}
+\DoxyCodeLine{00438\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&\ args)\ }
+\DoxyCodeLine{00439\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00440\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ filename\ =\ \textcolor{stringliteral}{"{}scene.json"{}};}
+\DoxyCodeLine{00441\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00442\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!args.empty())}
+\DoxyCodeLine{00443\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00444\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ }
+\DoxyCodeLine{00445\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00446\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filename\ =\ std::get<std::string>(args[0]);}
+\DoxyCodeLine{00447\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{catch}\ (...)\ }
+\DoxyCodeLine{00449\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00450\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::WARNING,\ \textcolor{stringliteral}{"{}Invalid\ filename\ argument,\ using\ default"{}});}
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00452\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00453\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00454\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (filename.find(\textcolor{stringliteral}{"{}.json"{}})\ ==\ std::string::npos)}
+\DoxyCodeLine{00455\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filename\ +=\ \textcolor{stringliteral}{"{}.json"{}};}
+\DoxyCodeLine{00456\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00457\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ success\ =\ sceneSerializer-\/>SaveScene(filename);}
+\DoxyCodeLine{00458\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00459\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (success)}
+\DoxyCodeLine{00460\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}✓\ Scene\ saved\ successfully:\ "{}}\ +\ filename);}
+\DoxyCodeLine{00461\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}✗\ Failed\ to\ save\ scene:\ "{}}\ +\ filename);}
+\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onLoadScene"{}},}
+\DoxyCodeLine{00466\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&\ args)\ }
+\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00468\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ filename\ =\ \textcolor{stringliteral}{"{}scene.json"{}};}
+\DoxyCodeLine{00469\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00470\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!args.empty())}
+\DoxyCodeLine{00471\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00472\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ }
+\DoxyCodeLine{00473\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filename\ =\ std::get<std::string>(args[0]);}
+\DoxyCodeLine{00475\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{catch}\ (...)\ }
+\DoxyCodeLine{00477\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::WARNING,\ \textcolor{stringliteral}{"{}Invalid\ filename\ argument,\ using\ default"{}});}
+\DoxyCodeLine{00479\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00480\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00481\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00482\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (filename.find(\textcolor{stringliteral}{"{}.json"{}})\ ==\ std::string::npos)}
+\DoxyCodeLine{00483\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filename\ +=\ \textcolor{stringliteral}{"{}.json"{}};}
+\DoxyCodeLine{00484\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00485\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ success\ =\ sceneSerializer-\/>LoadScene(}
+\DoxyCodeLine{00486\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filename,}
+\DoxyCodeLine{00487\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ renderingModule-\/>GetMaterialManager(),}
+\DoxyCodeLine{00488\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ renderingModule-\/>GetTextureManager()}
+\DoxyCodeLine{00489\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00490\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (success)}
+\DoxyCodeLine{00492\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}✓\ Scene\ loaded\ successfully:\ "{}}\ +\ filename);}
+\DoxyCodeLine{00493\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00494\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}✗\ Failed\ to\ load\ scene:\ "{}}\ +\ filename);}
+\DoxyCodeLine{00495\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00496\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00497\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onQuickSave"{}},}
+\DoxyCodeLine{00498\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00499\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00500\ \ \ \ \ \ \ \ \ \ \ \ \ CommandManager::ExecuteCommand(\textcolor{stringliteral}{"{}onSaveScene"{}},\ \{std::string(\textcolor{stringliteral}{"{}quicksave.json"{}})\});}
+\DoxyCodeLine{00501\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00502\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00503\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onQuickLoad"{}},}
+\DoxyCodeLine{00504\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00506\ \ \ \ \ \ \ \ \ \ \ \ \ CommandManager::ExecuteCommand(\textcolor{stringliteral}{"{}onLoadScene"{}},\ \{std::string(\textcolor{stringliteral}{"{}quicksave.json"{}})\});}
+\DoxyCodeLine{00507\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00508\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00509\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CommandManager::RegisterCommand("{}onNewScene"{},}}
+\DoxyCodeLine{00510\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [this](const\ CommandArgs\&)\ }}
+\DoxyCodeLine{00511\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \{}}
+\DoxyCodeLine{00512\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ GetECSWorld()-\/>Clear();}}
+\DoxyCodeLine{00513\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ }}
+\DoxyCodeLine{00514\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ GetCamera()-\/>SetPosition(glm::vec3(0,\ 0,\ 0));}}
+\DoxyCodeLine{00515\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ GetCamera()-\/>SetYaw(-\/95.0f);}}
+\DoxyCodeLine{00516\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ GetCamera()-\/>SetPitch(0.0f);}}
+\DoxyCodeLine{00517\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ }}
+\DoxyCodeLine{00518\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ Logger::Log(LogLevel::INFO,\ "{}New\ scene\ created"{});}}
+\DoxyCodeLine{00519\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \});}}
+\DoxyCodeLine{00520\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00521\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onListScenes"{}},}
+\DoxyCodeLine{00522\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00523\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00524\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ scenes\ =\ sceneSerializer-\/>GetAvailableScenes();}
+\DoxyCodeLine{00525\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00526\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (scenes.empty())}
+\DoxyCodeLine{00527\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00528\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}No\ saved\ scenes\ found"{}});}
+\DoxyCodeLine{00529\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00530\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00531\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00532\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Available\ scenes\ ("{}}\ +\ }
+\DoxyCodeLine{00533\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::to\_string(scenes.size())\ +\ \textcolor{stringliteral}{"{}):"{}});}
+\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00535\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ scene\ :\ scenes)}
+\DoxyCodeLine{00536\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}\ \ -\/\ "{}}\ +\ scene);}
+\DoxyCodeLine{00537\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00538\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00539\ }
+\DoxyCodeLine{00540\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onLoadModel"{}},}
+\DoxyCodeLine{00541\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&\ args)\ }
+\DoxyCodeLine{00542\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00543\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}===\ onLoadModel\ command\ called\ ==="{}});}
+\DoxyCodeLine{00544\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00545\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (args.empty())}
+\DoxyCodeLine{00546\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00547\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}onLoadModel\ requires\ filepath\ argument"{}});}
+\DoxyCodeLine{00548\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00549\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00550\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00551\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ filepath\ =\ std::get<std::string>(args[0]);}
+\DoxyCodeLine{00552\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Filepath:\ "{}}\ +\ filepath);}
+\DoxyCodeLine{00553\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00554\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!renderingModule-\/>GetModelManager())}
+\DoxyCodeLine{00555\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00556\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}ModelManager\ is\ NULL!"{}});}
+\DoxyCodeLine{00557\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00558\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00559\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00560\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!GetECSWorld())}
+\DoxyCodeLine{00561\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00562\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}ECSWorld\ is\ NULL!"{}});}
+\DoxyCodeLine{00563\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00564\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00565\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00566\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Calling\ LoadWithECS..."{}});}
+\DoxyCodeLine{00567\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ model\ =\ renderingModule-\/>GetModelManager()-\/>LoadWithECS(filepath,\ GetECSWorld());}
+\DoxyCodeLine{00568\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00569\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!model)\ }
+\DoxyCodeLine{00570\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00571\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,\ \textcolor{stringliteral}{"{}Failed\ to\ load\ model:\ "{}}\ +\ filepath);}
+\DoxyCodeLine{00572\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00573\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00574\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00575\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ }
+\DoxyCodeLine{00576\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Model\ loaded\ successfully\ with\ "{}}\ +\ std::to\_string(model-\/>GetMeshCount())\ +\ \textcolor{stringliteral}{"{}\ meshes"{}});}
+\DoxyCodeLine{00577\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00578\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Total\ entities\ in\ world:\ "{}}\ +\ std::to\_string(GetECSWorld()-\/>GetEntityCount()));}
+\DoxyCodeLine{00579\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}===\ onLoadModel\ command\ complete\ ===\(\backslash\)n"{}});}
+\DoxyCodeLine{00580\ }
+\DoxyCodeLine{00581\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ for\ (size\_t\ i\ =\ 0;\ i\ <\ model-\/>GetMeshCount();\ ++i)\ }}
+\DoxyCodeLine{00582\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \{}}
+\DoxyCodeLine{00583\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ auto\ entityName\ =\ model-\/>GetName()\ +\ "{}\_Mesh\_"{}\ +\ std::to\_string(i);}}
+\DoxyCodeLine{00584\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ auto\ entity\ =\ GetECSWorld()-\/>CreateEntity(entityName);}}
+\DoxyCodeLine{00585\ }
+\DoxyCodeLine{00586\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ Logger::Log(LogLevel::INFO,\ "{}Creating\ entity:\ "{}\ +\ entityName);}}
+\DoxyCodeLine{00587\ }
+\DoxyCodeLine{00588\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ GetECSWorld()-\/>AddComponent<TransformComponent>(entity,\ }}
+\DoxyCodeLine{00589\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ glm::vec3(0,\ 0,\ -\/5),\ glm::vec3(0),\ glm::vec3(1));}}
+\DoxyCodeLine{00590\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ Logger::Log(LogLevel::DEBUG,\ "{}TransformComponent\ added"{});}}
+\DoxyCodeLine{00591\ }
+\DoxyCodeLine{00592\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ auto\ mesh\ =\ model-\/>GetMesh(i);}}
+\DoxyCodeLine{00593\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ GetECSWorld()-\/>AddComponent<MeshComponent>(entity,\ mesh);}}
+\DoxyCodeLine{00594\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ Logger::Log(LogLevel::DEBUG,\ "{}MeshComponent\ added\ with\ "{}\ +\ }}
+\DoxyCodeLine{00595\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ std::to\_string(mesh-\/>GetMeshRenderer()-\/>GetVertexCount())\ +\ "{}\ vertices"{});}}
+\DoxyCodeLine{00596\ }
+\DoxyCodeLine{00597\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ auto\ material\ =\ mesh-\/>GetMaterial();}}
+\DoxyCodeLine{00598\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ if\ (!material)}}
+\DoxyCodeLine{00599\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \{}}
+\DoxyCodeLine{00600\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::WARNING,\ "{}Mesh\ "{}\ +\ std::to\_string(i)\ +\ }}
+\DoxyCodeLine{00601\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ "{}\ has\ no\ material,\ using\ default"{});}}
+\DoxyCodeLine{00602\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ material\ =\ GetMaterialManager()-\/>GetMaterial("{}default"{});}}
+\DoxyCodeLine{00603\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \}}}
+\DoxyCodeLine{00604\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ else}}
+\DoxyCodeLine{00605\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \{}}
+\DoxyCodeLine{00606\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ "{}Material\ assigned:\ "{}\ +\ material-\/>GetName()\ +}}
+\DoxyCodeLine{00607\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ "{}\ (using\ color:\ "{}\ +\ (material-\/>IsUsingColor()\ ?\ "{}YES"{}\ :\ "{}NO"{})\ +\ "{})"{});}}
+\DoxyCodeLine{00608\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \}}}
+\DoxyCodeLine{00609\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ GetECSWorld()-\/>AddComponent<MaterialComponent>(entity,\ material);}}
+\DoxyCodeLine{00610\ }
+\DoxyCodeLine{00611\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ GetECSWorld()-\/>AddComponent<VisibilityComponent>(entity,\ true);}}
+\DoxyCodeLine{00612\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ Logger::Log(LogLevel::DEBUG,\ "{}VisibilityComponent\ added"{});}}
+\DoxyCodeLine{00613\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \}}}
+\DoxyCodeLine{00614\ }
+\DoxyCodeLine{00615\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Logger::Log(LogLevel::INFO,\ }}
+\DoxyCodeLine{00616\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ "{}All\ model\ entities\ created:\ "{}\ +\ model-\/>GetName()\ +\ }}
+\DoxyCodeLine{00617\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ "{}\ ("{}\ +\ std::to\_string(model-\/>GetMeshCount())\ +\ "{}\ meshes)"{});}}
+\DoxyCodeLine{00618\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00619\ }
+\DoxyCodeLine{00620\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onCreateCamera"{}},\ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00621\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00622\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ ecs\ =\ GetECSWorld();}
+\DoxyCodeLine{00623\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ newCam\ =\ ecs-\/>CreateCamera(\textcolor{stringliteral}{"{}Camera"{}},\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00624\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00625\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ view\ =\ ecs-\/>GetRegistry().view<CameraComponent>();}
+\DoxyCodeLine{00626\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (view.size()\ ==\ 1)}
+\DoxyCodeLine{00627\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00628\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ecs-\/>GetComponent<CameraComponent>(newCam).isMainCamera\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00629\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SetMainCameraEntity(newCam);}
+\DoxyCodeLine{00630\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00631\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00632\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}New\ camera\ created\ and\ assigned\ as\ main\ if\ needed"{}});}
+\DoxyCodeLine{00633\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00634\ }
+\DoxyCodeLine{00635\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onPlayGame"{}},}
+\DoxyCodeLine{00636\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00637\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00638\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (isPlayMode)}
+\DoxyCodeLine{00639\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00640\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::WARNING,\ \textcolor{stringliteral}{"{}Already\ in\ play\ mode"{}});}
+\DoxyCodeLine{00641\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00642\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00643\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00644\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}===\ ENTERING\ PLAY\ MODE\ ==="{}});}
+\DoxyCodeLine{00645\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00646\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ ecs\ =\ GetECSWorld();}
+\DoxyCodeLine{00647\ \ \ \ \ \ \ \ \ \ \ \ \ entt::entity\ editorCam\ =\ ecs-\/>FindEditorCamera();}
+\DoxyCodeLine{00648\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00649\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (editorCam\ !=\ entt::null\ \&\&\ ecs-\/>IsValid(editorCam))}
+\DoxyCodeLine{00650\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00651\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ transform\ =\ ecs-\/>GetComponent<TransformComponent>(editorCam);}
+\DoxyCodeLine{00652\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ orientation\ =\ ecs-\/>GetComponent<CameraOrientationComponent>(editorCam);}
+\DoxyCodeLine{00653\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00654\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ savedEditorCameraPos\ =\ transform.position;}
+\DoxyCodeLine{00655\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ savedEditorCameraYaw\ =\ orientation.yaw;}
+\DoxyCodeLine{00656\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ savedEditorCameraPitch\ =\ orientation.pitch;}
+\DoxyCodeLine{00657\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00658\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Editor\ camera\ state\ saved"{}});}
+\DoxyCodeLine{00659\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00660\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00661\ \ \ \ \ \ \ \ \ \ \ \ \ entt::entity\ gameCam\ =\ ecs-\/>FindGameCamera();}
+\DoxyCodeLine{00662\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (gameCam\ !=\ entt::null)}
+\DoxyCodeLine{00663\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00664\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SetMainCameraEntity(gameCam);}
+\DoxyCodeLine{00665\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ gameCamComp\ =\ ecs-\/>GetComponent<CameraComponent>(gameCam);}
+\DoxyCodeLine{00666\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ gameCamComp.isMainCamera\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00667\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00668\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (editorCam\ !=\ entt::null)}
+\DoxyCodeLine{00669\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00670\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ editorCamComp\ =\ ecs-\/>GetComponent<CameraComponent>(editorCam);}
+\DoxyCodeLine{00671\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ editorCamComp.isMainCamera\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00672\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00673\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00674\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Switched\ to\ Game\ Camera"{}});}
+\DoxyCodeLine{00675\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00676\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00677\ \ \ \ \ \ \ \ \ \ \ \ \ isPlayMode\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00678\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Play\ mode\ started"{}});}
+\DoxyCodeLine{00679\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00680\ }
+\DoxyCodeLine{00681\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onStopGame"{}},}
+\DoxyCodeLine{00682\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00683\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00684\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!isPlayMode)}
+\DoxyCodeLine{00685\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00686\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::WARNING,\ \textcolor{stringliteral}{"{}Not\ in\ play\ mode"{}});}
+\DoxyCodeLine{00687\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00688\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00689\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00690\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}===\ EXITING\ PLAY\ MODE\ ==="{}});}
+\DoxyCodeLine{00691\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00692\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ ecs\ =\ GetECSWorld();}
+\DoxyCodeLine{00693\ \ \ \ \ \ \ \ \ \ \ \ \ entt::entity\ editorCam\ =\ ecs-\/>FindEditorCamera();}
+\DoxyCodeLine{00694\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00695\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (editorCam\ !=\ entt::null\ \&\&\ ecs-\/>IsValid(editorCam))}
+\DoxyCodeLine{00696\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00697\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ transform\ =\ ecs-\/>GetComponent<TransformComponent>(editorCam);}
+\DoxyCodeLine{00698\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ orientation\ =\ ecs-\/>GetComponent<CameraOrientationComponent>(editorCam);}
+\DoxyCodeLine{00699\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00700\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ transform.position\ =\ savedEditorCameraPos;}
+\DoxyCodeLine{00701\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ orientation.yaw\ =\ savedEditorCameraYaw;}
+\DoxyCodeLine{00702\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ orientation.pitch\ =\ savedEditorCameraPitch;}
+\DoxyCodeLine{00703\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00704\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ editorCamComp\ =\ ecs-\/>GetComponent<CameraComponent>(editorCam);}
+\DoxyCodeLine{00705\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ editorCamComp.isMainCamera\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00706\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00707\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SetMainCameraEntity(editorCam);}
+\DoxyCodeLine{00708\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00709\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ entt::entity\ gameCam\ =\ ecs-\/>FindGameCamera();}
+\DoxyCodeLine{00710\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (gameCam\ !=\ entt::null)}
+\DoxyCodeLine{00711\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00712\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ gameCamComp\ =\ ecs-\/>GetComponent<CameraComponent>(gameCam);}
+\DoxyCodeLine{00713\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ gameCamComp.isMainCamera\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00714\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00715\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00716\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Editor\ camera\ state\ restored"{}});}
+\DoxyCodeLine{00717\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00718\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00719\ \ \ \ \ \ \ \ \ \ \ \ \ isPlayMode\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00720\ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Play\ mode\ stopped"{}});}
+\DoxyCodeLine{00721\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00722\ }
+\DoxyCodeLine{00723\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onAttachScript"{}},}
+\DoxyCodeLine{00724\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&\ args)}
+\DoxyCodeLine{00725\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00726\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (args.empty())}
+\DoxyCodeLine{00727\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00728\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::ERROR,}
+\DoxyCodeLine{00729\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}onAttachScript\ requires\ script\ path"{}});}
+\DoxyCodeLine{00730\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00731\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00732\ }
+\DoxyCodeLine{00733\ \ \ \ \ \ \ \ \ \ \ \ \ entt::entity\ selected\ =\ editorLayout-\/>GetSelectedEntity();}
+\DoxyCodeLine{00734\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (selected\ ==\ entt::null\ ||\ !GetECSWorld()-\/>IsValid(selected))}
+\DoxyCodeLine{00735\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00736\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::WARNING,\ \textcolor{stringliteral}{"{}No\ entity\ selected"{}});}
+\DoxyCodeLine{00737\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00738\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00739\ }
+\DoxyCodeLine{00740\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ scriptPath\ =\ std::get<std::string>(args[0]);}
+\DoxyCodeLine{00741\ }
+\DoxyCodeLine{00742\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ ecs\ =\ GetECSWorld();}
+\DoxyCodeLine{00743\ }
+\DoxyCodeLine{00744\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ecs-\/>HasComponent<ScriptComponent>(selected))}
+\DoxyCodeLine{00745\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00746\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ script\ =\ ecs-\/>GetComponent<ScriptComponent>(selected);}
+\DoxyCodeLine{00747\ }
+\DoxyCodeLine{00748\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ script.scriptPath\ =\ scriptPath;}
+\DoxyCodeLine{00749\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ script.loaded\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00750\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ script.failed\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00751\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ script.env\ =\ \{\};}
+\DoxyCodeLine{00752\ }
+\DoxyCodeLine{00753\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,}
+\DoxyCodeLine{00754\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Script\ updated:\ "{}}\ +\ scriptPath);}
+\DoxyCodeLine{00755\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00756\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00757\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00758\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ script\ =\ ecs-\/>AddComponent<ScriptComponent>(selected);}
+\DoxyCodeLine{00759\ }
+\DoxyCodeLine{00760\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ script.scriptPath\ =\ scriptPath;}
+\DoxyCodeLine{00761\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ script.loaded\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00762\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ script.failed\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00763\ }
+\DoxyCodeLine{00764\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,}
+\DoxyCodeLine{00765\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Script\ attached:\ "{}}\ +\ scriptPath);}
+\DoxyCodeLine{00766\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00767\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00768\ }
+\DoxyCodeLine{00769\ \ \ \ \ \ \ \ \ CommandManager::RegisterCommand(\textcolor{stringliteral}{"{}onRemoveScript"{}},}
+\DoxyCodeLine{00770\ \ \ \ \ \ \ \ \ [\textcolor{keyword}{this}](\textcolor{keyword}{const}\ CommandArgs\&)\ }
+\DoxyCodeLine{00771\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00772\ \ \ \ \ \ \ \ \ \ \ \ \ entt::entity\ selected\ =\ editorLayout-\/>GetSelectedEntity();}
+\DoxyCodeLine{00773\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (selected\ ==\ entt::null\ ||\ !GetECSWorld()-\/>IsValid(selected))}
+\DoxyCodeLine{00774\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00775\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::WARNING,\ \textcolor{stringliteral}{"{}No\ entity\ selected"{}});}
+\DoxyCodeLine{00776\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00777\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00778\ }
+\DoxyCodeLine{00779\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (GetECSWorld()-\/>HasComponent<ScriptComponent>(selected))}
+\DoxyCodeLine{00780\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00781\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ script\ =\ GetECSWorld()-\/>GetComponent<ScriptComponent>(selected);}
+\DoxyCodeLine{00782\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00783\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (script.loaded\ \&\&\ script.env[\textcolor{stringliteral}{"{}onDestroy"{}}].valid())}
+\DoxyCodeLine{00784\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00785\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ }
+\DoxyCodeLine{00786\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00787\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ script.env[\textcolor{stringliteral}{"{}onDestroy"{}}]();}
+\DoxyCodeLine{00788\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ }
+\DoxyCodeLine{00789\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{catch}\ (...)\ }
+\DoxyCodeLine{00790\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00791\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::WARNING,\ \textcolor{stringliteral}{"{}Error\ in\ script\ onDestroy"{}});}
+\DoxyCodeLine{00792\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00793\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00794\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00795\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GetECSWorld()-\/>RemoveComponent<ScriptComponent>(selected);}
+\DoxyCodeLine{00796\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::INFO,\ \textcolor{stringliteral}{"{}Script\ removed\ from\ entity"{}});}
+\DoxyCodeLine{00797\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00798\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00799\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00800\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Logger::Log(LogLevel::WARNING,\ \textcolor{stringliteral}{"{}Entity\ has\ no\ script\ component"{}});}
+\DoxyCodeLine{00801\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00802\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00803\ \ \ \ \ \}}
+\DoxyCodeLine{00804\ \};}
 
 \end{DoxyCode}

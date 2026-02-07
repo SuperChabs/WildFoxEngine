@@ -15,7 +15,6 @@ import WFE.Application.Application;
 import WFE.Core.Input;
 import WFE.Core.CommandManager;
 import WFE.Core.Logger;
-import WFE.Scene.Skybox;
 import WFE.Rendering.Core.Framebuffer;
 import WFE.Rendering.Primitive.PrimitivesFactory;
 import WFE.Rendering.Light;
@@ -25,9 +24,10 @@ import WFE.UI.EditorLayout;
 import WFE.ECS.ECSWorld;
 import WFE.ECS.Components;
 import WFE.ECS.Systems;
-import WFE.Rendering.Renderer;
 import WFE.Scripting.LuaBindings;
 import WFE.Scripting.LuaState;
+import WFE.Core.ModuleManager;
+import WFE.Rendering.RenderingModule;
 
 /// @file Engine.cppm
 /// @brief Engine class
@@ -40,13 +40,15 @@ import WFE.Scripting.LuaState;
 export class Engine : public Application 
 {
 private:
-    std::unique_ptr<Skybox> skybox;
     std::unique_ptr<EditorLayout> editorLayout;
     
     std::unique_ptr<RotationSystem> rotationSystem;
     std::unique_ptr<ScriptSystem> scriptSystem;
 
     std::unique_ptr<SceneSerializer> sceneSerializer;
+
+    ModuleManager* mm;
+    RenderingModule* renderingModule;
 
     bool isPlayMode = false;
 
@@ -64,34 +66,20 @@ protected:
     {
         Logger::Log(LogLevel::INFO, "Initializing WFE...");
 
-        GetShaderManager()->Load();
-        GetMaterialManager()->LoadMaterialConfigs();
+        mm = GetModuleManager();
 
-        std::vector<std::string> faces = 
+        renderingModule = mm->RegisterModule<RenderingModule>(GetWindow()->GetGLFWWindow(), GetECSWorld());
+
+        if (!renderingModule->IsInitialized())
         {
-            "assets/textures/skybox1/right.png",
-            "assets/textures/skybox1/left.png",
-            "assets/textures/skybox1/top.png",
-            "assets/textures/skybox1/bottom.png",
-            "assets/textures/skybox1/front.png",
-            "assets/textures/skybox1/back.png"
-        };
-        
-        unsigned int cubemapTexture = GetTextureManager()->LoadCubemap(faces);
-        skybox = std::make_unique<Skybox>(cubemapTexture, "skybox");
-
-        auto renderer = std::make_unique<Renderer>(GetShaderManager(), GetECSWorld());
-
-        SetRenderer(std::move(renderer));
-
-        auto iconSystem = std::make_unique<IconRenderSystem>(GetTextureManager());
-        GetRenderer()->SetIconRenderSystem(std::move(iconSystem));
-
-        if (!GetRenderer()->Initialize(skybox->GetVAO(), skybox->GetTexture()))
-        {
-            Logger::Log(LogLevel::ERROR, "Failed to initialize Renderer!");
-            return;
+            Logger::Log(LogLevel::WARNING, 
+                "RenderingModule failed to initialize - running headless");
         }
+
+        mm->InitializeAll();
+
+        // auto iconSystem = std::make_unique<IconRenderSystem>(renderingModule->GetTextureManager());
+        // renderingModule->GetRenderer()->SetIconRenderSystem(std::move(iconSystem));
 
         rotationSystem = std::make_unique<RotationSystem>();
         scriptSystem = std::make_unique<ScriptSystem>();
@@ -113,8 +101,8 @@ protected:
         else
             Logger::Log(LogLevel::INFO, "EditorLayout created successfully!");
 
-        GetShaderManager()->Bind("skybox");
-        GetShaderManager()->SetInt("skybox", "skybox", 0);
+        renderingModule->GetShaderManager()->Bind("skybox");
+        renderingModule->GetShaderManager()->SetInt("skybox", "skybox", 0);
 
         auto editorCam = GetECSWorld()->CreateCamera("Editor Camera", true, false);
         SetMainCameraEntity(editorCam);
@@ -124,6 +112,10 @@ protected:
 
     void OnUpdate(float deltaTime) override
     {
+        mm->UpdateAll(deltaTime);
+
+        ProcessInput();
+
         UpdateMainCamera();
 
         if (isPlayMode)
@@ -174,6 +166,9 @@ protected:
         entt::entity editorCamera = GetECSWorld()->FindEditorCamera();
         entt::entity gameCamera = GetECSWorld()->FindGameCamera();
 
+        auto* renderingModule = GetModuleManager()->GetModule<RenderingModule>("Rendering");
+        auto* renderer = renderingModule->GetRenderer();
+
         if (gameCamera == entt::null)
         {
             gameCamera = GetECSWorld()->CreateCamera("Game Camera", false, true);
@@ -185,37 +180,40 @@ protected:
         Framebuffer* sceneFB = editorLayout->GetSceneFramebuffer();
         ImVec2 sceneViewportSize = editorLayout->GetSceneViewportSize();
         sceneFB->Bind();
-        GetRenderer()->BeginFrame();
+        renderer->BeginFrame();
 
-        GetRenderer()->Render(
+        renderer->Render(
             *GetECSWorld(),
             editorCamera, 
             static_cast<int>(sceneViewportSize.x), 
             static_cast<int>(sceneViewportSize.y)
         );
 
-        GetRenderer()->EndFrame();
+        renderer->EndFrame();
         sceneFB->Unbind();
 
         // Game Framebuffer
         Framebuffer* gameFB = editorLayout->GetGameFramebuffer();
         ImVec2 gameViewportSize = editorLayout->GetGameViewportSize();
         gameFB->Bind();
-        GetRenderer()->BeginFrame();
+        renderer->BeginFrame();
 
         if (gameCamera != entt::null)
-            GetRenderer()->Render(
+            renderer->Render(
                 *GetECSWorld(), 
                 gameCamera,             
                 static_cast<int>(gameViewportSize.x), 
                 static_cast<int>(gameViewportSize.y)
             );
         
-        GetRenderer()->EndFrame();
+        renderer->EndFrame();
         gameFB->Unbind();
         
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glClear(GL_COLOR_BUFFER_BIT); 
+        glViewport(0, 0, GetWindow()->GetWidth(), GetWindow()->GetHeight());
+        glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDisable(GL_DEPTH_TEST);
     }
 
     /**
@@ -225,9 +223,8 @@ protected:
     {
         Logger::Log(LogLevel::INFO, "Shutting down engine...");
         
-        GetRenderer()->Shutdown();
-        GetShaderManager()->ClearAll();
-        
+        mm->ShutdownAll();
+
         Logger::Log(LogLevel::INFO, "Engine shutdown complete!");
     }
 
@@ -245,9 +242,9 @@ protected:
         editorLayout->RenderEditor(
             GetECSWorld(), 
             GetMainCameraEntity(),
-            GetRenderer(), 
-            GetShaderManager(), 
-            GetMaterialManager(),
+            renderingModule->GetRenderer(), 
+            renderingModule->GetShaderManager(), 
+            renderingModule->GetMaterialManager(),
             isPlayMode
         );
     }
@@ -278,6 +275,45 @@ private:
         }
     }
 
+    void ProcessInput()
+    {
+        if (GetInput()->IsKeyPressed(Key::KEY_ESCAPE)) 
+            Stop();
+        
+        if (GetInput()->IsKeyJustPressed(Key::KEY_F1)) 
+            showUI = !showUI;
+
+        if (GetInput()->IsKeyJustPressed(Key::KEY_F5))
+        {
+            renderingModule->GetShaderManager()->ReloadAll();
+            Logger::Log(LogLevel::INFO, "Reloaded all shaders");
+        }
+
+        // Ctrl+S - Quick Save
+        if (GetInput()->IsKeyPressed(Key::KEY_LEFT_CONTROL) && 
+            GetInput()->IsKeyJustPressed(Key::KEY_S))
+        {
+            if (CommandManager::HasCommand("onQuickSave"))
+                CommandManager::ExecuteCommand("onQuickSave", {});
+        }
+        
+        // Ctrl+L - Quick Load
+        if (GetInput()->IsKeyPressed(Key::KEY_LEFT_CONTROL) && 
+            GetInput()->IsKeyJustPressed(Key::KEY_L))
+        {
+            if (CommandManager::HasCommand("onQuickLoad"))
+                CommandManager::ExecuteCommand("onQuickLoad", {});
+        }
+        
+        // Ctrl+N - New Scene
+        if (GetInput()->IsKeyPressed(Key::KEY_LEFT_CONTROL) && 
+            GetInput()->IsKeyJustPressed(Key::KEY_N))
+        {
+            if (CommandManager::HasCommand("onNewScene"))
+                CommandManager::ExecuteCommand("onNewScene", {});
+        }
+    }
+
     void InitCommandRegistration()
     {
         CommandManager::RegisterCommand("onCreateCube",
@@ -289,7 +325,7 @@ private:
             auto cubeMesh = PrimitivesFactory::CreatePrimitive(PrimitiveType::CUBE);
             GetECSWorld()->AddComponent<MeshComponent>(entity, cubeMesh);
             
-            auto material = GetMaterialManager()->GetMaterial("gray");
+            auto material = renderingModule->GetMaterialManager()->GetMaterial("gray");
             GetECSWorld()->AddComponent<MaterialComponent>(entity, material);
             
             GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
@@ -307,7 +343,7 @@ private:
             auto mesh = PrimitivesFactory::CreatePrimitive(PrimitiveType::QUAD);
             GetECSWorld()->AddComponent<MeshComponent>(entity, mesh);
             
-            auto material = GetMaterialManager()->GetMaterial("gray");
+            auto material = renderingModule->GetMaterialManager()->GetMaterial("gray");
             GetECSWorld()->AddComponent<MaterialComponent>(entity, material);
             
             GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
@@ -448,8 +484,8 @@ private:
             
             bool success = sceneSerializer->LoadScene(
                 filename,
-                GetMaterialManager(),
-                GetTextureManager()
+                renderingModule->GetMaterialManager(),
+                renderingModule->GetTextureManager()
             );
             
             if (success)
@@ -515,7 +551,7 @@ private:
             std::string filepath = std::get<std::string>(args[0]);
             Logger::Log(LogLevel::INFO, "Filepath: " + filepath);
             
-            if (!GetModelManager())
+            if (!renderingModule->GetModelManager())
             {
                 Logger::Log(LogLevel::ERROR, "ModelManager is NULL!");
                 return;
@@ -528,7 +564,7 @@ private:
             }
             
             Logger::Log(LogLevel::INFO, "Calling LoadWithECS...");
-            auto model = GetModelManager()->LoadWithECS(filepath, GetECSWorld());
+            auto model = renderingModule->GetModelManager()->LoadWithECS(filepath, GetECSWorld());
             
             if (!model) 
             {
