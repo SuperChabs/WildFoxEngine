@@ -11,21 +11,13 @@ module;
 export module WFE.Rendering.RenderingModule;
 
 import WFE.Core.IModule;
+import WFE.Core.ModuleManager;
 import WFE.Core.Logger;
-
-// Rendering
 import WFE.Rendering.Renderer;
 import WFE.Scene.Skybox;
-
-// Resource Managers
-import WFE.Resource.Shader.ShaderManager;
-import WFE.Resource.Texture.TextureManager;
-import WFE.Resource.Material.MaterialManager;
-import WFE.Resource.Model.ModelManager;
-
-// ECS
 import WFE.ECS.ECSWorld;
 import WFE.ECS.Systems;
+import WFE.Resource.ResourceModule;
 
 /// @file RenderingModule.cppm
 /// @brief Module responsible for all graphics and rendering
@@ -39,7 +31,6 @@ import WFE.ECS.Systems;
  * Responsibilities:
  * - Initialize OpenGL context
  * - Create and manage Renderer
- * - Manage resources (shaders, textures, materials, models)
  * - Create Skybox
  * - Setup rendering systems
  */
@@ -49,17 +40,13 @@ private:
     std::unique_ptr<Renderer> renderer;
     std::unique_ptr<Skybox> skybox;
     
-    std::unique_ptr<ShaderManager> shaderManager;
-    std::unique_ptr<TextureManager> textureManager;
-    std::unique_ptr<MaterialManager> materialManager;
-    std::unique_ptr<ModelManager> modelManager;
-    
     std::unique_ptr<IconRenderSystem> iconRenderSystem;
     
+    ResourceModule* resourceModule;
+
     ECSWorld* ecsWorld = nullptr;
     GLFWwindow* window = nullptr;
     
-    bool initialized = false;
     bool hasOpenGL = false;
 
 public:
@@ -68,7 +55,7 @@ public:
      * @param win GLFW window (for OpenGL context)
      * @param ecs ECS World (for render systems)
      */
-    RenderingModule(GLFWwindow* win, ECSWorld* ecs)
+    RenderingModule(GLFWwindow* win, ECSWorld* ecs, ModuleManager* mm)
         : window(win)
         , ecsWorld(ecs)
     {
@@ -76,6 +63,8 @@ public:
             Logger::Log(LogLevel::ERROR, "RenderingModule: window is null!");
         if (!ecsWorld)
             Logger::Log(LogLevel::ERROR, "RenderingModule: ecsWorld is null!");
+
+        resourceModule = mm->GetModule<ResourceModule>("Resource");
     }
     
     /**
@@ -95,12 +84,6 @@ public:
         }
         
         hasOpenGL = true;
-        
-        if (!CreateResourceManagers())
-        {
-            Logger::Log(LogLevel::ERROR, "Failed to create resource managers");
-            return false;
-        }
         
         if (!LoadResources())
         {
@@ -130,7 +113,7 @@ public:
             Logger::Log(LogLevel::WARNING, "Failed to create render systems");
         }
         
-        initialized = true;
+        isInitialized = true;
         Logger::Log(LogLevel::INFO, "RenderingModule initialized successfully");
         Logger::Log(LogLevel::INFO, "======================================");
         
@@ -158,19 +141,10 @@ public:
             renderer.reset();
         }
         
-        if (shaderManager)
-        {
-            shaderManager->ClearAll();
-            shaderManager.reset();
-        }
-        
         iconRenderSystem.reset();
         skybox.reset();
-        modelManager.reset();
-        materialManager.reset();
-        textureManager.reset();
         
-        initialized = false;
+        isInitialized = false;
         Logger::Log(LogLevel::INFO, "RenderingModule shutdown complete");
     }
     
@@ -184,13 +158,8 @@ public:
     /// @name Getters
     /// @{
     Renderer* GetRenderer() { return renderer.get(); }
-    ShaderManager* GetShaderManager() { return shaderManager.get(); }
-    TextureManager* GetTextureManager() { return textureManager.get(); }
-    MaterialManager* GetMaterialManager() { return materialManager.get(); }
-    ModelManager* GetModelManager() { return modelManager.get(); }
     Skybox* GetSkybox() { return skybox.get(); }
     
-    bool IsInitialized() const { return initialized; }
     bool HasOpenGL() const { return hasOpenGL; }
     /// @}
 
@@ -230,41 +199,6 @@ private:
     }
     
     /**
-     * @brief Create resource managers
-     * @return true if successful
-     */
-    bool CreateResourceManagers()
-    {
-        Logger::Log(LogLevel::INFO, "Creating resource managers...");
-        
-        try
-        {
-            textureManager = std::make_unique<TextureManager>();
-            Logger::Log(LogLevel::DEBUG, "TextureManager created");
-            
-            materialManager = std::make_unique<MaterialManager>(textureManager.get());
-            Logger::Log(LogLevel::DEBUG, "MaterialManager created");
-            
-            shaderManager = std::make_unique<ShaderManager>();
-            Logger::Log(LogLevel::DEBUG, "ShaderManager created");
-            Logger::Log(LogLevel::DEBUG, "ShaderManager address: " + 
-                std::to_string(reinterpret_cast<uintptr_t>(shaderManager.get())));
-            
-            modelManager = std::make_unique<ModelManager>();
-            modelManager->SetMaterialManager(materialManager.get());
-            Logger::Log(LogLevel::DEBUG, "ModelManager created");
-            
-            return true;
-        }
-        catch (const std::exception& e)
-        {
-            Logger::Log(LogLevel::ERROR, 
-                "Exception creating resource managers: " + std::string(e.what()));
-            return false;
-        }
-    }
-    
-    /**
      * @brief Load shaders and materials
      * @return true if successful
      */
@@ -274,15 +208,15 @@ private:
         
         try
         {
-            shaderManager->Load();
+            resourceModule->GetShaderManager()->Load();
             Logger::Log(LogLevel::INFO, "Shaders loaded successfully");
             
-            materialManager->LoadMaterialConfigs();
+            resourceModule->GetMaterialManager()->LoadMaterialConfigs();
             Logger::Log(LogLevel::INFO, "Materials loaded successfully");
             
-            shaderManager->Bind("skybox");
-            shaderManager->SetInt("skybox", "skybox", 0);
-            shaderManager->Unbind();
+            resourceModule->GetShaderManager()->Bind("skybox");
+            resourceModule->GetShaderManager()->SetInt("skybox", "skybox", 0);
+            resourceModule->GetShaderManager()->Unbind();
             
             return true;
         }
@@ -314,7 +248,7 @@ private:
                 "assets/textures/skybox1/back.png"
             };
             
-            unsigned int cubemapTexture = textureManager->LoadCubemap(faces);
+            unsigned int cubemapTexture = resourceModule->GetTextureManager()->LoadCubemap(faces);
             
             if (cubemapTexture == 0)
             {
@@ -351,11 +285,11 @@ private:
         
         try
         {
-            renderer = std::make_unique<Renderer>(shaderManager.get(), ecsWorld);
+            renderer = std::make_unique<Renderer>(resourceModule->GetShaderManager(), ecsWorld);
             
             Logger::Log(LogLevel::INFO, "Renderer created successfully");
             Logger::Log(LogLevel::DEBUG, "  - ShaderManager: " + 
-                std::to_string(reinterpret_cast<uintptr_t>(shaderManager.get())));
+                std::to_string(reinterpret_cast<uintptr_t>(resourceModule->GetShaderManager())));
             Logger::Log(LogLevel::DEBUG, "  - ECSWorld: " + 
                 std::to_string(reinterpret_cast<uintptr_t>(ecsWorld)));
             
@@ -411,7 +345,7 @@ private:
         
         try
         {
-            iconRenderSystem = std::make_unique<IconRenderSystem>(textureManager.get());
+            iconRenderSystem = std::make_unique<IconRenderSystem>(resourceModule->GetTextureManager());
             renderer->SetIconRenderSystem(std::move(iconRenderSystem));
             
             Logger::Log(LogLevel::INFO, "IconRenderSystem created");

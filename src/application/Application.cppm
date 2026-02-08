@@ -23,10 +23,6 @@ import WFE.Core.CommandManager;
 import WFE.ECS.ECSWorld;
 import WFE.ECS.Systems;
 import WFE.ECS.Components;
-import WFE.Resource.Texture.TextureManager;
-import WFE.Resource.Material.MaterialManager;
-import WFE.Resource.Shader.ShaderManager;
-import WFE.Resource.Model.ModelManager;
 import WFE.UI.ImGuiManager;
 import WFE.Core.ModuleManager;
 
@@ -57,8 +53,6 @@ private:
     std::unique_ptr<InputControllerSystem> inputControllerSystem;
 
     std::unique_ptr<ModuleManager> moduleManager;
-
-    entt::entity mainCameraEntity = entt::null;
     
     ConsoleLogger console;
     FileLogger file;
@@ -87,6 +81,7 @@ private:
             glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
             glDisable(GL_DEPTH_TEST);
+            glDisable(GL_BLEND);
             
             imGuiManager->BeginFrame();
             RenderUI();
@@ -142,6 +137,7 @@ private:
 protected:
     bool cameraControlEnabled;
     bool showUI;
+    entt::entity mainCameraEntity = entt::null;
 
     /**
      * @brief Constructor

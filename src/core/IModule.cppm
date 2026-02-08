@@ -2,6 +2,9 @@ export module WFE.Core.IModule;
 
 export class IModule
 {
+protected:
+    bool isInitialized;
+
 public:
     virtual ~IModule() = default;
     virtual bool Initialize() = 0;
@@ -10,4 +13,5 @@ public:
     virtual const char* GetName() const = 0;
     virtual int GetPriority() const { return 100; }
     virtual bool IsRequired() const { return true; }
+    virtual bool IsInitialized() const {return isInitialized; }
 };

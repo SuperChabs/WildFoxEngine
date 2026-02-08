@@ -26,8 +26,11 @@ import WFE.ECS.Components;
 import WFE.ECS.Systems;
 import WFE.Scripting.LuaBindings;
 import WFE.Scripting.LuaState;
+
 import WFE.Core.ModuleManager;
 import WFE.Rendering.RenderingModule;
+import WFE.Resource.ResourceModule;
+import WFE.UI.UIModule;
 
 /// @file Engine.cppm
 /// @brief Engine class
@@ -39,9 +42,7 @@ import WFE.Rendering.RenderingModule;
  */
 export class Engine : public Application 
 {
-private:
-    std::unique_ptr<EditorLayout> editorLayout;
-    
+private:  
     std::unique_ptr<RotationSystem> rotationSystem;
     std::unique_ptr<ScriptSystem> scriptSystem;
 
@@ -49,6 +50,8 @@ private:
 
     ModuleManager* mm;
     RenderingModule* renderingModule;
+    ResourceModule* resourceModule;
+    UIModule* uiModule;
 
     bool isPlayMode = false;
 
@@ -59,29 +62,50 @@ private:
 protected:
     /**
      * @brief Initialize game engine
-     * Initialize Skybox, Renderer and other stuff that wasn't initialized
+     * Initialize Modules and other stuff that wasn't initialized
      * in Application class
      */
     void OnInitialize() override
     {
         Logger::Log(LogLevel::INFO, "Initializing WFE...");
+        Logger::Log(LogLevel::INFO, "==================================");
 
         mm = GetModuleManager();
 
-        renderingModule = mm->RegisterModule<RenderingModule>(GetWindow()->GetGLFWWindow(), GetECSWorld());
+        mm->RegisterModule<ResourceModule>();
+        resourceModule = mm->GetModule<ResourceModule>("Resource");
+        if (!resourceModule->IsInitialized())
+        {
+            Logger::Log(LogLevel::WARNING, 
+                "RedsourceModule failed to initialize");
+        }
 
+        mm->RegisterModule<RenderingModule>(
+            GetWindow()->GetGLFWWindow(), 
+            GetECSWorld(), 
+            mm);
+        renderingModule = mm->GetModule<RenderingModule>("Rendering");
         if (!renderingModule->IsInitialized())
         {
             Logger::Log(LogLevel::WARNING, 
-                "RenderingModule failed to initialize - running headless");
+                "RenderingModule failed to initialize");
+        }
+
+        mm->RegisterModule<UIModule>(
+            GetECSWorld(), 
+            &mainCameraEntity, 
+            &isPlayMode, 
+            mm
+        );
+        uiModule = mm->GetModule<UIModule>("UI");
+        if (!uiModule->IsInitialized())
+        {
+            Logger::Log(LogLevel::WARNING, 
+                "UIModule failed to initialize");
         }
 
         mm->InitializeAll();
 
-        // auto iconSystem = std::make_unique<IconRenderSystem>(renderingModule->GetTextureManager());
-        // renderingModule->GetRenderer()->SetIconRenderSystem(std::move(iconSystem));
-
-        rotationSystem = std::make_unique<RotationSystem>();
         scriptSystem = std::make_unique<ScriptSystem>();
 
         InitializeLua();
@@ -93,20 +117,10 @@ protected:
 
         InitCommandRegistration();
 
-        Logger::Log(LogLevel::INFO, "Creating EditorLayout...");
-        editorLayout = std::make_unique<EditorLayout>();
-        
-        if (!editorLayout)
-            Logger::Log(LogLevel::ERROR, "Failed to create EditorLayout!");
-        else
-            Logger::Log(LogLevel::INFO, "EditorLayout created successfully!");
-
-        renderingModule->GetShaderManager()->Bind("skybox");
-        renderingModule->GetShaderManager()->SetInt("skybox", "skybox", 0);
-
         auto editorCam = GetECSWorld()->CreateCamera("Editor Camera", true, false);
         SetMainCameraEntity(editorCam);
         
+        Logger::Log(LogLevel::INFO, "==================================");
         Logger::Log(LogLevel::INFO, "Engine initialized successfully");
     }
 
@@ -160,13 +174,10 @@ protected:
      */
     void OnRender() override
     {
-        if (!editorLayout)
-            return;
-        
         entt::entity editorCamera = GetECSWorld()->FindEditorCamera();
         entt::entity gameCamera = GetECSWorld()->FindGameCamera();
 
-        auto* renderingModule = GetModuleManager()->GetModule<RenderingModule>("Rendering");
+        renderingModule = GetModuleManager()->GetModule<RenderingModule>("Rendering");
         auto* renderer = renderingModule->GetRenderer();
 
         if (gameCamera == entt::null)
@@ -177,8 +188,8 @@ protected:
         }
 
         // Scene Framebuffer
-        Framebuffer* sceneFB = editorLayout->GetSceneFramebuffer();
-        ImVec2 sceneViewportSize = editorLayout->GetSceneViewportSize();
+        Framebuffer* sceneFB = uiModule->GetEditorLayout()->GetSceneFramebuffer();
+        ImVec2 sceneViewportSize = uiModule->GetEditorLayout()->GetSceneViewportSize();
         sceneFB->Bind();
         renderer->BeginFrame();
 
@@ -193,8 +204,8 @@ protected:
         sceneFB->Unbind();
 
         // Game Framebuffer
-        Framebuffer* gameFB = editorLayout->GetGameFramebuffer();
-        ImVec2 gameViewportSize = editorLayout->GetGameViewportSize();
+        Framebuffer* gameFB = uiModule->GetEditorLayout()->GetGameFramebuffer();
+        ImVec2 gameViewportSize = uiModule->GetEditorLayout()->GetGameViewportSize();
         gameFB->Bind();
         renderer->BeginFrame();
 
@@ -222,9 +233,11 @@ protected:
     void OnShutdown() override
     {
         Logger::Log(LogLevel::INFO, "Shutting down engine...");
-        
-        mm->ShutdownAll();
+        Logger::Log(LogLevel::INFO, "==================================");
 
+        mm->ShutdownAll();
+        
+        Logger::Log(LogLevel::INFO, "==================================");
         Logger::Log(LogLevel::INFO, "Engine shutdown complete!");
     }
 
@@ -232,21 +245,8 @@ protected:
      * @brief Render User Interface
      */
     void RenderUI() override
-    {    
-        if (!editorLayout)
-        {
-            Logger::Log(LogLevel::ERROR, "EditorLayout is null!");
-            return;
-        }
-
-        editorLayout->RenderEditor(
-            GetECSWorld(), 
-            GetMainCameraEntity(),
-            renderingModule->GetRenderer(), 
-            renderingModule->GetShaderManager(), 
-            renderingModule->GetMaterialManager(),
-            isPlayMode
-        );
+    {
+        uiModule->RenderUI();
     }
 
     bool ShouldAllowCameraControl() const override 
@@ -285,7 +285,7 @@ private:
 
         if (GetInput()->IsKeyJustPressed(Key::KEY_F5))
         {
-            renderingModule->GetShaderManager()->ReloadAll();
+            resourceModule->GetShaderManager()->ReloadAll();
             Logger::Log(LogLevel::INFO, "Reloaded all shaders");
         }
 
@@ -325,7 +325,7 @@ private:
             auto cubeMesh = PrimitivesFactory::CreatePrimitive(PrimitiveType::CUBE);
             GetECSWorld()->AddComponent<MeshComponent>(entity, cubeMesh);
             
-            auto material = renderingModule->GetMaterialManager()->GetMaterial("gray");
+            auto material = resourceModule->GetMaterialManager()->GetMaterial("gray");
             GetECSWorld()->AddComponent<MaterialComponent>(entity, material);
             
             GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
@@ -343,7 +343,7 @@ private:
             auto mesh = PrimitivesFactory::CreatePrimitive(PrimitiveType::QUAD);
             GetECSWorld()->AddComponent<MeshComponent>(entity, mesh);
             
-            auto material = renderingModule->GetMaterialManager()->GetMaterial("gray");
+            auto material = resourceModule->GetMaterialManager()->GetMaterial("gray");
             GetECSWorld()->AddComponent<MaterialComponent>(entity, material);
             
             GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
@@ -369,7 +369,7 @@ private:
             }
 
             const auto& color = std::get<glm::vec3>(args[0]);
-            entt::entity selected = editorLayout->GetSelectedEntity();
+            entt::entity selected = uiModule->GetEditorLayout()->GetSelectedEntity();
             
             if (selected == entt::null || !GetECSWorld()->IsValid(selected))
             {
@@ -484,8 +484,8 @@ private:
             
             bool success = sceneSerializer->LoadScene(
                 filename,
-                renderingModule->GetMaterialManager(),
-                renderingModule->GetTextureManager()
+                resourceModule->GetMaterialManager(),
+                resourceModule->GetTextureManager()
             );
             
             if (success)
@@ -551,7 +551,7 @@ private:
             std::string filepath = std::get<std::string>(args[0]);
             Logger::Log(LogLevel::INFO, "Filepath: " + filepath);
             
-            if (!renderingModule->GetModelManager())
+            if (!resourceModule->GetModelManager())
             {
                 Logger::Log(LogLevel::ERROR, "ModelManager is NULL!");
                 return;
@@ -564,7 +564,7 @@ private:
             }
             
             Logger::Log(LogLevel::INFO, "Calling LoadWithECS...");
-            auto model = renderingModule->GetModelManager()->LoadWithECS(filepath, GetECSWorld());
+            auto model = resourceModule->GetModelManager()->LoadWithECS(filepath, GetECSWorld());
             
             if (!model) 
             {
@@ -577,44 +577,6 @@ private:
             
             Logger::Log(LogLevel::INFO, "Total entities in world: " + std::to_string(GetECSWorld()->GetEntityCount()));
             Logger::Log(LogLevel::INFO, "=== onLoadModel command complete ===\n");
-
-            // for (size_t i = 0; i < model->GetMeshCount(); ++i) 
-            // {
-            //     auto entityName = model->GetName() + "_Mesh_" + std::to_string(i);
-            //     auto entity = GetECSWorld()->CreateEntity(entityName);
-
-            //     Logger::Log(LogLevel::INFO, "Creating entity: " + entityName);
-
-            //     GetECSWorld()->AddComponent<TransformComponent>(entity, 
-            //         glm::vec3(0, 0, -5), glm::vec3(0), glm::vec3(1));
-            //     Logger::Log(LogLevel::DEBUG, "TransformComponent added");
-
-            //     auto mesh = model->GetMesh(i);
-            //     GetECSWorld()->AddComponent<MeshComponent>(entity, mesh);
-            //     Logger::Log(LogLevel::DEBUG, "MeshComponent added with " + 
-            //         std::to_string(mesh->GetMeshRenderer()->GetVertexCount()) + " vertices");
-
-            //     auto material = mesh->GetMaterial();
-            //     if (!material)
-            //     {
-            //         Logger::Log(LogLevel::WARNING, "Mesh " + std::to_string(i) + 
-            //             " has no material, using default");
-            //         material = GetMaterialManager()->GetMaterial("default");
-            //     }
-            //     else
-            //     {
-            //         Logger::Log(LogLevel::INFO, "Material assigned: " + material->GetName() +
-            //             " (using color: " + (material->IsUsingColor() ? "YES" : "NO") + ")");
-            //     }
-            //     GetECSWorld()->AddComponent<MaterialComponent>(entity, material);
-
-            //     GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
-            //     Logger::Log(LogLevel::DEBUG, "VisibilityComponent added");
-            // }
-
-            // Logger::Log(LogLevel::INFO, 
-            //     "All model entities created: " + model->GetName() + 
-            //     " (" + std::to_string(model->GetMeshCount()) + " meshes)");
         });
 
         CommandManager::RegisterCommand("onCreateCamera", [this](const CommandArgs&) 
@@ -730,7 +692,7 @@ private:
                 return;
             }
 
-            entt::entity selected = editorLayout->GetSelectedEntity();
+            entt::entity selected = uiModule->GetEditorLayout()->GetSelectedEntity();
             if (selected == entt::null || !GetECSWorld()->IsValid(selected))
             {
                 Logger::Log(LogLevel::WARNING, "No entity selected");
@@ -769,7 +731,7 @@ private:
         CommandManager::RegisterCommand("onRemoveScript",
         [this](const CommandArgs&) 
         {
-            entt::entity selected = editorLayout->GetSelectedEntity();
+            entt::entity selected = uiModule->GetEditorLayout()->GetSelectedEntity();
             if (selected == entt::null || !GetECSWorld()->IsValid(selected))
             {
                 Logger::Log(LogLevel::WARNING, "No entity selected");
