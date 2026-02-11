@@ -12,7 +12,7 @@ import WFE.ECS.ECSWorld;
 import WFE.ECS.Components;
 import WFE.Resource.Material.MaterialManager;
 import WFE.Resource.Shader.ShaderManager;
-import WFE.Rendering.Light;
+import WFE.Scene.Light;
 
 import WFE.UI.Panels.TagPanel;
 import WFE.UI.Panels.TransformPanel;

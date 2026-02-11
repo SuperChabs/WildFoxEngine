@@ -5,7 +5,7 @@ module;
 
 export module WFE.ECS.Components.Lighting;
 
-import WFE.Rendering.Light;
+import WFE.Scene.Light;
 
 import WFE.ECS.Components.Transform;
 

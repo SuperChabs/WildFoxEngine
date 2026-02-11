@@ -5,6 +5,7 @@ module;
 #include <glm/glm.hpp>
 #include <imgui.h>
 #include <entt/entt.hpp>
+
 #include <memory>
 #include <string>
 #include <variant>
@@ -17,25 +18,22 @@ import WFE.Core.CommandManager;
 import WFE.Core.Logger;
 import WFE.Rendering.Core.Framebuffer;
 import WFE.Rendering.Primitive.PrimitivesFactory;
-import WFE.Rendering.Light;
-import WFE.Scene.Mesh;
 import WFE.Scene.SceneSurializer;
-import WFE.UI.EditorLayout;
-import WFE.ECS.ECSWorld;
-import WFE.ECS.Components;
-import WFE.ECS.Systems;
+import WFE.Scene.Light;
 import WFE.Scripting.LuaBindings;
 import WFE.Scripting.LuaState;
+import WFE.ECS.Systems;
+import WFE.ECS.Components;
 
 import WFE.Core.ModuleManager;
 import WFE.Rendering.RenderingModule;
 import WFE.Resource.ResourceModule;
 import WFE.UI.UIModule;
+import WFE.ECS.ECSModule;
 
 /// @file Engine.cppm
 /// @brief Engine class
 /// @author SuperChabs
-/// @date 2026-02-05
 
 /**
  * 
@@ -45,6 +43,7 @@ export class Engine : public Application
 private:  
     std::unique_ptr<RotationSystem> rotationSystem;
     std::unique_ptr<ScriptSystem> scriptSystem;
+    std::unique_ptr<InputControllerSystem> inputControllerSystem;
 
     std::unique_ptr<SceneSerializer> sceneSerializer;
 
@@ -52,12 +51,72 @@ private:
     RenderingModule* renderingModule;
     ResourceModule* resourceModule;
     UIModule* uiModule;
+    ECSModule* ecsModule;
 
     bool isPlayMode = false;
+    bool cameraControlEnabled;
+    bool showUI;
+
+    entt::entity mainCameraEntity = entt::null;
 
     glm::vec3 savedEditorCameraPos;
     float savedEditorCameraYaw;
     float savedEditorCameraPitch;
+
+    static void FramebufferSizeCallback(GLFWwindow* window, int width, int height)
+    {
+        glViewport(0, 0, width, height);
+        Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
+        if (app && app->GetWindow())
+            app->GetWindow()->SetSize(width, height);
+    }
+
+    static void MouseCallback(GLFWwindow* window, double xpos, double ypos)
+    {   
+        Engine* engine = static_cast<Engine*>(glfwGetWindowUserPointer(window));
+        if (!engine) return;
+
+        engine->GetInput()->UpdateMousePosition(xpos, ypos);
+        
+        if (engine->cameraControlEnabled && engine->mainCameraEntity != entt::null) 
+        {
+            glm::vec2 delta = engine->GetInput()->GetMouseDelta();
+            auto& orientation = engine->ecsModule->GetECS()->GetComponent<CameraOrientationComponent>(engine->mainCameraEntity);
+            auto& config = engine->ecsModule->GetECS()->GetComponent<CameraComponent>(engine->mainCameraEntity);
+
+            orientation.yaw   += delta.x * config.mouseSensitivity;
+            orientation.pitch += delta.y * config.mouseSensitivity;
+
+            if (orientation.pitch > 89.0f)  orientation.pitch = 89.0f;
+            if (orientation.pitch < -89.0f) orientation.pitch = -89.0f;
+        }
+    }
+
+    static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+    {
+        Engine* engine = static_cast<Engine*>(glfwGetWindowUserPointer(window));
+        if (!engine) return;
+
+        if (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS) 
+            if (engine->ShouldAllowCameraControl())
+                engine->SetCameraControlMode(!engine->cameraControlEnabled);
+    }
+
+    void SetCameraControlMode(bool enabled)
+    {
+        cameraControlEnabled = enabled;
+        
+        if (enabled) 
+        {
+            GetWindow()->SetCursorMode(GLFW_CURSOR_DISABLED);
+            Logger::Log(LogLevel::INFO, "Camera control: ON");
+        } 
+        else 
+        {
+            GetWindow()->SetCursorMode(GLFW_CURSOR_NORMAL);
+            Logger::Log(LogLevel::INFO, "Camera control: OFF (UI mode)");
+        }
+    }
 
 protected:
     /**
@@ -70,10 +129,25 @@ protected:
         Logger::Log(LogLevel::INFO, "Initializing WFE...");
         Logger::Log(LogLevel::INFO, "==================================");
 
+        GetWindow()->SetFramebufferSizeCallback(FramebufferSizeCallback);
+        GetWindow()->SetCursorPosCallback(MouseCallback);
+        GetWindow()->SetScrollCallback(Input::ScrollCallback);
+        GetWindow()->SetMouseButtonCallback(MouseButtonCallback);
+
         mm = GetModuleManager();
+
+        mm->RegisterModule<ECSModule>();
+        ecsModule = mm->GetModule<ECSModule>("ECS");
+        ecsModule->Initialize();
+        if (!ecsModule->IsInitialized())
+        {
+            Logger::Log(LogLevel::WARNING, 
+                "RedsourceModule failed to initialize");
+        }
 
         mm->RegisterModule<ResourceModule>();
         resourceModule = mm->GetModule<ResourceModule>("Resource");
+        resourceModule->Initialize();
         if (!resourceModule->IsInitialized())
         {
             Logger::Log(LogLevel::WARNING, 
@@ -82,9 +156,10 @@ protected:
 
         mm->RegisterModule<RenderingModule>(
             GetWindow()->GetGLFWWindow(), 
-            GetECSWorld(), 
+            ecsModule->GetECS(), 
             mm);
         renderingModule = mm->GetModule<RenderingModule>("Rendering");
+        renderingModule->Initialize();
         if (!renderingModule->IsInitialized())
         {
             Logger::Log(LogLevel::WARNING, 
@@ -92,33 +167,33 @@ protected:
         }
 
         mm->RegisterModule<UIModule>(
-            GetECSWorld(), 
+            ecsModule->GetECS(), 
             &mainCameraEntity, 
             &isPlayMode, 
             mm
         );
         uiModule = mm->GetModule<UIModule>("UI");
+        uiModule->Initialize();
         if (!uiModule->IsInitialized())
         {
             Logger::Log(LogLevel::WARNING, 
                 "UIModule failed to initialize");
         }
 
-        mm->InitializeAll();
-
         scriptSystem = std::make_unique<ScriptSystem>();
+        inputControllerSystem = std::make_unique<InputControllerSystem>();
 
         InitializeLua();
 
         sceneSerializer = std::make_unique<SceneSerializer>(
-            GetECSWorld(), 
-            nullptr
+            ecsModule->GetECS()
         );
 
         InitCommandRegistration();
 
-        auto editorCam = GetECSWorld()->CreateCamera("Editor Camera", true, false);
+        auto editorCam = ecsModule->GetECS()->CreateCamera("Editor Camera", true, false);
         SetMainCameraEntity(editorCam);
+        SetCameraControlMode(false);
         
         Logger::Log(LogLevel::INFO, "==================================");
         Logger::Log(LogLevel::INFO, "Engine initialized successfully");
@@ -130,18 +205,26 @@ protected:
 
         ProcessInput();
 
+        bool allowCameraControl = cameraControlEnabled && ShouldAllowCameraControl();
+        inputControllerSystem->Update(
+            *ecsModule->GetECS(), 
+            *GetInput(), 
+            deltaTime, 
+            allowCameraControl
+        );
+
         UpdateMainCamera();
 
         if (isPlayMode)
-            rotationSystem->Update(*GetECSWorld(), deltaTime);
+            rotationSystem->Update(*ecsModule->GetECS(), deltaTime);
 
-        scriptSystem->Update(*GetECSWorld(), deltaTime);
+        scriptSystem->Update(*ecsModule->GetECS(), deltaTime);
     }
 
     void UpdateMainCamera()
     {
-        auto* ecs = GetECSWorld();
-        entt::entity current = GetMainCameraEntity();
+        auto* ecs = ecsModule->GetECS();
+        entt::entity current = mainCameraEntity;
 
         if (current == entt::null || !ecs->IsValid(current) || !ecs->HasComponent<CameraComponent>(current))
         {
@@ -174,57 +257,80 @@ protected:
      */
     void OnRender() override
     {
-        entt::entity editorCamera = GetECSWorld()->FindEditorCamera();
-        entt::entity gameCamera = GetECSWorld()->FindGameCamera();
+        uiModule->GetImGuiManager()->BeginFrame();
 
-        renderingModule = GetModuleManager()->GetModule<RenderingModule>("Rendering");
+        entt::entity editorCamera = ecsModule->GetECS()->FindEditorCamera();
+        entt::entity gameCamera = ecsModule->GetECS()->FindGameCamera();
+
         auto* renderer = renderingModule->GetRenderer();
 
         if (gameCamera == entt::null)
         {
-            gameCamera = GetECSWorld()->CreateCamera("Game Camera", false, true);
-            auto& transform = GetECSWorld()->GetComponent<TransformComponent>(gameCamera);
+            gameCamera = ecsModule->GetECS()->CreateCamera("Game Camera", false, true);
+            auto& transform = ecsModule->GetECS()->GetComponent<TransformComponent>(gameCamera);
             transform.position = glm::vec3(0, 5, 10);
         }
 
         // Scene Framebuffer
         Framebuffer* sceneFB = uiModule->GetEditorLayout()->GetSceneFramebuffer();
         ImVec2 sceneViewportSize = uiModule->GetEditorLayout()->GetSceneViewportSize();
-        sceneFB->Bind();
-        renderer->BeginFrame();
+        if (sceneViewportSize.x <= 0 || sceneViewportSize.y <= 0)
+        {
+            Logger::Log(LogLevel::WARNING, "Invalid scene viewport size, skipping render");
+        }
+        else
+        {
+            sceneFB->Bind();
+            renderer->BeginFrame();
 
-        renderer->Render(
-            *GetECSWorld(),
-            editorCamera, 
-            static_cast<int>(sceneViewportSize.x), 
-            static_cast<int>(sceneViewportSize.y)
-        );
-
-        renderer->EndFrame();
-        sceneFB->Unbind();
+            if (gameCamera != entt::null)
+                renderer->Render(
+                    *ecsModule->GetECS(), 
+                    gameCamera,             
+                    static_cast<int>(sceneViewportSize.x), 
+                    static_cast<int>(sceneViewportSize.y)
+                );
+            
+            renderer->EndFrame();
+            sceneFB->Unbind();
+        }
 
         // Game Framebuffer
         Framebuffer* gameFB = uiModule->GetEditorLayout()->GetGameFramebuffer();
         ImVec2 gameViewportSize = uiModule->GetEditorLayout()->GetGameViewportSize();
-        gameFB->Bind();
-        renderer->BeginFrame();
 
-        if (gameCamera != entt::null)
-            renderer->Render(
-                *GetECSWorld(), 
-                gameCamera,             
-                static_cast<int>(gameViewportSize.x), 
-                static_cast<int>(gameViewportSize.y)
-            );
-        
-        renderer->EndFrame();
-        gameFB->Unbind();
+        if (gameViewportSize.x <= 0 || gameViewportSize.y <= 0)
+        {
+            Logger::Log(LogLevel::WARNING, "Invalid game viewport size, skipping render");
+        }
+        else
+        {
+            gameFB->Bind();
+            renderer->BeginFrame();
+
+            if (gameCamera != entt::null)
+                renderer->Render(
+                    *ecsModule->GetECS(), 
+                    gameCamera,             
+                    static_cast<int>(gameViewportSize.x), 
+                    static_cast<int>(gameViewportSize.y)
+                );
+            
+            renderer->EndFrame();
+            gameFB->Unbind();
+        }
         
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glViewport(0, 0, GetWindow()->GetWidth(), GetWindow()->GetHeight());
         glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         glDisable(GL_DEPTH_TEST);
+        glDisable(GL_BLEND);
+        
+        if (showUI)
+            uiModule->RenderUI();
+        
+        uiModule->GetImGuiManager()->EndFrame();
     }
 
     /**
@@ -241,17 +347,14 @@ protected:
         Logger::Log(LogLevel::INFO, "Engine shutdown complete!");
     }
 
-    /**
-     * @brief Render User Interface
-     */
-    void RenderUI() override
-    {
-        uiModule->RenderUI();
-    }
-
     bool ShouldAllowCameraControl() const override 
     { 
         return !isPlayMode; 
+    }
+
+    void SetMainCameraEntity(entt::entity newMainCameraEntity) 
+    {
+        mainCameraEntity = newMainCameraEntity;
     }
 
 public:
@@ -266,7 +369,7 @@ private:
         
         try 
         {
-            InitLua(GetECSWorld());
+            InitLua(ecsModule->GetECS());
             Logger::Log(LogLevel::INFO, "Lua scripting initialized successfully");
         }
         catch (const std::exception& e)
@@ -319,17 +422,17 @@ private:
         CommandManager::RegisterCommand("onCreateCube",
         [this](const CommandArgs&) 
         {
-            auto entity = GetECSWorld()->CreateEntity("Cube");
-            GetECSWorld()->AddComponent<TransformComponent>(entity, glm::vec3(0, 0, -5), glm::vec3(0), glm::vec3(1));
+            auto entity = ecsModule->GetECS()->CreateEntity("Cube");
+            ecsModule->GetECS()->AddComponent<TransformComponent>(entity, glm::vec3(0, 0, -5), glm::vec3(0), glm::vec3(1));
             
             auto cubeMesh = PrimitivesFactory::CreatePrimitive(PrimitiveType::CUBE);
-            GetECSWorld()->AddComponent<MeshComponent>(entity, cubeMesh);
+            ecsModule->GetECS()->AddComponent<MeshComponent>(entity, cubeMesh);
             
             auto material = resourceModule->GetMaterialManager()->GetMaterial("gray");
-            GetECSWorld()->AddComponent<MaterialComponent>(entity, material);
+            ecsModule->GetECS()->AddComponent<MaterialComponent>(entity, material);
             
-            GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
-            GetECSWorld()->AddComponent<RotationComponent>(entity, 50.0f);
+            ecsModule->GetECS()->AddComponent<VisibilityComponent>(entity, true);
+            ecsModule->GetECS()->AddComponent<RotationComponent>(entity, 50.0f);
             
             Logger::Log(LogLevel::INFO, "Cube entity created");
         });
@@ -337,17 +440,17 @@ private:
         CommandManager::RegisterCommand("onCreatePlane",
         [this](const CommandArgs&) 
         {
-            auto entity = GetECSWorld()->CreateEntity("Plane");
-            GetECSWorld()->AddComponent<TransformComponent>(entity, glm::vec3(0, 0, -5), glm::vec3(0), glm::vec3(1));
+            auto entity = ecsModule->GetECS()->CreateEntity("Plane");
+            ecsModule->GetECS()->AddComponent<TransformComponent>(entity, glm::vec3(0, 0, -5), glm::vec3(0), glm::vec3(1));
             
             auto mesh = PrimitivesFactory::CreatePrimitive(PrimitiveType::QUAD);
-            GetECSWorld()->AddComponent<MeshComponent>(entity, mesh);
+            ecsModule->GetECS()->AddComponent<MeshComponent>(entity, mesh);
             
             auto material = resourceModule->GetMaterialManager()->GetMaterial("gray");
-            GetECSWorld()->AddComponent<MaterialComponent>(entity, material);
+            ecsModule->GetECS()->AddComponent<MaterialComponent>(entity, material);
             
-            GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
-            GetECSWorld()->AddComponent<RotationComponent>(entity, 50.0f);
+            ecsModule->GetECS()->AddComponent<VisibilityComponent>(entity, true);
+            ecsModule->GetECS()->AddComponent<RotationComponent>(entity, 50.0f);
             
             Logger::Log(LogLevel::INFO, "Cube entity created");
         });
@@ -371,25 +474,25 @@ private:
             const auto& color = std::get<glm::vec3>(args[0]);
             entt::entity selected = uiModule->GetEditorLayout()->GetSelectedEntity();
             
-            if (selected == entt::null || !GetECSWorld()->IsValid(selected))
+            if (selected == entt::null || !ecsModule->GetECS()->IsValid(selected))
             {
                 Logger::Log(LogLevel::WARNING, "No entity selected");
                 return;
             }
 
-            if (GetECSWorld()->HasComponent<ColorComponent>(selected))
+            if (ecsModule->GetECS()->HasComponent<ColorComponent>(selected))
             {
-                auto& colorComp = GetECSWorld()->GetComponent<ColorComponent>(selected);
+                auto& colorComp = ecsModule->GetECS()->GetComponent<ColorComponent>(selected);
                 colorComp.color = color;
             }
             else
             {
-                GetECSWorld()->AddComponent<ColorComponent>(selected, color);
+                ecsModule->GetECS()->AddComponent<ColorComponent>(selected, color);
             }
 
-            if (GetECSWorld()->HasComponent<MeshComponent>(selected))
+            if (ecsModule->GetECS()->HasComponent<MeshComponent>(selected))
             {
-                auto& meshComp = GetECSWorld()->GetComponent<MeshComponent>(selected);
+                auto& meshComp = ecsModule->GetECS()->GetComponent<MeshComponent>(selected);
                 if (meshComp.mesh)
                     meshComp.mesh->SetColor(color);
             }
@@ -398,12 +501,12 @@ private:
         CommandManager::RegisterCommand("onCreateDirectionalLight",
         [this](const CommandArgs&) 
         {
-            auto entity = GetECSWorld()->CreateEntity("Directional Light");
-            GetECSWorld()->AddComponent<TransformComponent>(entity, 
+            auto entity = ecsModule->GetECS()->CreateEntity("Directional Light");
+            ecsModule->GetECS()->AddComponent<TransformComponent>(entity, 
                 glm::vec3(0, 10, 0), glm::vec3(45, 0, 0), glm::vec3(1));
-            GetECSWorld()->AddComponent<LightComponent>(entity, LightType::DIRECTIONAL);
-            GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
-            GetECSWorld()->AddComponent<IconComponent>(entity, 
+            ecsModule->GetECS()->AddComponent<LightComponent>(entity, LightType::DIRECTIONAL);
+            ecsModule->GetECS()->AddComponent<VisibilityComponent>(entity, true);
+            ecsModule->GetECS()->AddComponent<IconComponent>(entity, 
                 "assets/textures/icons/light_directional.png", 0.3f);
             Logger::Log(LogLevel::INFO, "Directional light created with icon");
         });
@@ -411,12 +514,12 @@ private:
         CommandManager::RegisterCommand("onCreatePointLight",
         [this](const CommandArgs&) 
         {
-            auto entity = GetECSWorld()->CreateEntity("Point Light");
-            GetECSWorld()->AddComponent<TransformComponent>(entity, 
+            auto entity = ecsModule->GetECS()->CreateEntity("Point Light");
+            ecsModule->GetECS()->AddComponent<TransformComponent>(entity, 
                 glm::vec3(0, 5, 0), glm::vec3(0), glm::vec3(1));
-            GetECSWorld()->AddComponent<LightComponent>(entity, LightType::POINT);
-            GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
-            GetECSWorld()->AddComponent<IconComponent>(entity, 
+            ecsModule->GetECS()->AddComponent<LightComponent>(entity, LightType::POINT);
+            ecsModule->GetECS()->AddComponent<VisibilityComponent>(entity, true);
+            ecsModule->GetECS()->AddComponent<IconComponent>(entity, 
                 "assets/textures/icons/light_point.png", 0.4f);
             Logger::Log(LogLevel::INFO, "Point light created with icon");
         });
@@ -424,12 +527,12 @@ private:
         CommandManager::RegisterCommand("onCreateSpotLight",
         [this](const CommandArgs&) 
         {
-            auto entity = GetECSWorld()->CreateEntity("Spot Light");
-            GetECSWorld()->AddComponent<TransformComponent>(entity, 
+            auto entity = ecsModule->GetECS()->CreateEntity("Spot Light");
+            ecsModule->GetECS()->AddComponent<TransformComponent>(entity, 
                 glm::vec3(0, 5, 0), glm::vec3(45, 0, 0), glm::vec3(1));
-            GetECSWorld()->AddComponent<LightComponent>(entity, LightType::SPOT);
-            GetECSWorld()->AddComponent<VisibilityComponent>(entity, true);
-            GetECSWorld()->AddComponent<IconComponent>(entity, 
+            ecsModule->GetECS()->AddComponent<LightComponent>(entity, LightType::SPOT);
+            ecsModule->GetECS()->AddComponent<VisibilityComponent>(entity, true);
+            ecsModule->GetECS()->AddComponent<IconComponent>(entity, 
                 "assets/textures/icons/light_spot.png", 0.35f);
             Logger::Log(LogLevel::INFO, "Spot light created with icon");
         });
@@ -509,7 +612,7 @@ private:
         // CommandManager::RegisterCommand("onNewScene",
         // [this](const CommandArgs&) 
         // {
-        //     GetECSWorld()->Clear();
+        //     ecsModule->GetECS()->Clear();
         //    
         //     GetCamera()->SetPosition(glm::vec3(0, 0, 0));
         //     GetCamera()->SetYaw(-95.0f);
@@ -557,14 +660,14 @@ private:
                 return;
             }
             
-            if (!GetECSWorld())
+            if (!ecsModule->GetECS())
             {
                 Logger::Log(LogLevel::ERROR, "ECSWorld is NULL!");
                 return;
             }
             
             Logger::Log(LogLevel::INFO, "Calling LoadWithECS...");
-            auto model = resourceModule->GetModelManager()->LoadWithECS(filepath, GetECSWorld());
+            auto model = resourceModule->GetModelManager()->LoadWithECS(filepath, ecsModule->GetECS());
             
             if (!model) 
             {
@@ -575,13 +678,13 @@ private:
             Logger::Log(LogLevel::INFO, 
                 "Model loaded successfully with " + std::to_string(model->GetMeshCount()) + " meshes");
             
-            Logger::Log(LogLevel::INFO, "Total entities in world: " + std::to_string(GetECSWorld()->GetEntityCount()));
+            Logger::Log(LogLevel::INFO, "Total entities in world: " + std::to_string(ecsModule->GetECS()->GetEntityCount()));
             Logger::Log(LogLevel::INFO, "=== onLoadModel command complete ===\n");
         });
 
         CommandManager::RegisterCommand("onCreateCamera", [this](const CommandArgs&) 
         {
-            auto* ecs = GetECSWorld();
+            auto* ecs = ecsModule->GetECS();
             auto newCam = ecs->CreateCamera("Camera", false);
             
             auto view = ecs->GetRegistry().view<CameraComponent>();
@@ -605,7 +708,7 @@ private:
             
             Logger::Log(LogLevel::INFO, "=== ENTERING PLAY MODE ===");
             
-            auto* ecs = GetECSWorld();
+            auto* ecs = ecsModule->GetECS();
             entt::entity editorCam = ecs->FindEditorCamera();
             
             if (editorCam != entt::null && ecs->IsValid(editorCam))
@@ -651,7 +754,7 @@ private:
             
             Logger::Log(LogLevel::INFO, "=== EXITING PLAY MODE ===");
             
-            auto* ecs = GetECSWorld();
+            auto* ecs = ecsModule->GetECS();
             entt::entity editorCam = ecs->FindEditorCamera();
             
             if (editorCam != entt::null && ecs->IsValid(editorCam))
@@ -693,7 +796,7 @@ private:
             }
 
             entt::entity selected = uiModule->GetEditorLayout()->GetSelectedEntity();
-            if (selected == entt::null || !GetECSWorld()->IsValid(selected))
+            if (selected == entt::null || !ecsModule->GetECS()->IsValid(selected))
             {
                 Logger::Log(LogLevel::WARNING, "No entity selected");
                 return;
@@ -701,7 +804,7 @@ private:
 
             std::string scriptPath = std::get<std::string>(args[0]);
 
-            auto* ecs = GetECSWorld();
+            auto* ecs = ecsModule->GetECS();
 
             if (ecs->HasComponent<ScriptComponent>(selected))
             {
@@ -732,15 +835,15 @@ private:
         [this](const CommandArgs&) 
         {
             entt::entity selected = uiModule->GetEditorLayout()->GetSelectedEntity();
-            if (selected == entt::null || !GetECSWorld()->IsValid(selected))
+            if (selected == entt::null || !ecsModule->GetECS()->IsValid(selected))
             {
                 Logger::Log(LogLevel::WARNING, "No entity selected");
                 return;
             }
 
-            if (GetECSWorld()->HasComponent<ScriptComponent>(selected))
+            if (ecsModule->GetECS()->HasComponent<ScriptComponent>(selected))
             {
-                auto& script = GetECSWorld()->GetComponent<ScriptComponent>(selected);
+                auto& script = ecsModule->GetECS()->GetComponent<ScriptComponent>(selected);
                 
                 if (script.loaded && script.env["onDestroy"].valid())
                 {
@@ -754,7 +857,7 @@ private:
                     }
                 }
                 
-                GetECSWorld()->RemoveComponent<ScriptComponent>(selected);
+                ecsModule->GetECS()->RemoveComponent<ScriptComponent>(selected);
                 Logger::Log(LogLevel::INFO, "Script removed from entity");
             }
             else

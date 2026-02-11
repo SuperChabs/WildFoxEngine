@@ -28,19 +28,19 @@ public:
         try
         {
             textureManager = std::make_unique<TextureManager>();
-            Logger::Log(LogLevel::DEBUG, "TextureManager created");
+            Logger::Log(LogLevel::DEBUG, "  TextureManager created");
             
             materialManager = std::make_unique<MaterialManager>(textureManager.get());
-            Logger::Log(LogLevel::DEBUG, "MaterialManager created");
+            Logger::Log(LogLevel::DEBUG, "  MaterialManager created");
             
             shaderManager = std::make_unique<ShaderManager>();
-            Logger::Log(LogLevel::DEBUG, "ShaderManager created");
-            Logger::Log(LogLevel::DEBUG, "ShaderManager address: " + 
+            Logger::Log(LogLevel::DEBUG, "  ShaderManager created");
+            Logger::Log(LogLevel::DEBUG, "  ShaderManager address: " + 
                 std::to_string(reinterpret_cast<uintptr_t>(shaderManager.get())));
             
             modelManager = std::make_unique<ModelManager>();
             modelManager->SetMaterialManager(materialManager.get());
-            Logger::Log(LogLevel::DEBUG, "ModelManager created");
+            Logger::Log(LogLevel::DEBUG, "  ModelManager created");
             
             isInitialized = true;
 
@@ -80,7 +80,7 @@ public:
     /// @name IModule interface
     /// @{
     const char* GetName() const override { return "Resource"; }
-    int GetPriority() const override { return 10; }
+    int GetPriority() const override { return 20; }
     bool IsRequired() const override { return true; } 
     /// @}
 

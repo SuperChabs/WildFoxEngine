@@ -20,7 +20,6 @@ import WFE.Rendering.RenderingTypes;
 import WFE.Resource.Shader.ShaderManager;
 import WFE.ECS.ECSWorld;
 import WFE.ECS.Systems;
-import WFE.Core.Camera;
 import WFE.Core.Logger;
 import WFE.Core.CommandManager;
 

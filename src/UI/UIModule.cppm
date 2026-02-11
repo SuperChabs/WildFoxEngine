@@ -40,12 +40,18 @@ public:
             editorLayout = std::make_unique<EditorLayout>();
             imGuiManager = std::make_unique<ImGuiManager>();
             
+            Logger::Log(LogLevel::INFO, 
+                "Successfully created UI Mdoule");
+
             isInitialized = true;
 
             return true;
         } 
         catch (const std::exception& e) 
         {
+            Logger::Log(LogLevel::ERROR, 
+                "Exception creating ui module: " + std::string(e.what()));
+
             isInitialized = true;
 
             return false;
@@ -79,7 +85,7 @@ public:
     /// @name IModule interface
     /// @{
     const char* GetName() const override{ return "UI"; }
-    int GetPriority() const override { return 100; }
+    int GetPriority() const override { return 40; }
     bool IsRequired() const override { return true; }
     /// }@
 

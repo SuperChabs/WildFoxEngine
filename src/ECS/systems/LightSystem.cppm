@@ -17,7 +17,7 @@ import WFE.Core.Logger;
 
 import WFE.Resource.Shader.ShaderManager;
 
-import WFE.Rendering.Light;
+import WFE.Scene.Light;
 
 export class LightSystem
 {

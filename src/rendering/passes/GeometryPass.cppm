@@ -8,7 +8,6 @@ export module WFE.Rendering.Passes.GeometryPass;
 
 import WFE.Rendering.Passes.RenderPass;
 import WFE.ECS.ECSWorld;
-import WFE.Core.Camera;
 import WFE.Core.CommandManager;
 import WFE.Rendering.Core.GLContext;
 import WFE.Resource.Shader.ShaderManager;

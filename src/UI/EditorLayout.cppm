@@ -13,13 +13,12 @@ export module WFE.UI.EditorLayout;
 import WFE.ECS.ECSWorld;
 import WFE.ECS.Components;
 
-import WFE.Core.Camera;
 import WFE.Core.Logger;
 import WFE.Core.CommandManager;
 
 import WFE.Rendering.Renderer;
 import WFE.Rendering.Core.Framebuffer;
-import WFE.Rendering.Light;
+import WFE.Scene.Light;
 
 import WFE.Resource.Material.MaterialManager;
 import WFE.Resource.Shader.ShaderManager;
@@ -90,6 +89,11 @@ private:
     void RenderDockSpace(bool isPlayMode)
     {
         ImGuiViewport* viewport = ImGui::GetMainViewport();
+        if (!viewport)
+        {
+            Logger::Log(LogLevel::ERROR, "Main viewport is NULL!");
+            return;
+        }
         ImGui::SetNextWindowPos(viewport->WorkPos);
         ImGui::SetNextWindowSize(viewport->WorkSize);
         ImGui::SetNextWindowViewport(viewport->ID);

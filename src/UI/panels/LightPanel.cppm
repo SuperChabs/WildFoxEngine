@@ -8,7 +8,7 @@ export module WFE.UI.Panels.LightPanel;
 
 import WFE.ECS.ECSWorld;
 import WFE.ECS.Components;
-import WFE.Rendering.Light;
+import WFE.Scene.Light;
 
 export class LightPanel
 {

@@ -13,9 +13,8 @@ export module WFE.Scene.SceneSurializer;
 
 import WFE.ECS.ECSWorld;
 import WFE.ECS.Components;
-import WFE.Core.Camera;
 import WFE.Core.Logger;
-import WFE.Rendering.Light;
+import WFE.Scene.Light;
 import WFE.Resource.Material.MaterialManager;
 import WFE.Resource.Texture.TextureManager;
 import WFE.Rendering.Primitive.PrimitivesFactory;
@@ -29,12 +28,13 @@ export class SceneSerializer
 {
 private:
     ECSWorld* world;
-    Camera* camera;
+    //Camera* camera;
     std::string savesDirectory = "../saves/";
 
 public:
-    SceneSerializer(ECSWorld* w, Camera* c) 
-        : world(w), camera(c) {}
+    SceneSerializer(ECSWorld* w)//, Camera* c) 
+        : world(w)//, camera(c) 
+        {}
     
     bool SaveScene(const std::string& filename)
     {
@@ -51,7 +51,7 @@ public:
         sceneData["scene"]["name"] = "MyScene";
         sceneData["scene"]["timestamp"] = GetCurrentTimestamp();
         
-        sceneData["scene"]["camera"] = SerializeCamera();
+        //sceneData["scene"]["camera"] = SerializeCamera();
         sceneData["scene"]["entities"] = json::array();
         sceneData["scene"]["theme"] = ImGuiManager::Instance().GetTheme();
         
@@ -224,8 +224,8 @@ public:
         
         world->Clear();
         
-        if (sceneData["scene"].contains("camera"))
-            DeserializeCamera(sceneData["scene"]["camera"]);
+        //if (sceneData["scene"].contains("camera"))
+        //    DeserializeCamera(sceneData["scene"]["camera"]);
 
         // if (sceneData["scene"].contains("theme"))
         // {
@@ -443,34 +443,34 @@ private:
         }
     }
     
-    json SerializeCamera()
-    {
-        return 
-        {
-            {"position", {camera->GetPosition().x, camera->GetPosition().y, camera->GetPosition().z}},
-            {"yaw", camera->GetYaw()},
-            {"pitch", camera->GetPitch()},
-            {"speed", camera->GetMovementSpeed()},
-            {"sensitivity", camera->GetMouseSensitivity()},
-            {"zoom", camera->GetZoom()}
-        };
-    }
+    //json SerializeCamera()
+    //{
+    //    return 
+    //    {
+    //        {"position", {camera->GetPosition().x, camera->GetPosition().y, camera->GetPosition().z}},
+    //        {"yaw", camera->GetYaw()},
+    //        {"pitch", camera->GetPitch()},
+    //        {"speed", camera->GetMovementSpeed()},
+    //        {"sensitivity", camera->GetMouseSensitivity()},
+    //        {"zoom", camera->GetZoom()}
+    //    };
+    //}
     
-    void DeserializeCamera(const json& camData)
-    {
-        if (camData.contains("position"))
-            camera->SetPosition({camData["position"][0], camData["position"][1], camData["position"][2]});
-        if (camData.contains("yaw"))
-            camera->SetYaw(camData["yaw"]);
-        if (camData.contains("pitch"))
-            camera->SetPitch(camData["pitch"]);
-        if (camData.contains("speed"))
-            camera->SetMovementSpeed(camData["speed"]);
-        if (camData.contains("sensitivity"))
-            camera->SetMouseSensitivity(camData["sensitivity"]);
-        if (camData.contains("zoom"))
-            camera->SetZoom(camData["zoom"]);
-    }
+    //void DeserializeCamera(const json& camData)
+    //{
+    //    if (camData.contains("position"))
+    //        camera->SetPosition({camData["position"][0], camData["position"][1], camData["position"][2]});
+    //    if (camData.contains("yaw"))
+    //        camera->SetYaw(camData["yaw"]);
+    //    if (camData.contains("pitch"))
+    //        camera->SetPitch(camData["pitch"]);
+    //    if (camData.contains("speed"))
+    //        camera->SetMovementSpeed(camData["speed"]);
+    //    if (camData.contains("sensitivity"))
+    //        camera->SetMouseSensitivity(camData["sensitivity"]);
+    //    if (camData.contains("zoom"))
+    //        camera->SetZoom(camData["zoom"]);
+    //}
     
     std::string GetCurrentTimestamp()
     {

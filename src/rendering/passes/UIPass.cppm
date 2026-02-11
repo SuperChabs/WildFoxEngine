@@ -7,7 +7,6 @@ module;
 export module WFE.Rendering.Passes.UIPass;
 
 import WFE.Rendering.Passes.RenderPass;
-import WFE.Core.Camera;
 import WFE.Core.CommandManager;
 import WFE.Rendering.Core.GLContext;
 import WFE.Resource.Shader.ShaderManager;

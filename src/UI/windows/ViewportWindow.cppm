@@ -19,7 +19,6 @@ import WFE.Core.Logger;
 import WFE.Rendering.Core.Framebuffer;
 import WFE.ECS.ECSWorld;
 import WFE.ECS.Components;
-import WFE.Core.Camera;
 
 export class ViewportWindow 
 {
@@ -135,7 +134,13 @@ public:
     }
     
     bool IsOpen() const { return isOpen; }
-    ImVec2 GetViewportSize() const { return viewportSize; }
+    ImVec2 GetViewportSize() const 
+    { 
+        return ImVec2(
+            std::max(viewportSize.x, 1.0f), 
+            std::max(viewportSize.y, 1.0f)
+        );
+    }
     ImVec2 GetViewportPos() const { return viewportPos; }
     bool IsHovered() const { return isHovered; }
     bool IsFocused() const { return isFocused; }

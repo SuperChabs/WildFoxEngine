@@ -14,6 +14,7 @@ import WFE.Core.IModule;
 import WFE.Core.ModuleManager;
 import WFE.Core.Logger;
 import WFE.Rendering.Renderer;
+
 import WFE.Scene.Skybox;
 import WFE.ECS.ECSWorld;
 import WFE.ECS.Systems;
@@ -151,7 +152,7 @@ public:
     /// @name IModule interface
     /// @{
     const char* GetName() const override { return "Rendering"; }
-    int GetPriority() const override { return 50; }
+    int GetPriority() const override { return 30; }
     bool IsRequired() const override { return false; } 
     /// @}
     

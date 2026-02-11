@@ -6,7 +6,6 @@ module;
 
 export module WFE.UI.Windows.PropertiesWindow;
 
-import WFE.Core.Camera;
 import WFE.Rendering.Renderer;
 import WFE.ECS.ECSWorld;
 import WFE.ECS.Components;

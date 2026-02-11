@@ -13,5 +13,5 @@ public:
     virtual const char* GetName() const = 0;
     virtual int GetPriority() const { return 100; }
     virtual bool IsRequired() const { return true; }
-    virtual bool IsInitialized() const {return isInitialized; }
+    bool IsInitialized() const {return isInitialized; }
 };

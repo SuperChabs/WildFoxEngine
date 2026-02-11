@@ -10,7 +10,6 @@ module;
 
 export module WFE.ECS.Systems.CameraSystem;
 
-import WFE.Core.Camera;
 import WFE.Core.Input;
 import WFE.ECS.ECSWorld;
 import WFE.ECS.Components;
@@ -20,12 +19,9 @@ export class CameraSystem
 {
     entt::entity mainCameraEntity = entt::null;
 
-    Camera* legacyCamera = nullptr;
 
 public:
     CameraSystem() = default;
-
-    void SetLagacyCamera(Camera* cam) { legacyCamera = cam; }
 
     void Update(ECSWorld& ecs, Input& input, float deltaTime, bool viewportFocused)
     {

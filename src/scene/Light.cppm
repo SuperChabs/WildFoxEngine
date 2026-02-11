@@ -3,7 +3,7 @@ module;
 #include <glm/glm.hpp>
 #include <string>
 
-export module WFE.Rendering.Light;
+export module WFE.Scene.Light;
 
 export enum class LightType
 {

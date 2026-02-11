@@ -47,97 +47,22 @@ private:
     std::unique_ptr<Window> window;
     std::unique_ptr<Input> input;
     std::unique_ptr<Time> time;
-    
-    std::unique_ptr<ImGuiManager> imGuiManager;
-    std::unique_ptr<ECSWorld> ecsWorld;
-    std::unique_ptr<InputControllerSystem> inputControllerSystem;
 
     std::unique_ptr<ModuleManager> moduleManager;
     
     ConsoleLogger console;
     FileLogger file;
 
-    bool isRunning; ///< Whether the application is currently running
+    bool isRunning;
 
     void Update()
     {
         float deltaTime = time->GetDeltaTime();
-        
-        bool allowCameraControl = cameraControlEnabled && ShouldAllowCameraControl();
-        inputControllerSystem->Update(*ecsWorld, *input, deltaTime, allowCameraControl);;
 
         OnUpdate(deltaTime);
     }
 
-    void Render()
-    {
-        OnRender();  
-
-        if (showUI) 
-        {
-            int width = window->GetWidth();
-            int height = window->GetHeight();
-            glViewport(0, 0, width, height);
-            glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT);
-            glDisable(GL_DEPTH_TEST);
-            glDisable(GL_BLEND);
-            
-            imGuiManager->BeginFrame();
-            RenderUI();
-            imGuiManager->EndFrame();
-        } 
-    }
-    
-    static void FramebufferSizeCallback(GLFWwindow* window, int width, int height)
-    {
-        glViewport(0, 0, width, height);
-        Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
-        if (app && app->GetWindow())
-            app->GetWindow()->SetSize(width, height);
-    }
-
-    static void MouseCallback(GLFWwindow* window, double xpos, double ypos)
-    {
-        Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
-        
-        if (!app || !app->input) // || !app->camera
-            return;
-        
-        app->input->UpdateMousePosition(xpos, ypos);
-        
-        if (app->cameraControlEnabled) 
-        {
-            glm::vec2 delta = app->input->GetMouseDelta();
-            auto& orientation = app->ecsWorld->GetComponent<CameraOrientationComponent>(app->mainCameraEntity);
-            auto& config = app->ecsWorld->GetComponent<CameraComponent>(app->mainCameraEntity);
-
-            orientation.yaw   += delta.x * config.mouseSensitivity;
-            orientation.pitch += delta.y * config.mouseSensitivity;
-
-            if (orientation.pitch > 89.0f)  orientation.pitch = 89.0f;
-            if (orientation.pitch < -89.0f) orientation.pitch = -89.0f;
-        }
-    }
-
-    static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
-    {
-        Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
-        
-        if (!app || !app->input)
-            return;
-        
-        if (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS) 
-        {
-            if (app->ShouldAllowCameraControl())
-                app->SetCameraControlMode(!app->cameraControlEnabled);
-        }
-    }
-
 protected:
-    bool cameraControlEnabled;
-    bool showUI;
-    entt::entity mainCameraEntity = entt::null;
 
     /**
      * @brief Constructor
@@ -147,8 +72,7 @@ protected:
      */
     Application(int width, int height, const std::string& title)
         : window(nullptr), input(nullptr), time(nullptr), 
-          isRunning(false), showUI(true), 
-          cameraControlEnabled(false)
+          isRunning(false)
     {
         window = std::make_unique<Window>(width, height, title);
 
@@ -160,27 +84,7 @@ protected:
     virtual void OnRender() {}
     virtual void OnShutdown() {}
 
-    virtual void RenderUI() = 0;
-
     virtual bool ShouldAllowCameraControl() const { return true; }
-
-    void SetCameraControlMode(bool enabled)
-    {
-        cameraControlEnabled = enabled;
-        
-        if (enabled) 
-        {
-            window->SetCursorMode(GLFW_CURSOR_DISABLED);
-            Logger::Log(LogLevel::INFO, "Camera control: ON");
-        } 
-        else 
-        {
-            window->SetCursorMode(GLFW_CURSOR_NORMAL);
-            Logger::Log(LogLevel::INFO, "Camera control: OFF (UI mode)");
-        }
-    }
-
-    void SetMainCameraEntity(entt::entity newMainCameraEntity) {mainCameraEntity = newMainCameraEntity; }
 
 public:
     /**
@@ -211,33 +115,10 @@ public:
 
         glfwSetWindowUserPointer(window->GetGLFWWindow(), this);
         
-        window->SetFramebufferSizeCallback(FramebufferSizeCallback);
-        window->SetCursorPosCallback(MouseCallback);
-        window->SetScrollCallback(Input::ScrollCallback);
-        window->SetMouseButtonCallback(MouseButtonCallback);
-        
         input = std::make_unique<Input>(window->GetGLFWWindow());
         time = std::make_unique<Time>();
 
-        imGuiManager = std::make_unique<ImGuiManager>();
-        ecsWorld = std::make_unique<ECSWorld>();
-        inputControllerSystem = std::make_unique<InputControllerSystem>();
-
-        mainCameraEntity = ecsWorld->CreateCamera("Main Camera", true);
-
-        moduleManager = std::make_unique<ModuleManager>();
-        
-        Logger::Log(LogLevel::DEBUG, "ECSWorld address: " + 
-            std::to_string(reinterpret_cast<uintptr_t>(ecsWorld.get())));
-
-        glEnable(GL_DEBUG_OUTPUT);
-        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-
-        imGuiManager = std::make_unique<ImGuiManager>();
-        if (!imGuiManager->Initialize(window->GetGLFWWindow())) 
-            return false;
-
-        SetCameraControlMode(false);  
+        moduleManager = std::make_unique<ModuleManager>();  
         
         Logger::AddSink(&console);
         Logger::AddSink(&file);
@@ -262,7 +143,7 @@ public:
             time->Update();
         
             Update();
-            Render();
+            OnRender();
             
             window->SwapBuffers();
             window->PollEvents();
@@ -270,19 +151,14 @@ public:
     }
 
     /**
-     * @brief well, it do what in method name stand
+     * @brief well, it do what in method name stands for
      */
     void Shutdown()
     {
-        OnShutdown();
-
-        if (imGuiManager)
-        {
-            imGuiManager->Shutdown();
-            imGuiManager.reset();
-        }        
+        OnShutdown();     
 
         Logger::RemoveSink(&console);
+        Logger::RemoveSink(&file);
         
         Logger::Log(LogLevel::INFO, "Application shutdown complete");
     }
@@ -301,10 +177,6 @@ public:
     Window* GetWindow() { return window.get(); }
     Input* GetInput() { return input.get(); }
     Time* GetTime() const { return time.get(); }
-
-    entt::entity GetMainCameraEntity() const { return mainCameraEntity; }
-    ImGuiManager* GetImGuiManager() const { return imGuiManager.get(); }
-    ECSWorld* GetECSWorld() const { return ecsWorld.get(); }
 
     ModuleManager* GetModuleManager() { return moduleManager.get(); }
     /// @}

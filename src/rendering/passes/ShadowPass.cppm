@@ -10,7 +10,6 @@ import WFE.Rendering.Passes.RenderPass;
 import WFE.Rendering.Core.GLContext;
 import WFE.Resource.Shader.ShaderManager;
 import WFE.Core.CommandManager;
-import WFE.Core.Camera;
 
 export class ShadowPass : public RenderPass
 {

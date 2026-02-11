@@ -6,10 +6,9 @@ module;
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <entt/entt.hpp>
 
 export module WFE.Scene.Skybox;
-
-import WFE.Core.Camera;
 
 import WFE.Rendering.Core.VertexBuffer;
 import WFE.Rendering.Core.VertexArray;
@@ -92,12 +91,11 @@ public:
 
     //~Skybox() = default;
 
-    void Render(ShaderManager& shaderManager, const Camera& camera, const glm::mat4& projection)
+    void Render(ShaderManager& shaderManager, const glm::mat4& view, const glm::mat4& projection)
     {
         glDepthFunc(GL_LEQUAL);
         shaderManager.Bind(shaderName);
 
-        glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
         shaderManager.SetMat4(shaderName, "view", view);
         shaderManager.SetMat4(shaderName, "projection", projection);
 
