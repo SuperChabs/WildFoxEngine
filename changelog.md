@@ -14,6 +14,6 @@
 -- Add ECS module
 -- Delete all legacy camera mantions
 
-### v0.1.3
+### v0.1.4
 ##### 12.02.2026
 -- fixed errors related to UI module
