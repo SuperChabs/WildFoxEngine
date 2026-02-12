@@ -3,6 +3,7 @@ module;
 #include <memory>
 
 #include <entt/entt.hpp>
+#include <GLFW/glfw3.h>
 
 export module WFE.UI.UIModule;
 
@@ -23,11 +24,12 @@ export class UIModule : public IModule
     ECSWorld* ecs = nullptr;
     entt::entity* mainCameraEntity = nullptr;
     ModuleManager* mm = nullptr;
+    GLFWwindow* window = nullptr;
     bool* _isPlayMode = nullptr;
 
 public:
-    UIModule(ECSWorld* ecs, entt::entity* cameraEntity, bool* isPlayMode, ModuleManager* mm)
-        : ecs(ecs), mainCameraEntity(cameraEntity), _isPlayMode(isPlayMode), mm(mm)
+    UIModule(ECSWorld* ecs, entt::entity* cameraEntity, bool* isPlayMode, ModuleManager* mm, GLFWwindow* window)
+        : ecs(ecs), mainCameraEntity(cameraEntity), _isPlayMode(isPlayMode), mm(mm), window(window)
     {
         if (!ecs)
             Logger::Log(LogLevel::ERROR, "RenderingModule: ecs is null!");
@@ -37,9 +39,15 @@ public:
     {
         try 
         {
-            editorLayout = std::make_unique<EditorLayout>();
             imGuiManager = std::make_unique<ImGuiManager>();
+            editorLayout = std::make_unique<EditorLayout>();
             
+            if (!imGuiManager->Initialize(window))
+            {
+                Logger::Log(LogLevel::ERROR, "Failed to initialize ImGuiManager");
+                return false;
+            }
+
             Logger::Log(LogLevel::INFO, 
                 "Successfully created UI Mdoule");
 

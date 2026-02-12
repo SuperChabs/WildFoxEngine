@@ -170,7 +170,8 @@ protected:
             ecsModule->GetECS(), 
             &mainCameraEntity, 
             &isPlayMode, 
-            mm
+            mm,
+            GetWindow()->GetGLFWWindow()
         );
         uiModule = mm->GetModule<UIModule>("UI");
         uiModule->Initialize();
