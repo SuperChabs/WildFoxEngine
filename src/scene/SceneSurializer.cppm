@@ -13,6 +13,10 @@ export module WFE.Scene.SceneSurializer;
 
 import WFE.ECS.ECSWorld;
 import WFE.ECS.Components;
+import WFE.ECS.Components.Camera;
+import WFE.ECS.Components.Rotation;
+import WFE.ECS.Components.Script;
+import WFE.ECS.Components.Hierarchy;
 import WFE.Core.Logger;
 import WFE.Scene.Light;
 import WFE.Resource.Material.MaterialManager;
@@ -29,31 +33,50 @@ export class SceneSerializer
 private:
     ECSWorld* world;
     //Camera* camera;
-    std::string savesDirectory = "../saves/";
+    std::string savesDirectory = "saves/";
 
 public:
     SceneSerializer(ECSWorld* w)//, Camera* c) 
         : world(w)//, camera(c) 
         {}
     
+    std::string EnsureJsonExtension(const std::string& filename)
+    {
+        fs::path p(filename);
+        if (p.extension() != ".json")
+            return (p.string() + ".json");
+        return p.string();
+    }
+
     bool SaveScene(const std::string& filename)
+    {
+        return SaveScene(filename, true);
+    }
+
+    bool SaveScene(const std::string& filename, bool pretty)
     {
         if (!EnsureDirectoryExists(savesDirectory))
         {
             Logger::Log(LogLevel::ERROR, "Cannot create saves directory");
             return false;
         }
-        
-        std::string filepath = savesDirectory + filename;
-        
+
+        std::string name = EnsureJsonExtension(filename);
+        std::string filepath = savesDirectory + name;
+
         json sceneData;
         
         sceneData["scene"]["name"] = "MyScene";
         sceneData["scene"]["timestamp"] = GetCurrentTimestamp();
-        
-        //sceneData["scene"]["camera"] = SerializeCamera();
         sceneData["scene"]["entities"] = json::array();
         sceneData["scene"]["theme"] = ImGuiManager::Instance().GetTheme();
+        
+        // Serialize main camera if exists
+        entt::entity mainCam = world->FindEditorCamera();
+        if (mainCam != entt::null)
+        {
+            sceneData["scene"]["mainCamera"] = SerializeEntity(mainCam);
+        }
         
         world->Each<IDComponent, TagComponent>(
             [&](entt::entity entity, IDComponent& id, TagComponent& tag) 
@@ -63,54 +86,55 @@ public:
             entityData["id"] = id.id;
             entityData["name"] = tag.name;
             
+            // Transform Component
             if (world->HasComponent<TransformComponent>(entity))
             {
-                auto& transform = world->GetComponent<TransformComponent>(entity);
+                auto& t = world->GetComponent<TransformComponent>(entity);
                 entityData["transform"] = {
-                    {"position", {transform.position.x, transform.position.y, transform.position.z}},
-                    {"rotation", {transform.rotation.x, transform.rotation.y, transform.rotation.z}},
-                    {"scale", {transform.scale.x, transform.scale.y, transform.scale.z}}
+                    {"position", {t.position.x, t.position.y, t.position.z}},
+                    {"rotation", {t.rotation.x, t.rotation.y, t.rotation.z}},
+                    {"scale", {t.scale.x, t.scale.y, t.scale.z}}
                 };
             }
             
+            // Mesh Component (store primitive type or model path)
             if (world->HasComponent<MeshComponent>(entity))
             {
                 auto& meshComp = world->GetComponent<MeshComponent>(entity);
-                
-                entityData["mesh"] = json::object();
-                
-                entityData["mesh"]["type"] = "primitive";
-                entityData["mesh"]["primitiveType"] = "CUBE"; 
-                
-                // entityData["mesh"]["type"] = "model";
-                // entityData["mesh"]["path"] = "path/to/model.obj";
+                if (meshComp.mesh)
+                {
+                    entityData["mesh"] = {{"type", "primitive"}, {"primitiveType", "CUBE"}};
+                    // TODO: Store actual primitive type if available via Mesh
+                }
             }
             
+            // Material Component (by name)
             if (world->HasComponent<MaterialComponent>(entity))
             {
                 auto& mat = world->GetComponent<MaterialComponent>(entity);
                 if (mat.material)
                 {
-                    entityData["material"] = 
-                    {
+                    entityData["material"] = {
                         {"name", mat.material->GetName()},
-                        {"type", mat.material->GetType()} // "color" або "texture"
+                        {"type", mat.material->GetType()}
                     };
                     
                     if (mat.material->IsUsingColor())
                     {
                         glm::vec3 col = mat.material->GetColor();
-                        entityData["material"]["color"] = {col.r, col.g, col.b};
+                        entityData["material"]["color"] = {col.x, col.y, col.z};
                     }
                 }
             }
             
-            if (world->HasComponent<ColorComponent>(entity))
+            // Color Component (fallback if no material)
+            if (world->HasComponent<ColorComponent>(entity) && !world->HasComponent<MaterialComponent>(entity))
             {
                 auto& color = world->GetComponent<ColorComponent>(entity);
-                entityData["color"] = {color.color.r, color.color.g, color.color.b};
+                entityData["color"] = {color.color.x, color.color.y, color.color.z};
             }
             
+            // Light Component
             if (world->HasComponent<LightComponent>(entity))
             {
                 auto& light = world->GetComponent<LightComponent>(entity);
@@ -118,73 +142,117 @@ public:
                     {"type", static_cast<int>(light.type)},
                     {"position", {light.position.x, light.position.y, light.position.z}},
                     {"direction", {light.direction.x, light.direction.y, light.direction.z}},
-                    {"ambient", {light.ambient.r, light.ambient.g, light.ambient.b}},
-                    {"diffuse", {light.diffuse.r, light.diffuse.g, light.diffuse.b}},
-                    {"specular", {light.specular.r, light.specular.g, light.specular.b}},
+                    {"ambient", {light.ambient.x, light.ambient.y, light.ambient.z}},
+                    {"diffuse", {light.diffuse.x, light.diffuse.y, light.diffuse.z}},
+                    {"specular", {light.specular.x, light.specular.y, light.specular.z}},
                     {"intensity", light.intensity},
-                    {"active", light.isActive},
-                    {"castShadows", light.castShadows}
+                    {"isActive", light.isActive},
+                    {"castShadows", light.castShadows},
+                    {"constant", light.constant},
+                    {"linear", light.linear},
+                    {"quadratic", light.quadratic},
+                    {"radius", light.radius},
+                    {"innerCutoff", light.innerCutoff},
+                    {"outerCutoff", light.outerCutoff}
                 };
-                
-                if (light.type == LightType::POINT || light.type == LightType::SPOT)
-                {
-                    entityData["light"]["attenuation"] = {
-                        {"constant", light.constant},
-                        {"linear", light.linear},
-                        {"quadratic", light.quadratic},
-                        {"radius", light.radius}
-                    };
-                }
-                
-                if (light.type == LightType::SPOT)
-                {
-                    entityData["light"]["cone"] = {
-                        {"innerCutoff", light.innerCutoff},
-                        {"outerCutoff", light.outerCutoff}
-                    };
-                }
             }
             
+            // Rotation Component
             if (world->HasComponent<RotationComponent>(entity))
             {
                 auto& rot = world->GetComponent<RotationComponent>(entity);
-                entityData["rotation_animation"] = {
-                    {"auto", rot.autoRotate},
+                entityData["rotation"] = {
+                    {"autoRotate", rot.autoRotate},
                     {"speed", rot.speed},
                     {"axis", {rot.axis.x, rot.axis.y, rot.axis.z}}
                 };
             }
             
+            // Icon Component
             if (world->HasComponent<IconComponent>(entity))
             {
                 auto& icon = world->GetComponent<IconComponent>(entity);
                 entityData["icon"] = {
                     {"path", icon.iconTexturePath},
                     {"scale", icon.scale},
-                    {"billboard", icon.billboardMode}
+                    {"billboardMode", icon.billboardMode}
                 };
             }
             
+            // Camera Component
+            if (world->HasComponent<CameraComponent>(entity))
+            {
+                auto& cam = world->GetComponent<CameraComponent>(entity);
+                entityData["camera"] = {
+                    {"fov", cam.fov},
+                    {"nearPlane", cam.nearPlane},
+                    {"farPlane", cam.farPlane},
+                    {"movementSpeed", cam.movementSpeed},
+                    {"mouseSensitivity", cam.mouseSensitivity},
+                    {"isMainCamera", cam.isMainCamera},
+                    {"isActive", cam.isActive}
+                };
+                
+                if (world->HasComponent<CameraOrientationComponent>(entity))
+                {
+                    auto& orient = world->GetComponent<CameraOrientationComponent>(entity);
+                    entityData["camera"]["orientation"] = {
+                        {"yaw", orient.yaw},
+                        {"pitch", orient.pitch}
+                    };
+                }
+            }
+            
+            // Script Component
+            if (world->HasComponent<ScriptComponent>(entity))
+            {
+                auto& script = world->GetComponent<ScriptComponent>(entity);
+                entityData["script"] = {
+                    {"path", script.scriptPath}
+                };
+            }
+            
+            // Hierarchy Component
+            if (world->HasComponent<HierarchyComponent>(entity))
+            {
+                auto& hierarchy = world->GetComponent<HierarchyComponent>(entity);
+                entityData["hierarchy"] = {
+                    {"hasParent", hierarchy.HasParent()},
+                    {"childrenCount", hierarchy.children.size()}
+                };
+            }
+            
+            // Visibility Component
             if (world->HasComponent<VisibilityComponent>(entity))
             {
                 auto& vis = world->GetComponent<VisibilityComponent>(entity);
                 entityData["visibility"] = {
-                    {"active", vis.isActive},
+                    {"isActive", vis.isActive},
                     {"visible", vis.visible}
                 };
+            }
+            
+            // Camera Type Component
+            if (world->HasComponent<CameraTypeComponent>(entity))
+            {
+                auto& camType = world->GetComponent<CameraTypeComponent>(entity);
+                std::string typeStr = (camType.type == CameraTypeComponent::Type::EDITOR) ? "EDITOR" : "GAME";
+                entityData["cameraType"] = typeStr;
             }
             
             sceneData["scene"]["entities"].push_back(entityData);
         });
 
-        std::ofstream file(filepath);
+        std::ofstream file(filepath, std::ios::trunc);
         if (!file.is_open())
         {
             Logger::Log(LogLevel::ERROR, "Failed to open file: " + filepath);
             return false;
         }
-        
-        file << sceneData.dump(4);
+        if (pretty)
+            file << sceneData.dump(4);
+        else
+            file << sceneData.dump();
         file.close();
         
         Logger::Log(LogLevel::INFO, "Scene saved: " + filepath + 
@@ -196,7 +264,8 @@ public:
                    MaterialManager* materialManager,
                    TextureManager* textureManager)
     {
-        std::string filepath = savesDirectory + filename;
+        std::string name = EnsureJsonExtension(filename);
+        std::string filepath = savesDirectory + name;
         
         if (!fs::exists(filepath))
         {
@@ -224,20 +293,13 @@ public:
         
         world->Clear();
         
-        //if (sceneData["scene"].contains("camera"))
-        //    DeserializeCamera(sceneData["scene"]["camera"]);
-
-        // if (sceneData["scene"].contains("theme"))
-        // {
-        //     std::string themeStr = sceneData["scene"]["theme"];
-        // }
-        
         int loadedCount = 0;
         for (auto& entityData : sceneData["scene"]["entities"])
         {
-            std::string name = entityData.value("name", "Entity");
-            auto entity = world->CreateEntity(name);
+            std::string entityName = entityData.value("name", "Entity");
+            auto entity = world->CreateEntity(entityName);
             
+            // Deserialize Transform
             if (entityData.contains("transform"))
             {
                 auto& t = entityData["transform"];
@@ -248,11 +310,22 @@ public:
                 world->AddComponent<TransformComponent>(entity, pos, rot, scl);
             }
             
+            // Deserialize Mesh and Models
             if (entityData.contains("mesh"))
             {
                 std::string meshType = entityData["mesh"].value("type", "primitive");
                 
-                if (meshType == "primitive")
+                if (meshType == "model")
+                {
+                    std::string modelPath = entityData["mesh"].value("path", "");
+                    if (!modelPath.empty())
+                    {
+                        Logger::Log(LogLevel::INFO, "Loading model: " + modelPath);
+                        // Model loading will be done via ModelManager in Engine
+                        // TODO: Store model path reference for later loading
+                    }
+                }
+                else if (meshType == "primitive")
                 {
                     std::string primType = entityData["mesh"].value("primitiveType", "CUBE");
                     
@@ -267,22 +340,9 @@ public:
                     if (mesh)
                         world->AddComponent<MeshComponent>(entity, mesh);
                 }
-                else if (meshType == "model")
-                {
-                    std::string modelPath = entityData["mesh"].value("path", "");
-                    
-                    Logger::Log(LogLevel::WARNING, 
-                        "Model loading not yet implemented: " + modelPath);
-                    
-                    // Model* model = new Model(modelPath.c_str());
-                    // world->AddComponent<MeshComponent>(entity, model->GetMesh(0));
-                }
-                else if (meshType == "custom")
-                {
-                    Logger::Log(LogLevel::WARNING, "Custom mesh loading not implemented");
-                }
             }
             
+            // Deserialize Material
             if (entityData.contains("material"))
             {
                 std::string materialName = entityData["material"].value("name", "default");
@@ -307,6 +367,7 @@ public:
                 }
             }
             
+            // Deserialize Color
             if (entityData.contains("color") && !world->HasComponent<MaterialComponent>(entity))
             {
                 auto& col = entityData["color"];
@@ -314,6 +375,7 @@ public:
                 world->AddComponent<ColorComponent>(entity, color);
             }
             
+            // Light Component
             if (entityData.contains("light"))
             {
                 auto& l = entityData["light"];
@@ -333,37 +395,29 @@ public:
                     lightComp.specular = {l["specular"][0], l["specular"][1], l["specular"][2]};
                 
                 lightComp.intensity = l.value("intensity", 1.0f);
-                lightComp.isActive = l.value("active", true);
+                lightComp.isActive = l.value("isActive", true);
                 lightComp.castShadows = l.value("castShadows", true);
-                
-                if (l.contains("attenuation"))
-                {
-                    auto& att = l["attenuation"];
-                    lightComp.constant = att.value("constant", 1.0f);
-                    lightComp.linear = att.value("linear", 0.09f);
-                    lightComp.quadratic = att.value("quadratic", 0.032f);
-                    lightComp.radius = att.value("radius", 50.0f);
-                }
-                
-                if (l.contains("cone"))
-                {
-                    auto& cone = l["cone"];
-                    lightComp.innerCutoff = cone.value("innerCutoff", 12.5f);
-                    lightComp.outerCutoff = cone.value("outerCutoff", 17.5f);
-                }
+                lightComp.constant = l.value("constant", 1.0f);
+                lightComp.linear = l.value("linear", 0.09f);
+                lightComp.quadratic = l.value("quadratic", 0.032f);
+                lightComp.radius = l.value("radius", 50.0f);
+                lightComp.innerCutoff = l.value("innerCutoff", 12.5f);
+                lightComp.outerCutoff = l.value("outerCutoff", 17.5f);
             }
             
-            if (entityData.contains("rotation_animation"))
+            // Rotation (was rotation_animation)
+            if (entityData.contains("rotation"))
             {
-                auto& r = entityData["rotation_animation"];
+                auto& r = entityData["rotation"];
                 auto& rotComp = world->AddComponent<RotationComponent>(entity);
                 
-                rotComp.autoRotate = r.value("auto", false);
+                rotComp.autoRotate = r.value("autoRotate", false);
                 rotComp.speed = r.value("speed", 50.0f);
                 if (r.contains("axis"))
                     rotComp.axis = {r["axis"][0], r["axis"][1], r["axis"][2]};
             }
             
+            // Icon Component
             if (entityData.contains("icon"))
             {
                 auto& i = entityData["icon"];
@@ -371,15 +425,64 @@ public:
                 float scale = i.value("scale", 0.5f);
                 
                 auto& iconComp = world->AddComponent<IconComponent>(entity, path, scale);
-                iconComp.billboardMode = i.value("billboard", true);
+                iconComp.billboardMode = i.value("billboardMode", true);
             }
             
+            // Camera Component
+            if (entityData.contains("camera"))
+            {
+                auto& cam = entityData["camera"];
+                auto& camComp = world->AddComponent<CameraComponent>(entity);
+                
+                camComp.fov = cam.value("fov", 55.0f);
+                camComp.nearPlane = cam.value("nearPlane", 0.1f);
+                camComp.farPlane = cam.value("farPlane", 1000.0f);
+                camComp.movementSpeed = cam.value("movementSpeed", 3.5f);
+                camComp.mouseSensitivity = cam.value("mouseSensitivity", 0.1f);
+                camComp.isMainCamera = cam.value("isMainCamera", false);
+                camComp.isActive = cam.value("isActive", true);
+                
+                if (cam.contains("orientation"))
+                {
+                    auto& orient = cam["orientation"];
+                    auto& orientComp = world->AddComponent<CameraOrientationComponent>(entity);
+                    orientComp.yaw = orient.value("yaw", -95.0f);
+                    orientComp.pitch = orient.value("pitch", 0.0f);
+                }
+            }
+            
+            // Camera Type Component
+            if (entityData.contains("cameraType"))
+            {
+                std::string typeStr = entityData.value("cameraType", "EDITOR");
+                auto& camType = world->AddComponent<CameraTypeComponent>(entity);
+                camType.type = (typeStr == "GAME") ? CameraTypeComponent::Type::GAME : CameraTypeComponent::Type::EDITOR;
+            }
+            
+            // Script Component
+            if (entityData.contains("script"))
+            {
+                auto& s = entityData["script"];
+                std::string scriptPath = s.value("path", "");
+                auto& scriptComp = world->AddComponent<ScriptComponent>(entity);
+                scriptComp.scriptPath = scriptPath;
+            }
+            
+            // Hierarchy Component (mark parent/children - actual linking should be handled post-load)
+            if (entityData.contains("hierarchy"))
+            {
+                auto& hier = entityData["hierarchy"];
+                auto& hierComp = world->AddComponent<HierarchyComponent>(entity);
+                // Note: children linking requires second pass or external resolution
+            }
+            
+            // Visibility Component (default to visible if not specified)
             if (entityData.contains("visibility"))
             {
                 auto& v = entityData["visibility"];
                 auto& visComp = world->AddComponent<VisibilityComponent>(entity);
                 
-                visComp.isActive = v.value("active", true);
+                visComp.isActive = v.value("isActive", true);
                 visComp.visible = v.value("visible", true);
             }
             else
@@ -405,8 +508,8 @@ public:
         try
         {
             for (const auto& entry : fs::directory_iterator(savesDirectory))
-                if (entry.is_regular_file() && entry.path().extension() == ".json") 
-                    scenes.push_back(entry.path().filename().string()); 
+                if (entry.is_regular_file() && entry.path().extension() == ".json")
+                    scenes.push_back(entry.path().filename().string());
         }
         catch (const fs::filesystem_error& e)
         {
@@ -417,6 +520,51 @@ public:
     }
 
 private:
+    json SerializeEntity(entt::entity entity)
+    {
+        json entityData;
+        
+        if (world->HasComponent<IDComponent>(entity))
+            entityData["id"] = world->GetComponent<IDComponent>(entity).id;
+        if (world->HasComponent<TagComponent>(entity))
+            entityData["name"] = world->GetComponent<TagComponent>(entity).name;
+        
+        if (world->HasComponent<TransformComponent>(entity))
+        {
+            auto& transform = world->GetComponent<TransformComponent>(entity);
+            entityData["transform"] = {
+                {"position", {transform.position.x, transform.position.y, transform.position.z}},
+                {"rotation", {transform.rotation.x, transform.rotation.y, transform.rotation.z}},
+                {"scale", {transform.scale.x, transform.scale.y, transform.scale.z}}
+            };
+        }
+        
+        if (world->HasComponent<CameraComponent>(entity))
+        {
+            auto& cam = world->GetComponent<CameraComponent>(entity);
+            entityData["camera"] = {
+                {"fov", cam.fov},
+                {"nearPlane", cam.nearPlane},
+                {"farPlane", cam.farPlane},
+                {"movementSpeed", cam.movementSpeed},
+                {"mouseSensitivity", cam.mouseSensitivity},
+                {"isMainCamera", cam.isMainCamera},
+                {"isActive", cam.isActive}
+            };
+            
+            if (world->HasComponent<CameraOrientationComponent>(entity))
+            {
+                auto& orientation = world->GetComponent<CameraOrientationComponent>(entity);
+                entityData["camera"]["orientation"] = {
+                    {"yaw", orientation.yaw},
+                    {"pitch", orientation.pitch}
+                };
+            }
+        }
+        
+        return entityData;
+    }
+
     bool EnsureDirectoryExists(const std::string& path)
     {
         try 

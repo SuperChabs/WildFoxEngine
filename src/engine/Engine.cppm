@@ -142,7 +142,7 @@ protected:
         if (!ecsModule->IsInitialized())
         {
             Logger::Log(LogLevel::WARNING, 
-                "RedsourceModule failed to initialize");
+                "ECS failed to initialize");
         }
 
         mm->RegisterModule<ResourceModule>();
@@ -186,10 +186,6 @@ protected:
 
         InitializeLua();
 
-        sceneSerializer = std::make_unique<SceneSerializer>(
-            ecsModule->GetECS()
-        );
-
         InitCommandRegistration();
 
         auto editorCam = ecsModule->GetECS()->CreateCamera("Editor Camera", true, false);
@@ -219,7 +215,7 @@ protected:
         if (isPlayMode)
             rotationSystem->Update(*ecsModule->GetECS(), deltaTime);
 
-        scriptSystem->Update(*ecsModule->GetECS(), deltaTime);
+        scriptSystem->Update(*ecsModule->GetECS(), GetInput(), deltaTime);
     }
 
     void UpdateMainCamera()

@@ -9,14 +9,24 @@ export module WFE.ECS.Systems.ScriptSystem;
 import WFE.ECS.ECSWorld;
 import WFE.ECS.Components;
 import WFE.Scripting.LuaState;
+import WFE.Scripting.LuaRegisterAPI;
 import WFE.Core.Logger;
+import WFE.Core.Input;
 
 export class ScriptSystem
 {
 public:
-    void Update(ECSWorld& ecs, float deltaTime)
+    void Update(ECSWorld& ecs, Input* input, float deltaTime)
     {
         auto& lua = LuaState::Get();
+
+        // Реєстрація Input API один раз
+        static bool inputRegistered = false;
+        if (!inputRegistered && input != nullptr)
+        {
+            LuaRegisterAPI::RegisterInput(input, lua);
+            inputRegistered = true;
+        }
 
         ecs.Each<ScriptComponent>([&](entt::entity e, ScriptComponent& script)
         {

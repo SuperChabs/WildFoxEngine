@@ -93,7 +93,7 @@ public:
     /// @name IModule interface
     /// @{
     const char* GetName() const override{ return "UI"; }
-    int GetPriority() const override { return 40; }
+    int GetPriority() const override { return 100; }
     bool IsRequired() const override { return true; }
     /// }@
 
