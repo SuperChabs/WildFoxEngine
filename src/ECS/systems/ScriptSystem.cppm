@@ -33,6 +33,9 @@ public:
             if (script.failed)
                 return;
 
+            if (!script.active)
+                return;
+
             if (!script.loaded)
             {
                 LoadScript(e, script, lua);

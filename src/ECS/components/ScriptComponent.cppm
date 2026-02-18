@@ -12,4 +12,5 @@ export struct ScriptComponent
     
     bool loaded = false;
     bool failed = false;
+    bool active = true;
 };

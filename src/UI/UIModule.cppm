@@ -15,6 +15,7 @@ import WFE.UI.ImGuiManager;
 import WFE.ECS.ECSWorld;
 import WFE.Resource.ResourceModule;
 import WFE.Rendering.RenderingModule;
+import WFE.Scene.SceneManager;
 
 export class UIModule : public IModule
 {
@@ -25,11 +26,11 @@ export class UIModule : public IModule
     entt::entity* mainCameraEntity = nullptr;
     ModuleManager* mm = nullptr;
     GLFWwindow* window = nullptr;
-    bool* _isPlayMode = nullptr;
+    SceneManager* m_sceneManager = nullptr;
 
 public:
-    UIModule(ECSWorld* ecs, entt::entity* cameraEntity, bool* isPlayMode, ModuleManager* mm, GLFWwindow* window)
-        : ecs(ecs), mainCameraEntity(cameraEntity), _isPlayMode(isPlayMode), mm(mm), window(window)
+    UIModule(ECSWorld* ecs, entt::entity* cameraEntity, SceneManager* sceneManager, ModuleManager* mm, GLFWwindow* window)
+        : ecs(ecs), mainCameraEntity(cameraEntity), m_sceneManager(sceneManager), mm(mm), window(window)
     {
         if (!ecs)
             Logger::Log(LogLevel::ERROR, "RenderingModule: ecs is null!");
@@ -77,7 +78,7 @@ public:
             mm->GetModule<RenderingModule>("Rendering")->GetRenderer(), 
             mm->GetModule<ResourceModule>("Resource")->GetShaderManager(), 
             mm->GetModule<ResourceModule>("Resource")->GetMaterialManager(),
-            _isPlayMode
+            m_sceneManager ? m_sceneManager->IsInPlayMode() : false
         );
     }
 

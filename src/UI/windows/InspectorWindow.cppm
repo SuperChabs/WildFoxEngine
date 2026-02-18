@@ -113,12 +113,18 @@ private:
         ImGui::Spacing();
         ImGui::Separator();
         
-        transformPanel.Render(ecs, entity);
-        rotationPanel.Render(ecs, entity);
-        materialPanel.Render(ecs, entity, materialManager);
-        lightPanel.Render(ecs, entity);
-        iconPanel.Render(ecs, entity);
-        cameraPanel.Render(ecs, entity);
+        if (ecs->HasComponent<TransformComponent>(selectedEntity))
+            transformPanel.Render(ecs, entity);
+        if (ecs->HasComponent<MaterialComponent>(selectedEntity))
+            materialPanel.Render(ecs, entity, materialManager);
+        if (ecs->HasComponent<LightComponent>(selectedEntity))
+            lightPanel.Render(ecs, entity);
+        if (ecs->HasComponent<IconComponent>(selectedEntity))
+            iconPanel.Render(ecs, entity);
+        if (ecs->HasComponent<CameraComponent>(selectedEntity) &&
+            ecs->HasComponent<CameraOrientationComponent>(selectedEntity))
+            cameraPanel.Render(ecs, entity);
+        if (ecs->HasComponent<ScriptComponent>(selectedEntity))
         scriptPanel.Render(ecs, entity);
     }
     

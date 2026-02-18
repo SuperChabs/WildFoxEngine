@@ -119,8 +119,16 @@ public:
                         glm::value_ptr(transform)
                     );
                     
-                    if (ImGuizmo::IsUsing())
+                    if (ImGuizmo::IsUsing()) {
                         UpdateTransformFromMatrix(tc, transform);
+                        // If the selected entity is a camera, sync orientation component
+                        if (ecs->HasComponent<CameraOrientationComponent>(selectedEntity)) {
+                            auto& orient = ecs->GetComponent<CameraOrientationComponent>(selectedEntity);
+                            // TransformComponent stores Euler angles in degrees: x=pitch, y=yaw
+                            orient.yaw = tc.rotation.y;
+                            orient.pitch = tc.rotation.x;
+                        }
+                    }
                 }
             }
         }

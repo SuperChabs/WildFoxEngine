@@ -3,6 +3,8 @@ module;
 #include <GLFW/glfw3.h>
 #include <entt/entt.hpp>
 #include <glm/glm.hpp>
+#include <imgui.h>
+#include <ImGuizmo.h>
 
 export module WFE.ECS.Systems.InputControllerSystem;
 
@@ -24,7 +26,7 @@ public:
             if (!camera.isMainCamera || !camera.isActive) return;
             
             ProcessKeyboard(input, transform, orientation, camera.movementSpeed, deltaTime);
-            ProcessMouse(input, orientation, camera.mouseSensitivity);
+            ProcessMouse(input, transform, orientation, camera.mouseSensitivity);
             ProcessScroll(input, camera);
         });
     }
@@ -59,8 +61,15 @@ private:
             transform.position.y -= velocity;
     }
     
-    void ProcessMouse(Input& input, CameraOrientationComponent& orientation, float sensitivity)
+    void ProcessMouse(Input& input, TransformComponent& transform, CameraOrientationComponent& orientation, float sensitivity)
     {
+        // If ImGui/ImGuizmo are using the mouse, don't update camera orientation
+        if (ImGuizmo::IsUsing() || ImGui::GetIO().WantCaptureMouse)
+        {
+            input.ResetMouseDelta();
+            return;
+        }
+
         if (!input.IsMouseButtonPressed(GLFW_MOUSE_BUTTON_RIGHT))
         {
             input.ResetMouseDelta();
@@ -77,6 +86,10 @@ private:
         
         if (orientation.yaw > 360.0f || orientation.yaw < -360.0f)
             orientation.yaw = 0.0f;
+
+        // Keep Transform's Euler rotation in sync with orientation so gizmo reflects camera rotation
+        transform.rotation.x = orientation.pitch;
+        transform.rotation.y = orientation.yaw;
     }
     
     void ProcessScroll(Input& input, CameraComponent& camera)

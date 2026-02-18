@@ -58,7 +58,7 @@ public:
     void RenderEditor(ECSWorld* ecs, entt::entity cameraEntity, Renderer* renderer, 
                      ShaderManager* shaderManager, MaterialManager* materialManager, bool isPlayMode)
     {
-        if (!ecs || cameraEntity == entt::null || !renderer || !materialManager)
+        if (!ecs || !renderer || !materialManager)
         {
             Logger::Log(LogLevel::ERROR, "EditorLayout: nullptr passed to RenderEditor");
             return;
