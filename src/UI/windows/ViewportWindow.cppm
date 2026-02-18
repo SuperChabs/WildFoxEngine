@@ -115,16 +115,16 @@ public:
                         glm::value_ptr(cameraView),
                         glm::value_ptr(cameraProj),
                         (ImGuizmo::OPERATION)m_GizmoOperation, 
-                        ImGuizmo::LOCAL,
+                        ImGuizmo::WORLD,
                         glm::value_ptr(transform)
                     );
                     
-                    if (ImGuizmo::IsUsing()) {
+                    if (ImGuizmo::IsUsing()) 
+                    {
                         UpdateTransformFromMatrix(tc, transform);
-                        // If the selected entity is a camera, sync orientation component
-                        if (ecs->HasComponent<CameraOrientationComponent>(selectedEntity)) {
+                        if (ecs->HasComponent<CameraOrientationComponent>(selectedEntity))
+                        {
                             auto& orient = ecs->GetComponent<CameraOrientationComponent>(selectedEntity);
-                            // TransformComponent stores Euler angles in degrees: x=pitch, y=yaw
                             orient.yaw = tc.rotation.y;
                             orient.pitch = tc.rotation.x;
                         }
@@ -161,13 +161,7 @@ private:
     {
         glm::vec3 skew;
         glm::vec4 perspective;
-        glm::quat orientation;
-        
-        glm::decompose(matrix, tc.scale, orientation, tc.position, skew, perspective);
-        
-        glm::vec3 rotationRadians = glm::eulerAngles(orientation);
-        tc.rotation.x = glm::degrees(rotationRadians.x);
-        tc.rotation.y = glm::degrees(rotationRadians.y);
-        tc.rotation.z = glm::degrees(rotationRadians.z);
+        glm::decompose(matrix, tc.scale, tc.rotation, tc.position, skew, perspective);
+        tc.rotation = glm::normalize(tc.rotation);
     }
 };

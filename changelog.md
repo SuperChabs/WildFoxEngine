@@ -32,3 +32,8 @@
 -- Update SceneModule with adding in it SceneManager
 -- Fix Camera movement
 -- Will show only those components an entity has
+
+### v0.1.7
+##### 18.02.2026
+-- Enchance mesh rendering
+-- Fix gizmo rotation feedback loop

@@ -95,7 +95,8 @@ export Model* LoadModelFromFile(const std::string& path, MaterialManager& materi
         aiProcess_Triangulate | 
         aiProcess_FlipUVs | 
         aiProcess_CalcTangentSpace |
-        aiProcess_GenSmoothNormals);
+        aiProcess_GenSmoothNormals |
+        aiProcess_FlipWindingOrder);
     
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) 
     {

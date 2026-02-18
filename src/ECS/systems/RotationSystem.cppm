@@ -16,13 +16,13 @@ export class RotationSystem
 public:
     void Update(ECSWorld& world, float deltaTime) 
     {
-        world.Each<TransformComponent, RotationComponent>(
-            [&](entt::entity entity, 
-                TransformComponent& transform,
-                RotationComponent& rotation) 
-        {
-            if (rotation.autoRotate) 
-                transform.rotation += rotation.axis * rotation.speed * deltaTime;
-        });
+        // world.Each<TransformComponent, RotationComponent>(
+        //     [&](entt::entity entity, 
+        //         TransformComponent& transform,
+        //         RotationComponent& rotation) 
+        // {
+        //     if (rotation.autoRotate) 
+        //         transform.rotation += rotation.axis * rotation.speed * deltaTime;
+        // });
     }
 };

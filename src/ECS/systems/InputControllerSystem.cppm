@@ -86,10 +86,6 @@ private:
         
         if (orientation.yaw > 360.0f || orientation.yaw < -360.0f)
             orientation.yaw = 0.0f;
-
-        // Keep Transform's Euler rotation in sync with orientation so gizmo reflects camera rotation
-        transform.rotation.x = orientation.pitch;
-        transform.rotation.y = orientation.yaw;
     }
     
     void ProcessScroll(Input& input, CameraComponent& camera)

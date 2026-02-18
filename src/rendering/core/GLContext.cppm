@@ -21,7 +21,7 @@ private:
         
         bool depthTest = true;
         bool blend = false;
-        bool cullFace = true;
+        bool cullFace = false;
         
         GLenum depthFunc = GL_LESS;
         GLenum cullMode = GL_BACK;

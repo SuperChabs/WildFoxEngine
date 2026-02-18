@@ -32,8 +32,6 @@ public:
         ImGui::Separator();
         
         ImGui::Text("Scale");
-        float uniformScale = transform.scale.x;
-        if (ImGui::DragFloat("##Scale", &uniformScale, 0.01f, 0.01f, 10.0f))
-            transform.scale = glm::vec3(uniformScale);
+        ImGui::DragFloat3("##Scale", &transform.scale[0], 0.1f);
     }
 };
