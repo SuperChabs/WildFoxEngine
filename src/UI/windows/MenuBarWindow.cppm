@@ -33,11 +33,13 @@ public:
 
         RenderOpenModelDialog();
         RenderSaveSceneDialog();
+        RenderOpenSceneDialog();
     }
 
 private:
     bool showOpenModelDialog = false;
     bool showSaveSceneDialog = false;
+    bool showOpenSceneDialog = false;
 
     char modelPath[512]{};
     char scenePath[512]{};
@@ -53,7 +55,7 @@ private:
             ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.9f, 0.3f, 0.3f, 1.0f));
             ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.7f, 0.1f, 0.1f, 1.0f));
             
-            if (ImGui::Button("■ Stop"))
+            if (ImGui::Button("Stop"))
                 Execute("onStopGame");
                 
             ImGui::PopStyleColor(3);
@@ -64,7 +66,7 @@ private:
             ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.9f, 0.3f, 1.0f));
             ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.7f, 0.1f, 1.0f));
             
-            if (ImGui::Button("▶ Play"))
+            if (ImGui::Button("Play"))
                 Execute("onPlayGame");
                 
             ImGui::PopStyleColor(3);
@@ -99,8 +101,11 @@ private:
 
         ImGui::Separator();
 
-        if (ImGui::MenuItem("Load Scene"))
-            Execute("onLoadScene");
+        if (ImGui::MenuItem("Open Scene"))
+        {
+            showOpenSceneDialog = true;
+            std::strcpy(scenePath, "scene.json");
+        }
 
         ImGui::Separator();
 
@@ -109,7 +114,6 @@ private:
 
         ImGui::EndMenu();
     }
-
 
     void RenderOpenModelDialog()
     {
@@ -154,7 +158,6 @@ private:
         }
     }
 
-
     void RenderSaveSceneDialog()
     {
         if (!showSaveSceneDialog) return;
@@ -191,6 +194,41 @@ private:
         }
     }
 
+    void RenderOpenSceneDialog()
+    {
+        if (!showOpenSceneDialog) return;
+
+        ImGui::OpenPopup("Open Scene");
+
+        if (ImGui::BeginPopupModal(
+                "Open Scene",
+                &showOpenSceneDialog,
+                ImGuiWindowFlags_AlwaysAutoResize))
+        {
+            ImGui::Text("Scene path:");
+            ImGui::InputText("##scenepath",
+                             scenePath,
+                             sizeof(scenePath));
+
+            ImGui::Spacing();
+
+            if (ImGui::Button("Open"))
+            {
+                std::string path = scenePath;
+                if (path.empty())
+                    Execute("onLoadScene", path);
+
+                ClosePopup(showOpenSceneDialog);
+            }
+
+            ImGui::SameLine();
+
+            if (ImGui::Button("Cancel"))
+                ClosePopup(showOpenSceneDialog);
+
+            ImGui::EndPopup();
+        }
+    }
 
     void RenderCreateMenu()
     {
@@ -242,7 +280,6 @@ private:
 
         ImGui::EndMenu();
     }
-
 
     void Execute(const char* name)
     {

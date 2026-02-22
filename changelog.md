@@ -37,3 +37,6 @@
 ##### 18.02.2026
 -- Enchance mesh rendering
 -- Fix gizmo rotation feedback loop
+
+### v0.1.8
+-- Bug fix

@@ -7,7 +7,7 @@ export module WFE.Scene.SceneModule;
 import WFE.Core.IModule;
 import WFE.Core.Logger;
 import WFE.ECS.ECSWorld;
-import WFE.Scene.SceneSurializer;
+import WFE.Scene.SceneSerializer;
 import WFE.Scene.SceneManager;
 
 export class SceneModule : public IModule
