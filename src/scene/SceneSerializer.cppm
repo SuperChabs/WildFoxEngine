@@ -3,8 +3,12 @@ module;
 #include <string>
 #include <filesystem>
 #include <fstream>
+#include <unordered_map>
+#include <cstdint>
 
 #include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/trigonometric.hpp>
 #include <entt/entt.hpp>
 
 #include <nlohmann/json.hpp>
@@ -24,6 +28,8 @@ import WFE.Resource.Texture.TextureManager;
 import WFE.Rendering.Primitive.PrimitivesFactory;
 import WFE.Scene.Mesh;
 import WFE.UI.ImGuiManager;
+import WFE.Resource.Model.ModelManager;
+import WFE.Resource.Model.ModelLoader;
 
 using json = nlohmann::json;
 namespace fs = std::filesystem;
@@ -80,24 +86,69 @@ public:
             
             entityData["id"] = id.id;
             entityData["name"] = tag.name;
-            
 
+            if (world->HasComponent<HierarchyComponent>(entity))
+            {
+                auto& h = world->GetComponent<HierarchyComponent>(entity);
+                if (h.parent != entt::null && world->HasComponent<ModelComponent>(h.parent))
+                {
+                    entityData["modelChild"] = true;
+
+                    if (world->HasComponent<TransformComponent>(entity))
+                    {
+                        auto& t = world->GetComponent<TransformComponent>(entity);
+                        glm::vec3 euler = glm::degrees(glm::eulerAngles(t.rotation));
+                        entityData["transform"] = {
+                            {"position", {t.position.x, t.position.y, t.position.z}},
+                            {"rotation", {euler.x, euler.y, euler.z}},
+                            {"scale", {t.scale.x, t.scale.y, t.scale.z}}
+                        };
+                    }
+
+                    if (world->HasComponent<MeshComponent>(entity))
+                    {
+                        std::string name = tag.name;
+                        size_t pos = name.rfind("_Mesh_");
+                        if (pos != std::string::npos)
+                            entityData["meshIndex"] = std::stoi(name.substr(pos + 6));
+                    }
+
+                    if (world->HasComponent<VisibilityComponent>(entity))
+                    {
+                        auto& vis = world->GetComponent<VisibilityComponent>(entity);
+                        entityData["visibility"] = {{"isActive", vis.isActive}, {"visible", vis.visible}};
+                    }
+
+                    entityData["parentId"] = world->GetComponent<IDComponent>(h.parent).id;
+
+                    sceneData["scene"]["entities"].push_back(entityData);
+                    return;
+                }
+            }
+            
             if (world->HasComponent<TransformComponent>(entity))
             {
                 auto& t = world->GetComponent<TransformComponent>(entity);
-                entityData["transform"] = {
+                glm::vec3 euler = glm::degrees(glm::eulerAngles(t.rotation));
+                entityData["transform"] = 
+                {
                     {"position", {t.position.x, t.position.y, t.position.z}},
-                    {"rotation", {t.rotation.x, t.rotation.y, t.rotation.z}},
+                    {"rotation", {euler.x, euler.y, euler.z}},
                     {"scale", {t.scale.x, t.scale.y, t.scale.z}}
                 };
             }
             
-            if (world->HasComponent<MeshComponent>(entity))
+            if(world->HasComponent<ModelComponent>(entity))
+            {
+                auto& m = world->GetComponent<ModelComponent>(entity);
+                entityData["mesh"] = {{"type", "model"}, {"path", m.filePath}};
+            }
+            else if (world->HasComponent<MeshComponent>(entity) && !world->HasComponent<ModelComponent>(entity))
             {
                 auto& meshComp = world->GetComponent<MeshComponent>(entity);
                 if (meshComp.mesh)
                 {
-                    entityData["mesh"] = {{"type", "primitive"}, {"primitiveType", "CUBE"}};
+                    entityData["mesh"] = {{"type", "primitive"}, {"primitiveType", PrimitiveTypeToString(meshComp.type)}};
                 }
             }
             
@@ -200,11 +251,9 @@ public:
             
             if (world->HasComponent<HierarchyComponent>(entity))
             {
-                auto& hierarchy = world->GetComponent<HierarchyComponent>(entity);
-                entityData["hierarchy"] = {
-                    {"hasParent", hierarchy.HasParent()},
-                    {"childrenCount", hierarchy.children.size()}
-                };
+                auto& h = world->GetComponent<HierarchyComponent>(entity);
+                if (h.parent != entt::null)
+                    entityData["parentId"] = world->GetComponent<IDComponent>(h.parent).id;
             }
             
             if (world->HasComponent<VisibilityComponent>(entity))
@@ -245,10 +294,13 @@ public:
     
     bool LoadScene(const std::string& filename,
                    MaterialManager* materialManager,
-                   TextureManager* textureManager)
+                   TextureManager* textureManager,
+                   ModelManager* modelManager)
     {
         std::string name = EnsureJsonExtension(filename);
         std::string filepath = savesDirectory + name;
+
+        std::unordered_map<uint64_t, entt::entity> createdEntities;
         
         if (!fs::exists(filepath))
         {
@@ -281,19 +333,9 @@ public:
         {
             std::string entityName = entityData.value("name", "Entity");
             auto entity = world->CreateEntity(entityName);
+            uint64_t uuid = entityData["id"];
+            createdEntities[uuid] = entity;
             
-            // Deserialize Transform
-            if (entityData.contains("transform"))
-            {
-                auto& t = entityData["transform"];
-                glm::vec3 pos = {t["position"][0], t["position"][1], t["position"][2]};
-                glm::vec3 rot = {t["rotation"][0], t["rotation"][1], t["rotation"][2]};
-                glm::vec3 scl = {t["scale"][0], t["scale"][1], t["scale"][2]};
-                
-                world->AddComponent<TransformComponent>(entity, pos, rot, scl);
-            }
-            
-            // Deserialize Mesh and Models
             if (entityData.contains("mesh"))
             {
                 std::string meshType = entityData["mesh"].value("type", "primitive");
@@ -301,12 +343,67 @@ public:
                 if (meshType == "model")
                 {
                     std::string modelPath = entityData["mesh"].value("path", "");
-                    if (!modelPath.empty())
+
+                    bool hasStoredChildren = false;
+                    for(auto& other : sceneData["scene"]["entities"])
+                        if (other.value("modelChild", false) && other.value("parentId", 0) == entityData["id"])
+                        {
+                            hasStoredChildren = true;
+                            break;
+                        }
+
+                    if (!modelPath.empty() && !hasStoredChildren)
                     {
-                        Logger::Log(LogLevel::INFO, "Loading model: " + modelPath);
-                        // Model loading will be done via ModelManager in Engine
-                        // TODO: Store model path reference for later loading
+                        entt::entity modelRoot = modelManager->LoadWithECS(modelPath, world);
+
+                        if (modelRoot != entt::null)
+                        {
+                            if (entityData.contains("transform"))
+                            {
+                                auto& t = entityData["transform"];
+                                glm::vec3 pos = {t["position"][0], t["position"][1], t["position"][2]};
+                                glm::vec3 eulerRot(t["rotation"][0], t["rotation"][1], t["rotation"][2]);
+                                glm::quat rot = glm::quat(glm::radians(eulerRot));
+                                glm::vec3 scl = {t["scale"][0], t["scale"][1], t["scale"][2]};
+                                world->GetComponent<TransformComponent>(modelRoot) = {pos, rot, scl};
+                            }
+
+                            if (entityData.contains("script"))
+                            {
+                                std::string scriptPath = entityData["script"].value("path", "");
+                                auto& s = world->AddComponent<ScriptComponent>(modelRoot);
+                                s.scriptPath = scriptPath;
+                            }
+                        }
                     }
+                    else if(hasStoredChildren)
+                    {
+                        auto [rawModel, _] = LoadModelFromFile(modelPath, *materialManager, nullptr);
+    
+                        if (rawModel)
+                        {
+                            world->AddComponent<ModelComponent>(entity, modelPath);
+                            
+                            if (entityData.contains("transform"))
+                            {
+                                auto& t = entityData["transform"];
+                                glm::vec3 pos = {t["position"][0], t["position"][1], t["position"][2]};
+                                glm::vec3 eulerRot(t["rotation"][0], t["rotation"][1], t["rotation"][2]);
+                                glm::quat rot = glm::quat(glm::radians(eulerRot));
+                                glm::vec3 scl = {t["scale"][0], t["scale"][1], t["scale"][2]};
+                                world->AddComponent<TransformComponent>(entity, pos, rot, scl);
+                            }
+                            world->AddComponent<HierarchyComponent>(entity);
+                            world->AddComponent<VisibilityComponent>(entity, true);
+                            
+                            createdEntities[uuid] = entity;
+                            continue;
+                        }
+                    }
+
+                    world->DestroyEntity(entity);
+                    createdEntities.erase(uuid);
+                    continue;
                 }
                 else if (meshType == "primitive")
                 {
@@ -323,6 +420,19 @@ public:
                     if (mesh)
                         world->AddComponent<MeshComponent>(entity, mesh);
                 }
+            }
+
+            if (entityData.contains("transform"))
+            {
+                auto& t = entityData["transform"];
+                glm::vec3 pos = {t["position"][0], t["position"][1], t["position"][2]};
+
+                glm::vec3 eulerRot(t["rotation"][0], t["rotation"][1], t["rotation"][2]);
+                glm::quat rot = glm::quat(glm::radians(eulerRot));
+
+                glm::vec3 scl = {t["scale"][0], t["scale"][1], t["scale"][2]};
+                
+                world->AddComponent<TransformComponent>(entity, pos, rot, scl);
             }
             
             if (entityData.contains("material"))
@@ -443,12 +553,6 @@ public:
                 scriptComp.scriptPath = scriptPath;
             }
             
-            if (entityData.contains("hierarchy"))
-            {
-                auto& hier = entityData["hierarchy"];
-                auto& hierComp = world->AddComponent<HierarchyComponent>(entity);
-            }
-            
             if (entityData.contains("visibility"))
             {
                 auto& v = entityData["visibility"];
@@ -465,6 +569,20 @@ public:
             loadedCount++;
         }
         
+        for (auto& entityData : sceneData["scene"]["entities"])
+        {
+            if (entityData.contains("parentId"))
+            {
+                uint64_t childUUID  = entityData["id"];
+                uint64_t parentUUID = entityData["parentId"];
+                
+                entt::entity child  = createdEntities[childUUID];
+                entt::entity parent = createdEntities[parentUUID];
+                
+                world->SetParent(child, parent);
+            }
+        }
+
         Logger::Log(LogLevel::INFO, 
             "Scene loaded: " + filepath + " (" + std::to_string(loadedCount) + " entities)");
         return true;
@@ -563,6 +681,24 @@ private:
         }
     }
     
+    std::string PrimitiveTypeToString(PrimitiveType type)
+    {
+        switch (type)
+        {
+            case PrimitiveType::CUBE:   return "CUBE";
+            case PrimitiveType::PLANE:  return "PLANE";
+            case PrimitiveType::QUAD:   return "QUAD";
+            default:                    return "CUBE";
+        }
+    }
+
+    PrimitiveType StringToPrimitiveType(const std::string& name)
+    {
+        if (name == "QAUD") return PrimitiveType::QUAD;
+        if (name == "PLANE")  return PrimitiveType::PLANE;
+        return PrimitiveType::CUBE;
+    }
+
     std::string GetCurrentTimestamp()
     {
         auto now = std::chrono::system_clock::now();

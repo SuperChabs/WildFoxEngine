@@ -81,9 +81,7 @@ private:
                 ImGui::Text("Parent: %s", parentTag.name.c_str());
                 
                 if (ImGui::Button("Clear Parent"))
-                {
                     ecs->ClearParent(selectedEntity);
-                }
             }
             else
             {
@@ -125,7 +123,43 @@ private:
             ecs->HasComponent<CameraOrientationComponent>(selectedEntity))
             cameraPanel.Render(ecs, entity);
         if (ecs->HasComponent<ScriptComponent>(selectedEntity))
-        scriptPanel.Render(ecs, entity);
+            scriptPanel.Render(ecs, entity);
+
+        if (ImGui::Button("Add Component"))
+            ImGui::OpenPopup("AddComponentPopup");
+
+        if (ImGui::BeginPopup("AddComponentPopup"))
+        {
+            if (!ecs->HasComponent<TransformComponent>(entity))
+                if (ImGui::MenuItem("Transform"))
+                    ecs->AddComponent<TransformComponent>(entity);
+
+            if (!ecs->HasComponent<MaterialComponent>(entity))
+                if (ImGui::MenuItem("Material"))
+                    ecs->AddComponent<MaterialComponent>(entity);
+
+            if (!ecs->HasComponent<LightComponent>(entity))
+                if (ImGui::MenuItem("Light"))
+                    ecs->AddComponent<LightComponent>(entity, LightType::POINT);
+
+            if (!ecs->HasComponent<CameraComponent>(entity))
+                if (ImGui::MenuItem("Camera"))
+                {
+                    ecs->AddComponent<CameraComponent>(entity);
+                    ecs->AddComponent<CameraOrientationComponent>(entity);
+                }
+
+            if (!ecs->HasComponent<RotationComponent>(entity))
+                if (ImGui::MenuItem("Auto Rotation"))
+                    ecs->AddComponent<RotationComponent>(entity);
+
+            if (!ecs->HasComponent<ScriptComponent>(entity))
+                if (ImGui::MenuItem("Script"))
+                    ecs->AddComponent<ScriptComponent>(entity);
+
+            ImGui::EndPopup();
+        }
+        
     }
     
     void RenderShaderInspector(ShaderObj* shader, ShaderManager* shaderManager)

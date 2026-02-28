@@ -29,3 +29,11 @@ export struct CameraTypeComponent
     CameraTypeComponent() = default;
     CameraTypeComponent(Type t) : type(t) {}
 };
+
+export struct ModelComponent
+{
+    std::string filePath;
+
+    ModelComponent() = default;
+    ModelComponent(const std::string& path) : filePath(path) {}
+};

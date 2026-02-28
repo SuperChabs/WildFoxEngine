@@ -3,6 +3,9 @@ module;
 #include <imgui.h>
 #include <entt/entt.hpp>
 #include <glm/glm.hpp>
+#include <glm/detail/type_quat.hpp>
+#include <glm/fwd.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 export module WFE.UI.Panels.TransformPanel;
 
@@ -26,7 +29,9 @@ public:
         ImGui::Separator();
         
         ImGui::Text("Rotation");
-        ImGui::DragFloat3("##Rot", &transform.rotation[0], 1.0f);
+        glm::vec3 euler = glm::degrees(glm::eulerAngles(transform.rotation));
+        if(ImGui::DragFloat3("##Rot", &euler[0], 1.0f))
+            transform.rotation = glm::quat(glm::radians(euler));
         
         ImGui::Spacing();
         ImGui::Separator();

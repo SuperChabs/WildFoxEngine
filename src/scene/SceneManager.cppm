@@ -23,7 +23,9 @@ export class SceneManager
 public:
     SceneManager(ECSWorld* ecs)
         : m_ecs(ecs)
-    {}
+    {
+        RegisterSceneCommands();
+    }
 
     void StartPlayMode()
     {
@@ -85,10 +87,23 @@ public:
 
         m_ecs->Each<ScriptComponent>([&](entt::entity e, ScriptComponent& script)
         {
+            if (script.ctx)
+            {
+                script.ctx->Release();
+                script.ctx = nullptr;
+            }
+            if (script.module)
+            {
+                script.module->GetEngine()->DiscardModule(script.module->GetName());
+                script.module = nullptr;
+            }
+            script.fnOnStart  = nullptr;
+            script.fnOnUpdate = nullptr;
+            script.fnOnStop   = nullptr;
+
             script.active = false;
             script.loaded = false;
             script.failed = false;
-            script.env = decltype(script.env)();
         });
 
         m_IsPlayMode = false;

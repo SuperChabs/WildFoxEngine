@@ -7,15 +7,17 @@ module;
 export module WFE.ECS.Components.Rendering;
 
 import WFE.Scene.Mesh;
-
 import WFE.Resource.Material.Material;
+import WFE.Rendering.Primitive.PrimitivesFactory;
 
 export struct MeshComponent 
 {
     std::shared_ptr<Mesh> mesh;
+    PrimitiveType type;
     
     MeshComponent() = default;
     MeshComponent(Mesh* m) : mesh(m) {}
+    MeshComponent(Mesh* m, PrimitiveType t) : mesh(m), type(t) {}
     MeshComponent(std::shared_ptr<Mesh> m) : mesh(m) {}
 };
 

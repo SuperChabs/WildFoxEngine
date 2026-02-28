@@ -5,6 +5,8 @@ module;
 #include <memory>
 #include <vector>
 
+#include <entt/entt.hpp>
+
 export module WFE.Resource.Model.ModelManager;
 
 import WFE.Resource.Model.Model;
@@ -52,7 +54,7 @@ public:
         }
         
         std::string fullPath = assetsPath + filepath;
-        Model* rawModel = LoadModelFromFile(fullPath, *materialManager);
+        auto [rawModel, _] = LoadModelFromFile(fullPath, *materialManager);
         
         if (!rawModel) 
         {
@@ -71,31 +73,31 @@ public:
         return model;
     }
     
-    std::shared_ptr<Model> LoadWithECS(const std::string& filepath, ECSWorld* world) 
+    entt::entity LoadWithECS(const std::string& filepath, ECSWorld* world) 
     {
         auto it = loadedModels.find(filepath);
         if (it != loadedModels.end()) 
         {
             Logger::Log(LogLevel::INFO, 
                 "Model already loaded (from cache): " + filepath);
-            return it->second;
+            return entt::null;
         }
         
         if (!materialManager)
         {
             Logger::Log(LogLevel::ERROR, 
                 "MaterialManager not set in ModelManager!");
-            return nullptr;
+            return entt::null;
         }
         
         std::string fullPath = assetsPath + filepath;
-        Model* rawModel = LoadModelFromFile(fullPath, *materialManager, world);
+        auto [rawModel, rootEntity] = LoadModelFromFile(fullPath, *materialManager, world);
         
         if (!rawModel) 
         {
             Logger::Log(LogLevel::ERROR, 
                 "Failed to load model: " + filepath);
-            return nullptr;
+            return entt::null;
         }
         
         std::shared_ptr<Model> model(rawModel);
@@ -105,7 +107,7 @@ public:
             "Model cached: " + filepath + 
             " (total models: " + std::to_string(loadedModels.size()) + ")");
         
-        return model;
+        return rootEntity;
     }
 
     std::shared_ptr<Model> Get(const std::string& filepath) 

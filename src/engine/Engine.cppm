@@ -18,8 +18,7 @@ import WFE.Core.Input;
 import WFE.Core.CommandManager;
 import WFE.Core.Logger;
 import WFE.Rendering.Core.Framebuffer;
-import WFE.Scripting.LuaBindings;
-import WFE.Scripting.LuaState;
+import WFE.Scripting.ASBindings;
 import WFE.ECS.Systems;
 import WFE.ECS.Components;
 import WFE.Engine.EditorCommandHandler;
@@ -58,8 +57,6 @@ private:
     bool showUI;
 
     entt::entity mainCameraEntity = entt::null;
-
-    // editor camera saved state now handled by SceneManager
 
     static void FramebufferSizeCallback(GLFWwindow* window, int width, int height)
     {
@@ -196,13 +193,11 @@ protected:
         scriptSystem = std::make_unique<ScriptSystem>();
         inputControllerSystem = std::make_unique<InputControllerSystem>();
 
-        InitializeLua();
+        InitializeAS();
 
         ech = std::make_unique<EditorCommandHandler>(mm);
         ech->RegisterAllCommands();
         RegistraterCoreCommands();
-
-        // play-mode state is now owned by SceneManager; Engine no longer tracks it
 
         auto editorCam = ecsModule->GetECS()->CreateCamera("Editor Camera", true, false);
         SetMainCameraEntity(editorCam);
@@ -371,18 +366,18 @@ public:
     {}
 
 private:
-    void InitializeLua()
+    void InitializeAS()
     {
-        Logger::Log(LogLevel::INFO, "Initializing Lua scripting...");
+        Logger::Log(LogLevel::INFO, "Initializing AngelScript...");
         
         try 
         {
-            InitLua(ecsModule->GetECS());
-            Logger::Log(LogLevel::INFO, "Lua scripting initialized successfully");
+            InitAS(ecsModule->GetECS(), GetInput());
+            Logger::Log(LogLevel::INFO, "AngelScript initialized successfully");
         }
         catch (const std::exception& e)
         {
-            Logger::Log(LogLevel::ERROR, "Failed to initialize Lua: " + std::string(e.what()));
+            Logger::Log(LogLevel::ERROR, "Failed to initialize AngelScript: " + std::string(e.what()));
         }
     }
 

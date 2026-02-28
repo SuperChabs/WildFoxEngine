@@ -5,6 +5,7 @@ module;
 
 #include <glm/glm.hpp>
 #include <entt/entt.hpp>
+#include <angelscript.h>
 
 export module WFE.Engine.EditorCommandHandler;
 
@@ -56,7 +57,7 @@ private:
             m_ecsModule->GetECS()->AddComponent<TransformComponent>(entity, glm::vec3(0, 0, -5), glm::vec3(0), glm::vec3(1));
             
             auto cubeMesh = PrimitivesFactory::CreatePrimitive(PrimitiveType::CUBE);
-            m_ecsModule->GetECS()->AddComponent<MeshComponent>(entity, cubeMesh);
+            m_ecsModule->GetECS()->AddComponent<MeshComponent>(entity, cubeMesh, PrimitiveType::CUBE);
             
             auto material = m_resModule->GetMaterialManager()->GetMaterial("gray");
             m_ecsModule->GetECS()->AddComponent<MaterialComponent>(entity, material);
@@ -74,7 +75,7 @@ private:
             m_ecsModule->GetECS()->AddComponent<TransformComponent>(entity, glm::vec3(0, 0, -5), glm::vec3(0), glm::vec3(1));
             
             auto mesh = PrimitivesFactory::CreatePrimitive(PrimitiveType::QUAD);
-            m_ecsModule->GetECS()->AddComponent<MeshComponent>(entity, mesh);
+            m_ecsModule->GetECS()->AddComponent<MeshComponent>(entity, mesh, PrimitiveType::QUAD);
             
             auto material = m_resModule->GetMaterialManager()->GetMaterial("gray");
             m_ecsModule->GetECS()->AddComponent<MaterialComponent>(entity, material);
@@ -112,16 +113,13 @@ private:
             }
             
             Logger::Log(LogLevel::INFO, "Calling LoadWithECS...");
-            auto model = m_resModule->GetModelManager()->LoadWithECS(filepath, m_ecsModule->GetECS());
+            auto entity = m_resModule->GetModelManager()->LoadWithECS(filepath, m_ecsModule->GetECS());
             
-            if (!model) 
+            if (entity != entt::null) 
             {
                 Logger::Log(LogLevel::ERROR, "Failed to load model: " + filepath);
                 return;
             }
-            
-            Logger::Log(LogLevel::INFO, 
-                "Model loaded successfully with " + std::to_string(model->GetMeshCount()) + " meshes");
             
             Logger::Log(LogLevel::INFO, "Total entities in world: " + std::to_string(m_ecsModule->GetECS()->GetEntityCount()));
             Logger::Log(LogLevel::INFO, "=== onLoadModel command complete ===\n");
@@ -238,7 +236,8 @@ private:
             bool success = m_sceneModule->GetSceneSerializer()->LoadScene(
                 filename,
                 m_resModule->GetMaterialManager(),
-                m_resModule->GetTextureManager()
+                m_resModule->GetTextureManager(),
+                m_resModule->GetModelManager()
             );
             
             if (success)
@@ -318,10 +317,24 @@ private:
             {
                 auto& script = ecs->GetComponent<ScriptComponent>(selected);
 
+                if (script.ctx)
+                {
+                    script.ctx->Release();
+                    script.ctx = nullptr;
+                }
+                if (script.module)
+                {
+                    script.module->GetEngine()->DiscardModule(script.module->GetName());
+                    script.module = nullptr;
+                }
+                script.fnOnStart  = nullptr;
+                script.fnOnUpdate = nullptr;
+                script.fnOnStop   = nullptr;
+
                 script.scriptPath = scriptPath;
+                script.active = true;
                 script.loaded = false;
                 script.failed = false;
-                script.env = {};
 
                 Logger::Log(LogLevel::INFO,
                     "Script updated: " + scriptPath);
@@ -353,16 +366,22 @@ private:
             {
                 auto& script = m_ecsModule->GetECS()->GetComponent<ScriptComponent>(selected);
                 
-                if (script.loaded && script.env["onDestroy"].valid())
+                if (script.loaded && script.fnOnStop)
                 {
-                    try 
-                    {
-                        script.env["onDestroy"]();
-                    } 
-                    catch (...) 
-                    {
-                        Logger::Log(LogLevel::WARNING, "Error in script onDestroy");
-                    }
+                    script.ctx->Prepare(script.fnOnStop);
+                    if (script.ctx->Execute() == asEXECUTION_EXCEPTION)
+                        Logger::Log(LogLevel::WARNING, "Error in script OnStop");
+                }
+
+                if (script.ctx)
+                {
+                    script.ctx->Release();
+                    script.ctx = nullptr;
+                }
+                if (script.module)
+                {
+                    script.module->GetEngine()->DiscardModule(script.module->GetName());
+                    script.module = nullptr;
                 }
                 
                 m_ecsModule->GetECS()->RemoveComponent<ScriptComponent>(selected);

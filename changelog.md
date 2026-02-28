@@ -39,4 +39,22 @@
 -- Fix gizmo rotation feedback loop
 
 ### v0.1.8
+##### 20.02.2026
 -- Bug fix
+
+### v0.1.9
+##### 25.02.2026
+-- Updated ScriptPanel to change default script file extension from .lua to .as.
+-- Enhanced UpdateScript method to properly release AngelScript context and module.
+-- Modified TransformPanel to handle quaternion rotations using degrees.
+-- Improved InspectorWindow to allow adding components via a popup menu.
+-- Fixed MenuBarWindow to ensure scene loading only occurs if a valid path is provided.
+-- Refactored Engine to initialize AngelScript instead of Lua, removing Lua-related code.
+-- Updated EngineCommandHandler to accommodate changes in model loading and component addition.
+-- Adjusted ModelLoader to return both model and root entity upon loading.
+-- Changed ModelManager to return root entity when loading models with ECS.
+-- Enhanced SceneManager to properly reset script components when entering play mode.
+-- Updated SceneSerializer to handle model components and hierarchy during scene loading.
+-- Removed Lua bindings and related files, transitioning to AngelScript bindings.
+-- Added new AngelScript bindings and registration API for ECS and input handling.
+-- Introduced a sample controller script for player movement using AngelScript.

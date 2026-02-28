@@ -215,7 +215,7 @@ private:
             if (ImGui::Button("Open"))
             {
                 std::string path = scenePath;
-                if (path.empty())
+                if (!path.empty())
                     Execute("onLoadScene", path);
 
                 ClosePopup(showOpenSceneDialog);

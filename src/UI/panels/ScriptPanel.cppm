@@ -64,7 +64,7 @@ public:
         {
             ImGui::InputTextWithHint(
                 "##NewScript",
-                "scripts/player.lua",
+                "scripts/player.as",
                 scriptPathBuffer,
                 sizeof(scriptPathBuffer)
             );
@@ -93,10 +93,24 @@ private:
 
     void UpdateScript(ScriptComponent& script, const std::string& newPath)
     {
+        if (script.ctx)
+        {
+            script.ctx->Release();
+            script.ctx = nullptr;
+        }
+
+        if (script.module)
+        {
+            script.module->GetEngine()->DiscardModule(script.module->GetName());
+            script.module = nullptr;
+        }
+        script.fnOnStart  = nullptr;
+        script.fnOnUpdate = nullptr;
+        script.fnOnStop   = nullptr;
+
         script.scriptPath = newPath;
         script.loaded = false;
         script.failed = false;
-        script.env = {};
 
         Logger::Log(LogLevel::INFO, "Script path updated: " + newPath);
     }

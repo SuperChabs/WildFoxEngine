@@ -1,14 +1,20 @@
 module;
 
 #include <string>
-#include <sol/sol.hpp>
+#include <angelscript.h>
 
 export module WFE.ECS.Components.Script;
 
 export struct ScriptComponent
 {
     std::string scriptPath;
-    sol::environment env;
+
+    asIScriptModule*  module  = nullptr;
+    asIScriptContext* ctx     = nullptr;
+
+    asIScriptFunction* fnOnStart  = nullptr;
+    asIScriptFunction* fnOnUpdate = nullptr;
+    asIScriptFunction* fnOnStop   = nullptr;
     
     bool loaded = false;
     bool failed = false;

@@ -4,6 +4,7 @@ module;
 #include <string>
 #include <memory>
 #include <unordered_map>
+#include <utility>
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -83,9 +84,15 @@ glm::mat4 ConvertAssimpMatrix(const aiMatrix4x4 from)
 /**
  * @brief Model loader function
  */
-export Model* LoadModelFromFile(const std::string& path, MaterialManager& materialManager, ECSWorld* world = nullptr) 
+export std::pair<Model*, entt::entity> LoadModelFromFile(std::string& path, MaterialManager& materialManager, ECSWorld* world = nullptr) 
 {
     Logger::Log(LogLevel::INFO, "=== LoadModelFromFile START ===");
+
+    std::string removePath = "../assets/objects/";
+    size_t pos = path.find(removePath);
+    if (pos != std::string::npos)
+        path.erase(pos, removePath.length());
+
     Logger::Log(LogLevel::INFO, "Path: " + path);
     Logger::Log(LogLevel::INFO, "World pointer: " + std::string(world ? "OK" : "NULL"));
     
@@ -95,14 +102,15 @@ export Model* LoadModelFromFile(const std::string& path, MaterialManager& materi
         aiProcess_Triangulate | 
         aiProcess_FlipUVs | 
         aiProcess_CalcTangentSpace |
-        aiProcess_GenSmoothNormals |
-        aiProcess_FlipWindingOrder);
+        aiProcess_GenSmoothNormals 
+        //| aiProcess_FlipWindingOrder
+    );
     
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) 
     {
         Logger::Log(LogLevel::ERROR, 
             "Assimp error: " + std::string(importer.GetErrorString()));
-        return nullptr;
+        return {nullptr, entt::null};
     }
     
     std::string directory = path.substr(0, path.find_last_of('/'));
@@ -118,7 +126,8 @@ export Model* LoadModelFromFile(const std::string& path, MaterialManager& materi
         world->AddComponent<TransformComponent>(rootEntity, glm::vec3(0, 0, -5), glm::vec3(0), glm::vec3(1));
         world->AddComponent<VisibilityComponent>(rootEntity, true);
         world->AddComponent<HierarchyComponent>(rootEntity);
-        
+        world->AddComponent<ModelComponent>(rootEntity, path);
+
         Logger::Log(LogLevel::INFO, "Root entity created: " + model->GetName() + "_Root");
     }
     else
@@ -156,7 +165,7 @@ export Model* LoadModelFromFile(const std::string& path, MaterialManager& materi
     
     Logger::Log(LogLevel::INFO, "=== LoadModelFromFile END ===\n");
     
-    return model;
+    return {model, rootEntity};
 }
 
 std::shared_ptr<ModelNode>  ProcessNode(aiNode* node, 

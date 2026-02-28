@@ -1,106 +1,149 @@
 module;
 
+#include <angelscript.h>
+#include <scriptbuilder.h>
 #include <entt/entt.hpp>
-#include <sol/sol.hpp>
 #include <filesystem>
 
 export module WFE.ECS.Systems.ScriptSystem;
 
 import WFE.ECS.ECSWorld;
 import WFE.ECS.Components;
-import WFE.Scripting.LuaState;
-import WFE.Scripting.LuaRegisterAPI;
+import WFE.ECS.Components.Script;
 import WFE.Core.Logger;
 import WFE.Core.Input;
+import WFE.Scripting.ASState;
 
 export class ScriptSystem
 {
 public:
     void Update(ECSWorld& ecs, Input* input, float deltaTime)
     {
-        auto& lua = LuaState::Get();
-
-        // Реєстрація Input API один раз
-        static bool inputRegistered = false;
-        if (!inputRegistered && input != nullptr)
-        {
-            LuaRegisterAPI::RegisterInput(input, lua);
-            inputRegistered = true;
-        }
-
         ecs.Each<ScriptComponent>([&](entt::entity e, ScriptComponent& script)
         {
-            if (script.failed)
-                return;
-
-            if (!script.active)
+            if (script.failed || !script.active)
                 return;
 
             if (!script.loaded)
             {
-                LoadScript(e, script, lua);
+                LoadScript(e, script);
                 return;
             }
 
-            // Update
-            auto onUpdate = script.env["onUpdate"];
-            if (!onUpdate.valid())
+            CallUpdate(script, deltaTime);
+        });
+    }
+
+    void Start(ECSWorld& ecs)
+    {
+        ecs.Each<ScriptComponent>([&](entt::entity e, ScriptComponent& script)
+        {
+            if (script.failed || !script.active || !script.loaded)
                 return;
 
-            script.env["deltaTime"] = deltaTime;
+            CallFunction(script, script.fnOnStart);
+        });
+    }
 
-            auto result = onUpdate();
-            if (!result.valid())
-            {
-                sol::error err = result;
-                Logger::Log(LogLevel::ERROR,
-                    "Lua onUpdate error: " + std::string(err.what()));
-            }
+    void Stop(ECSWorld& ecs)
+    {
+        ecs.Each<ScriptComponent>([&](entt::entity e, ScriptComponent& script)
+        {
+            if (script.failed || !script.loaded)
+                return;
+
+            CallFunction(script, script.fnOnStop);
         });
     }
 
 private:
-    void LoadScript(entt::entity e, ScriptComponent& script, sol::state& lua)
+    void LoadScript(entt::entity e, ScriptComponent& script)
     {
         if (!std::filesystem::exists(script.scriptPath))
         {
-            Logger::Log(LogLevel::ERROR,
-                "Script file not found: " + script.scriptPath);
+            Logger::Log(LogLevel::ERROR, "Script not found: " + script.scriptPath);
             script.failed = true;
             return;
         }
 
-        script.env = sol::environment(lua, sol::create, lua.globals());
-        script.env["entity"] = e;
+        asIScriptEngine* engine = ASState::Get();
 
-        auto load = lua.safe_script_file(script.scriptPath, script.env);
-        if (!load.valid())
+        CScriptBuilder builder;
+        std::string moduleName = script.scriptPath;
+
+        if (builder.StartNewModule(engine, moduleName.c_str()) < 0)
         {
-            sol::error err = load;
-            Logger::Log(LogLevel::ERROR,
-                "Lua load error: " + std::string(err.what()));
+            Logger::Log(LogLevel::ERROR, "Failed to start module: " + moduleName);
             script.failed = true;
             return;
         }
 
-        // onCreate
-        auto onCreate = script.env["onCreate"];
-        if (onCreate.valid())
+        if (builder.AddSectionFromFile(script.scriptPath.c_str()) < 0)
         {
-            auto r = onCreate();
-            if (!r.valid())
-            {
-                sol::error err = r;
-                Logger::Log(LogLevel::ERROR,
-                    "Lua onCreate error: " + std::string(err.what()));
-                script.failed = true;
-                return;
-            }
+            Logger::Log(LogLevel::ERROR, "Failed to add script: " + script.scriptPath);
+            script.failed = true;
+            return;
+        }
+
+        if (builder.BuildModule() < 0)
+        {
+            Logger::Log(LogLevel::ERROR, "Failed to build script: " + script.scriptPath);
+            script.failed = true;
+            return;
+        }
+
+        script.module = engine->GetModule(moduleName.c_str());
+
+        script.fnOnStart  = script.module->GetFunctionByDecl("void OnStart()");
+        script.fnOnUpdate = script.module->GetFunctionByDecl("void OnUpdate(float)");
+        script.fnOnStop   = script.module->GetFunctionByDecl("void OnStop()");
+
+        script.ctx = engine->CreateContext();
+
+        asIScriptFunction* setEntity = script.module->GetFunctionByDecl("void _SetEntity(uint64)");
+        if (setEntity)
+        {
+            script.ctx->Prepare(setEntity);
+            script.ctx->SetArgQWord(0, static_cast<asQWORD>(e));
+            script.ctx->Execute();
         }
 
         script.loaded = true;
+        Logger::Log(LogLevel::INFO, "Script loaded: " + script.scriptPath);
 
-        Logger::Log(LogLevel::INFO,
-            "Script loaded: " + script.scriptPath);
+        CallFunction(script, script.fnOnStart);
+    }
+
+    void CallUpdate(ScriptComponent& script, float deltaTime)
+    {
+        if (!script.fnOnUpdate || !script.ctx)
+            return;
+
+        script.ctx->Prepare(script.fnOnUpdate);
+        script.ctx->SetArgFloat(0, deltaTime);
+
+        if (script.ctx->Execute() == asEXECUTION_EXCEPTION)
+        {
+            Logger::Log(LogLevel::ERROR,
+                "Script exception in OnUpdate: " +
+                std::string(script.ctx->GetExceptionString()));
+            script.failed = true;
+        }
+    }
+
+    void CallFunction(ScriptComponent& script, asIScriptFunction* fn)
+    {
+        if (!fn || !script.ctx)
+            return;
+
+        script.ctx->Prepare(fn);
+
+        if (script.ctx->Execute() == asEXECUTION_EXCEPTION)
+        {
+            Logger::Log(LogLevel::ERROR,
+                "Script exception in " + std::string(fn->GetName()) + ": " +
+                std::string(script.ctx->GetExceptionString()));
+            script.failed = true;
+        }
     }
 };

@@ -22,7 +22,8 @@ enum class PrimitiveType
 {
     CUBE,
     QUAD,
-    PLANE
+    PLANE,
+    NONE
 };
 
 export
