@@ -12,19 +12,14 @@ export module WFE.UI.EditorLayout;
 
 import WFE.ECS.ECSWorld;
 import WFE.ECS.Components;
-
 import WFE.Core.Logger;
 import WFE.Core.CommandManager;
-
 import WFE.Rendering.Renderer;
 import WFE.Rendering.Core.Framebuffer;
 import WFE.Scene.Light;
-
 import WFE.Resource.Material.MaterialManager;
 import WFE.Resource.Shader.ShaderManager;
-
 import WFE.UI.Theme; 
-
 import WFE.UI.Windows;
 
 export class EditorLayout

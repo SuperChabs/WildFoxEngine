@@ -1,5 +1,3 @@
-// player.as
-
 uint64 entity;
 
 void _SetEntity(uint64 e)

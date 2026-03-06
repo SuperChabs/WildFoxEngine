@@ -13,7 +13,6 @@ export module WFE.UI.Windows.HierarchyWindow;
 
 import WFE.ECS.ECSWorld;
 import WFE.ECS.Components;
-
 import WFE.Resource.Shader.ShaderManager;
 import WFE.Resource.Material.MaterialManager;
 
@@ -32,6 +31,9 @@ public:
     {
         if (!isOpen) return;
         
+        if (selectedEntity != entt::null && !ecs->IsValid(selectedEntity))
+            selectedEntity = entt::null;
+
         ImGui::SetNextWindowPos({10, 170}, ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize({280, 400}, ImGuiCond_FirstUseEver);
 
@@ -52,6 +54,12 @@ public:
     std::string GetSelectedMaterial() const { return selectedMaterial; }
     
     void SetSelectedEntity(entt::entity entity) { selectedEntity = entity; }
+
+    void ResetSelection() 
+    { 
+        selectedEntity = entt::null; 
+        selectedShader = nullptr;
+    }
 
 private:
     void RenderObjectsSection(ECSWorld* ecs)
