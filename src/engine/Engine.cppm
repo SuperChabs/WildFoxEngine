@@ -73,7 +73,6 @@ private:
 
         engine->GetInput()->UpdateMousePosition(xpos, ypos);
 
-        // If ImGui/ImGuizmo is using the mouse, do not drive camera orientation
         if (ImGuizmo::IsUsing() || ImGui::GetIO().WantCaptureMouse)
             return;
 
@@ -88,7 +87,11 @@ private:
 
             if (orientation.pitch > 89.0f)  orientation.pitch = 89.0f;
             if (orientation.pitch < -89.0f) orientation.pitch = -89.0f;
+            return;
         }
+
+        if (ImGuizmo::IsUsing() || ImGui::GetIO().WantCaptureMouse)
+            return;
     }
 
     static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)

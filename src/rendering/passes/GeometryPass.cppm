@@ -33,15 +33,13 @@ public:
         context->SetBlend(false);
         context->SetCullFace(true);
         glCullFace(GL_BACK);
-        glFrontFace(GL_CCW);
     }
     
     void Execute(const glm::mat4& view, const glm::mat4& projection) override
     {
         if (!enabled || !world) return;
-        
         Setup();
-        
+
         CommandManager::ExecuteCommand("Renderer_RenderGeometry", 
         {
             view,

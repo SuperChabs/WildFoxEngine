@@ -184,6 +184,9 @@ public:
         AddComponent<TransformComponent>(entity, glm::vec3(0, 0, 3), glm::vec3(0), glm::vec3(1));
         AddComponent<CameraComponent>(entity);
         AddComponent<CameraOrientationComponent>(entity);
+        AddComponent<VisibilityComponent>(entity, true);
+        if (isGameCamera)
+            AddComponent<IconComponent>(entity, "assets/textures/icons/camera.png", 0.4f); 
         
         auto cameraType = isGameCamera ? CameraTypeComponent::Type::GAME : CameraTypeComponent::Type::EDITOR;
         AddComponent<CameraTypeComponent>(entity, cameraType);

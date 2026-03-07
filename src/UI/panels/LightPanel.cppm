@@ -110,21 +110,21 @@ private:
     void RenderLightColors(LightComponent& light)
     {
         ImGui::Text("Ambient Color");
-        float ambient[3] = { light.ambient.r, light.ambient.g, light.ambient.b };
+        float ambient[3] = {light.ambient.x, light.ambient.y, light.ambient.z};
         if (ImGui::ColorEdit3("##Ambient", ambient))
             light.ambient = glm::vec3(ambient[0], ambient[1], ambient[2]);
         
         ImGui::Spacing();
         
         ImGui::Text("Diffuse Color");
-        float diffuse[3] = { light.diffuse.r, light.diffuse.g, light.diffuse.b };
+        float diffuse[3] = {light.diffuse.x, light.diffuse.y, light.diffuse.z};
         if (ImGui::ColorEdit3("##Diffuse", diffuse))
             light.diffuse = glm::vec3(diffuse[0], diffuse[1], diffuse[2]);
         
         ImGui::Spacing();
         
         ImGui::Text("Specular Color");
-        float specular[3] = { light.specular.r, light.specular.g, light.specular.b };
+        float specular[3] = {light.specular.x, light.specular.y, light.specular.z};
         if (ImGui::ColorEdit3("##Specular", specular))
             light.specular = glm::vec3(specular[0], specular[1], specular[2]);
         

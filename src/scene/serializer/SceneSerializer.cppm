@@ -167,9 +167,9 @@ private:
         for (auto& entityData : sceneData["scene"]["entities"])
         {
             std::string entityName = entityData.value("_name", "Entity");
-            auto entity = world->CreateEntity(entityName);
             uint64_t uuid = entityData["_id"];
 
+            entt::entity entity;
             if (createdEntities.count(uuid))
             {
                 entity = createdEntities[uuid]; 
@@ -201,7 +201,6 @@ private:
             }
             else
             {
-                uint64_t uuid = entityData["_id"];
                 auto it = createdEntities.find(uuid);
                 if (it == createdEntities.end())
                 {

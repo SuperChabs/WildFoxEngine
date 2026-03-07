@@ -241,12 +241,12 @@ private:
         {
             std::vector<std::string> faces = 
             {
-                "assets/textures/skybox1/right.png",
-                "assets/textures/skybox1/left.png",
-                "assets/textures/skybox1/top.png",
-                "assets/textures/skybox1/bottom.png",
-                "assets/textures/skybox1/front.png",
-                "assets/textures/skybox1/back.png"
+                "assets/textures/skybox4/right.bmp",
+                "assets/textures/skybox4/left.bmp",
+                "assets/textures/skybox4/top.bmp",
+                "assets/textures/skybox4/bottom.bmp",
+                "assets/textures/skybox4/front.bmp",
+                "assets/textures/skybox4/back.bmp"
             };
             
             unsigned int cubemapTexture = resourceModule->GetTextureManager()->LoadCubemap(faces);

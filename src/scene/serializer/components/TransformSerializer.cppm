@@ -43,7 +43,7 @@ public:
             ? glm::vec3{data["scale"][0], data["scale"][1], data["scale"][2]}
             : glm::vec3{1.0f};
         
-        world->AddComponent<TransformComponent>(entity, pos, rot, scl);
+            world->AddComponent<TransformComponent>(entity, pos, rot, scl);
     }
 
     bool CanSerialize(ECSWorld* world, entt::entity entity) const override

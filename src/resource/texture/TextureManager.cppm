@@ -21,6 +21,7 @@ private:
         glGenTextures(1, &textureID);
 
         int width, height, nrComponents;
+        stbi_set_flip_vertically_on_load(true);
         unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 0);
         if (!data)
         {
@@ -51,9 +52,10 @@ private:
     {
         unsigned int textureID;
         glGenTextures(1, &textureID);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, textureID); 
 
         int width, height, nrComponents;
+        stbi_set_flip_vertically_on_load(false);
         for (unsigned int i = 0; i < faces.size(); i++)
         {
             unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrComponents, 0);
@@ -92,7 +94,8 @@ public:
 
     unsigned int LoadTexture(const std::string& path, bool gamma = false)
     {
-        if (IsLoaded(path)) return loadedTextures[path];
+        if (IsLoaded(path)) 
+            return loadedTextures[path];
         unsigned int textureID = LoadTextureFromFile(path.c_str(), gamma);
         if (textureID != 0)
             loadedTextures[path] = textureID;
@@ -102,10 +105,13 @@ public:
     unsigned int LoadCubemap(const std::vector<std::string>& faces)
     {
         std::string key = "cubemap_";
-        for (const auto& face : faces) key += face;
-        if (IsLoaded(key)) return loadedTextures[key];
+        for (const auto& face : faces) 
+            key += face;
+        if (IsLoaded(key)) 
+            return loadedTextures[key];
         unsigned int textureID = LoadCubemapFromFiles(faces);
-        if (textureID != 0) loadedTextures[key] = textureID;
+        if (textureID != 0) 
+            loadedTextures[key] = textureID;
         return textureID;
     }
 
@@ -115,7 +121,7 @@ public:
         glGenTextures(1, &textureID);
         glBindTexture(GL_TEXTURE_2D, textureID);
         
-        unsigned char data[] = { 255, 255, 255, 255 }; // Білий піксель
+        unsigned char data[] = { 255, 255, 255, 255 };
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);

@@ -326,7 +326,7 @@ std::shared_ptr<Mesh> ProcessMesh(
             material->Get(AI_MATKEY_COLOR_DIFFUSE, color);
             glm::vec3 matColor(color.r, color.g, color.b);
 
-            Logger::Log(LogLevel::INFO, "No textures found. Creating COLOR material with color: (" + std::to_string(matColor.r) + ", " + std::to_string(matColor.g) + ", " + std::to_string(matColor.b) + ")");
+            Logger::Log(LogLevel::INFO, "No textures found. Creating COLOR material with color: (" + std::to_string(matColor.x) + ", " + std::to_string(matColor.y) + ", " + std::to_string(matColor.z) + ")");
             meshMaterial = std::make_shared<Material>(matColor, materialName);
             Logger::Log(LogLevel::INFO, "Color material created successfully");
         }

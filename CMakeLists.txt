@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.30)
+cmake_minimum_required(VERSION 4.0)
 
 project(WildFoxEngine LANGUAGES C CXX)
 
@@ -122,6 +122,11 @@ add_executable(${PROJECT_NAME}
     ${WildFoxEngine_ALL_HEADERS}
 )
 
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    UNITY_BUILD ON 
+    UNITY_BUILD_BATCH_SIZE 16
+)
+
 if(WildFoxEngine_MODULES)
     message(STATUS "=== C++ Modules ===")
     foreach(MODULE ${WildFoxEngine_MODULES})
@@ -157,6 +162,35 @@ target_link_libraries(${PROJECT_NAME}
     scriptbuilder
 )
 
+target_precompile_headers(${PROJECT_NAME} PRIVATE
+    [["glm_fix.h"]]
+    <glm/glm.hpp>
+    <glm/gtc/quaternion.hpp>
+    <entt/entt.hpp>
+    <nlohmann/json.hpp>
+    <string>
+    <vector>
+    <unordered_map>
+    <memory>
+)
+
+find_program(MOLD_LINKER mold)
+if(MOLD_LINKER)
+    add_link_options(-fuse-ld=mold)
+endif()
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_compile_options(${PROJECT_NAME} PRIVATE 
+        -O0
+        -g
+        -fno-omit-frame-pointer
+    )
+elseif(CMAKE_BUILD_TYPE STREQUAL "Realese")
+    target_compile_options(${PROJECT_NAME} PRIVATE 
+        -O2
+    )
+endif()
+
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${CMAKE_SOURCE_DIR}/assets
@@ -172,6 +206,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     ASSETS_PATH="${CMAKE_BINARY_DIR}/assets"
     PROJECT_ROOT="${CMAKE_SOURCE_DIR}"
     SOL_ALL_SAFETIES_ON=1
+    GLM_ENABLE_EXPERIMENTAL
 )
 
 include(GNUInstallDirs)

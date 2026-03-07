@@ -39,13 +39,6 @@ public:
     {
         Logger::Log(LogLevel::INFO, "Initializing Forward Rendering Pipeline");
         
-        /// shadow pass
-        Logger::Log(LogLevel::DEBUG, "Creating ShadowPass...");
-        auto shadowPass = std::make_unique<ShadowPass>(context, shaderManager);
-        shadowPass->SetEnabled(false);
-        AddPass(std::move(shadowPass));
-        Logger::Log(LogLevel::DEBUG, "ShadowPass created");
-        
         /// skybox pass
         Logger::Log(LogLevel::DEBUG, "Creating SkyboxPass...");
         auto skyboxPass = std::make_unique<SkyboxPass>(
@@ -54,6 +47,13 @@ public:
         AddPass(std::move(skyboxPass));
         Logger::Log(LogLevel::DEBUG, "SkyboxPass created");
 
+        /// shadow pass
+        Logger::Log(LogLevel::DEBUG, "Creating ShadowPass...");
+        auto shadowPass = std::make_unique<ShadowPass>(context, shaderManager);
+        shadowPass->SetEnabled(false);
+        AddPass(std::move(shadowPass));
+        Logger::Log(LogLevel::DEBUG, "ShadowPass created");
+        
         /// geometry pass
         Logger::Log(LogLevel::DEBUG, "Creating GeometryPass...");
         auto geometryPass = std::make_unique<GeometryPass>(

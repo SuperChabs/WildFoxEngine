@@ -125,10 +125,10 @@ public:
         stats.Reset();
         
         context->ClearColor(
-            config.clearColor.r, 
-            config.clearColor.g, 
-            config.clearColor.b, 
-            config.clearColor.a
+            config.clearColor.x, 
+            config.clearColor.y, 
+            config.clearColor.z, 
+            config.clearColor.w
         );
         context->Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
