@@ -41,7 +41,7 @@ public:
         try 
         {
             imGuiManager = std::make_unique<ImGuiManager>();
-            editorLayout = std::make_unique<EditorLayout>();
+            //editorLayout = std::make_unique<EditorLayout>();
             
             if (!imGuiManager->Initialize(window))
             {
@@ -72,14 +72,14 @@ public:
 
     void RenderUI()
     {
-        editorLayout->RenderEditor(
+        /*editorLayout->RenderEditor(
             ecs, 
             *mainCameraEntity,
             mm->GetModule<RenderingModule>("Rendering")->GetRenderer(), 
             mm->GetModule<ResourceModule>("Resource")->GetShaderManager(), 
             mm->GetModule<ResourceModule>("Resource")->GetMaterialManager(),
             m_sceneManager ? m_sceneManager->IsInPlayMode() : false
-        );
+        );*/
     }
 
     void Shutdown() override 
@@ -87,7 +87,7 @@ public:
         imGuiManager->Shutdown();
 
         imGuiManager.reset();
-        editorLayout.reset();
+        //editorLayout.reset();
 
     }
 
@@ -98,6 +98,6 @@ public:
     bool IsRequired() const override { return true; }
     /// }@
 
-    EditorLayout* GetEditorLayout() { return editorLayout.get(); }
+    //EditorLayout* GetEditorLayout() { return editorLayout.get(); }
     ImGuiManager* GetImGuiManager() { return imGuiManager.get(); }
 };

@@ -41,8 +41,6 @@ private:
     std::unique_ptr<Renderer> renderer;
     std::unique_ptr<Skybox> skybox;
     
-    std::unique_ptr<IconRenderSystem> iconRenderSystem;
-    
     ResourceModule* resourceModule;
 
     ECSWorld* ecsWorld = nullptr;
@@ -109,11 +107,6 @@ public:
             return false;
         }
         
-        if (!CreateRenderSystems())
-        {
-            Logger::Log(LogLevel::WARNING, "Failed to create render systems");
-        }
-        
         isInitialized = true;
         Logger::Log(LogLevel::INFO, "RenderingModule initialized successfully");
         Logger::Log(LogLevel::INFO, "======================================");
@@ -142,7 +135,6 @@ public:
             renderer.reset();
         }
         
-        iconRenderSystem.reset();
         skybox.reset();
         
         isInitialized = false;
@@ -286,7 +278,7 @@ private:
         
         try
         {
-            renderer = std::make_unique<Renderer>(resourceModule->GetShaderManager(), ecsWorld);
+            renderer = std::make_unique<Renderer>(resourceModule->GetShaderManager(), ecsWorld, resourceModule->GetTextureManager());
             
             Logger::Log(LogLevel::INFO, "Renderer created successfully");
             Logger::Log(LogLevel::DEBUG, "  - ShaderManager: " + 
@@ -334,30 +326,5 @@ private:
         
         Logger::Log(LogLevel::INFO, "Renderer initialized successfully");
         return true;
-    }
-    
-    /**
-     * @brief Create rendering systems (IconRenderSystem, etc.)
-     * @return true if successful
-     */
-    bool CreateRenderSystems()
-    {
-        Logger::Log(LogLevel::INFO, "Creating render systems...");
-        
-        try
-        {
-            iconRenderSystem = std::make_unique<IconRenderSystem>(resourceModule->GetTextureManager());
-            renderer->SetIconRenderSystem(std::move(iconRenderSystem));
-            
-            Logger::Log(LogLevel::INFO, "IconRenderSystem created");
-            
-            return true;
-        }
-        catch (const std::exception& e)
-        {
-            Logger::Log(LogLevel::ERROR, 
-                "Exception creating render systems: " + std::string(e.what()));
-            return false;
-        }
     }
 };

@@ -61,6 +61,7 @@ public:
         );
         AddPass(std::move(geometryPass));
         Logger::Log(LogLevel::DEBUG, "GeometryPass created");
+
         
         /// grid pass
         // auto gridPass = std::make_unique<GridPass>(context, shaderManager);
@@ -70,13 +71,13 @@ public:
         /// ui pass2
         Logger::Log(LogLevel::DEBUG, "Creating UIPass...");
         auto uiPass = std::make_unique<UIPass>(
-            context, shaderManager
+           context, shaderManager
         );
         AddPass(std::move(uiPass));
         Logger::Log(LogLevel::DEBUG, "UIPass created");
         
         Logger::Log(LogLevel::INFO, 
-            "Forward pipeline initialized with " + 
-            std::to_string(GetPassCount()) + " passes");
+           "Forward pipeline initialized with " + 
+           std::to_string(GetPassCount()) + " passes");
     }
 };

@@ -15,6 +15,7 @@ import WFE.Resource.Material.MaterialManager;
 import WFE.Resource.Material.Material;
 import WFE.Core.Logger;
 import WFE.ECS.ECSWorld;
+import WFE.Core.CommandManager;
 
 export class ModelManager 
 {
@@ -24,7 +25,14 @@ private:
     MaterialManager* materialManager = nullptr;
 
 public:
-    ModelManager() = default;
+    ModelManager()
+    {
+        CommandManager::RegisterCommand("onModelManagerCacheCleaning", 
+        [this](const CommandArgs&)
+        {
+            UnloadAll();
+        });
+    }
     
     ~ModelManager() 
     {

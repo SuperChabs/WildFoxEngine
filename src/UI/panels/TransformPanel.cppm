@@ -27,15 +27,12 @@ public:
         
         ImGui::Spacing();
         ImGui::Separator();
-        
         ImGui::Text("Rotation");
-        glm::vec3 euler = glm::degrees(glm::eulerAngles(transform.rotation));
-        if(ImGui::DragFloat3("##Rot", &euler[0], 1.0f))
-            transform.rotation = glm::quat(glm::radians(euler));
+        if (ImGui::DragFloat3("##Rot", &transform.eulerHint[0], 1.0f))
+            transform.rotation = glm::quat(glm::radians(transform.eulerHint));
         
         ImGui::Spacing();
         ImGui::Separator();
-        
         ImGui::Text("Scale");
         ImGui::DragFloat3("##Scale", &transform.scale[0], 0.1f);
     }

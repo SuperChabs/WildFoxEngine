@@ -18,6 +18,7 @@ import WFE.Rendering.Pipeline.RenderPipeline;
 import WFE.Rendering.Pipeline.PipelineBuilder;
 import WFE.Rendering.RenderingTypes;
 import WFE.Resource.Shader.ShaderManager;
+import WFE.Resource.Texture.TextureManager;
 import WFE.ECS.ECSWorld;
 import WFE.ECS.Systems;
 import WFE.Core.Logger;
@@ -30,7 +31,7 @@ export class Renderer : public IRenderer
     
     std::unique_ptr<RenderSystem> renderSystem;
     std::unique_ptr<LightSystem> lightSystem;
-    std::unique_ptr<IconRenderSystem> iconRenderSystem;
+    std::unique_ptr<IconRenderSystem> m_icon;
     
     ShaderManager* shaderManager;
     ECSWorld* world;
@@ -48,7 +49,7 @@ export class Renderer : public IRenderer
     int fpsFrameCount = 0;
 
 public:
-    Renderer(ShaderManager* sm, ECSWorld* w)
+    Renderer(ShaderManager* sm, ECSWorld* w, TextureManager* tm)
         : shaderManager(sm)
         , world(w)
     {
@@ -61,6 +62,7 @@ public:
         
         renderSystem = std::make_unique<RenderSystem>();
         lightSystem = std::make_unique<LightSystem>();
+        m_icon = std::make_unique<IconRenderSystem>(tm);
 
         RegisterRenderCommands();
         
@@ -183,7 +185,6 @@ public:
         pipeline.reset();
         renderSystem.reset();
         lightSystem.reset();
-        iconRenderSystem.reset();
         context.reset();
         
         initialized = false;
@@ -234,13 +235,9 @@ public:
     const RenderStats& GetStats() const override { return stats; }
     RendererConfig& GetConfig() override { return config; }
     
-    void SetIconRenderSystem(std::unique_ptr<IconRenderSystem> sys) override
-    {
-        iconRenderSystem = std::move(sys);
-    }
-    
     ECSWorld* GetWorld() override { return world; }
     ShaderManager* GetShaderManager() override { return shaderManager; }
+    IconRenderSystem* GetIcon() {return m_icon.get(); }
     // Grid* GetGrid() { return grid.get(); }
     
     bool IsInitialized() const override { return initialized; }
@@ -310,15 +307,10 @@ private:
             const auto& projection = std::get<glm::mat4>(args[1]);
             const auto& shaderName = std::get<std::string>(args[2]);
             
-            if (!iconRenderSystem)
-                return;
-            
             shaderManager->Bind(shaderName);
             
             shaderManager->SetMat4(shaderName, "projection", projection);
             shaderManager->SetMat4(shaderName, "view", view);
-            
-            iconRenderSystem->Update(*world, *shaderManager, shaderName, view, projection);
             
             shaderManager->Unbind();
         });

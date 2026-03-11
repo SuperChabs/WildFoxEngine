@@ -100,12 +100,12 @@ private:
         RegisterSerializer<TransformSerializer>("transform");
         RegisterSerializer<MeshSerializer>("mesh");
         RegisterSerializer<MaterialSerializer>("material");
-        RegisterSerializer<ColorSerializer>("color");
         RegisterSerializer<LightSerializer>("light");
-        RegisterSerializer<IconSerializer>("icon");
         RegisterSerializer<CameraSerializer>("camera");
         RegisterSerializer<CameraTypeSerializer>("cameraType");
         RegisterSerializer<ScriptSerializer>("script");
         RegisterSerializer<VisibilitySerializer>("visibility");
+        RegisterSerializer<IconSerializer>("icon");
+        //RegisterSerializer<HierarchySerializer>("hierarchy");
     }
 };

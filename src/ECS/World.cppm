@@ -52,6 +52,8 @@ public:
     template<typename T, typename... Args>
     T& AddComponent(entt::entity entity, Args&&... args) 
     {
+        if (registry.all_of<T>(entity))
+            registry.remove<T>(entity);
         return registry.emplace<T>(entity, std::forward<Args>(args)...);
     }
     
@@ -185,8 +187,6 @@ public:
         AddComponent<CameraComponent>(entity);
         AddComponent<CameraOrientationComponent>(entity);
         AddComponent<VisibilityComponent>(entity, true);
-        if (isGameCamera)
-            AddComponent<IconComponent>(entity, "assets/textures/icons/camera.png", 0.4f); 
         
         auto cameraType = isGameCamera ? CameraTypeComponent::Type::GAME : CameraTypeComponent::Type::EDITOR;
         AddComponent<CameraTypeComponent>(entity, cameraType);

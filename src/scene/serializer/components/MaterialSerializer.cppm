@@ -35,7 +35,7 @@ public:
         auto& material = world->GetComponent<MaterialComponent>(entity);
         if (material.material)
         {
-            data["material"]["name"] = material.material->GetName();
+            data["name"] = material.material->GetName();
         }
         
         return data;
@@ -45,7 +45,6 @@ public:
                      entt::entity entity, 
                      const json& data) override
     {
-        // This is handled by DeserializeMaterials static method
     }
 
     static void DeserializeMaterials(const json& sceneData,
@@ -72,23 +71,17 @@ public:
             entt::entity entity = it->second;
             const auto& matData = entityData["material"];
 
-            std::string materialName = matData.value("name", "default");
+            std::string materialName = matData.value("name", "");
             auto material = materialManager->GetMaterial(materialName);
 
             if (material)
             {
                 world->AddComponent<MaterialComponent>(entity, material);
             }
-            else if (matData.contains("color"))
+            else
             {
-                auto& col = matData["color"];
-                glm::vec3 color = {col[0], col[1], col[2]};
-                auto newMat = materialManager->CreateColorMaterial(materialName, color);
-
-                if (newMat)
-                {
-                    world->AddComponent<MaterialComponent>(entity, newMat);
-                }
+                Logger::Log(LogLevel::WARNING,
+                    "Material not found in manager: " + materialName);
             }
         }
     }

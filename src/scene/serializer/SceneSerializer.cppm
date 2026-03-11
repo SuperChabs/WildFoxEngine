@@ -119,11 +119,13 @@ private:
         world->Each<IDComponent, TagComponent>(
             [&](entt::entity entity, IDComponent& id, TagComponent& tag)
         {
+            if (IsModelChild(world, entity))
+                return;
+
             json entityData;
             entityData["_id"] = id.id;
             entityData["_name"] = tag.name;
 
-            registry.SerializeAllComponents(world, entity);
             json componentData = registry.SerializeAllComponents(world, entity);
             entityData.merge_patch(componentData);
 
@@ -183,6 +185,8 @@ private:
             bool isModelChild = entityData.value("modelChild", false);
             if (isModelChild)
             {
+                json otherComponents = entityData;
+                otherComponents.erase("mesh"); 
                 registry.DeserializeAllComponents(world, entity, entityData);
                 loadedCount++;
                 continue;
@@ -261,5 +265,17 @@ private:
                 world->AddComponent<ColorComponent>(entity, color);
             }
         }
+    }
+
+    bool IsModelChild(ECSWorld* w, entt::entity entity)
+    {
+        if (!w->HasComponent<HierarchyComponent>(entity))
+            return false;
+
+        auto& h = w->GetComponent<HierarchyComponent>(entity);
+        if (h.parent == entt::null)
+            return false;
+
+        return w->HasComponent<ModelComponent>(h.parent);
     }
 };

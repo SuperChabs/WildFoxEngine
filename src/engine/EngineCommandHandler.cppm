@@ -63,7 +63,6 @@ private:
             m_ecsModule->GetECS()->AddComponent<MaterialComponent>(entity, material);
             
             m_ecsModule->GetECS()->AddComponent<VisibilityComponent>(entity, true);
-            m_ecsModule->GetECS()->AddComponent<RotationComponent>(entity, 50.0f);
             
             Logger::Log(LogLevel::INFO, "Cube entity created");
         });
@@ -81,7 +80,6 @@ private:
             m_ecsModule->GetECS()->AddComponent<MaterialComponent>(entity, material);
             
             m_ecsModule->GetECS()->AddComponent<VisibilityComponent>(entity, true);
-            m_ecsModule->GetECS()->AddComponent<RotationComponent>(entity, 50.0f);
             
             Logger::Log(LogLevel::INFO, "Cube entity created");
         });
@@ -232,7 +230,9 @@ private:
             
             if (filename.find(".json") == std::string::npos)
                 filename += ".json";
-            
+
+            CommandManager::ExecuteCommand("onModelManagerCacheCleaning", args);
+
             bool success = m_sceneModule->GetSceneSerializer()->LoadScene(
                 filename,
                 m_resModule->GetMaterialManager(),
@@ -295,6 +295,7 @@ private:
         CommandManager::RegisterCommand("onAttachScript",
         [this](const CommandArgs& args)
         {
+            /*
             if (args.empty())
             {
                 Logger::Log(LogLevel::ERROR,
@@ -350,11 +351,13 @@ private:
                 Logger::Log(LogLevel::INFO,
                     "Script attached: " + scriptPath);
             }
+            */
         });
 
         CommandManager::RegisterCommand("onRemoveScript",
         [this](const CommandArgs&) 
         {
+            /*
             entt::entity selected = m_uiModule->GetEditorLayout()->GetSelectedEntity();
             if (selected == entt::null || !m_ecsModule->GetECS()->IsValid(selected))
             {
@@ -391,6 +394,7 @@ private:
             {
                 Logger::Log(LogLevel::WARNING, "Entity has no script component");
             }
+            */
         });
     }
 

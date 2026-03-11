@@ -13,6 +13,11 @@
             "diffuse": "textures/rust_metal.jpg",
             "normal":  "textures/rust_metal_normal.jpg",
             "height":  "textures/rust_metal_height.jpg"
+        },
+        {
+            "name": "grass",
+            "type": "texture",
+            "diffuse": "textures/grass.png"
         }
     ]
 }

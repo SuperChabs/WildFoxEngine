@@ -14,7 +14,8 @@ import WFE.ECS.Components;
 export class SceneManager
 {
     ECSWorld* m_ecs;
-    bool m_IsPlayMode = false;
+    bool m_IsPlayMode    = false;
+    bool m_IsDebugPaused = false;
 
     glm::vec3 m_SavedEditorCameraPos;
     float m_SavedEditorCameraYaw;
@@ -25,10 +26,12 @@ public:
         : m_ecs(ecs)
     {
         RegisterSceneCommands();
+        RegisterDebugEvents();
     }
 
     void StartPlayMode()
     {
+        /*
         if (!m_ecs || m_IsPlayMode)
             return;
 
@@ -61,10 +64,12 @@ public:
         GetEventBus().Publish("play_mode_started");
 
         Logger::Log(LogLevel::INFO, "SceneManager: Entered Play Mode");
+        */
     }
 
     void StopPlayMode()
     {
+        /*
         if (!m_ecs || !m_IsPlayMode)
             return;
 
@@ -111,9 +116,40 @@ public:
         GetEventBus().Publish("play_mode_stopped");
 
         Logger::Log(LogLevel::INFO, "SceneManager: Exited Play Mode");
+        */
     }
     
-    bool IsInPlayMode() const { return m_IsPlayMode; }
+    void PauseScripts()
+    {
+        if (!m_ecs || m_IsDebugPaused) return;
+
+        m_ecs->Each<ScriptComponent>([](entt::entity, ScriptComponent& script)
+        {
+            script.active = false;
+        });
+
+        m_IsDebugPaused = true;
+        GetEventBus().Publish("debug_paused");
+        Logger::Log(LogLevel::INFO, "SceneManager: Scripts PAUSED (debug)");
+    }
+
+    void ResumeScripts()
+    {
+        if (!m_ecs || !m_IsDebugPaused) return;
+
+        m_ecs->Each<ScriptComponent>([](entt::entity, ScriptComponent& script)
+        {
+            if (!script.failed)
+                script.active = true;
+        });
+
+        m_IsDebugPaused = false;
+        GetEventBus().Publish("debug_resumed");
+        Logger::Log(LogLevel::INFO, "SceneManager: Scripts RESUMED");
+    }
+
+    bool IsInPlayMode()  { return m_IsPlayMode; }
+    bool IsInDebugMode() { return m_IsDebugPaused; }
 
 private:
     void RegisterSceneCommands() 
@@ -121,7 +157,7 @@ private:
         CommandManager::RegisterCommand("onPlayGame",
         [this](const CommandArgs&)
         {
-            if (IsInPlayMode())
+            if (m_IsPlayMode)
             {
                 Logger::Log(LogLevel::WARNING, "Already in play mode");
                 return;
@@ -134,7 +170,7 @@ private:
         CommandManager::RegisterCommand("onStopGame",
         [this](const CommandArgs&)
         {
-            if (!IsInPlayMode())
+            if (!m_IsPlayMode)
             {
                 Logger::Log(LogLevel::WARNING, "Not in play mode");
                 return;
@@ -142,6 +178,24 @@ private:
 
             Logger::Log(LogLevel::INFO, "=== EXITING PLAY MODE ===");
             StopPlayMode();
+        });
+    }
+
+    void RegisterDebugEvents()
+    {
+        GetEventBus().Subscribe("debug_pause",
+        [this](const std::any&) { PauseScripts(); });
+
+        GetEventBus().Subscribe("debug_resume",
+        [this](const std::any&) { ResumeScripts(); });
+
+        CommandManager::RegisterCommand("onDebugPauseToggle",
+        [this](const CommandArgs&)
+        {
+            if (m_IsDebugPaused)
+                ResumeScripts();
+            else
+                PauseScripts();
         });
     }
 };

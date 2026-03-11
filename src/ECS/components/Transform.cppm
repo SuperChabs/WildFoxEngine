@@ -9,9 +9,11 @@ export module WFE.ECS.Components.Transform;
 export struct TransformComponent 
 {
     glm::vec3 position{0.0f};
-    glm::quat rotation{glm::identity<glm::quat>()};  // ← кватерніон
+    glm::quat rotation{glm::identity<glm::quat>()};
     glm::vec3 scale{1.0f};
     
+    glm::vec3 eulerHint = glm::vec3(0.0f);
+
     TransformComponent() = default;
     TransformComponent(const glm::vec3& pos) : position(pos) {}
     TransformComponent(const glm::vec3& pos, const glm::quat& rot, const glm::vec3& scl)

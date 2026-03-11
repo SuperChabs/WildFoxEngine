@@ -19,7 +19,6 @@ public:
         auto& camera = ecs->GetComponent<CameraComponent>(entity);
         
         ImGui::Checkbox("Is Main Camera", &camera.isMainCamera);
-        ImGui::Checkbox("Active", &camera.isActive);
         
         ImGui::Spacing();
         ImGui::Separator();

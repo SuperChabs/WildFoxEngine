@@ -255,7 +255,6 @@ private:
         ImGui::EndMenu();
     }
 
-
     void RenderViewMenu(bool& showHierarchy, bool& showInspector,
                         bool& showProperties, bool& showConsole)
     {

@@ -16,10 +16,8 @@ import WFE.Scene.Light;
 
 import WFE.UI.Panels.TagPanel;
 import WFE.UI.Panels.TransformPanel;
-import WFE.UI.Panels.RotationPanel;
 import WFE.UI.Panels.MaterialPanel;
 import WFE.UI.Panels.LightPanel;
-import WFE.UI.Panels.IconPanel;
 import WFE.UI.Panels.CameraPanel;
 import WFE.UI.Panels.ScriptPanel;
 
@@ -30,10 +28,8 @@ private:
 
     TagPanel tagPanel;
     TransformPanel transformPanel;
-    RotationPanel rotationPanel;
     MaterialPanel materialPanel;
     LightPanel lightPanel;
-    IconPanel iconPanel;
     CameraPanel cameraPanel;
     ScriptPanel scriptPanel;
 
@@ -117,8 +113,6 @@ private:
             materialPanel.Render(ecs, entity, materialManager);
         if (ecs->HasComponent<LightComponent>(selectedEntity))
             lightPanel.Render(ecs, entity);
-        if (ecs->HasComponent<IconComponent>(selectedEntity))
-            iconPanel.Render(ecs, entity);
         if (ecs->HasComponent<CameraComponent>(selectedEntity) &&
             ecs->HasComponent<CameraOrientationComponent>(selectedEntity))
             cameraPanel.Render(ecs, entity);
@@ -148,10 +142,6 @@ private:
                     ecs->AddComponent<CameraComponent>(entity);
                     ecs->AddComponent<CameraOrientationComponent>(entity);
                 }
-
-            if (!ecs->HasComponent<RotationComponent>(entity))
-                if (ImGui::MenuItem("Auto Rotation"))
-                    ecs->AddComponent<RotationComponent>(entity);
 
             if (!ecs->HasComponent<ScriptComponent>(entity))
                 if (ImGui::MenuItem("Script"))

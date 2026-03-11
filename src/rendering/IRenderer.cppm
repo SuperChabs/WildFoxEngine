@@ -9,7 +9,6 @@ module;
 export module WFE.Rendering.IRenderer;
 
 import WFE.ECS.ECSWorld;
-import WFE.ECS.Systems.IconRenderSystem;
 import WFE.Rendering.Core.GLContext;
 import WFE.Rendering.RenderingTypes;
 import WFE.Rendering.Pipeline.RenderPipeline;
@@ -29,7 +28,6 @@ public:
     virtual void SetClearColor(const glm::vec4& color) = 0;
     virtual void SetWireframe(bool enable) = 0;
     virtual void SetEnableShadows(bool enable) = 0;
-    virtual void SetIconRenderSystem(std::unique_ptr<IconRenderSystem> sys) = 0;
 
     virtual GLContext* GetContext() = 0;
     virtual RenderPipeline* GetPipeline() = 0;

@@ -25,9 +25,9 @@ public:
         glm::vec3 euler = glm::degrees(glm::eulerAngles(t.rotation));
         
         return json{
-            {"position", {t.position.x, t.position.y, t.position.z}},
-            {"rotation", {euler.x, euler.y, euler.z}},
-            {"scale", {t.scale.x, t.scale.y, t.scale.z}}
+            {"position",  {t.position.x, t.position.y, t.position.z}},
+            {"rotation",  {euler.x, euler.y, euler.z}},
+            {"scale",     {t.scale.x, t.scale.y, t.scale.z}}
         };
     }
 

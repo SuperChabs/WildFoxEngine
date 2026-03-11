@@ -22,7 +22,6 @@ import WFE.Scripting.ASBindings;
 import WFE.ECS.Systems;
 import WFE.ECS.Components;
 import WFE.Engine.EditorCommandHandler;
-
 import WFE.Core.ModuleManager;
 import WFE.Rendering.RenderingModule;
 import WFE.Resource.ResourceModule;
@@ -30,6 +29,7 @@ import WFE.UI.UIModule;
 import WFE.ECS.ECSModule;
 import WFE.Scene.SceneModule;
 import WFE.Core.EventBus;
+import WFE.UI.DebugOverlay;
 
 /// @file Engine.cppm
 /// @brief Engine class
@@ -52,6 +52,9 @@ private:
     UIModule* uiModule;
     ECSModule* ecsModule;
     SceneModule* sceneModule;
+
+    DebugOverlay m_overlay;
+    SceneBuilderCallbacks cb;
 
     bool cameraControlEnabled;
     bool showUI;
@@ -126,7 +129,6 @@ protected:
      * Initialize Modules and other stuff that wasn't initialized
      * in Application class
      */
-    [[deprecated("hallo")]]
     void OnInitialize() override
     {
         Logger::Log(LogLevel::INFO, "Initializing WFE...");
@@ -202,7 +204,7 @@ protected:
         ech->RegisterAllCommands();
         RegistraterCoreCommands();
 
-        auto editorCam = ecsModule->GetECS()->CreateCamera("Editor Camera", true, false);
+        auto editorCam = ecsModule->GetECS()->CreateCamera("Main Camera", true, true);
         SetMainCameraEntity(editorCam);
         SetCameraControlMode(false);
         
@@ -265,75 +267,41 @@ protected:
      */
     void OnRender() override
     {
-        uiModule->GetImGuiManager()->BeginFrame();
-
-        entt::entity editorCamera = ecsModule->GetECS()->FindEditorCamera();
-        entt::entity gameCamera = ecsModule->GetECS()->FindGameCamera();
-
+        auto* ecs      = ecsModule->GetECS();
         auto* renderer = renderingModule->GetRenderer();
 
-        if (gameCamera == entt::null)
+        entt::entity camera = ecs->FindGameCamera();
+        if (camera == entt::null)
         {
-            gameCamera = ecsModule->GetECS()->CreateCamera("Game Camera", false, true);
-            auto& transform = ecsModule->GetECS()->GetComponent<TransformComponent>(gameCamera);
-            transform.position = glm::vec3(0, 5, 10);
+            Logger::Log(LogLevel::WARNING, "No game camera found!");
+            return;
         }
 
-        // Scene Framebuffer (use editor camera)
-        Framebuffer* sceneFB = uiModule->GetEditorLayout()->GetSceneFramebuffer();
-        ImVec2 sceneViewportSize = uiModule->GetEditorLayout()->GetSceneViewportSize();
-        if (sceneViewportSize.x <= 0 || sceneViewportSize.y <= 0)
+        renderer->BeginFrame();
+        renderer->Render(
+            *ecs,
+            camera,
+            GetWindow()->GetWidth(),
+            GetWindow()->GetHeight()
+        );
+        renderer->EndFrame();
+
+        if (showUI)
         {
-            Logger::Log(LogLevel::WARNING, "Invalid scene viewport size, skipping render");
+            renderingModule->GetRenderer()->GetIcon()->Update(
+                *ecs,
+                *resourceModule->GetShaderManager(),
+                "icon",
+                ecs->GetComponent<CameraOrientationComponent>(camera).GetViewMatrix(
+                    ecs->GetComponent<TransformComponent>(camera).position),
+                ecs->GetComponent<CameraComponent>(camera).GetProjectionMatrix(
+                    (float)GetWindow()->GetWidth()/(float)GetWindow()->GetHeight())
+            );
+
+            uiModule->GetImGuiManager()->BeginFrame();
+            m_overlay.Render(ecs, mainCameraEntity, cb, resourceModule->GetMaterialManager());
+            uiModule->GetImGuiManager()->EndFrame();
         }
-        else
-        {
-            sceneFB->Bind();
-            renderer->BeginFrame();
-
-            if (editorCamera != entt::null)
-                renderer->Render(
-                    *ecsModule->GetECS(), 
-                    editorCamera,             
-                    static_cast<int>(sceneViewportSize.x), 
-                    static_cast<int>(sceneViewportSize.y)
-                );
-            
-            renderer->EndFrame();
-            sceneFB->Unbind();
-        }
-
-        // Game Framebuffer (use game camera)
-        Framebuffer* gameFB = uiModule->GetEditorLayout()->GetGameFramebuffer();
-        ImVec2 gameViewportSize = uiModule->GetEditorLayout()->GetGameViewportSize();
-
-        if (gameViewportSize.x <= 0 || gameViewportSize.y <= 0)
-        {
-            Logger::Log(LogLevel::WARNING, "Invalid game viewport size, skipping render");
-        }
-        else
-        {
-            gameFB->Bind();
-            renderer->BeginFrame();
-
-            if (gameCamera != entt::null)
-                renderer->Render(
-                    *ecsModule->GetECS(), 
-                    gameCamera,             
-                    static_cast<int>(gameViewportSize.x), 
-                    static_cast<int>(gameViewportSize.y)
-                );
-            
-            renderer->EndFrame();
-            gameFB->Unbind();
-        }
-        
-        glClear(GL_COLOR_BUFFER_BIT);
-        glDisable(GL_DEPTH_TEST);
-        glDisable(GL_BLEND);
-
-        uiModule->RenderUI();
-        uiModule->GetImGuiManager()->EndFrame();
     }
 
     /**
@@ -392,26 +360,9 @@ private:
             Logger::Log(LogLevel::INFO, "Reloaded all shaders");
         }
 
-        if (GetInput()->IsKeyPressed(Key::KEY_LEFT_CONTROL) && 
-            GetInput()->IsKeyJustPressed(Key::KEY_S))
-        {
-            if (CommandManager::HasCommand("onQuickSave"))
-                CommandManager::ExecuteCommand("onQuickSave", {});
-        }
+        if (GetInput()->IsKeyJustPressed(Key::KEY_F1))
+            showUI = !showUI;
         
-        if (GetInput()->IsKeyPressed(Key::KEY_LEFT_CONTROL) && 
-            GetInput()->IsKeyJustPressed(Key::KEY_L))
-        {
-            if (CommandManager::HasCommand("onQuickLoad"))
-                CommandManager::ExecuteCommand("onQuickLoad", {});
-        }
-        
-        if (GetInput()->IsKeyPressed(Key::KEY_LEFT_CONTROL) && 
-            GetInput()->IsKeyJustPressed(Key::KEY_N))
-        {
-            if (CommandManager::HasCommand("onNewScene"))
-                CommandManager::ExecuteCommand("onNewScene", {});
-        }
     }
 
     void RegistraterCoreCommands()
