@@ -21,6 +21,11 @@ export class SceneManager
     float m_SavedEditorCameraYaw;
     float m_SavedEditorCameraPitch;
 
+    glm::vec3 m_SavedDebugCameraPos;
+    float m_SavedDebugCameraYaw;
+    float m_SavedDebugCameraPitch;
+    bool  m_HasSavedDebugCamera = false;
+
 public:
     SceneManager(ECSWorld* ecs)
         : m_ecs(ecs)
@@ -123,6 +128,22 @@ public:
     {
         if (!m_ecs || m_IsDebugPaused) return;
 
+        entt::entity gameCam = m_ecs->FindGameCamera();
+        if (gameCam != entt::null && m_ecs->IsValid(gameCam)
+            && m_ecs->HasComponent<TransformComponent>(gameCam)
+            && m_ecs->HasComponent<CameraOrientationComponent>(gameCam))
+        {
+            auto& transform    = m_ecs->GetComponent<TransformComponent>(gameCam);
+            auto& orientation  = m_ecs->GetComponent<CameraOrientationComponent>(gameCam);
+
+            m_SavedDebugCameraPos   = transform.position;
+            m_SavedDebugCameraYaw   = orientation.yaw;
+            m_SavedDebugCameraPitch = orientation.pitch;
+            m_HasSavedDebugCamera   = true;
+
+            Logger::Log(LogLevel::INFO, "SceneManager: Camera state saved for debug pause");
+        }
+
         m_ecs->Each<ScriptComponent>([](entt::entity, ScriptComponent& script)
         {
             script.active = false;
@@ -136,6 +157,25 @@ public:
     void ResumeScripts()
     {
         if (!m_ecs || !m_IsDebugPaused) return;
+
+        if (m_HasSavedDebugCamera)
+        {
+            entt::entity gameCam = m_ecs->FindGameCamera();
+            if (gameCam != entt::null && m_ecs->IsValid(gameCam)
+                && m_ecs->HasComponent<TransformComponent>(gameCam)
+                && m_ecs->HasComponent<CameraOrientationComponent>(gameCam))
+            {
+                auto& transform   = m_ecs->GetComponent<TransformComponent>(gameCam);
+                auto& orientation = m_ecs->GetComponent<CameraOrientationComponent>(gameCam);
+
+                transform.position  = m_SavedDebugCameraPos;
+                orientation.yaw     = m_SavedDebugCameraYaw;
+                orientation.pitch   = m_SavedDebugCameraPitch;
+
+                Logger::Log(LogLevel::INFO, "SceneManager: Camera state restored after debug pause");
+            }
+            m_HasSavedDebugCamera = false;
+        }
 
         m_ecs->Each<ScriptComponent>([](entt::entity, ScriptComponent& script)
         {

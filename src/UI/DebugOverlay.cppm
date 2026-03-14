@@ -255,13 +255,13 @@ private:
 
         if (ImGui::BeginPopup("##addcomp"))
         {
-            if (!ecs->HasComponent<TransformComponent>(m_selected))
-                if (ImGui::MenuItem("Transform"))
-                    ecs->AddComponent<TransformComponent>(m_selected);
-
             if (!ecs->HasComponent<ScriptComponent>(m_selected))
                 if (ImGui::MenuItem("Script"))
                     ecs->AddComponent<ScriptComponent>(m_selected);
+
+            if (!ecs->HasComponent<MaterialComponent>(m_selected))
+                if (ImGui::MenuItem("Material"))
+                    ecs->AddComponent<MaterialComponent>(m_selected);
 
             ImGui::EndPopup();
         }
@@ -274,7 +274,11 @@ private:
         if (ImGui::BeginMenu("Mesh"))
         {
             ExecuteItem("Cube", "onCreateCube");
+            ExecuteItem("Cone", "onCreateCone");
+            ExecuteItem("Cylinder", "onCreateCylinder");
             ExecuteItem("Plane", "onCreatePlane");
+            ExecuteItem("Sphere", "onCreateSphere");
+            ExecuteItem("Torus", "onCreateTorus");
             ImGui::EndMenu();
         }
 

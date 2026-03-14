@@ -16,9 +16,9 @@
             "fragment": "fragment/icon.fs"
         },
         {
-            "name": "grid",
-            "vertex": "vertex/grid.vs",
-            "fragment": "fragment/grid.fs"
+            "name": "shadow_depth",
+            "vertex": "vertex/shadow_depth.vs",
+            "fragment": "fragment/shadow_depth.fs"
         }
     ]
 }

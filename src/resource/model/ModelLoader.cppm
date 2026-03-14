@@ -84,7 +84,11 @@ glm::mat4 ConvertAssimpMatrix(const aiMatrix4x4 from)
 /**
  * @brief Model loader function
  */
-export std::pair<Model*, entt::entity> LoadModelFromFile(std::string& path, MaterialManager& materialManager, ECSWorld* world = nullptr) 
+export std::pair<Model*, entt::entity> LoadModelFromFile(
+    std::string& path, 
+    MaterialManager& materialManager, 
+    ECSWorld* world = nullptr, 
+    bool isBaseShape = false) 
 {
     Logger::Log(LogLevel::INFO, "=== LoadModelFromFile START ===");
 
@@ -102,8 +106,7 @@ export std::pair<Model*, entt::entity> LoadModelFromFile(std::string& path, Mate
         aiProcess_Triangulate | 
         aiProcess_FlipUVs | 
         aiProcess_CalcTangentSpace |
-        aiProcess_GenSmoothNormals 
-        //| aiProcess_FlipWindingOrder
+        aiProcess_GenSmoothNormals
     );
     
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) 
@@ -122,7 +125,7 @@ export std::pair<Model*, entt::entity> LoadModelFromFile(std::string& path, Mate
     if (world)
     {
         Logger::Log(LogLevel::INFO, "Creating root entity...");
-        rootEntity = world->CreateEntity(model->GetName() + "_Root");
+        rootEntity = world->CreateEntity(model->GetName() + (!isBaseShape ? "_Root" : ""));
         world->AddComponent<TransformComponent>(rootEntity, glm::vec3(0, 0, -5), glm::vec3(0), glm::vec3(1));
         world->AddComponent<VisibilityComponent>(rootEntity, true);
         world->AddComponent<HierarchyComponent>(rootEntity);
@@ -138,6 +141,7 @@ export std::pair<Model*, entt::entity> LoadModelFromFile(std::string& path, Mate
     globalMeshCounter = 0;
     
     Logger::Log(LogLevel::INFO, "Starting ProcessNode...");
+
     std::shared_ptr<ModelNode> rootNode = ProcessNode(
         scene->mRootNode, 
         scene, 
@@ -147,7 +151,6 @@ export std::pair<Model*, entt::entity> LoadModelFromFile(std::string& path, Mate
         world, 
         rootEntity
     );
-    
     model->SetRootNode(rootNode);
     
     Logger::Log(LogLevel::INFO, 

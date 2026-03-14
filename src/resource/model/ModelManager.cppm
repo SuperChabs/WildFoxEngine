@@ -81,7 +81,7 @@ public:
         return model;
     }
     
-    entt::entity LoadWithECS(const std::string& filepath, ECSWorld* world) 
+    entt::entity LoadWithECS(const std::string& filepath, ECSWorld* world, bool isBaseShape = false) 
     {
         auto it = loadedModels.find(filepath);
         if (it != loadedModels.end()) 
@@ -99,7 +99,7 @@ public:
         }
         
         std::string fullPath = assetsPath + filepath;
-        auto [rawModel, rootEntity] = LoadModelFromFile(fullPath, *materialManager, world);
+        auto [rawModel, rootEntity] = LoadModelFromFile(fullPath, *materialManager, world, isBaseShape);
         
         if (!rawModel) 
         {

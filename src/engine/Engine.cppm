@@ -207,6 +207,8 @@ protected:
         auto editorCam = ecsModule->GetECS()->CreateCamera("Main Camera", true, true);
         SetMainCameraEntity(editorCam);
         SetCameraControlMode(false);
+
+        renderingModule->GetRenderer()->SetEnableShadows(true);
         
         Logger::Log(LogLevel::INFO, "==================================");
         Logger::Log(LogLevel::INFO, "Engine initialized successfully");
