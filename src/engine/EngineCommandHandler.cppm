@@ -209,7 +209,7 @@ private:
             if (filename.find(".json") == std::string::npos)
                 filename += ".json";
             
-            bool success = m_sceneModule->GetSceneSerializer()->SaveScene(filename);
+            bool success = m_sceneModule->GetSceneSerializer()->SaveScene(filename, m_resModule->GetMaterialManager());
             
             if (success)
                 Logger::Log(LogLevel::INFO, "Scene saved successfully: " + filename);

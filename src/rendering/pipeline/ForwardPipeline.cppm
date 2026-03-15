@@ -48,12 +48,12 @@ public:
         AddPass(std::move(skyboxPass));
         Logger::Log(LogLevel::DEBUG, "SkyboxPass created");
 
-        // --- ShadowPass (disabled by default) ---
-        auto shadowPassOwned = std::make_unique<ShadowPass>(context, shaderManager, world);
-        m_ShadowPassPtr = shadowPassOwned.get();
-        shadowPassOwned->SetEnabled(false);
-        AddPass(std::move(shadowPassOwned));
-        Logger::Log(LogLevel::DEBUG, "ShadowPass created (disabled)");
+        // --- ShadowPass ---
+        // auto shadowPassOwned = std::make_unique<ShadowPass>(context, shaderManager, world);
+        // m_ShadowPassPtr = shadowPassOwned.get();
+        // shadowPassOwned->SetEnabled(false);
+        // AddPass(std::move(shadowPassOwned));
+        // Logger::Log(LogLevel::DEBUG, "ShadowPass created (disabled)");
 
         // --- GeometryPass ---
         auto geometryPassOwned = std::make_unique<GeometryPass>(context, shaderManager, world);

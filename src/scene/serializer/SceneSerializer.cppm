@@ -26,6 +26,7 @@ import WFE.Scene.Serializer.SerializerRegistry;
 import WFE.Scene.Serializer.SceneMetadataSerializer;
 import WFE.Scene.Serializer.HierarchyDeserializer;
 import WFE.Scene.Serializer.Component;
+import WFE.Scene.Serializer.SceneMaterialSerializer;
 
 using json = nlohmann::json;
 
@@ -35,6 +36,7 @@ private:
     ECSWorld* world;
     SceneFileHandler fileHandler;
     SerializerRegistry registry;
+    SceneMaterialSerializer m_material;
 
 public:
     explicit SceneSerializer(ECSWorld* w)
@@ -52,20 +54,23 @@ public:
         return fileHandler.GetSavesDirectory();
     }
 
-    bool SaveScene(const std::string& filename)
+    bool SaveScene(const std::string& filename, MaterialManager* materialManager)
     {
-        return SaveScene(filename, true);
+        return SaveScene(filename, materialManager, true);
     }
 
-    bool SaveScene(const std::string& filename, bool pretty)
+    bool SaveScene(const std::string& filename, MaterialManager* materialManager, bool pretty)
     {
         json sceneData;
         SceneMetadataSerializer metaSerializer(fileHandler);
 
         entt::entity mainCam = world->FindEditorCamera();
         sceneData["scene"]["metadata"] = metaSerializer.SerializeMetadata(filename, mainCam);
-
         SerializeEntities(sceneData);
+
+        json materialsData = m_material.Serialize(materialManager);
+        fileHandler.WriteMaterials(filename, materialsData, pretty);
+
         return WriteSceneToFile(filename, sceneData, pretty);
     }
 
@@ -81,6 +86,9 @@ public:
             Logger::Log(LogLevel::ERROR, "Invalid scene data");
             return false;
         }
+
+        json materialsData = fileHandler.ReadMaterials(filename);
+        m_material.Deserialize(materialManager, materialsData);
 
         world->Clear();
         std::unordered_map<uint64_t, entt::entity> createdEntities;

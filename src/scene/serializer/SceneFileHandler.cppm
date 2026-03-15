@@ -19,20 +19,13 @@ export class SceneFileHandler
 private:
     std::string savesDirectory;
 
+    static constexpr const char* ENTITIES_FILE  = "entities.json";
+    static constexpr const char* MATERIALS_FILE = "materials.json";
+
 public:
     explicit SceneFileHandler(const std::string& directory = "../saves/")
         : savesDirectory(directory)
     {
-    }
-
-    void SetSavesDirectory(const std::string& directory)
-    {
-        savesDirectory = directory;
-    }
-
-    std::string GetSavesDirectory() const
-    {
-        return savesDirectory;
     }
 
     std::string EnsureJsonExtension(const std::string& filename) const
@@ -71,19 +64,19 @@ public:
 
     json ReadScene(const std::string& filename)
     {
-        std::string name = EnsureJsonExtension(filename);
-        std::string filepath = savesDirectory + name;
+        fs::path scenePath = fs::path(savesDirectory) / fs::path(filename).stem();
+        fs::path entitiesPath = scenePath / ENTITIES_FILE;
 
-        if (!fs::exists(filepath))
+        if (!fs::exists(entitiesPath))
         {
-            Logger::Log(LogLevel::ERROR, "Scene file not found: " + filepath);
+            Logger::Log(LogLevel::ERROR, "Scene file not found: " + entitiesPath.string());
             return json::object();
         }
 
-        std::ifstream file(filepath);
+        std::ifstream file(entitiesPath);
         if (!file.is_open())
         {
-            Logger::Log(LogLevel::ERROR, "Failed to open scene: " + filepath);
+            Logger::Log(LogLevel::ERROR, "Failed to open scene: " + entitiesPath.string());
             return json::object();
         }
 
@@ -103,19 +96,20 @@ public:
 
     bool WriteScene(const std::string& filename, const json& sceneData, bool pretty = true)
     {
-        if (!EnsureDirectoryExists(savesDirectory))
+        fs::path scenePath = fs::path(savesDirectory) / fs::path(filename).stem();
+
+        if (!EnsureDirectoryExists(scenePath.string()))
         {
             Logger::Log(LogLevel::ERROR, "Cannot create saves directory");
             return false;
         }
 
-        std::string name = EnsureJsonExtension(filename);
-        std::string filepath = savesDirectory + name;
+        fs::path entitiesPath = scenePath / ENTITIES_FILE;
 
-        std::ofstream file(filepath, std::ios::trunc);
+        std::ofstream file(entitiesPath, std::ios::trunc);
         if (!file.is_open())
         {
-            Logger::Log(LogLevel::ERROR, "Failed to open file for writing: " + filepath);
+            Logger::Log(LogLevel::ERROR, "Failed to open file for writing: " + entitiesPath.string());
             return false;
         }
 
@@ -127,7 +121,7 @@ public:
                 file << sceneData.dump();
             
             file.close();
-            Logger::Log(LogLevel::INFO, "Scene saved: " + filepath);
+            Logger::Log(LogLevel::INFO, "Scene saved: " + entitiesPath.string());
             return true;
         }
         catch (const std::exception& e)
@@ -138,45 +132,91 @@ public:
         }
     }
 
-    std::vector<std::string> GetAvailableScenes() const
+    json ReadMaterials(const std::string& filename)
     {
-        std::vector<std::string> scenes;
+        fs::path scenePath = fs::path(savesDirectory) / fs::path(filename).stem();
+        fs::path materialsPath = scenePath / MATERIALS_FILE;
 
-        if (!fs::exists(savesDirectory))
-            return scenes;
+        if (!fs::exists(materialsPath))
+        {
+            Logger::Log(LogLevel::ERROR, "Scene file not found: " + materialsPath.string());
+            return json::object();
+        }
+
+        std::ifstream file(materialsPath);
+        if (!file.is_open())
+        {
+            Logger::Log(LogLevel::ERROR, "Failed to open scene: " + materialsPath.string());
+            return json::object();
+        }
 
         try
         {
-            for (const auto& entry : fs::directory_iterator(savesDirectory))
-            {
-                if (entry.is_regular_file() && entry.path().extension() == ".json")
-                    scenes.push_back(entry.path().filename().string());
-            }
+            json sceneData = json::parse(file);
+            file.close();
+            return sceneData;
         }
-        catch (const fs::filesystem_error& e)
+        catch (const json::parse_error& e)
         {
-            Logger::Log(LogLevel::ERROR, "Error listing scenes: " + std::string(e.what()));
+            Logger::Log(LogLevel::ERROR, "JSON parse error: " + std::string(e.what()));
+            file.close();
+            return json::object();
+        }
+    }
+
+    bool WriteMaterials(const std::string& filename, const json& sceneData, bool pretty = true)
+    {
+        fs::path scenePath = fs::path(savesDirectory) / fs::path(filename).stem();
+
+        if (!EnsureDirectoryExists(scenePath.string()))
+        {
+            Logger::Log(LogLevel::ERROR, "Cannot create saves directory");
+            return false;
         }
 
-        return scenes;
+        fs::path materialsPath = scenePath / MATERIALS_FILE;
+
+        std::ofstream file(materialsPath, std::ios::trunc);
+        if (!file.is_open())
+        {
+            Logger::Log(LogLevel::ERROR, "Failed to open file for writing: " + materialsPath.string());
+            return false;
+        }
+
+        try
+        {
+            if (pretty)
+                file << sceneData.dump(4);
+            else
+                file << sceneData.dump();
+            
+            file.close();
+            Logger::Log(LogLevel::INFO, "Material saved: " + materialsPath.string());
+            return true;
+        }
+        catch (const std::exception& e)
+        {
+            Logger::Log(LogLevel::ERROR, "Error writing materials: " + std::string(e.what()));
+            file.close();
+            return false;
+        }
     }
 
     bool DeleteScene(const std::string& filename)
     {
-        std::string name = EnsureJsonExtension(filename);
-        std::string filepath = savesDirectory + name;
+        fs::path scenePath = fs::path(savesDirectory) / fs::path(filename).stem();
 
         try
         {
-            if (fs::exists(filepath))
+            if (fs::exists(scenePath))
             {
-                fs::remove(filepath);
-                Logger::Log(LogLevel::INFO, "Scene deleted: " + filepath);
+                fs::remove(scenePath);
+                Logger::Log(LogLevel::INFO, "Scene deleted: " + scenePath.string());
                 return true;
             }
             else
             {
-                Logger::Log(LogLevel::WARNING, "Scene file not found: " + filepath);
+                Logger::Log(LogLevel::WARNING, "Scene file not found: " + scenePath.string());
                 return false;
             }
         }
@@ -200,4 +240,31 @@ public:
 
         return std::string(buffer);
     }
+
+    std::vector<std::string> GetAvailableScenes() const
+    {
+        std::vector<std::string> scenes;
+
+        if (!fs::exists(savesDirectory))
+            return scenes;
+
+        try
+        {
+            for (const auto& entry : fs::directory_iterator(savesDirectory))
+            {
+                if (entry.is_directory())
+                    scenes.push_back(entry.path().filename().string());
+            }
+        }
+        catch (const fs::filesystem_error& e)
+        {
+            Logger::Log(LogLevel::ERROR, "Error listing scenes: " + std::string(e.what()));
+        }
+
+        return scenes;
+    }
+
+    std::string GetSavesDirectory() const { return savesDirectory; }
+
+    void SetSavesDirectory(const std::string& directory) { savesDirectory = directory; }
 };

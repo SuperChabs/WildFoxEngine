@@ -333,6 +333,10 @@ std::shared_ptr<Mesh> ProcessMesh(
             meshMaterial = std::make_shared<Material>(matColor, materialName);
             Logger::Log(LogLevel::INFO, "Color material created successfully");
         }
+
+        if (meshMaterial && !materialManager.HasMaterial(materialName))
+            materialManager.AddMaterial(meshMaterial);
+
     }
     else
     {
@@ -417,7 +421,7 @@ std::vector<Texture> LoadMaterialTextures(
             Texture texture;
             texture.id = textureID;
             texture.type = typeName;
-            texture.path = texturePath;
+            texture.path = fullPath;
             
             textures.push_back(texture);
         }
