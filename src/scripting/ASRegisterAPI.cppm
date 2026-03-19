@@ -44,6 +44,8 @@ public:
         AS_CHECK(r, "Transform.position");
         engine->RegisterObjectProperty("Transform", "vec3 scale",    asOFFSET(TransformComponent, scale));
         AS_CHECK(r, "Transform.scale");
+        engine->RegisterObjectProperty("Transform", "vec3 rotation", asOFFSET(TransformComponent, eulerHint));
+        AS_CHECK(r, "Transform.rotation");
 
         engine->RegisterGlobalFunction(
             "bool IsValid(uint64 e)",

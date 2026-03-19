@@ -44,7 +44,8 @@ std::shared_ptr<ModelNode> ProcessNode(
     const std::string& directory, 
     MaterialManager& materialManager,
     ECSWorld* world = nullptr, 
-    entt::entity parentEntity = entt::null
+    entt::entity parentEntity = entt::null,
+    bool isBaseShape = false
 );
 
 std::shared_ptr<Mesh> ProcessMesh(
@@ -52,7 +53,8 @@ std::shared_ptr<Mesh> ProcessMesh(
     const aiScene* scene, 
     const std::string& directory,
     MaterialManager& materialManager, 
-    int meshIndex
+    int meshIndex,
+    bool isBaseShape = false
 );
 
 std::vector<Texture> LoadMaterialTextures(
@@ -149,9 +151,23 @@ export std::pair<Model*, entt::entity> LoadModelFromFile(
         directory, 
         materialManager, 
         world, 
-        rootEntity
+        rootEntity,
+        isBaseShape
     );
     model->SetRootNode(rootNode);
+
+    auto children = world->GetChildren(rootEntity);
+    if (children.size() == 1)
+    {
+        entt::entity meshEntity = children[0];
+
+        auto& modelComp = world->GetComponent<ModelComponent>(rootEntity);
+        world->AddComponent<ModelComponent>(meshEntity, modelComp.filePath);
+
+        world->ClearParent(meshEntity);
+        world->DestroyEntity(rootEntity);
+        rootEntity = meshEntity;
+    }
     
     Logger::Log(LogLevel::INFO, 
         "Model loaded: " + path + " (" + 
@@ -171,13 +187,15 @@ export std::pair<Model*, entt::entity> LoadModelFromFile(
     return {model, rootEntity};
 }
 
-std::shared_ptr<ModelNode>  ProcessNode(aiNode* node, 
-                 const aiScene* scene, 
-                 Model* model, 
-                 const std::string& directory, 
-                 MaterialManager& materialManager,
-                 ECSWorld* world, 
-                 entt::entity parentEntity)
+std::shared_ptr<ModelNode>  ProcessNode(
+    aiNode* node, 
+    const aiScene* scene, 
+    Model* model, 
+    const std::string& directory, 
+    MaterialManager& materialManager,
+    ECSWorld* world, 
+    entt::entity parentEntity,
+    bool isBaseShape)
 {
     Logger::Log(LogLevel::INFO, "ProcessNode: " + std::string(node->mName.C_Str()));
     Logger::Log(LogLevel::INFO, "  Meshes in this node: " + std::to_string(node->mNumMeshes));
@@ -195,7 +213,12 @@ std::shared_ptr<ModelNode>  ProcessNode(aiNode* node,
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
         
         std::shared_ptr<Mesh> processedMesh = ProcessMesh(
-            mesh, scene, directory, materialManager, globalMeshCounter
+            mesh, 
+            scene, 
+            directory, 
+            materialManager, 
+            globalMeshCounter, 
+            isBaseShape
         );
         
         int meshIndex = model->GetMeshCount();
@@ -204,9 +227,9 @@ std::shared_ptr<ModelNode>  ProcessNode(aiNode* node,
         
         if (world && parentEntity != entt::null)
         {
-            std::string meshName = model->GetName() + "_" + 
+            std::string meshName = model->GetName() + (isBaseShape ? "" : "_" + 
                                  std::string(node->mName.C_Str()) + "_Mesh_" + 
-                                 std::to_string(globalMeshCounter);
+                                 std::to_string(globalMeshCounter));
             
             entt::entity meshEntity = world->CreateEntity(meshName);
             
@@ -236,7 +259,8 @@ std::shared_ptr<ModelNode>  ProcessNode(aiNode* node,
             directory, 
             materialManager, 
             world, 
-            parentEntity
+            parentEntity,
+            isBaseShape
         );
         
         modelNode->AddChild(childNode);
@@ -246,10 +270,12 @@ std::shared_ptr<ModelNode>  ProcessNode(aiNode* node,
 }
 
 std::shared_ptr<Mesh> ProcessMesh(
-    aiMesh* mesh, const aiScene* scene,
+    aiMesh* mesh, 
+    const aiScene* scene,
     const std::string& directory,
     MaterialManager& materialManager,
-    int meshIndex)
+    int meshIndex,
+    bool isBaseShape)
 {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
@@ -280,13 +306,15 @@ std::shared_ptr<Mesh> ProcessMesh(
     std::shared_ptr<Material> meshMaterial;
     Logger::Log(LogLevel::INFO, "Material index: " + std::to_string(mesh->mMaterialIndex));
 
-    if (mesh->mMaterialIndex >= 0)
+    if (mesh->mMaterialIndex >= 0 && !isBaseShape)
     {
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
         aiString matName;
         material->Get(AI_MATKEY_NAME, matName);
-        std::string materialName = std::string(matName.C_Str()) + "_mesh" + std::to_string(meshIndex);
+
+        std::string modelName = directory.substr(directory.find_last_of('/') + 1);
+        std::string materialName = modelName + "_" + std::string(matName.C_Str()) + "_mesh" + std::to_string(meshIndex);
 
         Logger::Log(LogLevel::INFO, "Material name from model: " + std::string(matName.C_Str()));
         Logger::Log(LogLevel::INFO, "Generated material name: " + materialName);
@@ -333,10 +361,10 @@ std::shared_ptr<Mesh> ProcessMesh(
             meshMaterial = std::make_shared<Material>(matColor, materialName);
             Logger::Log(LogLevel::INFO, "Color material created successfully");
         }
-
-        if (meshMaterial && !materialManager.HasMaterial(materialName))
-            materialManager.AddMaterial(meshMaterial);
-
+    }
+    else if(isBaseShape)
+    {
+        meshMaterial = materialManager.GetMaterial("default");
     }
     else
     {
@@ -352,6 +380,8 @@ std::shared_ptr<Mesh> ProcessMesh(
     {
         Logger::Log(LogLevel::INFO, "Setting material to mesh...");
         createdMesh->SetMaterial(meshMaterial);
+        if (!materialManager.HasMaterial(meshMaterial->GetName()))
+            materialManager.AddMaterial(meshMaterial);
         Logger::Log(LogLevel::INFO, "Material successfully set to mesh! (textures: " + std::to_string(textures.size()) + ")");
 
         auto checkMaterial = createdMesh->GetMaterial();
@@ -374,10 +404,11 @@ std::shared_ptr<Mesh> ProcessMesh(
     return createdMesh;
 }
 
-
 std::vector<Texture> LoadMaterialTextures(
-    aiMaterial* mat, aiTextureType type, 
-    const std::string& typeName, const std::string& directory)
+    aiMaterial* mat, 
+    aiTextureType type, 
+    const std::string& typeName, 
+    const std::string& directory)
 {
     std::vector<Texture> textures;
     

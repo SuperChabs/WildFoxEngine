@@ -50,6 +50,7 @@ public:
 
         if (ImGui::Button("Remove Material", ImVec2(-1, 0)))
             RemoveMaterial(ecs, entity);
+
     }
 
 private:

@@ -208,6 +208,8 @@ protected:
         SetMainCameraEntity(editorCam);
         SetCameraControlMode(false);
 
+        CommandManager::ExecuteCommand("onDebugPauseToggle", {});
+
         renderingModule->GetRenderer()->SetEnableShadows(true);
         
         Logger::Log(LogLevel::INFO, "==================================");

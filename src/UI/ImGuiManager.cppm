@@ -44,7 +44,7 @@ public:
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Docking
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Multi-Viewport
         
-        Theme::ApplyTheme(theme);
+        Theme::ApplyTheme(ThemeStyle::Enemymouse);
 
         ImGuiStyle& style = ImGui::GetStyle();
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)

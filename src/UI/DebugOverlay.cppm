@@ -126,7 +126,7 @@ private:
         ImGui::Spacing();
 
         if (ImGui::Button("New scene", {-1.f, 0}) && cb.onNewScene)
-            cb.onNewScene();
+            Execute("onNewScene");
 
         ImGui::Separator();
         ImGui::Spacing();

@@ -47,16 +47,17 @@ public:
             return meshData;
         }
         
-        if (world->HasComponent<MeshComponent>(entity))
-        {
-            auto& meshComp = world->GetComponent<MeshComponent>(entity);
-            if (meshComp.mesh)
-            {
-                meshData["type"] = "primitive";
-                meshData["primitiveType"] = PrimitiveTypeToString(meshComp.type);
-                return meshData;
-            }
-        }
+        // if (world->HasComponent<MeshComponent>(entity) && 
+        //     !world->HasComponent<ModelComponent>(entity))
+        // {
+        //     auto& meshComp = world->GetComponent<MeshComponent>(entity);
+        //     if (meshComp.mesh)
+        //     {
+        //         meshData["type"] = "primitive";
+        //         meshData["primitiveType"] = PrimitiveTypeToString(meshComp.type);
+        //         return meshData;
+        //     }
+        // }
 
         return json::object();
     }

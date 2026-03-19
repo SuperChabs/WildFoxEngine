@@ -264,17 +264,15 @@ private:
             CommandManager::ExecuteCommand("onLoadScene", {std::string("quicksave.json")});
         });
 
-        // CommandManager::RegisterCommand("onNewScene",
-        // [this](const CommandArgs&) 
-        // {
-        //     ecsModule->GetECS()->Clear();
-        //    
-        //     GetCamera()->SetPosition(glm::vec3(0, 0, 0));
-        //     GetCamera()->SetYaw(-95.0f);
-        //     GetCamera()->SetPitch(0.0f);
-        //  
-        //     Logger::Log(LogLevel::INFO, "New scene created");
-        // });
+        CommandManager::RegisterCommand("onNewScene",
+        [this](const CommandArgs&) 
+        {
+            m_ecsModule->GetECS()->Clear();
+
+            auto cam = m_ecsModule->GetECS()->CreateCamera("Main Camera", true, true);
+         
+            Logger::Log(LogLevel::INFO, "New scene created");
+        });
         
         CommandManager::RegisterCommand("onListScenes",
         [this](const CommandArgs&) 
