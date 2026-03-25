@@ -1,6 +1,8 @@
 module;
 
 #include <glad/glad.h>
+#include <entt/entt.hpp>
+#include <glm/glm.hpp>
 #include <memory>
 #include <utility>
 #include <string>

@@ -2,6 +2,7 @@ module;
 
 #include <glm/glm.hpp>
 #include <entt/entt.hpp>
+#include <any>
 
 export module WFE.Scene.SceneManager;
 

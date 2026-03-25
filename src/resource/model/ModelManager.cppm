@@ -83,14 +83,6 @@ public:
     
     entt::entity LoadWithECS(const std::string& filepath, ECSWorld* world, bool isBaseShape = false) 
     {
-        auto it = loadedModels.find(filepath);
-        if (it != loadedModels.end()) 
-        {
-            Logger::Log(LogLevel::INFO, 
-                "Model already loaded (from cache): " + filepath);
-            return entt::null;
-        }
-        
         if (!materialManager)
         {
             Logger::Log(LogLevel::ERROR, 

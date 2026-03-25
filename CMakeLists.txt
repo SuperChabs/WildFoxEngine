@@ -127,6 +127,13 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     UNITY_BUILD_BATCH_SIZE 16
 )
 
+foreach(MODULE ${WildFoxEngine_MODULES})
+    set_source_files_properties(${MODULE} PROPERTIES
+            SKIP_UNITY_BUILD_INCLUSION ON
+            SKIP_PRECOMPILE_HEADERS ON
+    )
+endforeach()
+
 if(WildFoxEngine_MODULES)
     message(STATUS "=== C++ Modules ===")
     foreach(MODULE ${WildFoxEngine_MODULES})

@@ -1,6 +1,7 @@
 module;
 
 #include <string>
+#include <variant>
 #include <glm/glm.hpp>
 #include <glad/glad.h>
 

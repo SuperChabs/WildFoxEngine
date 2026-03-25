@@ -83,6 +83,7 @@ public:
         }
 
         RenderOpenModelDialog();
+        RenderOpenMaterialDialog();
 
         ImGui::End();
     }
@@ -93,9 +94,17 @@ private:
     char m_scenePathBuf[512]  = "scene.json";
     char m_scriptPathBuf[256] = "";
     char m_entityNameBuf[128] = "New Entity";
+
     char m_modelPath[512]{};
 
+    char m_name[128]{};
+    char m_diffusePath[512]{};
+    char m_specularPath[512]{};
+    char m_normalPath[512]{};
+    char m_heightPath[512]{};
+
     bool m_showOpenModelDialog = false;
+    bool m_showOpenMaterialDialog = false;
 
     TagPanel tagPanel;
     TransformPanel transformPanel;
@@ -295,6 +304,9 @@ private:
 
         if (ImGui::MenuItem("Open Model"))
             m_showOpenModelDialog = true;
+
+        if (ImGui::MenuItem("New Material"))
+            m_showOpenMaterialDialog = true;
     }
 
     void RenderOpenModelDialog()
@@ -344,25 +356,101 @@ private:
         }
     }
 
-    void Execute(const char* name, const CommandArgs& args)
+    void RenderOpenMaterialDialog()
+    {
+        if (!m_showOpenMaterialDialog) return;
+
+        ImGui::OpenPopup("NewMaterial");
+
+        if (ImGui::BeginPopupModal(
+            "NewMaterial", 
+            &m_showOpenMaterialDialog, 
+            ImGuiWindowFlags_AlwaysAutoResize))
+        {
+            ImGui::Text("Name:");
+            ImGui::InputTextWithHint(
+                "##name",
+                "material",
+                m_name,
+                sizeof(m_name));
+
+            ImGui::Text("Diff path:");
+            ImGui::InputTextWithHint(
+                "##diffpath",
+                "/home/user/texture.png",
+                m_diffusePath,
+                sizeof(m_diffusePath));
+
+            ImGui::Text("Spec path:");
+            ImGui::InputTextWithHint(
+                "##specpath",
+                "/home/user/texture.png",
+                m_specularPath,
+                sizeof(m_specularPath));
+
+            ImGui::Text("Norm path:");
+            ImGui::InputTextWithHint(
+                "##normpath",
+                "/home/user/texture.png",
+                m_normalPath,
+                sizeof(m_normalPath));
+
+            ImGui::Text("Height path:");
+            ImGui::InputTextWithHint(
+                "##heightpath",
+                "/home/user/texture.png",
+                m_heightPath,
+                sizeof(m_heightPath));
+
+            ImGui::Spacing();
+
+            if (ImGui::Button("Open"))
+            {
+                Execute("onCreateMaterial",
+                    {
+                        m_name,
+                        m_diffusePath,
+                        m_specularPath,
+                        m_normalPath,
+                        m_heightPath
+                    }
+                );
+
+                m_showOpenMaterialDialog = false;
+                ImGui::CloseCurrentPopup();
+            }
+
+            ImGui::SameLine();
+
+            if (ImGui::Button("Cancel"))
+            {
+                m_showOpenMaterialDialog = false;
+                ImGui::CloseCurrentPopup();
+            }
+
+            ImGui::EndPopup();
+        }
+    }
+
+    inline void Execute(const char* name, const CommandArgs& args)
     {
         if (CommandManager::HasCommand(name))
             CommandManager::ExecuteCommand(name, args);
     }
 
-    void ExecuteItem(const char* label, const char* command)
+    inline void ExecuteItem(const char* label, const char* command)
     {
         if (ImGui::MenuItem(label))
             Execute(command);
     }
 
-    void Execute(const char* name)
+    inline void Execute(const char* name)
     {
         CommandArgs args;
         Execute(name, args);
     }
 
-    void Execute(const char* name, const std::string& arg)
+    inline void Execute(const char* name, const std::string& arg)
     {
         CommandArgs args;
         args.emplace_back(arg);

@@ -4,7 +4,7 @@ module;
 #include <string>
 #include <memory>
 #include <vector>
-#include <cstddef>
+#include <variant>
 
 #include <glm/glm.hpp>
 
@@ -12,11 +12,10 @@ export module WFE.Resource.Material.MaterialManager;
 
 import WFE.Rendering.MeshData;
 import WFE.Resource.Material.Material;
-
 import WFE.Resource.Texture.TextureManager;
 import WFE.Resource.Material.MaterialConfigLoader;
-
 import WFE.Core.Logger;
+import WFE.Core.CommandManager;
 
 export class MaterialManager 
 {
@@ -30,16 +29,17 @@ private:
     std::string materialConfigPath = "../assets/configs/materials.json";
 
 public:
-    MaterialManager(TextureManager* tm) 
+    explicit MaterialManager(TextureManager* tm)
         : textureManager(tm) 
     { 
-        CreateDefaultMaterials(); 
+        CreateDefaultMaterials();
+        RegisterCommands();
     }
 
     void LoadMaterialConfigs()
     {
         const std::vector<MaterialConfig>& configs = configLoader.LoadMaterialConfigs(*textureManager, materialConfigPath);
-        
+
         for (const auto& config : configs)
         {
             if (materials.contains(config.name))
@@ -64,7 +64,7 @@ public:
         }
     }
 
-    std::shared_ptr<Material> CreateColorMaterial(const std::string name, const glm::vec3& color)
+    std::shared_ptr<Material> CreateColorMaterial(const std::string& name, const glm::vec3& color)
     {
         if (materials.contains(name))
         {
@@ -86,11 +86,11 @@ public:
         return material;
     }
 
-    std::shared_ptr<Material> CreateTextureMaterial(const std::string name, 
-                                                    const std::string diffusePath, 
-                                                    const std::string specularPath = "", 
-                                                    const std::string normalPath = "",
-                                                    const std::string heightPath = "")
+    std::shared_ptr<Material> CreateTextureMaterial(const std::string& name,
+                                                    const std::string& diffusePath,
+                                                    const std::string& specularPath = "",
+                                                    const std::string& normalPath = "",
+                                                    const std::string& heightPath = "")
     {
         if (materials.contains(name))
         {
@@ -247,5 +247,24 @@ private:
         materials["gray"] = std::make_shared<Material>(glm::vec3(0.5f, 0.5f, 0.5f), "gray");
 
         Logger::Log(LogLevel::INFO, LogCategory::RENDERING, "Default materials created");
+    }
+
+    void RegisterCommands()
+    {
+        CommandManager::RegisterCommand("onCreateMaterial",
+            [this](const CommandArgs& args)
+            {
+                std::string name = std::get<std::string>(args[0]);
+
+                std::string diffusePath = std::get<std::string>(args[1]);
+                std::string specularPath = std::get<std::string>(args[2]);
+                std::string normalPath = std::get<std::string>(args[3]);
+                std::string heightPath = std::get<std::string>(args[4]);
+
+                CreateTextureMaterial(name, diffusePath, specularPath, normalPath, heightPath);
+
+               Logger::Log(LogLevel::INFO, "New material was created. Paths to textures: ");
+            }
+        );
     }
 };
