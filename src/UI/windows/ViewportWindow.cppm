@@ -156,7 +156,7 @@ private:
         glm::quat orientation;
 
         if (glm::decompose(matrix, tc.scale, orientation, tc.position, skew, perspective))
-            tc.rotation = glm::degrees(glm::eulerAngles(orientation))
+            tc.rotation = glm::degrees(glm::eulerAngles(orientation));
         else
             tc.rotation = tc.rotation;
     }

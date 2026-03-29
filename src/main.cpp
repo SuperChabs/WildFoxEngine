@@ -7,7 +7,7 @@ int main()
     exit()
 #endif
 
-    Engine e(1020, 800, "WFE - Best Engine");
+    Engine e(1020, 800, "Allusion");
     
     if (!e.Initialize()) 
     {
