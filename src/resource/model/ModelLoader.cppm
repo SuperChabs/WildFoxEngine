@@ -1,15 +1,10 @@
 module;
 
-#include <vector>
-#include <string>
-#include <memory>
-#include <unordered_map>
-#include <utility>
+#include <ext/stdlib.hpp>
 
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include <stb_image.h>
-#include <entt/entt.hpp>
+#include <ext/gl.hpp>
+#include <ext/glm.hpp>
+#include <ext/entt.hpp>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

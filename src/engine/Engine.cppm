@@ -1,15 +1,10 @@
 module;
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <imgui.h>
-#include <ImGuizmo.h>
-#include <entt/entt.hpp>
-
-#include <memory>
-#include <string>
-#include <variant>
+#include "ext/imgui.hpp"
+#include "ext/stdlib.hpp"
+#include "ext/entt.hpp"
+#include "ext/glm.hpp"
+#include "ext/gl.hpp"
 
 export module WFE.Engine;
 

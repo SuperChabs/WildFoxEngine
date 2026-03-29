@@ -1,9 +1,9 @@
 module;
 
-#include <angelscript.h>
-#include <glm/glm.hpp>
-#include <entt/entt.hpp>
-#include <cassert>
+#include <ext/angelscript.hpp>
+#include <ext/glm.hpp>
+#include <ext/entt.hpp>
+#include <ext/stdlib.hpp>
 
 #define AS_CHECK(r, msg) if ((r) < 0) { Logger::Log(LogLevel::ERROR, std::string("AS Register failed: ") + msg + " code: " + std::to_string(r)); return; }
 

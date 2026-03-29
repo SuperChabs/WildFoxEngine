@@ -1,11 +1,9 @@
 module;
 
-#include <vector>
-#include <string>
-#include <memory>
+#include <ext/stdlib.hpp>
 
-#include <entt/entt.hpp>
-#include <glm/glm.hpp>
+#include <ext/entt.hpp>
+#include <ext/glm.hpp>
 
 export module WFE.Resource.Model.ModelNode;
 

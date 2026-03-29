@@ -1,11 +1,9 @@
 module;
 
-#include <unordered_map>
-#include <cstdint>
-#include <string>
-#include <glm/glm.hpp>
-#include <nlohmann/json.hpp>
-#include <entt/entt.hpp>
+#include <ext/stdlib.hpp>
+#include <ext/glm.hpp>
+#include <ext/json.hpp>
+#include <ext/entt.hpp>
 
 export module WFE.Scene.Serializer.MaterialDeserializer;
 

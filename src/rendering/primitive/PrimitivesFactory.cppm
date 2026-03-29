@@ -1,10 +1,7 @@
 module;
 
-#include <string>
-#include <memory>
-#include <utility>
-
-#include <glm/glm.hpp>
+#include "ext/stdlib.hpp"
+#include "ext/glm.hpp"
 
 export module WFE.Rendering.Primitive.PrimitivesFactory;
 

@@ -1,12 +1,8 @@
 module;
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <entt/entt.hpp>
-
-#include <vector>
-#include <memory>
-#include <string>
+#include "ext/stdlib.hpp"
+#include "ext/entt.hpp"
+#include "ext/glm.hpp"
 
 export module WFE.Rendering.Pipeline.RenderPipeline;
 

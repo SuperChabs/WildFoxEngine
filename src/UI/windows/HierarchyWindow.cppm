@@ -1,13 +1,10 @@
 module;
 
-#include <imgui.h>
-#include <entt/entt.hpp>
-#include <glm/glm.hpp>
-#include "entt/entity/fwd.hpp"
+#include <ext/imgui.hpp>
+#include <ext/entt.hpp>
+#include <ext/glm.hpp>
 
-#include <cstdint>
-#include <string>
-#include <cstring>
+#include <ext/stdlib.hpp>
 
 export module WFE.UI.Windows.HierarchyWindow;
 
@@ -125,7 +122,7 @@ private:
         if (ecs->HasComponent<HierarchyComponent>(entity))
         {
             auto& hierarchy = ecs->GetComponent<HierarchyComponent>(entity);
-            hasChildren = hierarchy.HasCildren();
+            hasChildren = hierarchy.HasChildren();
         }
 
         ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow |

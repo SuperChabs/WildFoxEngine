@@ -1,9 +1,8 @@
 module;
 
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <entt/entt.hpp>
-#include <nlohmann/json.hpp>
+#include <ext/glm.hpp>
+#include <ext/entt.hpp>
+#include <ext/json.hpp>
 
 export module WFE.Scene.Serializer.Component.TransformSerializer;
 

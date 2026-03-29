@@ -58,3 +58,10 @@
 -- Removed Lua bindings and related files, transitioning to AngelScript bindings.
 -- Added new AngelScript bindings and registration API for ECS and input handling.
 -- Introduced a sample controller script for player movement using AngelScript.
+
+### v0.2.0
+##### 29.03.2026
+yo, long time I haven't updated herre this shit
+-- created pch wrapper for std and vendor libraries
+-- i forgot what i have added
+-- uv tiling or wtf its name is

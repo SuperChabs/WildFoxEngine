@@ -1,12 +1,9 @@
 module;
 
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include <GLFW/glfw3.h>
-
-#include <entt/entt.hpp>
-
-#include <memory>
+#include "ext/stdlib.hpp"
+#include "ext/entt.hpp"
+#include "ext/glm.hpp"
+#include "ext/gl.hpp"
 
 export module WFE.Application.Application;
 

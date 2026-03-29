@@ -1,8 +1,7 @@
 module;
 
-#include <memory>
-
-#include <glm/glm.hpp>
+#include "ext/stdlib.hpp"
+#include "ext/glm.hpp"
 
 export module WFE.ECS.Components.Rendering;
 
@@ -24,6 +23,7 @@ export struct MeshComponent
 export struct MaterialComponent 
 {
     std::shared_ptr<Material> material;
+    glm::vec2 tiling = {1.0f, 1.0f};
     
     MaterialComponent() = default;
     MaterialComponent(std::shared_ptr<Material> mat) : material(mat) {}

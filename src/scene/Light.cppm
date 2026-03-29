@@ -1,7 +1,7 @@
 module;
 
-#include <glm/glm.hpp>
-#include <string>
+#include <ext/glm.hpp>
+#include <ext/stdlib.hpp>
 
 export module WFE.Scene.Light;
 

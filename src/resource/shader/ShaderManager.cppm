@@ -1,13 +1,10 @@
 module;
 
-#include <glad/glad.h>
+#include <ext/gl.hpp>
 
-#include <glm/glm.hpp>
+#include <ext/glm.hpp>
 
-#include <string>
-#include <unordered_map>
-#include <memory>
-#include <utility>
+#include <ext/stdlib.hpp>
 
 export module WFE.Resource.Shader.ShaderManager;
 

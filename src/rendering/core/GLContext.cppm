@@ -1,7 +1,7 @@
 module;
 
-#include <glad/glad.h>
-#include <string>
+#include "ext/stdlib.hpp"
+#include "ext/gl.hpp"
 
 export module WFE.Rendering.Core.GLContext;
 

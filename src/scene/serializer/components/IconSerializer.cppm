@@ -1,8 +1,8 @@
 module;
 
-#include <entt/entt.hpp>
-#include <nlohmann/json.hpp>
-#include <string>
+#include <ext/entt.hpp>
+#include <ext/json.hpp>
+#include <ext/stdlib.hpp>
 
 export module WFE.Scene.Serializer.Component.IconSerializer;
 

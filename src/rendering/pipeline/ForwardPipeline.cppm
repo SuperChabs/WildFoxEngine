@@ -1,12 +1,9 @@
 module;
 
-#include <glad/glad.h>
-#include <entt/entt.hpp>
-#include <glm/glm.hpp>
-#include <memory>
-#include <utility>
-#include <string>
-#include <vector>
+#include "ext/stdlib.hpp"
+#include "ext/entt.hpp"
+#include "ext/glm.hpp"
+#include "ext/gl.hpp"
 
 export module WFE.Rendering.Pipeline.ForwardPipeline;
 

@@ -1,12 +1,8 @@
 module;
 
-#include <string>
-#include <vector>
-#include <fstream>
-
-#include <nlohmann/json.hpp>
-
-#include <glm/vec3.hpp>
+#include "ext/stdlib.hpp"
+#include "ext/glm.hpp"
+#include "ext/json.hpp"
 
 export module WFE.Resource.Material.MaterialConfigLoader;
 

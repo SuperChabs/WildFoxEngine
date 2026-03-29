@@ -1,9 +1,8 @@
 module;
 
-#include <string>
-#include <cstdint>
-#include <nlohmann/json.hpp>
-#include <entt/entt.hpp>
+#include <ext/stdlib.hpp>
+#include <ext/json.hpp>
+#include <ext/entt.hpp>
 
 export module WFE.Scene.Serializer.SceneMetadataSerializer;
 

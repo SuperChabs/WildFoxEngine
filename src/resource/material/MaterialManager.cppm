@@ -1,12 +1,7 @@
 module;
 
-#include <unordered_map>
-#include <string>
-#include <memory>
-#include <vector>
-#include <variant>
-
-#include <glm/glm.hpp>
+#include "ext/stdlib.hpp"
+#include "ext/glm.hpp"
 
 export module WFE.Resource.Material.MaterialManager;
 

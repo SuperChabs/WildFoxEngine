@@ -1,12 +1,8 @@
 module;
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-
-#include <entt/entt.hpp>
-#include "entt/entity/entity.hpp"
-#include "entt/entity/fwd.hpp"
+#include "ext/entt.hpp"
+#include "ext/glm.hpp"
+#include "ext/gl.hpp"
 
 export module WFE.ECS.Systems.CameraSystem;
 

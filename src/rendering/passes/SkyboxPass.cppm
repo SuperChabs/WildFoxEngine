@@ -1,8 +1,7 @@
 module;
 
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include "ext/glm.hpp"
+#include "ext/gl.hpp"
 
 export module WFE.Rendering.Passes.SkyboxPass;
 

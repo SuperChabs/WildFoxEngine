@@ -1,8 +1,8 @@
 module;
 
-#include <imgui.h>
-#include <entt/entt.hpp>
-#include <glm/glm.hpp>
+#include <ext/imgui.hpp>
+#include <ext/entt.hpp>
+#include <ext/glm.hpp>
 
 export module WFE.UI.Panels.LightPanel;
 

@@ -1,9 +1,8 @@
 module;
 
-#include <string>
-#include <variant>
-#include <glm/glm.hpp>
-#include <glad/glad.h>
+#include "ext/stdlib.hpp"
+#include "ext/glm.hpp"
+#include "ext/gl.hpp"
 
 export module WFE.Rendering.Passes.GeometryPass;
 

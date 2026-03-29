@@ -1,6 +1,6 @@
 module;
 
-#include <memory>
+#include <ext/stdlib.hpp>
 
 export module WFE.Resource.ResourceModule;
 

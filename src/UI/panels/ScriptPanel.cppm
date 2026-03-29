@@ -1,9 +1,8 @@
 module;
 
-#include <imgui.h>
-#include <entt/entt.hpp>
-#include <string>
-#include <cstring>
+#include <ext/imgui.hpp>
+#include <ext/entt.hpp>
+#include <ext/stdlib.hpp>
 
 export module WFE.UI.Panels.ScriptPanel;
 

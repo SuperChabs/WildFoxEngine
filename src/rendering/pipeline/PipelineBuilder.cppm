@@ -1,8 +1,7 @@
 module;
 
-#include <glad/glad.h>
-#include <memory>
-#include <string>
+#include "ext/stdlib.hpp"
+#include "ext/gl.hpp"
 
 export module WFE.Rendering.Pipeline.PipelineBuilder;
 

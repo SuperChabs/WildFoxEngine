@@ -1,12 +1,8 @@
 module;
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-
-#include <memory>
-#include <string>
-#include <vector>
+#include "ext/stdlib.hpp"
+#include "ext/glm.hpp"
+#include "ext/gl.hpp"
 
 export module WFE.Rendering.RenderingModule;
 

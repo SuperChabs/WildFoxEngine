@@ -1,11 +1,9 @@
 module;
 
-#include <string>
-#include <vector>
-#include <exception>
+#include <ext/stdlib.hpp>
 
-#include <nlohmann/json.hpp>
-#include <glm/glm.hpp>
+#include <ext/json.hpp>
+#include <ext/glm.hpp>
 
 export module WFE.Scene.Serializer.SceneMaterialSerializer;
 

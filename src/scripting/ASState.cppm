@@ -1,8 +1,7 @@
 module;
 
-#include <angelscript.h>
-#include <assert.h>
-#include <cstdio>
+#include <ext/angelscript.hpp>
+#include <ext/stdlib.hpp>
 
 export module WFE.Scripting.ASState;
 

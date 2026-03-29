@@ -1,7 +1,7 @@
 module;
 
-#include <imgui.h>
-#include <entt/entt.hpp>
+#include <ext/imgui.hpp>
+#include <ext/entt.hpp>
 
 export module WFE.UI.Panels.CameraPanel;
 

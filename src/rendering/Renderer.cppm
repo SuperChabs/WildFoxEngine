@@ -1,13 +1,9 @@
 module;
 
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <entt/entt.hpp>
-
-#include <memory>
-#include <chrono>
-#include <variant>
+#include "ext/stdlib.hpp"
+#include "ext/entt.hpp"
+#include "ext/glm.hpp"
+#include "ext/gl.hpp"
 
 export module WFE.Rendering.Renderer;
 

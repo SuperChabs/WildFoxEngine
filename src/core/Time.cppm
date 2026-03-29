@@ -1,6 +1,6 @@
 module;
 
-#include <GLFW/glfw3.h>
+#include "ext/gl.hpp"
 
 export module WFE.Core.Time;
 

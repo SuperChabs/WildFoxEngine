@@ -1,8 +1,8 @@
 module;
 
-#include <imgui.h>
-#include <glm/glm.hpp>
-#include <entt/entt.hpp>
+#include <ext/imgui.hpp>
+#include <ext/glm.hpp>
+#include <ext/entt.hpp>
 
 export module WFE.UI.Windows.PropertiesWindow;
 

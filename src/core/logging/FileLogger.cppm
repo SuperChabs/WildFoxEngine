@@ -1,12 +1,6 @@
 module;
 
-#include <string>
-#include <chrono>
-#include <fstream>
-#include <filesystem>
-#include <format>
-#include <atomic>
-#include <mutex>
+#include "ext/stdlib.hpp"
 
 export module WFE.Core.Logging.FileLogger;
 

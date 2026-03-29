@@ -1,6 +1,6 @@
 module;
 
-#include <glad/glad.h>
+#include "ext/gl.hpp"
 
 export module WFE.Rendering.Core.GLStateGuard;
 

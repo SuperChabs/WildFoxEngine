@@ -1,12 +1,9 @@
 module;
 
-#include <string>
-#include <vector>
-#include <unordered_map>
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <entt/entt.hpp>
-#include <nlohmann/json.hpp>
+#include <ext/stdlib.hpp>
+#include <ext/glm.hpp>
+#include <ext/entt.hpp>
+#include <ext/json.hpp>
 
 export module WFE.Scene.Serializer.ModelLoader;
 

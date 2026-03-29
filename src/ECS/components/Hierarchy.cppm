@@ -1,16 +1,9 @@
 module;
 
-#include <algorithm>
-#include <vector>
-#include <entt/entt.hpp>
-#include "entt/entity/fwd.hpp"
+#include "ext/stdlib.hpp"
+#include "ext/entt.hpp"
 
 export module WFE.ECS.Components.Hierarchy;
-
-/**
- * @brief Hierarchy component
- * Responsible for Parent-Child something
- */
 
 export struct HierarchyComponent
 {
@@ -19,14 +12,23 @@ export struct HierarchyComponent
 
     HierarchyComponent() = default;
 
-    bool HasParent()  const { return parent != entt::null; }
-    bool HasCildren() const { return !children.empty(); }
-
-    void AddChild(entt::entity child) { children.push_back(child); }
-    void RemoveChild(entt::entity child)
-    {
-        auto it = std::find(children.begin(), children.end(), child);
-        if (it != children.end())
-            children.erase(it);
-    }
+    bool HasParent()   const;
+    bool HasChildren() const;
+    void AddChild(entt::entity child);
+    void RemoveChild(entt::entity child);
 };
+
+bool HierarchyComponent::HasParent()   const { return parent != entt::null; }
+bool HierarchyComponent::HasChildren() const { return !children.empty(); }
+
+void HierarchyComponent::AddChild(entt::entity child)
+{
+    children.push_back(child);
+}
+
+void HierarchyComponent::RemoveChild(entt::entity child)
+{
+    auto it = std::find(children.begin(), children.end(), child);
+    if (it != children.end())
+        children.erase(it);
+}

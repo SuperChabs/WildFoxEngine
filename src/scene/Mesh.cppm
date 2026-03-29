@@ -1,11 +1,8 @@
 module;
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include <ext/glm.hpp>
 
-#include <vector>
-#include <memory>
+#include <ext/stdlib.hpp>
 
 export module WFE.Scene.Mesh;
 

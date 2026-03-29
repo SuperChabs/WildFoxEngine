@@ -1,22 +1,16 @@
 module;
 
-#include <glad/glad.h>
-#include <entt/entt.hpp>
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
-#include <string>
+#include "ext/stdlib.hpp"
+#include "ext/entt.hpp"
+#include "ext/glm.hpp"
+#include "ext/gl.hpp"
 
 export module WFE.ECS.Systems.LightSystem;
 
 import WFE.ECS.Components; 
 import WFE.ECS.ECSWorld;
-
 import WFE.Core.Logger;
-
 import WFE.Resource.Shader.ShaderManager;
-
 import WFE.Scene.Light;
 
 export class LightSystem

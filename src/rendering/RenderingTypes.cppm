@@ -1,6 +1,6 @@
 module;
 
-#include <glm/glm.hpp>
+#include "ext/glm.hpp"
 
 export module WFE.Rendering.RenderingTypes;
 

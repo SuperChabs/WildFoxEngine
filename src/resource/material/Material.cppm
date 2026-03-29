@@ -1,10 +1,8 @@
 module;
 
-#include <string>
-#include <vector>
-
-#include <glad/glad.h>
-#include <glm/glm.hpp>
+#include "ext/stdlib.hpp"
+#include "ext/glm.hpp"
+#include "ext/gl.hpp"
 
 export module WFE.Resource.Material.Material;
 

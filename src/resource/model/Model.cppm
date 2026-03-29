@@ -1,11 +1,8 @@
 module;
 
-#include <vector>
-#include <string>
-#include <memory>
-#include <cstddef>
+#include <ext/stdlib.hpp>
 
-#include <glm/glm.hpp>
+#include <ext/glm.hpp>
 
 export module WFE.Resource.Model.Model;
 

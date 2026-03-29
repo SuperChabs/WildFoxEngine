@@ -1,9 +1,9 @@
 module;
 
-#include <imgui.h>
-#include <entt/entt.hpp>
+#include <ext/imgui.hpp>
+#include <ext/entt.hpp>
 
-#include <string>
+#include <ext/stdlib.hpp>
 
 export module WFE.UI.Panels.MaterialPanel;
 
@@ -31,7 +31,6 @@ public:
         }
 
         ImGui::Text("Assign Material:");
-        
         if (ImGui::BeginCombo("##MaterialSelect", selectedMaterial.c_str(), 0))
         {
             for (const auto& name : materialManager->GetMaterialNames())
@@ -47,6 +46,8 @@ public:
             }
             ImGui::EndCombo();
         }
+
+        ImGui::DragFloat2("Tiling", &ecs->GetComponent<MaterialComponent>(entity).tiling[0]);
 
         if (ImGui::Button("Remove Material", ImVec2(-1, 0)))
             RemoveMaterial(ecs, entity);

@@ -1,8 +1,8 @@
 module;
 
-#include <string>
+#include <ext/stdlib.hpp>
 
-#include <glad/glad.h>
+#include <ext/gl.hpp>
 
 export module WFE.Resource.Shader.ShaderCompiler;
 

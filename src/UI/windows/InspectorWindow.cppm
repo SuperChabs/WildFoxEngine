@@ -1,10 +1,10 @@
 module;
 
-#include <imgui.h>
-#include <entt/entt.hpp>
-#include <glm/glm.hpp>
+#include <ext/imgui.hpp>
+#include <ext/entt.hpp>
+#include <ext/glm.hpp>
 
-#include <string>
+#include <ext/stdlib.hpp>
 
 export module WFE.UI.Windows.InspectorWindow;
 

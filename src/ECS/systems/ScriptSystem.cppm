@@ -1,9 +1,8 @@
 module;
 
-#include <angelscript.h>
-#include <scriptbuilder.h>
-#include <entt/entt.hpp>
-#include <filesystem>
+#include "ext/angelscript.hpp"
+#include "ext/stdlib.hpp"
+#include "ext/entt.hpp"
 
 export module WFE.ECS.Systems.ScriptSystem;
 

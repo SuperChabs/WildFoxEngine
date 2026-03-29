@@ -1,7 +1,7 @@
 module;
 
-#include <glm/glm.hpp>
-#include <string>
+#include "ext/stdlib.hpp"
+#include "ext/glm.hpp"
 
 export module WFE.Rendering.Passes.RenderPass;
 

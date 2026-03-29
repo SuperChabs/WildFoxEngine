@@ -40,6 +40,8 @@ uniform vec3  viewPos;
 uniform sampler2D shadowMap;
 uniform bool      shadowsEnabled;
 
+uniform vec2 tiling;
+
 float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir)
 {
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
@@ -71,14 +73,18 @@ vec3 SampleDiffuse()
 {
     if (useColor)
         return material.color;
-    return texture(material.texture_diffuse1, TexCoords).rgb;
+
+    vec2 uv = TexCoords * tiling;
+    return texture(material.texture_diffuse1, uv).rgb;
 }
 
 vec3 SampleSpecular()
 {
     if (useColor)
         return vec3(0.3);
-    return texture(material.texture_specular1, TexCoords).rgb;
+
+    vec2 uv = TexCoords * tiling;
+    return texture(material.texture_specular1, uv).rgb;
 }
 
 vec3 CalcDirectional(Light light, vec3 normal, vec3 viewDir,

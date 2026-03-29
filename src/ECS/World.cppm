@@ -1,9 +1,8 @@
 module;
 
-#include <entt/entt.hpp>
-#include <glm/glm.hpp>
-#include <string>
-#include <cstdint>
+#include "ext/stdlib.hpp"
+#include "ext/entt.hpp"
+#include "ext/glm.hpp"
 
 export module WFE.ECS.ECSWorld;
 

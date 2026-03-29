@@ -1,10 +1,9 @@
 module;
 
-#include <GLFW/glfw3.h>
-#include <entt/entt.hpp>
-#include <glm/glm.hpp>
-#include <imgui.h>
-#include <ImGuizmo.h>
+#include "ext/imgui.hpp"
+#include "ext/entt.hpp"
+#include "ext/glm.hpp"
+#include "ext/gl.hpp"
 
 export module WFE.ECS.Systems.InputControllerSystem;
 

@@ -1,10 +1,9 @@
 module;
 
-#include <unordered_map>
-#include <cstdint>
-#include <nlohmann/json.hpp>
-#include <entt/entt.hpp>
-#include <glm/glm.hpp>
+#include <ext/stdlib.hpp>
+#include <ext/json.hpp>
+#include <ext/entt.hpp>
+#include <ext/glm.hpp>
 
 export module WFE.Scene.Serializer.Component.ModelSerializer;
 

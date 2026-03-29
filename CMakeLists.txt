@@ -2,13 +2,14 @@ cmake_minimum_required(VERSION 4.0)
 
 project(WildFoxEngine LANGUAGES C CXX)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 26)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_MODULE_STD OFF)
 set(CMAKE_CXX_SCAN_FOR_MODULES ON)
 set(CMAKE_CXX_COMPILER_LAUNCHER ccache)
+set(CMAKE_BUILD_PARALLEL_LEVEL 6)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     add_compile_options(-fmodules-ts)
@@ -131,6 +132,7 @@ foreach(MODULE ${WildFoxEngine_MODULES})
     set_source_files_properties(${MODULE} PROPERTIES
             SKIP_UNITY_BUILD_INCLUSION ON
             SKIP_PRECOMPILE_HEADERS ON
+            CXX_MODULE_TYPE CXX_MODULE_INTERFACE
     )
 endforeach()
 
@@ -170,15 +172,13 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE
-    [["glm_fix.h"]]
-    <glm/glm.hpp>
-    <glm/gtc/quaternion.hpp>
-    <entt/entt.hpp>
-    <nlohmann/json.hpp>
-    <string>
-    <vector>
-    <unordered_map>
-    <memory>
+    [["ext/angelscript.hpp"]]
+    [["ext/entt.hpp"]]
+    [["ext/gl.hpp"]]
+    [["ext/glm.hpp"]]
+    [["ext/imgui.hpp"]]
+    [["ext/stdlib.hpp"]]
+    [["ext/json.hpp"]]
 )
 
 find_program(MOLD_LINKER mold)

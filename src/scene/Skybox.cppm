@@ -1,12 +1,10 @@
 module;
 
-#include <string>
-#include <memory>
+#include <ext/stdlib.hpp>
 
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <entt/entt.hpp>
+#include <ext/gl.hpp>
+#include <ext/glm.hpp>
+#include <ext/entt.hpp>
 
 export module WFE.Scene.Skybox;
 

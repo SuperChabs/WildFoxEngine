@@ -1,10 +1,7 @@
 module;
 
-#include <glad/glad.h>
-#include <string>
-#include <unordered_map>
-#include <vector>
-#include <stb_image.h>
+#include <ext/gl.hpp>
+#include <ext/stdlib.hpp>
 
 export module WFE.Resource.Texture.TextureManager;
 

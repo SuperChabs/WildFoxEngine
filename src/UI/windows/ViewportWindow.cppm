@@ -1,17 +1,9 @@
 module;
 
-#include <imgui.h>
-#include <ImGuizmo.h>
-#include <entt/entt.hpp>
-#include "entt/entity/entity.hpp"
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/matrix_decompose.hpp>
-
-#include <string>
-#include <cstdint>
+#include <ext/imgui.hpp>
+#include <ext/entt.hpp>
+#include <ext/glm.hpp>
+#include <ext/stdlib.hpp>
 
 export module WFE.UI.Windows.ViewportWindow;
 
@@ -161,7 +153,11 @@ private:
     {
         glm::vec3 skew;
         glm::vec4 perspective;
-        glm::decompose(matrix, tc.scale, tc.rotation, tc.position, skew, perspective);
-        tc.rotation = glm::normalize(tc.rotation);
+        glm::quat orientation;
+
+        if (glm::decompose(matrix, tc.scale, orientation, tc.position, skew, perspective))
+            tc.rotation = glm::degrees(glm::eulerAngles(orientation))
+        else
+            tc.rotation = tc.rotation;
     }
 };

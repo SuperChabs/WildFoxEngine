@@ -1,9 +1,9 @@
 module;
 
-#include <memory>
+#include <ext/stdlib.hpp>
 
-#include <entt/entt.hpp>
-#include <GLFW/glfw3.h>
+#include <ext/entt.hpp>
+#include <ext/gl.hpp>
 
 export module WFE.UI.UIModule;
 

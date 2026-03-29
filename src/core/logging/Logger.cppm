@@ -1,10 +1,6 @@
 module;
 
-#include <string>
-#include <chrono>
-#include <cstring>
-#include <mutex>
-#include <source_location>
+#include "ext/stdlib.hpp"
 
 export module WFE.Core.Logger;
 

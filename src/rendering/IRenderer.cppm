@@ -1,10 +1,9 @@
 module;
 
-#include <memory>
-
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include <entt/entt.hpp>
+#include "ext/stdlib.hpp"
+#include "ext/entt.hpp"
+#include "ext/glm.hpp"
+#include "ext/gl.hpp"
 
 export module WFE.Rendering.IRenderer;
 

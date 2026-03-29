@@ -1,7 +1,7 @@
 module;
 
-#include <entt/entt.hpp>
-#include <nlohmann/json.hpp>
+#include <ext/entt.hpp>
+#include <ext/json.hpp>
 
 export module WFE.Scene.Serializer.Component.ScriptSerializer;
 

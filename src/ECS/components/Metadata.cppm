@@ -1,7 +1,6 @@
 module;
 
-#include <cstdint>
-#include<string>
+#include "ext/stdlib.hpp"
 
 export module WFE.ECS.Components.Metadata;
 

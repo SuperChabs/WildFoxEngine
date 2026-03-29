@@ -1,12 +1,10 @@
 module; 
 
-#include <glm/glm.hpp>
-#include <imgui.h>
-#include <entt/entt.hpp>
+#include <ext/glm.hpp>
+#include <ext/imgui.hpp>
+#include <ext/entt.hpp>
 
-#include <string>
-#include <cstring>
-#include <memory>
+#include <ext/stdlib.hpp>
 
 export module WFE.UI.EditorLayout;
 

@@ -1,10 +1,7 @@
 module;
 
-#include <string>
-#include <type_traits>
-
-#include <glad/glad.h>
-#include <stb_image.h>
+#include "ext/stdlib.hpp"
+#include "ext/gl.hpp"
 
 export module WFE.Rendering.Core.TextureWrapper;
 

@@ -1,11 +1,8 @@
 module;
 
-#include <unordered_map>
-#include <memory>
-#include <string>
-#include <vector>
-#include <entt/entt.hpp>
-#include <nlohmann/json.hpp>
+#include <ext/stdlib.hpp>
+#include <ext/entt.hpp>
+#include <ext/json.hpp>
 
 export module WFE.Scene.Serializer.SerializerRegistry;
 

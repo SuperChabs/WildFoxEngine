@@ -1,10 +1,7 @@
 module;
 
-#include <imgui.h>
-#include <string>
-#include <cstring>
-#include <vector>
-#include <variant>
+#include <ext/imgui.hpp>
+#include <ext/stdlib.hpp>
 
 export module WFE.UI.Windows.MenuBarWindow;
 

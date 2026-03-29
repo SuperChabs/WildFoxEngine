@@ -1,11 +1,8 @@
 module;
 
-#include <imgui.h>
-#include <entt/entt.hpp>
-#include <glm/glm.hpp>
-#include <glm/detail/type_quat.hpp>
-#include <glm/fwd.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include <ext/imgui.hpp>
+#include <ext/entt.hpp>
+#include <ext/glm.hpp>
 
 export module WFE.UI.Panels.TransformPanel;
 

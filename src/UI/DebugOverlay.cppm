@@ -1,13 +1,10 @@
 module;
 
-#include <imgui.h>
-#include <entt/entt.hpp>
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include <ext/imgui.hpp>
+#include <ext/entt.hpp>
+#include <ext/glm.hpp>
 
-#include <string>
-#include <cstring>
-#include <functional>
+#include <ext/stdlib.hpp>
 
 export module WFE.UI.DebugOverlay;
 
@@ -184,7 +181,7 @@ private:
         auto& tag = ecs->GetComponent<TagComponent>(e);
 
         bool hasChildren = ecs->HasComponent<HierarchyComponent>(e) &&
-                           ecs->GetComponent<HierarchyComponent>(e).HasCildren();
+                           ecs->GetComponent<HierarchyComponent>(e).HasChildren();
 
         ImGuiTreeNodeFlags flags =
             ImGuiTreeNodeFlags_OpenOnArrow |

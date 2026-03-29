@@ -1,11 +1,8 @@
 module;
 
-#include <unordered_map>
-#include <string>
-#include <memory>
-#include <vector>
+#include <ext/stdlib.hpp>
 
-#include <entt/entt.hpp>
+#include <ext/entt.hpp>
 
 export module WFE.Resource.Model.ModelManager;
 

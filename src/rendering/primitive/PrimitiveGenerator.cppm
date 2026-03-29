@@ -1,6 +1,6 @@
 module;
 
-#include <cstddef>
+#include "ext/stdlib.hpp"
 
 export module WFE.Rendering.Primitive.PrimitiveGenerator;
 

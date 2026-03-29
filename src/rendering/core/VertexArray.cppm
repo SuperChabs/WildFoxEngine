@@ -1,7 +1,7 @@
 module;
 
-#include <cstddef>
-#include <glad/glad.h>
+#include "ext/stdlib.hpp"
+#include "ext/gl.hpp"
 
 export module WFE.Rendering.Core.VertexArray;
 

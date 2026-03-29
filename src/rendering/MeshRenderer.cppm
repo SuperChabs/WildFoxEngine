@@ -1,10 +1,7 @@
 module;
 
-#include <memory>
-#include <cstddef>
-#include <vector>
-
-#include <glad/glad.h>
+#include "ext/stdlib.hpp"
+#include "ext/gl.hpp"
 
 export module WFE.Rendering.MeshRenderer;
 
