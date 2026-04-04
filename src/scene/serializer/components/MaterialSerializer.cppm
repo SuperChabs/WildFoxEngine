@@ -35,6 +35,8 @@ public:
         {
             data["name"] = material.material->GetName();
         }
+        if (material.tiling != glm::vec2(1.0f, 1.0f))
+            data["tiling"] ={{"x", material.tiling.x}, {"y", material.tiling.y}};
         
         return data;
     }
@@ -75,6 +77,13 @@ public:
             if (material)
             {
                 world->AddComponent<MaterialComponent>(entity, material);
+
+                if (matData.contains("tiling"))
+                {
+                    auto& matComp = world->GetComponent<MaterialComponent>(entity);
+                    matComp.tiling.x = matData["tiling"]["x"];
+                    matComp.tiling.y = matData["tiling"]["y"];
+                }
             }
             else
             {

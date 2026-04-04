@@ -25,6 +25,7 @@ import WFE.ECS.ECSModule;
 import WFE.Scene.SceneModule;
 import WFE.Core.EventBus;
 import WFE.UI.DebugOverlay;
+import WFE.Physics.PhysicsModule;
 
 /// @file Engine.cppm
 /// @brief Engine class
@@ -47,6 +48,7 @@ private:
     UIModule* uiModule;
     ECSModule* ecsModule;
     SceneModule* sceneModule;
+    PhysicsModule* m_physicsModule;
 
     DebugOverlay m_overlay;
     SceneBuilderCallbacks cb;
@@ -173,6 +175,15 @@ protected:
         {
             Logger::Log(LogLevel::WARNING, 
                 "SceneModule failed to initialize");
+        }
+
+        mm->RegisterModule<PhysicsModule>(ecsModule->GetECS());
+        m_physicsModule = mm->GetModule<PhysicsModule>("Physics");
+        m_physicsModule->Initialize();
+        if (!m_physicsModule->IsInitialized())
+        {
+            Logger::Log(LogLevel::WARNING, 
+                "PhysicsModule failed to initialize");
         }
 
         mm->RegisterModule<UIModule>(

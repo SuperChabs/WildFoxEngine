@@ -269,6 +269,19 @@ private:
                 if (ImGui::MenuItem("Material"))
                     ecs->AddComponent<MaterialComponent>(m_selected);
 
+            if (!ecs->HasComponent<RigidBodyComponent>(m_selected))
+                if (ImGui::MenuItem("RigidBody"))
+                {
+                    RigidBodyComponent rb;
+                    rb.inv_mass = 1.0f; // Set mass to 1 (inverse mass = 1)
+                    rb.velocity = glm::vec3(0.0f);
+                    rb.angular_velocity = glm::vec3(0.0f);
+                    rb.inertia = glm::vec3(1.0f); // Default inertia
+                    rb.force_accum = glm::vec3(0.0f);
+                    rb.torque_accum = glm::vec3(0.0f);
+                    ecs->AddComponent<RigidBodyComponent>(m_selected, rb);
+                }
+
             ImGui::EndPopup();
         }
     }

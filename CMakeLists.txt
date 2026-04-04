@@ -9,10 +9,15 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_MODULE_STD OFF)
 set(CMAKE_CXX_SCAN_FOR_MODULES ON)
 set(CMAKE_CXX_COMPILER_LAUNCHER ccache)
-set(CMAKE_BUILD_PARALLEL_LEVEL 12)
+set(CMAKE_BUILD_PARALLEL_LEVEL 10)
 
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    add_compile_options(-fmodules-ts)
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        -fno-standalone-debug
+        -fno-whole-program-vtables
+        -gsplit-dwarf
+    )
+    target_link_options(${PROJECT_NAME} PRIVATE -gsplit-dwarf)
 endif()
 
 find_package(OpenGL REQUIRED)
@@ -123,10 +128,10 @@ add_executable(${PROJECT_NAME}
     ${WildFoxEngine_ALL_HEADERS}
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    UNITY_BUILD ON 
-    UNITY_BUILD_BATCH_SIZE 16
-)
+# set_target_properties(${PROJECT_NAME} PROPERTIES
+    # UNITY_BUILD ON 
+    # UNITY_BUILD_BATCH_SIZE 16
+# )
 
 foreach(MODULE ${WildFoxEngine_MODULES})
     set_source_files_properties(${MODULE} PROPERTIES
