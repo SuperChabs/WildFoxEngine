@@ -1,10 +1,16 @@
 module;
 
-#include <ext/stdlib.hpp>
+#include <string>
+#include <memory>
+#include <vector>
+#include <filesystem>
+#include <fstream>
 
-#include <ext/gl.hpp>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <stb_image.h>
 
-#include <ext/json.hpp>
+#include <nlohmann/json.hpp>
 
 export module WFE.Resource.Shader.ShaderConfigLoader;
 

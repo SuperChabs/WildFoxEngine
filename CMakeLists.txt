@@ -9,16 +9,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_MODULE_STD OFF)
 set(CMAKE_CXX_SCAN_FOR_MODULES ON)
 set(CMAKE_CXX_COMPILER_LAUNCHER ccache)
-set(CMAKE_BUILD_PARALLEL_LEVEL 10)
-
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    target_compile_options(${PROJECT_NAME} PRIVATE
-        -fno-standalone-debug
-        -fno-whole-program-vtables
-        -gsplit-dwarf
-    )
-    target_link_options(${PROJECT_NAME} PRIVATE -gsplit-dwarf)
-endif()
+set(CMAKE_BUILD_PARALLEL_LEVEL 6)
 
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
@@ -137,7 +128,7 @@ foreach(MODULE ${WildFoxEngine_MODULES})
     set_source_files_properties(${MODULE} PROPERTIES
             SKIP_UNITY_BUILD_INCLUSION ON
             SKIP_PRECOMPILE_HEADERS ON
-            CXX_MODULE_TYPE CXX_MODULE_INTERFACE
+            //CXX_MODULE_TYPE CXX_MODULE_INTERFACE
     )
 endforeach()
 
@@ -177,13 +168,15 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE
-    [["ext/angelscript.hpp"]]
-    [["ext/entt.hpp"]]
-    [["ext/gl.hpp"]]
-    [["ext/glm.hpp"]]
-    [["ext/imgui.hpp"]]
-    [["ext/stdlib.hpp"]]
-    [["ext/json.hpp"]]
+    [["glm_fix.h"]]
+    <glm/glm.hpp>
+    <glm/gtc/quaternion.hpp>
+    <entt/entt.hpp>
+    <nlohmann/json.hpp>
+    <string>
+    <vector>
+    <unordered_map>
+    <memory>
 )
 
 find_program(MOLD_LINKER mold)

@@ -1,7 +1,11 @@
 module;
 
-#include <ext/stdlib.hpp>
-#include <ext/json.hpp>
+#include <string>
+#include <memory>
+#include <vector>
+#include <filesystem>
+#include <fstream>
+#include <nlohmann/json.hpp>
 
 export module WFE.Scene.Serializer.SceneFileHandler;
 

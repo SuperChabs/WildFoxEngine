@@ -1,8 +1,12 @@
 module;
 
-#include "ext/stdlib.hpp"
-#include "ext/glm.hpp"
-#include "ext/gl.hpp"
+#include <string>
+#include <unordered_map>
+#include <memory>
+#include <glm/glm.hpp>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <stb_image.h>
 
 export module WFE.Core.Input;
 

@@ -1,9 +1,12 @@
 module;
 
-#include <ext/gl.hpp>
-#include <ext/entt.hpp>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <stb_image.h>
+#include <entt/entt.hpp>
 
-#include <ext/glm.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 export module WFE.ECS.Systems.RotationSystem;
 

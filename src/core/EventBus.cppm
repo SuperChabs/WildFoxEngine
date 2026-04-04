@@ -1,6 +1,11 @@
 module;
 
-#include "ext/stdlib.hpp"
+#include <string>
+#include <unordered_map>
+#include <vector>
+#include <functional>
+#include <memory>
+#include <any>
 
 export module WFE.Core.EventBus;
 

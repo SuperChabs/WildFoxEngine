@@ -1,6 +1,8 @@
 module;
 
-#include "ext/stdlib.hpp"
+#include <string>
+#include <vector>
+#include <memory>
 
 export module WFE.Rendering.Primitive.PrimitiveGenerator;
 

@@ -1,8 +1,12 @@
 module;
 
-#include "ext/stdlib.hpp"
-#include "ext/entt.hpp"
-#include "ext/glm.hpp"
+#include <string>
+#include <memory>
+#include <vector>
+#include <unordered_map>
+#include <entt/entt.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 export module WFE.ECS.ECSWorld;
 

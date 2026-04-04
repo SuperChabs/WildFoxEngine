@@ -1,6 +1,8 @@
 module;
 
-#include "ext/gl.hpp"
+#include <chrono>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 export module WFE.Core.Time;
 

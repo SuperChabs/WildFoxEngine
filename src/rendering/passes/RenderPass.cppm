@@ -1,7 +1,10 @@
 module;
 
-#include "ext/stdlib.hpp"
-#include "ext/glm.hpp"
+#include <string>
+#include <memory>
+#include <vector>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 export module WFE.Rendering.Passes.RenderPass;
 

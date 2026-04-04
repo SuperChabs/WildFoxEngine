@@ -1,8 +1,12 @@
 module;
 
-#include <ext/imgui.hpp>
-#include <ext/glm.hpp>
-#include <ext/entt.hpp>
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
+#include <ImGuizmo.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <entt/entt.hpp>
 
 export module WFE.UI.Windows.PropertiesWindow;
 

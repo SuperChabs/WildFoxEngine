@@ -1,9 +1,13 @@
 module;
 
-#include <ext/angelscript.hpp>
-#include <ext/glm.hpp>
-#include <ext/entt.hpp>
-#include <ext/stdlib.hpp>
+#include <angelscript.h>
+#include <scriptbuilder.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <entt/entt.hpp>
+#include <string>
+#include <memory>
+#include <vector>
 
 #define AS_CHECK(r, msg) if ((r) < 0) { Logger::Log(LogLevel::ERROR, std::string("AS Register failed: ") + msg + " code: " + std::to_string(r)); return; }
 

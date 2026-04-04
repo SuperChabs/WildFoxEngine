@@ -1,8 +1,9 @@
 module;
 
-#include <ext/entt.hpp>
-#include <ext/json.hpp>
-#include <ext/glm.hpp>
+#include <entt/entt.hpp>
+#include <nlohmann/json.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 export module WFE.Scene.Serializer.Component.ColorSerializer;
 

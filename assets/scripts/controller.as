@@ -27,6 +27,9 @@ void OnUpdate(float dt)
 
     if (IsKeyPressed(KEY_D))
         t.position.x += 5.0f * dt;
+
+    if (IsKeyPressed(KEY_W) && IsKeyPressed(KEY_S))
+        t.position.y += 5.0f * dt;
 }
 
 void OnStop()

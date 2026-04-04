@@ -1,6 +1,13 @@
 module;
 
-#include "ext/stdlib.hpp"
+#include <string>
+#include <print>
+#include <mutex>
+#include <memory>
+#include <chrono>
+#include <ctime>
+#include <iomanip>
+#include <sstream>
 
 export module WFE.Core.Logging.ConsoleLogger;
 

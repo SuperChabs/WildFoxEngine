@@ -1,9 +1,12 @@
 module;
 
-#include "ext/angelscript.hpp"
-#include "ext/stdlib.hpp"
-#include "ext/entt.hpp"
-#include "ext/glm.hpp"
+#include <angelscript.h>
+#include <scriptbuilder.h>
+#include <string>
+#include <memory>
+#include <vector>
+#include <entt/entt.hpp>
+#include <glm/glm.hpp>
 
 export module WFE.Engine.EditorCommandHandler;
 

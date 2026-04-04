@@ -1,7 +1,11 @@
 module;
 
-#include "ext/stdlib.hpp"
-#include "ext/gl.hpp"
+#include <string>
+#include <memory>
+#include <vector>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <stb_image.h>
 
 export module WFE.Rendering.Framebuffer;
 

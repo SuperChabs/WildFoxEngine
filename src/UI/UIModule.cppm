@@ -1,9 +1,13 @@
 module;
 
-#include <ext/stdlib.hpp>
+#include <string>
+#include <memory>
+#include <vector>
 
-#include <ext/entt.hpp>
-#include <ext/gl.hpp>
+#include <entt/entt.hpp>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <stb_image.h>
 
 export module WFE.UI.UIModule;
 

@@ -1,10 +1,16 @@
 module;
 
-#include <ext/gl.hpp>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <stb_image.h>
 
-#include <ext/glm.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
-#include <ext/stdlib.hpp>
+#include <string>
+#include <memory>
+#include <vector>
+#include <unordered_map>
 
 export module WFE.Resource.Shader.ShaderManager;
 

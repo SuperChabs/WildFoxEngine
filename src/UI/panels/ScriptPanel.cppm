@@ -1,8 +1,13 @@
 module;
 
-#include <ext/imgui.hpp>
-#include <ext/entt.hpp>
-#include <ext/stdlib.hpp>
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
+#include <ImGuizmo.h>
+#include <entt/entt.hpp>
+#include <string>
+#include <memory>
+#include <vector>
 
 export module WFE.UI.Panels.ScriptPanel;
 

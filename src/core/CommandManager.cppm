@@ -1,7 +1,12 @@
 module;
 
-#include "ext/stdlib.hpp"
-#include "ext/glm.hpp"
+#include <string>
+#include <unordered_map>
+#include <vector>
+#include <variant>
+#include <functional>
+#include <memory>
+#include <glm/glm.hpp>
 
 export module WFE.Core.CommandManager;
 

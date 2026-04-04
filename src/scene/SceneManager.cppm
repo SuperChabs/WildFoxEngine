@@ -1,8 +1,12 @@
 module;
 
-#include <ext/glm.hpp>
-#include <ext/entt.hpp>
-#include <ext/stdlib.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <entt/entt.hpp>
+#include <string>
+#include <memory>
+#include <vector>
+#include <any>
 
 export module WFE.Scene.SceneManager;
 

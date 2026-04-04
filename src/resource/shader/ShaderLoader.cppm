@@ -1,6 +1,11 @@
 module;
 
-#include <ext/stdlib.hpp>
+#include <string>
+#include <memory>
+#include <vector>
+#include <filesystem>
+#include <fstream>
+#include <sstream>
 
 export module WFE.Resource.Shader.ShaderLoader;
 

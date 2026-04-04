@@ -1,7 +1,10 @@
 module;
 
-#include "ext/stdlib.hpp"
-#include "ext/gl.hpp"
+#include <string>
+#include <memory>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <stb_image.h>
 
 export module WFE.Core.Window;
 

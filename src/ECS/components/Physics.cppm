@@ -1,7 +1,10 @@
 module;
 
-#include "ext/stdlib.hpp"
-#include "ext/glm.hpp"
+#include <string>
+#include <memory>
+#include <vector>
+#include <variant>
+#include <glm/glm.hpp>
 
 export module WFE.ECS.Components.Physics;
 

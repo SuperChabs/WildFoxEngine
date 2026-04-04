@@ -1,6 +1,9 @@
 module;
 
-#include "ext/stdlib.hpp"
+#include <string>
+#include <map>
+#include <memory>
+#include <vector>
 
 export module WFE.Core.ModuleManager;
 

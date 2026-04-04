@@ -1,7 +1,10 @@
 module;
 
-#include <ext/glm.hpp>
-#include <ext/stdlib.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <string>
+#include <memory>
+#include <vector>
 
 export module WFE.Scene.Light;
 

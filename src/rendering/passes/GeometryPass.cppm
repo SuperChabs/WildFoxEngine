@@ -1,8 +1,14 @@
 module;
 
-#include "ext/stdlib.hpp"
-#include "ext/glm.hpp"
-#include "ext/gl.hpp"
+#include <string>
+#include <memory>
+#include <vector>
+#include <variant>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <stb_image.h>
 
 export module WFE.Rendering.Passes.GeometryPass;
 

@@ -1,10 +1,16 @@
 module;
 
-#include <ext/imgui.hpp>
-#include <ext/entt.hpp>
-#include <ext/glm.hpp>
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
+#include <ImGuizmo.h>
+#include <entt/entt.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
-#include <ext/stdlib.hpp>
+#include <string>
+#include <memory>
+#include <vector>
 
 export module WFE.UI.Windows.InspectorWindow;
 

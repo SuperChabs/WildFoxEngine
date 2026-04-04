@@ -1,10 +1,16 @@
 module;
 
-#include <ext/imgui.hpp>
-#include <ext/entt.hpp>
-#include <ext/glm.hpp>
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
+#include <ImGuizmo.h>
+#include <entt/entt.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
-#include <ext/stdlib.hpp>
+#include <string>
+#include <memory>
+#include <vector>
 
 export module WFE.UI.DebugOverlay;
 
@@ -22,6 +28,7 @@ import WFE.UI.Panels.LightPanel;
 import WFE.UI.Panels.CameraPanel;
 import WFE.UI.Panels.ScriptPanel;
 import WFE.UI.Panels.IconPanel;
+import WFE.UI.Panels.RigidBodyPanel;
 
 export struct SceneBuilderCallbacks
 {
@@ -110,6 +117,7 @@ private:
     CameraPanel cameraPanel;
     ScriptPanel scriptPanel;
     IconPanel iconPanel;
+    RigidBodyPanel rigidPanel;
     
     void RenderSceneTab(ECSWorld* ecs, const SceneBuilderCallbacks& cb)
     {
@@ -252,6 +260,8 @@ private:
             scriptPanel.Render(ecs, m_selected);
         if (ecs->HasComponent<IconComponent>(m_selected))
             iconPanel.Render(ecs, m_selected);
+        if (ecs->HasComponent<RigidBodyComponent>(m_selected))
+            rigidPanel.Render(ecs, m_selected);
             
 
         ImGui::Spacing();
@@ -273,13 +283,24 @@ private:
                 if (ImGui::MenuItem("RigidBody"))
                 {
                     RigidBodyComponent rb;
-                    rb.inv_mass = 1.0f; // Set mass to 1 (inverse mass = 1)
+                    rb.inv_mass = 0.0f;
                     rb.velocity = glm::vec3(0.0f);
                     rb.angular_velocity = glm::vec3(0.0f);
-                    rb.inertia = glm::vec3(1.0f); // Default inertia
+                    rb.inertia = glm::vec3(1.0f);
                     rb.force_accum = glm::vec3(0.0f);
                     rb.torque_accum = glm::vec3(0.0f);
                     ecs->AddComponent<RigidBodyComponent>(m_selected, rb);
+                }
+
+            if (!ecs->HasComponent<ColliderComponent>(m_selected))
+                if (ImGui::MenuItem("Collider"))
+                {     
+                    ColliderComponent cl;
+                    AABB aabb;
+                    aabb.min = glm::vec3(-0.5f, -0.5f, -0.5f);
+                    aabb.max = glm::vec3( 0.5f,  0.5f,  0.5f);
+                    cl.shape = aabb;
+                    ecs->AddComponent<ColliderComponent>(m_selected, cl);
                 }
 
             ImGui::EndPopup();

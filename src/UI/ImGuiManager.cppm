@@ -1,8 +1,13 @@
 module;
 
-#include <ext/gl.hpp>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <stb_image.h>
 
-#include <ext/imgui.hpp>
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
+#include <ImGuizmo.h>
 
 export module WFE.UI.ImGuiManager;
 

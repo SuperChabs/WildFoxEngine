@@ -1,7 +1,9 @@
 module;
 
-#include "ext/stdlib.hpp"
-#include "ext/entt.hpp"
+#include <string>
+#include <memory>
+#include <vector>
+#include <entt/entt.hpp>
 
 export module WFE.ECS.Components.Hierarchy;
 

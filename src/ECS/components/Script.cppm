@@ -1,7 +1,10 @@
 module;
 
-#include "ext/stdlib.hpp"
-#include "ext/angelscript.hpp"
+#include <string>
+#include <memory>
+#include <vector>
+#include <angelscript.h>
+#include <scriptbuilder.h>
 
 export module WFE.ECS.Components.Script;
 

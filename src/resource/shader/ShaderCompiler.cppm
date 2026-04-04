@@ -1,8 +1,13 @@
 module;
 
-#include <ext/stdlib.hpp>
+#include <string>
+#include <memory>
+#include <vector>
+#include <filesystem>
 
-#include <ext/gl.hpp>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <stb_image.h>
 
 export module WFE.Resource.Shader.ShaderCompiler;
 

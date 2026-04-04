@@ -1,10 +1,15 @@
 module;
 
-#include <ext/stdlib.hpp>
+#include <string>
+#include <memory>
+#include <vector>
 
-#include <ext/gl.hpp>
-#include <ext/glm.hpp>
-#include <ext/entt.hpp>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <stb_image.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <entt/entt.hpp>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
