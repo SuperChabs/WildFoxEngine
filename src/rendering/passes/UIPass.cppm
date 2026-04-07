@@ -44,7 +44,7 @@ public:
             projection,
             std::string("icon")
         });
-        
+
         Cleanup();
     }
     

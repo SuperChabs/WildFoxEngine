@@ -29,16 +29,7 @@ import WFE.UI.Panels.CameraPanel;
 import WFE.UI.Panels.ScriptPanel;
 import WFE.UI.Panels.IconPanel;
 import WFE.UI.Panels.RigidBodyPanel;
-
-export struct SceneBuilderCallbacks
-{
-    std::function<void(const std::string&)> onLoadScene;
-    std::function<void(const std::string&)> onSaveScene;
-    std::function<void()>                   onNewScene;  
-    std::function<void(entt::entity)>       onDeleteEntity;
-    std::function<entt::entity()>           onCreateEntity;
-    std::function<void(entt::entity, const std::string&)> onAttachScript;
-};
+import WFE.UI.Panels.ColliderPanel;
 
 export class DebugOverlay
 {
@@ -46,7 +37,7 @@ public:
     bool visible = true;
 
     void Render(ECSWorld* ecs, entt::entity cameraEntity,
-                const SceneBuilderCallbacks& cb, MaterialManager* materialManager)
+                MaterialManager* materialManager)
     {
         if (!visible || !ecs) return;
 
@@ -65,12 +56,12 @@ public:
         {
             if (ImGui::BeginTabItem("Scene"))
             {
-                RenderSceneTab(ecs, cb);
+                RenderSceneTab(ecs);
                 ImGui::EndTabItem();
             }
             if (ImGui::BeginTabItem("Hierarchy"))
             {
-                RenderHierarchyTab(ecs, cb);
+                RenderHierarchyTab(ecs);
                 ImGui::EndTabItem();
             }
             if (ImGui::BeginTabItem("Inspector"))
@@ -118,8 +109,9 @@ private:
     ScriptPanel scriptPanel;
     IconPanel iconPanel;
     RigidBodyPanel rigidPanel;
+    ColliderPanel colliderPanel;
     
-    void RenderSceneTab(ECSWorld* ecs, const SceneBuilderCallbacks& cb)
+    void RenderSceneTab(ECSWorld* ecs)
     {
         ImGui::Spacing();
         ImGui::Text("Scene file:");
@@ -139,7 +131,7 @@ private:
 
         ImGui::Spacing();
 
-        if (ImGui::Button("New scene", {-1.f, 0}) && cb.onNewScene)
+        if (ImGui::Button("New scene", {-1.f, 0}))
             Execute("onNewScene");
 
         ImGui::Separator();
@@ -155,7 +147,7 @@ private:
         }
     }
 
-    void RenderHierarchyTab(ECSWorld* ecs, const SceneBuilderCallbacks& cb)
+    void RenderHierarchyTab(ECSWorld* ecs)
     {
         ImGui::Spacing();
         ImGui::Text("%zu entities", ecs->GetEntityCount());
@@ -177,7 +169,6 @@ private:
         if (toDelete != entt::null)
         {
             if (m_selected == toDelete) m_selected = entt::null;
-            if (cb.onDeleteEntity) cb.onDeleteEntity(toDelete);
             else ecs->DestroyEntity(toDelete);
         }
     }
@@ -262,11 +253,13 @@ private:
             iconPanel.Render(ecs, m_selected);
         if (ecs->HasComponent<RigidBodyComponent>(m_selected))
             rigidPanel.Render(ecs, m_selected);
+        if (ecs->HasComponent<ColliderComponent>(m_selected))
+            colliderPanel.Render(ecs, m_selected);
             
-
         ImGui::Spacing();
         ImGui::Separator();
-        if (ImGui::Button("+ Add Component", {-1.f, 0}))
+
+        if (ImGui::Button("Add Component", {-1.f, 0}))
             ImGui::OpenPopup("##addcomp");
 
         if (ImGui::BeginPopup("##addcomp"))
@@ -280,8 +273,9 @@ private:
                     ecs->AddComponent<MaterialComponent>(m_selected);
 
             if (!ecs->HasComponent<RigidBodyComponent>(m_selected))
+            {
                 if (ImGui::MenuItem("RigidBody"))
-                {
+                {                
                     RigidBodyComponent rb;
                     rb.inv_mass = 0.0f;
                     rb.velocity = glm::vec3(0.0f);
@@ -291,10 +285,12 @@ private:
                     rb.torque_accum = glm::vec3(0.0f);
                     ecs->AddComponent<RigidBodyComponent>(m_selected, rb);
                 }
+            }
 
             if (!ecs->HasComponent<ColliderComponent>(m_selected))
+            {
                 if (ImGui::MenuItem("Collider"))
-                {     
+                {
                     ColliderComponent cl;
                     AABB aabb;
                     aabb.min = glm::vec3(-0.5f, -0.5f, -0.5f);
@@ -302,6 +298,27 @@ private:
                     cl.shape = aabb;
                     ecs->AddComponent<ColliderComponent>(m_selected, cl);
                 }
+            }
+
+            ImGui::EndPopup();
+        }
+
+        if (ImGui::Button("Remove Component", {-1.f, 0}))
+            ImGui::OpenPopup("##removecomp");
+
+        if (ImGui::BeginPopup("##removecomp"))
+        {
+            if (ecs->HasComponent<ScriptComponent>(m_selected))
+                if (ImGui::MenuItem("Script"))
+                    ecs->RemoveComponent<ScriptComponent>(m_selected);
+
+            if (ecs->HasComponent<RigidBodyComponent>(m_selected))
+                if (ImGui::MenuItem("RigidBody"))
+                    ecs->RemoveComponent<RigidBodyComponent>(m_selected);
+
+            if (ecs->HasComponent<ColliderComponent>(m_selected))
+                if (ImGui::MenuItem("Collider"))
+                    ecs->RemoveComponent<ColliderComponent>(m_selected);
 
             ImGui::EndPopup();
         }
@@ -332,6 +349,9 @@ private:
 
         if (ImGui::MenuItem("Camera"))
             Execute("onCreateCamera");
+
+        if (ImGui::MenuItem("AABB hitbox"))
+            Execute("onCreateAABBHitbox");
 
         if (ImGui::MenuItem("Open Model"))
             m_showOpenModelDialog = true;

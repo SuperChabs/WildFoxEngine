@@ -80,12 +80,6 @@ public:
 
                     if (TestAABB(world_a, world_b, contact))
                     {
-
-                        Logger::Log(LogLevel::DEBUG, 
-                            "Testing: A pos=(" + std::to_string(t_a.position.y) + ") " +
-                            "world_a min.y=" + std::to_string(world_a.min.y) + " max.y=" + std::to_string(world_a.max.y) + " | " +
-                            "world_b min.y=" + std::to_string(world_b.min.y) + " max.y=" + std::to_string(world_b.max.y));
-
                         float total = rb_a.inv_mass + rb_b.inv_mass;
                         if (total == 0.0f) continue;
 
@@ -136,8 +130,6 @@ private:
             contact.depth = oz;
             contact.normal = (dir.z > 0) ? glm::vec3(0,0,1) : glm::vec3(0,0,-1);
         }
-
-        Logger::Log(LogLevel::DEBUG, "Collision detected! depth=" + std::to_string(contact.depth));
 
         return true;
     }

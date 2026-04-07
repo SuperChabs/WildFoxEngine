@@ -13,7 +13,6 @@ module;
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -52,6 +51,7 @@ export class Engine : public Application
 private:
     std::unique_ptr<ScriptSystem> scriptSystem;
     std::unique_ptr<InputControllerSystem> inputControllerSystem;
+    std::unique_ptr<PhysicsDebugRenderSystem> physicsDebugSystem;
 
     std::unique_ptr<EditorCommandHandler> ech;
 
@@ -64,7 +64,6 @@ private:
     PhysicsModule* m_physicsModule;
 
     DebugOverlay m_overlay;
-    SceneBuilderCallbacks cb;
 
     bool cameraControlEnabled;
     bool showUI;
@@ -216,6 +215,7 @@ protected:
 
         scriptSystem = std::make_unique<ScriptSystem>();
         inputControllerSystem = std::make_unique<InputControllerSystem>();
+        physicsDebugSystem = std::make_unique<PhysicsDebugRenderSystem>();
 
         InitializeAS();
 
@@ -311,6 +311,26 @@ protected:
 
         if (showUI)
         {
+            auto& transform  = ecs->GetComponent<TransformComponent>(camera);
+            auto& orientation = ecs->GetComponent<CameraOrientationComponent>(camera);
+            auto& camComp    = ecs->GetComponent<CameraComponent>(camera);
+        
+            glm::mat4 view = orientation.GetViewMatrix(transform.position);
+            glm::mat4 projection = camComp.GetProjectionMatrix(
+                (float)GetWindow()->GetWidth() / (float)GetWindow()->GetHeight()
+            );
+        
+            physicsDebugSystem->Update(
+                *ecs,
+                *resourceModule->GetShaderManager(),
+                "aabbDebug",
+                view,
+                projection
+            );
+        }
+
+        if (showUI)
+        {
             renderingModule->GetRenderer()->GetIcon()->Update(
                 *ecs,
                 *resourceModule->GetShaderManager(),
@@ -322,7 +342,7 @@ protected:
             );
 
             uiModule->GetImGuiManager()->BeginFrame();
-            m_overlay.Render(ecs, mainCameraEntity, cb, resourceModule->GetMaterialManager());
+            m_overlay.Render(ecs, mainCameraEntity, resourceModule->GetMaterialManager());
             uiModule->GetImGuiManager()->EndFrame();
         }
     }

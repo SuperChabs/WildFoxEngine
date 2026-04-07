@@ -106,6 +106,8 @@ private:
         RegisterSerializer<ScriptSerializer>("script");
         RegisterSerializer<VisibilitySerializer>("visibility");
         RegisterSerializer<IconSerializer>("icon");
+        RegisterSerializer<RigidBodySerializer>("rigidBody");
+        RegisterSerializer<ColliderSerializer>("collider");
         //RegisterSerializer<HierarchySerializer>("hierarchy");
     }
 };

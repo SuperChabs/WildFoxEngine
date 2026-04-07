@@ -72,6 +72,7 @@ public:
         engine->RegisterEnumValue("Key", "KEY_D",     static_cast<int>(Key::KEY_D));
         engine->RegisterEnumValue("Key", "KEY_SPACE", static_cast<int>(Key::KEY_SPACE));
         engine->RegisterEnumValue("Key", "KEY_ESCAPE",static_cast<int>(Key::KEY_ESCAPE));
+        engine->RegisterEnumValue("Key", "KEY_LEFT_SHIFT",static_cast<int>(Key::KEY_LEFT_SHIFT));
 
         engine->RegisterGlobalFunction(
             "bool IsKeyPressed(Key key)",

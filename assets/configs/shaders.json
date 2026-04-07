@@ -19,6 +19,11 @@
             "name": "shadow_depth",
             "vertex": "vertex/shadow_depth.vs",
             "fragment": "fragment/shadow_depth.fs"
+        },
+        {
+            "name": "aabbDebug",
+            "vertex": "vertex/aabbDebug.vs",
+            "fragment": "fragment/aabbDebug.fs"
         }
     ]
 }

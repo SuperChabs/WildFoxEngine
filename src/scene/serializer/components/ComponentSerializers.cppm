@@ -10,6 +10,8 @@ export import WFE.Scene.Serializer.Component.ScriptSerializer;
 export import WFE.Scene.Serializer.Component.TransformSerializer;
 export import WFE.Scene.Serializer.Component.VisibilitySerializer;
 export import WFE.Scene.Serializer.Component.IconSerializer;
+export import WFE.Scene.Serializer.Component.RigidBodySerializer;
+export import WFE.Scene.Serializer.Component.ColliderSerializer;
 //export import WFE.Scene.Serializer.Component.HierarchySerializer;
 
 export import WFE.Scene.Serializer.Component.IComponentSerializer;

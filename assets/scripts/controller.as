@@ -18,18 +18,16 @@ void OnUpdate(float dt)
 
     if (IsKeyPressed(KEY_W))
         t.position.z -= 5.0f * dt;
-
     if (IsKeyPressed(KEY_S))
         t.position.z += 5.0f * dt;
-
     if (IsKeyPressed(KEY_A))
         t.position.x -= 5.0f * dt;
-
     if (IsKeyPressed(KEY_D))
         t.position.x += 5.0f * dt;
-
-    if (IsKeyPressed(KEY_W) && IsKeyPressed(KEY_S))
+    if (IsKeyPressed(KEY_SPACE))
         t.position.y += 5.0f * dt;
+    if (IsKeyPressed(KEY_LEFT_SHIFT))
+        t.position.y -= 5.0f * dt;
 }
 
 void OnStop()

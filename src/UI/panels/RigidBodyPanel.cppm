@@ -1,8 +1,11 @@
 module;
 
+#include <variant>
+
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
+
 #include <entt/entt.hpp>
 #include <glm/glm.hpp>
 
@@ -20,6 +23,7 @@ public:
         if (!ImGui::CollapsingHeader("Rigid Body", ImGuiTreeNodeFlags_DefaultOpen)) return;
 
         auto& rb = ecs->GetComponent<RigidBodyComponent>(entity);
+        auto& t = ecs->GetComponent<TransformComponent>(entity);
 
         RenderMass(rb);
 

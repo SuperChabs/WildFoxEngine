@@ -51,10 +51,38 @@ public:
 private:
     void RegisterObjectCommands()
     {
+        CommandManager::RegisterCommand("onCreateAABBHitbox",
+        [this](const CommandArgs&) 
+        {
+            auto entity = m_ecsModule->GetECS()->CreateEntity("AABB Hitbox");
+
+            m_ecsModule->GetECS()->AddComponent<TransformComponent>(entity, 
+                glm::vec3(0), glm::vec3(0), glm::vec3(1));
+
+            m_ecsModule->GetECS()->AddComponent<ColliderComponent>(entity, 
+                AABB{glm::vec3(-0.5f), glm::vec3(0.5f)});
+
+            RigidBodyComponent rb = 
+            {            
+                .inv_mass = 0.0f,
+                .velocity = glm::vec3(0.0f),
+                .angular_velocity = glm::vec3(0.0f),
+                .inertia = glm::vec3(1.0f),
+                .force_accum = glm::vec3(0.0f),
+                .torque_accum = glm::vec3(0.0f)
+            };
+
+            m_ecsModule->GetECS()->AddComponent<RigidBodyComponent>(entity, rb);
+            
+            Logger::Log(LogLevel::INFO, "AABB hitbox entity created");
+        });
+
         CommandManager::RegisterCommand("onCreateCube",
         [this](const CommandArgs&) 
         {
-            auto entity = m_resModule->GetModelManager()->LoadWithECS("assets/objects/shapes/cube/cube.obj", m_ecsModule->GetECS(), true);
+            auto entity = m_resModule->GetModelManager()->LoadWithECS(
+                "assets/objects/shapes/cube/cube.obj", 
+                m_ecsModule->GetECS(), true);
             
             Logger::Log(LogLevel::INFO, "Cube entity created");
         });
@@ -62,7 +90,9 @@ private:
         CommandManager::RegisterCommand("onCreatePlane",
         [this](const CommandArgs&) 
         {
-            auto entity = m_resModule->GetModelManager()->LoadWithECS("assets/objects/shapes/plane/plane.obj", m_ecsModule->GetECS(), true);
+            auto entity = m_resModule->GetModelManager()->LoadWithECS(
+                "assets/objects/shapes/plane/plane.obj", 
+                m_ecsModule->GetECS(), true);
             
             Logger::Log(LogLevel::INFO, "Plane entity created");
         });
@@ -70,7 +100,9 @@ private:
         CommandManager::RegisterCommand("onCreateCone",
         [this](const CommandArgs&) 
         {
-            auto entity = m_resModule->GetModelManager()->LoadWithECS("assets/objects/shapes/cone/cone.obj", m_ecsModule->GetECS(), true);
+            auto entity = m_resModule->GetModelManager()->LoadWithECS(
+                "assets/objects/shapes/cone/cone.obj", 
+                m_ecsModule->GetECS(), true);
             
             Logger::Log(LogLevel::INFO, "Cone entity created");
         });
@@ -78,7 +110,9 @@ private:
         CommandManager::RegisterCommand("onCreateCylinder",
         [this](const CommandArgs&) 
         {
-            auto entity = m_resModule->GetModelManager()->LoadWithECS("assets/objects/shapes/cylinder/cylinder.obj", m_ecsModule->GetECS(), true);
+            auto entity = m_resModule->GetModelManager()->LoadWithECS(
+                "assets/objects/shapes/cylinder/cylinder.obj", 
+                m_ecsModule->GetECS(), true);
             
             Logger::Log(LogLevel::INFO, "Cylinder entity created");
         });
@@ -86,7 +120,9 @@ private:
         CommandManager::RegisterCommand("onCreateTorus",
         [this](const CommandArgs&) 
         {
-            auto entity = m_resModule->GetModelManager()->LoadWithECS("assets/objects/shapes/torus/torus.obj", m_ecsModule->GetECS(), true);
+            auto entity = m_resModule->GetModelManager()->LoadWithECS(
+                "assets/objects/shapes/torus/torus.obj", 
+                m_ecsModule->GetECS(), true);
             
             Logger::Log(LogLevel::INFO, "Torus entity created");
         });
