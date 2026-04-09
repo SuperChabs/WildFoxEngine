@@ -6,13 +6,25 @@ module;
 #include <variant>
 #include <functional>
 #include <memory>
+
 #include <glm/glm.hpp>
+#include <entt/entt.hpp>
 
 export module WFE.Core.CommandManager;
 
 import WFE.Core.Logger;
 
-export using CommandArg = std::variant<int, bool, float, std::string, glm::vec3, glm::mat4>;
+export using CommandArg = 
+std::variant<
+    int, 
+    bool, 
+    float, 
+    std::string, 
+    glm::vec3, 
+    glm::mat4, 
+    entt::entity
+>;
+
 export using CommandArgs = std::vector<CommandArg>;
 export using CommandFn = std::function<void(const CommandArgs&)>;
 

@@ -40,19 +40,13 @@ public:
                 TransformComponent& t,
                 ColliderComponent&  c)
             {
-                float hue = (float)glfwGetTime() * 0.5f;
-                hue -= glm::floor(hue);
-
-                auto hsv2rgb = [](float h) -> glm::vec3 {
-                    float r = glm::abs(h * 6.0f - 3.0f) - 1.0f;
-                    float g = 2.0f - glm::abs(h * 6.0f - 2.0f);
-                    float b = 2.0f - glm::abs(h * 6.0f - 4.0f);
-                    return glm::clamp(glm::vec3(r, g, b), 0.0f, 1.0f);
-                };
-
                 shaderManager.SetMat4(shaderName, "view", view);
                 shaderManager.SetMat4(shaderName, "projection", projection);
-                shaderManager.SetVec3(shaderName, "color", hsv2rgb(hue));
+
+                if (!c.isTrigger)
+                    shaderManager.SetVec3(shaderName, "color", {0.0f, 1.0f, 0.0f});
+                else if (c.isTrigger)
+                    shaderManager.SetVec3(shaderName, "color", {0.0f, 0.0f, 1.0f});
 
                 if (std::holds_alternative<AABB>(c.shape))
                 {

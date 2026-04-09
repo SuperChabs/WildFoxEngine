@@ -20,6 +20,7 @@ export struct Sphere //чіфівффів
 export struct ColliderComponent
 {
     std::variant<AABB, Sphere> shape;
+    bool isTrigger = false;
 };
 
 export struct RigidBodyComponent

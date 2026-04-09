@@ -1,16 +1,10 @@
 module;
 
 #include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
-#include <ImGuizmo.h>
 #include <entt/entt.hpp>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
 #include <string>
-#include <memory>
-#include <vector>
 
 export module WFE.UI.DebugOverlay;
 

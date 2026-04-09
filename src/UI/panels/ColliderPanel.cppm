@@ -1,6 +1,8 @@
 module;
 
 #include <variant>
+#include <string>
+
 #include <imgui.h>
 #include <entt/entt.hpp>
 #include <glm/glm.hpp>
@@ -37,5 +39,13 @@ public:
                 c.shape = aabb;
             }
         }
+
+        ImGui::Spacing();
+        ImGui::Separator();
+        ImGui::Spacing();
+
+        ImGui::Text("Is Trigger:");
+        if (ImGui::Button(c.isTrigger ? "Yes" : "No"))
+            c.isTrigger = !c.isTrigger;
     }
 };

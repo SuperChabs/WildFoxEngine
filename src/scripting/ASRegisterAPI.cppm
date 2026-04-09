@@ -18,6 +18,7 @@ import WFE.ECS.ECSWorld;
 import WFE.ECS.Components;
 import WFE.Core.Input;
 import WFE.Core.Logger;
+import WFE.Core.CommandManager;
 
 export class ASRegisterAPI
 {
@@ -89,6 +90,7 @@ public:
             asFUNCTIONPR(IsKeyReleased, (Input*, Key), bool),
             asCALL_CDECL_OBJFIRST, input);
 
+        RegisterCommands(ecs);
     }
 
 private:
@@ -132,5 +134,44 @@ private:
     static bool IsKeyReleased(Input* input, Key key)
     {
         return input->IsKeyReleased(key);
+    }
+
+    static void RegisterCommands(ECSWorld* ecs)
+    {
+        CommandManager::RegisterCommand("OnTriggerEnter", 
+            [ecs](const CommandArgs& args)
+            {
+                entt::entity a = std::get<entt::entity>(args[0]);
+                entt::entity b = std::get<entt::entity>(args[1]);
+
+                if (!ecs->HasComponent<ScriptComponent>(a)) return;
+                    auto& script = ecs->GetComponent<ScriptComponent>(a);
+                if (!script.loaded || !script.ctx || !script.module) return;
+
+                asIScriptFunction* fn = script.module->GetFunctionByDecl("void OnTriggerEnter(uint64)");
+                if (!fn) return;
+
+                script.ctx->Prepare(fn);
+                script.ctx->SetArgQWord(0, static_cast<asQWORD>(b));
+                script.ctx->Execute();
+            });
+
+        CommandManager::RegisterCommand("OnTriggerExit", 
+            [ecs](const CommandArgs& args)
+            {
+                entt::entity a = std::get<entt::entity>(args[0]);
+                entt::entity b = std::get<entt::entity>(args[1]);
+
+                if (!ecs->HasComponent<ScriptComponent>(a)) return;
+                    auto& script = ecs->GetComponent<ScriptComponent>(a);
+                if (!script.loaded || !script.ctx || !script.module) return;
+
+                asIScriptFunction* fn = script.module->GetFunctionByDecl("void OnTriggerExit(uint64)");
+                if (!fn) return;
+
+                script.ctx->Prepare(fn);
+                script.ctx->SetArgQWord(0, static_cast<asQWORD>(b));
+                script.ctx->Execute();
+            });
     }
 };
