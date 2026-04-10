@@ -6,10 +6,10 @@ set(CMAKE_CXX_STANDARD 26)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_CXX_MODULE_STD OFF)
 set(CMAKE_CXX_SCAN_FOR_MODULES ON)
+set(CMAKE_CXX_MODULE_STD 26)
 set(CMAKE_CXX_COMPILER_LAUNCHER ccache)
-set(CMAKE_BUILD_PARALLEL_LEVEL 6)
+set(CMAKE_BUILD_PARALLEL_LEVEL 0)
 
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
@@ -80,6 +80,16 @@ target_include_directories(scriptbuilder PUBLIC
     vendor/angelscript/sdk/angelscript/include
 )
 
+add_library(scriptstdstring STATIC
+    vendor/angelscript/sdk/add_on/scriptstdstring/scriptstdstring.cpp)
+
+target_include_directories(scriptstdstring PUBLIC
+    vendor/angelscript/sdk/add_on/scriptstdstring
+    vendor/angelscript/sdk/angelscript/include
+)
+
+target_link_libraries(scriptstdstring PUBLIC angelscript)
+
 # ========== WildFoxEngine =============
 include_directories(${IMGUI_INCLUDE_DIRS})
 
@@ -128,7 +138,6 @@ foreach(MODULE ${WildFoxEngine_MODULES})
     set_source_files_properties(${MODULE} PROPERTIES
             SKIP_UNITY_BUILD_INCLUSION ON
             SKIP_PRECOMPILE_HEADERS ON
-            //CXX_MODULE_TYPE CXX_MODULE_INTERFACE
     )
 endforeach()
 
@@ -145,6 +154,7 @@ if(WildFoxEngine_MODULES)
     
     set_target_properties(${PROJECT_NAME} PROPERTIES
         CXX_MODULE_STD ""
+        CCACHE_SLOPPINESS "pch_defines,time_macros"
     )
 endif()
 
@@ -165,6 +175,7 @@ target_link_libraries(${PROJECT_NAME}
     EnTT::EnTT
     angelscript
     scriptbuilder
+    scriptstdstring
 )
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE

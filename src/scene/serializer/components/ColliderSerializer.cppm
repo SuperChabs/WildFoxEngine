@@ -36,7 +36,8 @@ public:
             return json{
                 {"type", "AABB"},
                 {"min", {aabb->min.x, aabb->min.y, aabb->min.z}},
-                {"max", {aabb->max.x, aabb->max.y, aabb->max.z}}
+                {"max", {aabb->max.x, aabb->max.y, aabb->max.z}},
+                {"isTrigger", collider.isTrigger}
             };
         }
 
@@ -45,7 +46,8 @@ public:
             return json{
                 {"type", "Sphere"},
                 {"centre", {sphere->centre.x, sphere->centre.y, sphere->centre.z}},
-                {"radius", sphere->radius}
+                {"radius", sphere->radius},
+                {"isTrigger", collider.isTrigger}
             };
         }
 
@@ -57,21 +59,28 @@ public:
         if (!data.contains("type"))
             return;
 
+        bool isTrigger;
+
         std::string type = data.value("type", "");
+
+        if (data.contains("isTrigger") && data["isTrigger"].is_boolean())
+            isTrigger = data["isTrigger"].get<bool>();
+        else
+            isTrigger = false;
 
         if (type == "AABB")
         {
             AABB aabb;
             aabb.min = Vec3FromJson(data.value("min", json::array({0.0f, 0.0f, 0.0f})));
             aabb.max = Vec3FromJson(data.value("max", json::array({0.0f, 0.0f, 0.0f})));
-            world->AddComponent<ColliderComponent>(entity, aabb);
+            world->AddComponent<ColliderComponent>(entity, aabb, isTrigger);
         }
         else if (type == "Sphere")
         {
             Sphere sphere;
             sphere.centre = Vec3FromJson(data.value("centre", json::array({0.0f, 0.0f, 0.0f})));
             sphere.radius = data.value("radius", 0.0f);
-            world->AddComponent<ColliderComponent>(entity, sphere);
+            world->AddComponent<ColliderComponent>(entity, sphere, isTrigger);
         }
     }
 

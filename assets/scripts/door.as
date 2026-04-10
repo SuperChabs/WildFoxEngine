@@ -1,24 +1,55 @@
-uint64 self;
+uint64 targetDoor;
+vec3 startPos;
 
-void _SetEntity(uint64 e)
-{
-    self = e;
-}
+bool open = false;
+bool initialized = false;
 
-void OnStart()
+float speed = 5.0f;
+float openHeight = 5.0f;
+
+void SetTargetByName(const string &in name)
 {
+    targetDoor = GetEntityByName(name);
+    if (targetDoor == 0) return;
+
+    Transform@ t = GetTransform(targetDoor);
+    if (t !is null)
+        startPos = t.position;
 }
 
 void OnTriggerEnter(uint64 other)
 {
-    Transform@ t = GetTransform(self);
-    if (t is null) return;
-    t.position.y += 5.0f;
+    open = true;
 }
 
 void OnTriggerExit(uint64 other)
 {
-    Transform@ t = GetTransform(self);
+    open = false;
+}
+
+void OnUpdate(float dt)
+{
+    if (!initialized)
+    {
+        SetTargetByName("door1");
+        if (targetDoor != 0)
+            initialized = true;
+    }
+
+    Transform@ t = GetTransform(targetDoor);
     if (t is null) return;
-    t.position.y -= 5.0f;
+
+    vec3 targetPos = startPos;
+    if (open) targetPos.y += openHeight;
+
+    vec3 delta = targetPos - t.position;
+
+    if ((delta.x*delta.x + delta.y*delta.y + delta.z*delta.z) < 0.001f)
+    {
+        t.position = targetPos;
+    }
+    else
+    {
+        t.position = t.position + delta * speed * dt;
+    }
 }
