@@ -156,6 +156,11 @@ public:
             asCALL_CDECL_OBJFIRST, ecs);
         AS_CHECK(r, "GetEntityByName");
 
+        r = engine->RegisterGlobalFunction(
+        "bool IsValidEntity(uint64 e)",
+        asFUNCTIONPR(IsValid, (ECSWorld*, entt::entity), bool),
+        asCALL_CDECL_OBJFIRST, ecs);
+
         RegisterCommands(ecs);
     }
 
@@ -217,6 +222,27 @@ private:
         return input->IsKeyReleased(key);
     }
 
+    static void DispatchTrigger(ECSWorld* ecs, const std::string& fnDecl,
+                                entt::entity a, entt::entity b)
+    {
+        auto tryCall = [&](entt::entity self, entt::entity other)
+        {
+            if (!ecs->HasComponent<ScriptComponent>(self)) return;
+            auto& script = ecs->GetComponent<ScriptComponent>(self);
+            if (!script.loaded || !script.ctx || !script.module) return;
+
+            asIScriptFunction* fn = script.module->GetFunctionByDecl(fnDecl.c_str());
+            if (!fn) return;
+
+            script.ctx->Prepare(fn);
+            script.ctx->SetArgQWord(0, static_cast<asQWORD>(other));
+            script.ctx->Execute();
+        };
+
+        tryCall(a, b);
+        tryCall(b, a);
+    }
+
     static void RegisterCommands(ECSWorld* ecs)
     {
         CommandManager::RegisterCommand("OnTriggerEnter",
@@ -224,17 +250,7 @@ private:
             {
                 entt::entity a = std::get<entt::entity>(args[0]);
                 entt::entity b = std::get<entt::entity>(args[1]);
-
-                if (!ecs->HasComponent<ScriptComponent>(a)) return;
-                auto& script = ecs->GetComponent<ScriptComponent>(a);
-                if (!script.loaded || !script.ctx || !script.module) return;
-
-                asIScriptFunction* fn = script.module->GetFunctionByDecl("void OnTriggerEnter(uint64)");
-                if (!fn) return;
-
-                script.ctx->Prepare(fn);
-                script.ctx->SetArgQWord(0, static_cast<asQWORD>(b));
-                script.ctx->Execute();
+                DispatchTrigger(ecs, "void OnTriggerEnter(uint64)", a, b);
             });
 
         CommandManager::RegisterCommand("OnTriggerExit",
@@ -242,17 +258,7 @@ private:
             {
                 entt::entity a = std::get<entt::entity>(args[0]);
                 entt::entity b = std::get<entt::entity>(args[1]);
-
-                if (!ecs->HasComponent<ScriptComponent>(a)) return;
-                auto& script = ecs->GetComponent<ScriptComponent>(a);
-                if (!script.loaded || !script.ctx || !script.module) return;
-
-                asIScriptFunction* fn = script.module->GetFunctionByDecl("void OnTriggerExit(uint64)");
-                if (!fn) return;
-
-                script.ctx->Prepare(fn);
-                script.ctx->SetArgQWord(0, static_cast<asQWORD>(b));
-                script.ctx->Execute();
+                DispatchTrigger(ecs, "void OnTriggerExit(uint64)", a, b);
             });
     }
 

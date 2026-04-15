@@ -5,6 +5,8 @@ module;
 #include <vector>
 #include <filesystem>
 #include <fstream>
+#include <chrono>
+#include <ctime>
 #include <nlohmann/json.hpp>
 
 export module WFE.Scene.Serializer.SceneFileHandler;
@@ -139,28 +141,28 @@ public:
 
         if (!fs::exists(materialsPath))
         {
-            Logger::Log(LogLevel::ERROR, "Scene file not found: " + materialsPath.string());
-            return json::object();
+            Logger::Log(LogLevel::WARNING, "Materials file not found: " + materialsPath.string());
+            return json::array();
         }
 
         std::ifstream file(materialsPath);
         if (!file.is_open())
         {
-            Logger::Log(LogLevel::ERROR, "Failed to open scene: " + materialsPath.string());
-            return json::object();
+            Logger::Log(LogLevel::ERROR, "Failed to open materials: " + materialsPath.string());
+            return json::array();
         }
 
         try
         {
-            json sceneData = json::parse(file);
+            json data = json::parse(file);
             file.close();
-            return sceneData;
+            return data;
         }
         catch (const json::parse_error& e)
         {
             Logger::Log(LogLevel::ERROR, "JSON parse error: " + std::string(e.what()));
             file.close();
-            return json::object();
+            return json::array();
         }
     }
 
@@ -210,7 +212,7 @@ public:
         {
             if (fs::exists(scenePath))
             {
-                fs::remove(scenePath);
+                fs::remove_all(scenePath);
                 Logger::Log(LogLevel::INFO, "Scene deleted: " + scenePath.string());
                 return true;
             }
@@ -230,9 +232,9 @@ public:
     std::string GetCurrentTimestamp() const
     {
         auto now = std::chrono::system_clock::now();
-        auto time = std::chrono::system_clock::to_time_t(now);
+        std::time_t time = std::chrono::system_clock::to_time_t(now);
 
-        std::tm tm_snapshot;
+        std::tm tm_snapshot{};
         localtime_r(&time, &tm_snapshot);
 
         char buffer[64];

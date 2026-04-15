@@ -164,8 +164,8 @@ export std::pair<Model*, entt::entity> LoadModelFromFile(
         auto& modelComp = world->GetComponent<ModelComponent>(rootEntity);
         world->AddComponent<ModelComponent>(meshEntity, modelComp.filePath);
 
-        auto& tag = world->GetComponent<TagComponent>(meshEntity);
-        tag.name = model->GetName();
+        // auto& tag = world->GetComponent<TagComponent>(meshEntity);
+        // tag.name = model->GetName();
 
         world->ClearParent(meshEntity);
         world->DestroyEntity(rootEntity);

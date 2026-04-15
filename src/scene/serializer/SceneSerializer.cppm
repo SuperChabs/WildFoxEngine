@@ -89,14 +89,13 @@ public:
         }
 
         json materialsData = fileHandler.ReadMaterials(filename);
-        m_material.Deserialize(materialManager, materialsData);
+        if (materialsData.is_array())
+            m_material.Deserialize(materialManager, materialsData);
 
         world->Clear();
         std::unordered_map<uint64_t, entt::entity> createdEntities;
 
-        int loadedCount = 0;
-
-        loadedCount = DeserializeEntities(sceneData, modelManager, createdEntities);
+        int loadedCount = DeserializeEntities(sceneData, modelManager, createdEntities);
 
         SetupHierarchies(sceneData, createdEntities);
 
@@ -150,7 +149,7 @@ private:
             return;
 
         auto& h = w->GetComponent<HierarchyComponent>(entity);
-        if (h.parent != entt::null)
+        if (h.parent != entt::null && w->HasComponent<IDComponent>(h.parent))
         {
             entityData["_parentId"] = w->GetComponent<IDComponent>(h.parent).id;
         }
@@ -163,7 +162,7 @@ private:
         if (success)
         {
             Logger::Log(LogLevel::INFO, "Scene saved: " + filename +
-                        " (" + std::to_string(sceneData["scene"]["entities"].size()) + " entities)");
+                " (" + std::to_string(sceneData["scene"]["entities"].size()) + " entities)");
         }
 
         return success;
@@ -175,7 +174,7 @@ private:
     {
         int loadedCount = 0;
 
-        for (auto& entityData : sceneData["scene"]["entities"])
+        for (const auto& entityData : sceneData["scene"]["entities"])
         {
             std::string entityName = entityData.value("_name", "Entity");
             uint64_t uuid = entityData["_id"];
@@ -183,7 +182,7 @@ private:
             entt::entity entity;
             if (createdEntities.count(uuid))
             {
-                entity = createdEntities[uuid]; 
+                entity = createdEntities[uuid];
             }
             else
             {
@@ -194,8 +193,6 @@ private:
             bool isModelChild = entityData.value("modelChild", false);
             if (isModelChild)
             {
-                json otherComponents = entityData;
-                otherComponents.erase("mesh"); 
                 registry.DeserializeAllComponents(world, entity, entityData);
                 loadedCount++;
                 continue;
@@ -217,13 +214,20 @@ private:
                 auto it = createdEntities.find(uuid);
                 if (it == createdEntities.end())
                 {
+
                     loadedCount++;
                     continue;
                 }
                 entity = it->second;
 
+                if (world->HasComponent<TagComponent>(entity))
+                    world->GetComponent<TagComponent>(entity).name = entityName;
+
                 json otherComponents = entityData;
                 otherComponents.erase("mesh");
+
+                otherComponents.erase("transform");
+                otherComponents.erase("script");
                 registry.DeserializeAllComponents(world, entity, otherComponents);
             }
 
@@ -269,7 +273,7 @@ private:
 
             if (!world->HasComponent<MaterialComponent>(entity))
             {
-                auto& col = entityData["color"];
+                const auto& col = entityData["color"];
                 glm::vec3 color = {col[0], col[1], col[2]};
                 world->AddComponent<ColorComponent>(entity, color);
             }
@@ -281,7 +285,7 @@ private:
         if (!w->HasComponent<HierarchyComponent>(entity))
             return false;
 
-        auto& h = w->GetComponent<HierarchyComponent>(entity);
+        const auto& h = w->GetComponent<HierarchyComponent>(entity);
         if (h.parent == entt::null)
             return false;
 

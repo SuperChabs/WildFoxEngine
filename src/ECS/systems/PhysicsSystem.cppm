@@ -113,11 +113,17 @@ public:
 
         for (auto& p : currentTriggers)
             if (!m_activeTriggers.count(p))
-                CommandManager::ExecuteCommand("OnTriggerExit", {p.first, p.second});
+            {    
+                CommandManager::ExecuteCommand("OnTriggerEnter", {p.first, p.second});
+                Logger::Log(LogLevel::INFO, "Enter trigger");
+            }
 
         for (auto& p : m_activeTriggers)
             if (!currentTriggers.count(p))
-                CommandManager::ExecuteCommand("OnTriggerEnter", {p.first, p.second});
+            {    
+                CommandManager::ExecuteCommand("OnTriggerExit", {p.first, p.second});
+                Logger::Log(LogLevel::INFO, "Enter trigger");
+            }
 
         m_activeTriggers = currentTriggers;
     }
