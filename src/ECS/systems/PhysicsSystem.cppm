@@ -8,7 +8,6 @@ module;
 
 #include <entt/entt.hpp>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
 export module WFE.ECS.Systems.PhysicsSystem;
 
@@ -64,50 +63,50 @@ public:
                 auto& t_a = world.GetComponent<TransformComponent>(entities[i]);
                 auto& t_b = world.GetComponent<TransformComponent>(entities[j]);
 
-                if (std::holds_alternative<AABB>(col_a.shape) && 
-                    std::holds_alternative<AABB>(col_b.shape))
-                {
-                    AABB& aabb_a = std::get<AABB>(col_a.shape);
-                    AABB& aabb_b = std::get<AABB>(col_b.shape);
+                if (!std::holds_alternative<AABB>(col_a.shape) && 
+                    !std::holds_alternative<AABB>(col_b.shape))
+                    continue;
+
+                AABB& aabb_a = std::get<AABB>(col_a.shape);
+                AABB& aabb_b = std::get<AABB>(col_b.shape);
+            
+                ContactInfo contact{};
+                contact.a = entities[i];
+                contact.b = entities[j];
                 
-                    ContactInfo contact{};
-                    contact.a = entities[i];
-                    contact.b = entities[j];
-                    
-                    AABB world_a = {
-                        aabb_a.min + t_a.position,
-                        aabb_a.max + t_a.position
-                    };
-                    AABB world_b = {
-                        aabb_b.min + t_b.position,
-                        aabb_b.max + t_b.position
-                    };
+                AABB world_a = {
+                    aabb_a.min + t_a.position,
+                    aabb_a.max + t_a.position
+                };
+                AABB world_b = {
+                    aabb_b.min + t_b.position,
+                    aabb_b.max + t_b.position
+                };
 
-                    if (TestAABB(world_a, world_b, contact))
+                if (!TestAABB(world_a, world_b, contact))
+                    continue;
+
+                if (col_a.isTrigger || col_b.isTrigger)
+                {
+                    auto pair = std::make_pair(entities[i], entities[j]);
+                    currentTriggers.insert(pair);
+                }
+                else 
+                {   
+                    float total = rb_a.inv_mass + rb_b.inv_mass;
+                    if (total == 0.0f) continue;
+
+                    float vRel = glm::dot(rb_a.velocity - rb_b.velocity, contact.normal);
+                    if (vRel > 0.0f)
                     {
-                        if (col_a.isTrigger || col_b.isTrigger)
-                        {
-                            auto pair = std::make_pair(entities[i], entities[j]);
-                            currentTriggers.insert(pair);
-                        }
-                        else 
-                        {   
-                            float total = rb_a.inv_mass + rb_b.inv_mass;
-                            if (total == 0.0f) continue;
-
-                            float vRel = glm::dot(rb_a.velocity - rb_b.velocity, contact.normal);
-                            if (vRel > 0.0f)
-                            {
-                                rb_a.velocity -= contact.normal * vRel * (rb_a.inv_mass / total);
-                                rb_b.velocity += contact.normal * vRel * (rb_b.inv_mass / total);
-                            }
-
-                            float ratio_a = rb_a.inv_mass / total;
-                            float ratio_b = rb_b.inv_mass / total;
-                            t_a.position -= contact.normal * contact.depth * ratio_a;
-                            t_b.position += contact.normal * contact.depth * ratio_b;
-                        }
+                        rb_a.velocity -= contact.normal * vRel * (rb_a.inv_mass / total);
+                        rb_b.velocity += contact.normal * vRel * (rb_b.inv_mass / total);
                     }
+
+                    float ratio_a = rb_a.inv_mass / total;
+                    float ratio_b = rb_b.inv_mass / total;
+                    t_a.position -= contact.normal * contact.depth * ratio_a;
+                    t_b.position += contact.normal * contact.depth * ratio_b;
                 }
             }
 

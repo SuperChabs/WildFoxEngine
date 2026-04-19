@@ -87,6 +87,16 @@ private:
             Logger::Log(LogLevel::INFO, "Cube entity created");
         });
 
+        CommandManager::RegisterCommand("onCreateSphere",
+        [this](const CommandArgs&) 
+        {
+            auto entity = m_resModule->GetModelManager()->LoadWithECS(
+                "assets/objects/shapes/sphere/sphere.obj", 
+                m_ecsModule->GetECS(), true);
+            
+            Logger::Log(LogLevel::INFO, "Cube entity created");
+        });
+
         CommandManager::RegisterCommand("onCreatePlane",
         [this](const CommandArgs&) 
         {

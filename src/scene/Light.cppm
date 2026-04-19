@@ -12,7 +12,8 @@ export enum class LightType
 {
     DIRECTIONAL,
     POINT,
-    SPOT
+    SPOT,
+    NONE
 };
 
 export class Light

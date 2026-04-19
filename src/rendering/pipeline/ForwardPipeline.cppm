@@ -53,11 +53,11 @@ public:
         Logger::Log(LogLevel::DEBUG, "SkyboxPass created");
 
         // --- ShadowPass ---
-        // auto shadowPassOwned = std::make_unique<ShadowPass>(context, shaderManager, world);
-        // m_ShadowPassPtr = shadowPassOwned.get();
-        // shadowPassOwned->SetEnabled(false);
-        // AddPass(std::move(shadowPassOwned));
-        // Logger::Log(LogLevel::DEBUG, "ShadowPass created (disabled)");
+        auto shadowPassOwned = std::make_unique<ShadowPass>(context, shaderManager, world);
+        m_ShadowPassPtr = shadowPassOwned.get();
+        shadowPassOwned->SetEnabled(true);
+        AddPass(std::move(shadowPassOwned));
+        Logger::Log(LogLevel::DEBUG, "ShadowPass created");
 
         // --- GeometryPass ---
         auto geometryPassOwned = std::make_unique<GeometryPass>(context, shaderManager, world);
@@ -95,17 +95,17 @@ public:
         {
             m_ShadowPassPtr->Execute(view, projection);
 
-            if (m_GeometryPassPtr)
-            {
-                m_GeometryPassPtr->SetShadowData(
-                    m_ShadowPassPtr->GetLightMatrix(),
-                    m_ShadowPassPtr->GetShadowMap()
-                );
-            }
+            glViewport(0, 0, width, height);
+
+            m_GeometryPassPtr->SetShadowData(
+                m_ShadowPassPtr->GetLightMatrices(),
+                m_ShadowPassPtr->GetShadowMaps()
+            );
+            
         }
         else if (m_GeometryPassPtr)
         {
-            m_GeometryPassPtr->SetShadowData(glm::mat4(1.0f), 0);
+            m_GeometryPassPtr->SetShadowData({glm::mat4(1.0f)}, {0});
         }
 
         for (auto& pass : passes)

@@ -24,8 +24,8 @@ export class GeometryPass : public RenderPass
 private:
     ECSWorld* world;
 
-    glm::mat4 m_LightSpaceMatrix{1.0f};
-    GLuint    m_ShadowMapTexture = 0;
+    std::vector<glm::mat4> m_LightSpaceMatrices;
+    std::vector<GLuint>    m_ShadowMapTextures;
 
     static constexpr int SHADOW_MAP_TEXTURE_SLOT = 8;
 
@@ -37,10 +37,10 @@ public:
         RegisterCommands();
     }
 
-    void SetShadowData(const glm::mat4& lightSpaceMatrix, GLuint shadowMapTexture)
+    void SetShadowData(const std::vector<glm::mat4> lightSpaceMatrices, std::vector<GLuint> shadowMapTextures)
     {
-        m_LightSpaceMatrix  = lightSpaceMatrix;
-        m_ShadowMapTexture  = shadowMapTexture;
+        m_LightSpaceMatrices  = lightSpaceMatrices;
+        m_ShadowMapTextures   = shadowMapTextures;
     }
 
     void Setup() override
@@ -58,14 +58,28 @@ public:
         if (!enabled || !world) return;
         Setup();
 
-        CommandManager::ExecuteCommand("Renderer_RenderGeometry",
+        if (m_LightSpaceMatrices.empty() || m_ShadowMapTextures.empty())
         {
-            view,
-            projection,
-            std::string("basic"),
-            m_LightSpaceMatrix,
-            static_cast<int>(m_ShadowMapTexture)
-        });
+            CommandManager::ExecuteCommand("Renderer_RenderGeometry",
+            {
+                view,
+                projection,
+                std::string("basic"),
+                glm::mat4(1.0f),
+                0
+            });
+        }
+        else
+        {
+            CommandManager::ExecuteCommand("Renderer_RenderGeometry",
+            {
+                view,
+                projection,
+                std::string("basic"),
+                m_LightSpaceMatrices[0],
+                static_cast<int>(m_ShadowMapTextures[0])
+            });
+        }
 
         CleanupShadowBinding();
     }
@@ -83,11 +97,14 @@ private:
     {
         if (!CommandManager::HasCommand("Shadow_UpdateLightSpaceMatrix"))
         {
-            CommandManager::RegisterCommand("Shadow_UpdateLightSpaceMatrix",
+            CommandManager::RegisterCommand("Shadow_UpdateLightSpaceMatrices",
             [this](const CommandArgs& args)
             {
-                if (args.size() < 2) return;
-                m_LightSpaceMatrix = std::get<glm::mat4>(args[0]);
+                if (args.size() > 1) return;
+
+                auto lightSpaceMatrix = std::get<glm::mat4>(args[0]);
+
+                m_LightSpaceMatrices.push_back(lightSpaceMatrix);
             });
         }
     }

@@ -94,7 +94,7 @@ public:
 
     //~Skybox() = default;
 
-    void Render(ShaderManager& shaderManager, const glm::mat4& view, const glm::mat4& projection)
+    void Render(ShaderManager& shaderManager, const glm::mat4& view, const glm::mat4& projection, bool useSkybox = true)
     {
         glDepthFunc(GL_LEQUAL);
         shaderManager.Bind(shaderName);
@@ -112,6 +112,8 @@ public:
     }
 
     void SetShader(const std::string& newShaderName) { shaderName = newShaderName; }
+    void SetCubemapTexture(const unsigned int newCubemap) { cubemapTexture = newCubemap; }
+
     std::string GetShader() const { return shaderName; }
     unsigned int GetTexture() const { return cubemapTexture; }
     GLint GetVAO() const { return skyboxVAO->GetID(); }

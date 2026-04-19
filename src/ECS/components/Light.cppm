@@ -2,6 +2,7 @@ module;
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 export module WFE.ECS.Components.Lighting;
 
@@ -60,10 +61,7 @@ export struct LightComponent
     {
         position = transform.position;
         
-        glm::mat4 rotMat = glm::mat4(1.0f);
-        rotMat = glm::rotate(rotMat, glm::radians(transform.rotation.x), glm::vec3(1, 0, 0));
-        rotMat = glm::rotate(rotMat, glm::radians(transform.rotation.y), glm::vec3(0, 1, 0));
-        rotMat = glm::rotate(rotMat, glm::radians(transform.rotation.z), glm::vec3(0, 0, 1));
+        glm::mat4 rotMat = glm::mat4_cast(transform.rotation);
         
         glm::vec4 dir = rotMat * glm::vec4(0.0f, -1.0f, 0.0f, 0.0f);
         direction = glm::normalize(glm::vec3(dir));

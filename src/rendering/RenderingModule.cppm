@@ -233,14 +233,24 @@ private:
         try
         {
             std::vector<std::string> faces = 
-            {
+           {
                 "assets/textures/skybox4/right.bmp",
                 "assets/textures/skybox4/left.bmp",
                 "assets/textures/skybox4/top.bmp",
                 "assets/textures/skybox4/bottom.bmp",
                 "assets/textures/skybox4/front.bmp",
                 "assets/textures/skybox4/back.bmp"
-            };
+            }; 
+
+        //     std::vector<std::string> faces = 
+        //    {
+        //         "assets/textures/error.png",
+        //         "assets/textures/error.png",
+        //         "assets/textures/error.png",
+        //         "assets/textures/error.png",
+        //         "assets/textures/error.png",
+        //         "assets/textures/error.png"
+        //     }; 
             
             unsigned int cubemapTexture = resourceModule->GetTextureManager()->LoadCubemap(faces);
             
