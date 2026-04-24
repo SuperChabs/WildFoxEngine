@@ -21,7 +21,8 @@ import WFE.Scene.Light;
 export class LightSystem
 {
 public:
-    void Update(ECSWorld& world, ShaderManager& shaderManager, const std::string& shaderName)
+    void Update(ECSWorld& world, ShaderManager& shaderManager, const std::string& shaderName, 
+                const std::vector<int>* shadowMapIndices = nullptr)
     {
         shaderManager.Bind(shaderName);
         
@@ -38,7 +39,13 @@ public:
                 
                 std::string base = "lights[" + std::to_string(lightIndex) + "]";
                 
+                // Set shadow map index
+                int shadowIndex = -1;
+                if (shadowMapIndices && lightIndex < shadowMapIndices->size())
+                    shadowIndex = (*shadowMapIndices)[lightIndex];
+                
                 shaderManager.SetInt(shaderName, base + ".type", static_cast<int>(light.type));
+                shaderManager.SetInt(shaderName, base + ".shadowIndex", shadowIndex);
                 
                 shaderManager.SetVec3(shaderName, base + ".position", light.position);
                 shaderManager.SetVec3(shaderName, base + ".direction", light.direction);

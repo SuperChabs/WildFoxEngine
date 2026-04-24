@@ -99,13 +99,14 @@ public:
 
             m_GeometryPassPtr->SetShadowData(
                 m_ShadowPassPtr->GetLightMatrices(),
-                m_ShadowPassPtr->GetShadowMaps()
+                m_ShadowPassPtr->GetShadowMapArray(),
+                m_ShadowPassPtr->GetShadowMapIndices()
             );
             
         }
         else if (m_GeometryPassPtr)
         {
-            m_GeometryPassPtr->SetShadowData({glm::mat4(1.0f)}, {0});
+            m_GeometryPassPtr->SetShadowData({glm::mat4(1.0f)}, 0);
         }
 
         for (auto& pass : passes)

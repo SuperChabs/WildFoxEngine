@@ -240,26 +240,34 @@ private:
                 bool shadowsEnabled = false;
                 if (args.size() >= 5)
                 {
-                    const auto& lightSpaceMat = std::get<glm::mat4>(args[3]);
-                    int shadowTexID           = std::get<int>(args[4]);
+                    const auto& lightSpaceMatrices = std::get<std::vector<glm::mat4>>(args[3]);
+                    int shadowTexID = std::get<int>(args[4]);
 
-                    shaderManager->SetMat4(shaderName, "lightSpaceMatrix", lightSpaceMat);
+                    for (int i = 0; i < lightSpaceMatrices.size(); i++)
+                        shaderManager->SetMat4(shaderName, 
+                    "lightSpaceMatrices[" + std::to_string(i) + "]", lightSpaceMatrices[i]);
 
                     if (shadowTexID != 0)
                     {
                         shadowsEnabled = true;
                         shaderManager->SetBool(shaderName, "shadowsEnabled", true);
-                        shaderManager->SetInt(shaderName, "shadowMap", SHADOW_MAP_SLOT);
+                        shaderManager->SetInt(shaderName, "shadowMapArray", SHADOW_MAP_SLOT);
 
                         glActiveTexture(GL_TEXTURE0 + SHADOW_MAP_SLOT);
-                        glBindTexture(GL_TEXTURE_2D, shadowTexID);
+                        glBindTexture(GL_TEXTURE_2D_ARRAY, shadowTexID);
                     }
                 }
 
                 if (!shadowsEnabled)
                     shaderManager->SetBool(shaderName, "shadowsEnabled", false);
 
-                lightSystem->Update(*world, *shaderManager, shaderName);
+                const std::vector<int>* shadowMapIndices = nullptr;
+                if (args.size() >= 6)
+                {
+                    shadowMapIndices = &std::get<std::vector<int>>(args[5]);
+                }
+
+                lightSystem->Update(*world, *shaderManager, shaderName, shadowMapIndices);
                 renderSystem->Update(*world, *shaderManager, shaderName);
 
                 shaderManager->Unbind();

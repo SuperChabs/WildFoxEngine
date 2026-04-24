@@ -26,12 +26,13 @@ export class ShadowPass : public RenderPass
 {
 private:
     std::vector<GLuint> m_ShadowFBOs;
-    std::vector<GLuint> m_ShadowMaps;
+    GLuint m_ShadowMapArray = 0;
     int m_ShadowMapSize  = 2048;
 
     ECSWorld* m_World = nullptr;
 
     std::vector<glm::mat4> m_LightSpaceMatrices;
+    std::vector<int> m_ShadowMapIndices;  // maps global light index -> shadow map index
 
     float m_OrthoSize   = 30.0f;
     float m_NearPlane   = 0.1f;
@@ -43,7 +44,6 @@ public:
         , m_World(world)
     {
         InitializeShadowMap(MAX_SHADOW_LIGHTS);
-        RegisterCommands();
     }
 
     ~ShadowPass() override
@@ -54,22 +54,37 @@ public:
     void Execute(const glm::mat4& /*view*/, const glm::mat4& /*projection*/) override
     {
         assert(m_LightSpaceMatrices.size() == MAX_SHADOW_LIGHTS && "LightSpaceMatrices not initialized!");
-        assert(m_ShadowMaps.size()         == MAX_SHADOW_LIGHTS && "ShadowMaps not initialized!");
         assert(m_ShadowFBOs.size()         == MAX_SHADOW_LIGHTS && "ShadowFBOs not initialized!");
 
         if (!enabled || !m_World)
             return;
 
-        std::vector<LightComponent> shadowLights;
+        m_ShadowMapIndices.assign(8, -1);
 
+        std::vector<LightComponent> shadowLights;
+        std::vector<int> globalLightIndices;
+
+        int globalIndex = 0;
         m_World->Each<LightComponent>(
             [&](entt::entity, LightComponent& light)
         {
-            if (!light.isActive || !light.castShadows) return;
-            if (light.type == LightType::POINT) return;
+            if (!light.isActive)
+            {
+                globalIndex++;
+                return;
+            }
 
-            if (shadowLights.size() < 8)
-                shadowLights.push_back(light);
+            if (globalIndex < 8)
+            {
+                if (light.castShadows && light.type != LightType::POINT && shadowLights.size() < 8)
+                {
+                    int shadowIndex = static_cast<int>(shadowLights.size());
+                    m_ShadowMapIndices[globalIndex] = shadowIndex;
+                    shadowLights.push_back(light);
+                    globalLightIndices.push_back(globalIndex);
+                }
+            }
+            globalIndex++;
         });
 
         shaderManager->Bind("shadow_depth");
@@ -110,11 +125,6 @@ public:
                 shaderManager->SetMat4("shadow_depth", "model", model);
                 meshComp.mesh->DrawDepthOnly();
             });
-
-            CommandManager::ExecuteCommand("Shadow_UpdateLightSpaceMatrices",
-            {
-                m_LightSpaceMatrices[i]
-            });
         }
 
         shaderManager->Unbind();
@@ -126,16 +136,21 @@ public:
     {
         if (!m_ShadowFBOs.empty())
             glDeleteFramebuffers(static_cast<GLsizei>(m_ShadowFBOs.size()), m_ShadowFBOs.data());
-        if (!m_ShadowMaps.empty())
-            glDeleteTextures(static_cast<GLsizei>(m_ShadowMaps.size()), m_ShadowMaps.data());
+        
+        if (m_ShadowMapArray != 0)
+        {
+            glDeleteTextures(1, &m_ShadowMapArray);
+            m_ShadowMapArray = 0;
+        }
 
         m_ShadowFBOs.clear();
-        m_ShadowMaps.clear();
         m_LightSpaceMatrices.clear();
+        m_ShadowMapIndices.clear();
     }
 
-    std::vector<GLuint> GetShadowMaps()             const { return m_ShadowMaps; }
+    GLuint GetShadowMapArray() const { return m_ShadowMapArray; }
     const std::vector<glm::mat4>& GetLightMatrices() const { return m_LightSpaceMatrices; }
+    const std::vector<int>& GetShadowMapIndices() const { return m_ShadowMapIndices; }
     int GetShadowMapSize()            const { return m_ShadowMapSize; }
 
     void SetShadowMapSize(int size)
@@ -153,31 +168,30 @@ private:
     void InitializeShadowMap(int count)
     {
         m_ShadowFBOs.resize(count, 0);
-        m_ShadowMaps.resize(count, 0);
         m_LightSpaceMatrices.resize(count, glm::mat4(1.0f));
 
-        glGenTextures(count, m_ShadowMaps.data());
         glGenFramebuffers(count, m_ShadowFBOs.data());
+
+        glGenTextures(1, &m_ShadowMapArray);
+        glBindTexture(GL_TEXTURE_2D_ARRAY, m_ShadowMapArray);
+        glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_DEPTH_COMPONENT32F,
+                    m_ShadowMapSize, m_ShadowMapSize, count);
+
+        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+        float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
+        glTexParameterfv(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BORDER_COLOR, borderColor);
 
         for (int i = 0; i < count; i++)
         {
-            // maps initializating
-            glBindTexture(GL_TEXTURE_2D, m_ShadowMaps[i]);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F,
-                        m_ShadowMapSize, m_ShadowMapSize,
-                        0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-            float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
-            glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-            
             // framebuffers initializating
             glBindFramebuffer(GL_FRAMEBUFFER, m_ShadowFBOs[i]);
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-                                GL_TEXTURE_2D, m_ShadowMaps[i], 0);
+            glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+                                m_ShadowMapArray, 0, i);
             glDrawBuffer(GL_NONE);
             glReadBuffer(GL_NONE);
 
@@ -214,34 +228,27 @@ private:
 
     glm::mat4 BuildSpotLightMatrix(const LightComponent& light)
     {
+        float fov = light.outerCutoff * 2.0f;
+        
         glm::mat4 proj = glm::perspective(
-            glm::radians(light.outerCutoff * 2.0f),
+            glm::radians(fov),
             1.0f,
             0.1f,
-            light.radius 
+            std::max(light.radius, 100.0f)
         );
 
+        glm::vec3 lightDir = glm::normalize(light.direction);
         glm::vec3 up = glm::vec3(0, 1, 0);
-        if (glm::abs(glm::dot(glm::normalize(light.direction), up)) > 0.99f)
+        
+        if (glm::abs(glm::dot(lightDir, up)) > 0.99f)
             up = glm::vec3(1, 0, 0);
 
         glm::mat4 view = glm::lookAt(
             light.position,
-            light.position + glm::normalize(light.direction),
+            light.position + lightDir,
             up
         );
 
         return proj * view;
-    }
-
-    void RegisterCommands()
-    {
-        if (!CommandManager::HasCommand("Shadow_GetShadowMap"))
-        {
-            CommandManager::RegisterCommand("Shadow_GetShadowMap",
-            [this](const CommandArgs&)
-            {
-            });
-        }
     }
 };

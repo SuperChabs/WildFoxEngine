@@ -7,6 +7,7 @@ module;
 #include <entt/entt.hpp>
 
 #include <string>
+#include <cmath>
 
 #define AS_CHECK(r, msg) if ((r) < 0) { Logger::Log(LogLevel::ERROR, std::string("AS Register failed: ") + msg + " code: " + std::to_string(r)); return; }
 
@@ -157,6 +158,30 @@ public:
         AS_CHECK(r, "GetEntityByName");
 
         r = engine->RegisterGlobalFunction(
+            "float sqrt(float x)", 
+            asFUNCTION(FuncSqrt), 
+            asCALL_CDECL);
+        AS_CHECK(r, "sqrt");
+
+        r = engine->RegisterGlobalFunction(
+            "float sin(float x)", 
+            asFUNCTION(FuncSin), 
+            asCALL_CDECL);
+        AS_CHECK(r, "sin");
+
+        r = engine->RegisterGlobalFunction(
+            "float cos(float x)", 
+            asFUNCTION(FuncCos), 
+            asCALL_CDECL);
+        AS_CHECK(r, "cos");
+
+        r = engine->RegisterGlobalFunction(
+            "float atan2(float x, float y)", 
+            asFUNCTION(FuncATan2), 
+            asCALL_CDECL);
+        AS_CHECK(r, "atan2");
+
+        r = engine->RegisterGlobalFunction(
         "bool IsValidEntity(uint64 e)",
         asFUNCTIONPR(IsValid, (ECSWorld*, entt::entity), bool),
         asCALL_CDECL_OBJFIRST, ecs);
@@ -165,6 +190,26 @@ public:
     }
 
 private:
+    static float FuncSqrt(float x)
+    {
+        return std::sqrt(x);
+    }
+
+    static float FuncCos(float x)
+    {
+        return std::cos(x);
+    }
+
+    static float FuncSin(float x)
+    {
+        return std::sin(x);
+    }
+
+    static float FuncATan2(float x, float y)
+    {
+        return std::atan2(x, y);
+    }
+
     static void Vec3Add(const glm::vec3& other, const glm::vec3& self, glm::vec3& out)
     {
         out = self + other;

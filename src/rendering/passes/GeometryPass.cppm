@@ -25,7 +25,8 @@ private:
     ECSWorld* world;
 
     std::vector<glm::mat4> m_LightSpaceMatrices;
-    std::vector<GLuint>    m_ShadowMapTextures;
+    std::vector<int> m_ShadowMapIndices;
+    GLuint m_shadowMapArray;
 
     static constexpr int SHADOW_MAP_TEXTURE_SLOT = 8;
 
@@ -34,13 +35,14 @@ public:
         : RenderPass("GeometryPass", ctx, sm)
         , world(w)
     {
-        RegisterCommands();
     }
 
-    void SetShadowData(const std::vector<glm::mat4> lightSpaceMatrices, std::vector<GLuint> shadowMapTextures)
+    void SetShadowData(const std::vector<glm::mat4>& lightSpaceMatrices, GLuint shadowMapArray,
+                       const std::vector<int>& shadowMapIndices = {})
     {
         m_LightSpaceMatrices  = lightSpaceMatrices;
-        m_ShadowMapTextures   = shadowMapTextures;
+        m_shadowMapArray      = shadowMapArray;
+        m_ShadowMapIndices    = shadowMapIndices;
     }
 
     void Setup() override
@@ -58,28 +60,16 @@ public:
         if (!enabled || !world) return;
         Setup();
 
-        if (m_LightSpaceMatrices.empty() || m_ShadowMapTextures.empty())
+        CommandManager::ExecuteCommand("Renderer_RenderGeometry",
         {
-            CommandManager::ExecuteCommand("Renderer_RenderGeometry",
-            {
-                view,
-                projection,
-                std::string("basic"),
-                glm::mat4(1.0f),
-                0
-            });
-        }
-        else
-        {
-            CommandManager::ExecuteCommand("Renderer_RenderGeometry",
-            {
-                view,
-                projection,
-                std::string("basic"),
-                m_LightSpaceMatrices[0],
-                static_cast<int>(m_ShadowMapTextures[0])
-            });
-        }
+            view,
+            projection,
+            std::string("basic"),
+            m_LightSpaceMatrices,
+            static_cast<int>(m_shadowMapArray),
+            m_ShadowMapIndices
+        });
+        
 
         CleanupShadowBinding();
     }
@@ -90,22 +80,6 @@ private:
     void CleanupShadowBinding()
     {
         glActiveTexture(GL_TEXTURE0 + SHADOW_MAP_TEXTURE_SLOT);
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
-
-    void RegisterCommands()
-    {
-        if (!CommandManager::HasCommand("Shadow_UpdateLightSpaceMatrix"))
-        {
-            CommandManager::RegisterCommand("Shadow_UpdateLightSpaceMatrices",
-            [this](const CommandArgs& args)
-            {
-                if (args.size() > 1) return;
-
-                auto lightSpaceMatrix = std::get<glm::mat4>(args[0]);
-
-                m_LightSpaceMatrices.push_back(lightSpaceMatrix);
-            });
-        }
+        glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
     }
 };

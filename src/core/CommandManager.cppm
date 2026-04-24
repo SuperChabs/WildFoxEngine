@@ -22,6 +22,8 @@ std::variant<
     std::string, 
     glm::vec3, 
     glm::mat4, 
+    std::vector<glm::mat4>,
+    std::vector<int>,
     entt::entity
 >;
 

@@ -22,6 +22,7 @@ uniform vec2 tiling;
 // light
 struct Light {
     int   type; // 0 = directional, 1 = point, 2 = spot
+    int   shadowIndex;
 
     vec3  position;
     vec3  direction;
@@ -44,9 +45,9 @@ uniform int numLights;
 uniform vec3 viewPos;
 
 // shadows
-uniform sampler2D shadowMap;
-uniform mat4      lightSpaceMatrix;
-uniform bool      shadowsEnabled;
+uniform sampler2DArrayShadow shadowMapArray;
+uniform mat4 lightSpaceMatrices[8];
+uniform bool shadowsEnabled;
 
 // settings
 uniform float shininess = 32.0;
@@ -69,9 +70,13 @@ vec3 SampleSpecular()
 }
 
 // shadow
-float ShadowCalculation(vec3 normal, vec3 lightDir)
+float ShadowCalculation(vec3 normal, vec3 lightDir, int index)
 {
-    vec4 fragPosLightSpace = lightSpaceMatrix * vec4(FragPos, 1.0);
+    // Invalid shadow index means no shadow for this light
+    if (index < 0)
+        return 0.0;
+
+    vec4 fragPosLightSpace = lightSpaceMatrices[index] * vec4(FragPos, 1.0);
 
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
     projCoords = projCoords * 0.5 + 0.5;
@@ -86,17 +91,7 @@ float ShadowCalculation(vec3 normal, vec3 lightDir)
     float cosTheta = max(dot(normal, lightDir), 0.0);
     float bias = max(0.005 * (1.0 - cosTheta), 0.0005);
 
-    float shadow = 0.0;
-    vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
-
-    for (int x = -1; x <= 1; ++x)
-        for (int y = -1; y <= 1; ++y)
-        {
-            float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
-            shadow += (currentDepth - bias > pcfDepth) ? 1.0 : 0.0;
-        }
-
-    return shadow / 9.0;
+    return 1.0 - texture(shadowMapArray, vec4(projCoords.xy, float(index), projCoords.z - bias));
 }
 
 // lighting
@@ -191,7 +186,7 @@ void main()
                 ? normalize(-lights[i].direction)
                 : normalize(lights[i].position - FragPos);
 
-            shadow = ShadowCalculation(norm, lightDir);
+            shadow = ShadowCalculation(norm, lightDir, lights[i].shadowIndex);
         }
 
         if (lights[i].type == 0)
