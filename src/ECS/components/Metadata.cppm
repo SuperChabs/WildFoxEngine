@@ -1,8 +1,7 @@
 module;
 
 #include <string>
-#include <memory>
-#include <vector>
+#include <cstdint>
 
 export module WFE.ECS.Components.Metadata;
 

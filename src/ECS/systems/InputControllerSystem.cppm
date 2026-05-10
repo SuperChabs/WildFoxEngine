@@ -1,15 +1,10 @@
 module;
 
 #include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
-#include <ImGuizmo.h>
 #include <entt/entt.hpp>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <stb_image.h>
 
 export module WFE.ECS.Systems.InputControllerSystem;
 
@@ -69,7 +64,7 @@ private:
     void ProcessMouse(Input& input, TransformComponent& transform, CameraOrientationComponent& orientation, float sensitivity)
     {
         // If ImGui/ImGuizmo are using the mouse, don't update camera orientation
-        if (ImGuizmo::IsUsing() || ImGui::GetIO().WantCaptureMouse)
+        if (/*ImGuizmo::IsUsing() ||*/ ImGui::GetIO().WantCaptureMouse)
         {
             input.ResetMouseDelta();
             return;

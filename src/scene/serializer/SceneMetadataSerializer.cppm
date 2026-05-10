@@ -1,8 +1,6 @@
 module;
 
 #include <string>
-#include <memory>
-#include <vector>
 #include <nlohmann/json.hpp>
 #include <entt/entt.hpp>
 
@@ -35,6 +33,5 @@ public:
 
     void DeserializeMetadata(const json& data)
     {
-        // Metadata is informational only, no state to deserialize
     }
 };

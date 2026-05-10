@@ -4,6 +4,7 @@ module;
 #include <memory>
 #include <vector>
 #include <unordered_map>
+
 #include <entt/entt.hpp>
 #include <nlohmann/json.hpp>
 
@@ -11,6 +12,8 @@ export module WFE.Scene.Serializer.SerializerRegistry;
 
 import WFE.ECS.ECSWorld;
 import WFE.Scene.Serializer.Component;
+import WFE.Scene.Serializer.Component.AudioSourceSerializer;
+import WFE.Scene.Serializer.Component.AudioListenerSerializer;
 import WFE.Core.Logger;
 
 using json = nlohmann::json;
@@ -104,6 +107,8 @@ private:
         RegisterSerializer<CameraSerializer>("camera");
         RegisterSerializer<CameraTypeSerializer>("cameraType");
         RegisterSerializer<ScriptSerializer>("script");
+        RegisterSerializer<AudioSourceSerializer>("audioSource");
+        RegisterSerializer<AudioListenerSerializer>("audioListener");
         RegisterSerializer<VisibilitySerializer>("visibility");
         RegisterSerializer<IconSerializer>("icon");
         RegisterSerializer<RigidBodySerializer>("rigidBody");

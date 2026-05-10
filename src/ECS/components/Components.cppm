@@ -9,3 +9,4 @@ export import WFE.ECS.Components.Hierarchy;
 export import WFE.ECS.Components.Camera;
 export import WFE.ECS.Components.Script;
 export import WFE.ECS.Components.Physics;
+export import WFE.ECS.Components.Audio;

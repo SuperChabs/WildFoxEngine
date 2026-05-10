@@ -21,6 +21,7 @@ import WFE.UI.Panels.MaterialPanel;
 import WFE.UI.Panels.LightPanel;
 import WFE.UI.Panels.CameraPanel;
 import WFE.UI.Panels.ScriptPanel;
+import WFE.UI.Panels.AudioPanel;
 import WFE.UI.Panels.IconPanel;
 import WFE.UI.Panels.RigidBodyPanel;
 import WFE.UI.Panels.ColliderPanel;
@@ -29,6 +30,7 @@ export class DebugOverlay
 {
 public:
     bool visible = true;
+    AudioPanel audioPanel;
 
     void Render(ECSWorld* ecs, entt::entity cameraEntity,
                 MaterialManager* materialManager)
@@ -241,6 +243,8 @@ private:
         if (ecs->HasComponent<CameraComponent>(m_selected) &&
             ecs->HasComponent<CameraOrientationComponent>(m_selected))
             cameraPanel.Render(ecs, m_selected);
+        if (ecs->HasComponent<AudioSourceComponent>(m_selected) || ecs->HasComponent<AudioListenerComponent>(m_selected))
+            audioPanel.Render(ecs, m_selected);
         if (ecs->HasComponent<ScriptComponent>(m_selected))
             scriptPanel.Render(ecs, m_selected);
         if (ecs->HasComponent<IconComponent>(m_selected))
@@ -261,6 +265,14 @@ private:
             if (!ecs->HasComponent<ScriptComponent>(m_selected))
                 if (ImGui::MenuItem("Script"))
                     ecs->AddComponent<ScriptComponent>(m_selected);
+
+            if (!ecs->HasComponent<AudioSourceComponent>(m_selected))
+                if (ImGui::MenuItem("Audio Source"))
+                    ecs->AddComponent<AudioSourceComponent>(m_selected);
+
+            if (!ecs->HasComponent<AudioListenerComponent>(m_selected))
+                if (ImGui::MenuItem("Audio Listener"))
+                    ecs->AddComponent<AudioListenerComponent>(m_selected);
 
             if (!ecs->HasComponent<MaterialComponent>(m_selected))
                 if (ImGui::MenuItem("Material"))
@@ -305,6 +317,14 @@ private:
             if (ecs->HasComponent<ScriptComponent>(m_selected))
                 if (ImGui::MenuItem("Script"))
                     ecs->RemoveComponent<ScriptComponent>(m_selected);
+
+            if (ecs->HasComponent<AudioSourceComponent>(m_selected))
+                if (ImGui::MenuItem("Audio Source"))
+                    ecs->RemoveComponent<AudioSourceComponent>(m_selected);
+
+            if (ecs->HasComponent<AudioListenerComponent>(m_selected))
+                if (ImGui::MenuItem("Audio Listener"))
+                    ecs->RemoveComponent<AudioListenerComponent>(m_selected);
 
             if (ecs->HasComponent<RigidBodyComponent>(m_selected))
                 if (ImGui::MenuItem("RigidBody"))

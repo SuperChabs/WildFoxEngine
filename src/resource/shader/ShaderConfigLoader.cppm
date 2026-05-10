@@ -1,14 +1,8 @@
 module;
 
 #include <string>
-#include <memory>
 #include <vector>
-#include <filesystem>
 #include <fstream>
-
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <stb_image.h>
 
 #include <nlohmann/json.hpp>
 

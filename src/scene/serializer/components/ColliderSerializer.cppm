@@ -3,6 +3,7 @@ module;
 #include <entt/entt.hpp>
 #include <nlohmann/json.hpp>
 #include <glm/glm.hpp>
+
 #include <variant>
 
 export module WFE.Scene.Serializer.Component.ColliderSerializer;

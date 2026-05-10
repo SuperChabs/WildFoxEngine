@@ -1,12 +1,9 @@
 module;
 
-#include <string>
 #include <unordered_map>
-#include <memory>
+
 #include <glm/glm.hpp>
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <stb_image.h>
 
 export module WFE.Core.Input;
 

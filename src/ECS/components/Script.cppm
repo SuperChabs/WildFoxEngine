@@ -1,8 +1,7 @@
 module;
 
 #include <string>
-#include <memory>
-#include <vector>
+
 #include <angelscript.h>
 #include <scriptbuilder.h>
 

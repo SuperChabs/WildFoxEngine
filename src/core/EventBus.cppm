@@ -4,7 +4,6 @@ module;
 #include <unordered_map>
 #include <vector>
 #include <functional>
-#include <memory>
 #include <any>
 
 export module WFE.Core.EventBus;

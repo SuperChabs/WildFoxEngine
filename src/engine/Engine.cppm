@@ -2,21 +2,15 @@ module;
 
 #include <string>
 #include <memory>
-#include <vector>
-#include <variant>
-#include <functional>
+
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <ImGuizmo.h>
 #include <entt/entt.hpp>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/matrix_decompose.hpp>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <stb_image.h>
 
 export module WFE.Engine;
 
@@ -52,6 +46,7 @@ private:
     std::unique_ptr<ScriptSystem> scriptSystem;
     std::unique_ptr<InputControllerSystem> inputControllerSystem;
     std::unique_ptr<PhysicsDebugRenderSystem> physicsDebugSystem;
+    std::unique_ptr<AudioSystem> audioSystem;
 
     std::unique_ptr<EditorCommandHandler> ech;
 
@@ -216,6 +211,11 @@ protected:
         scriptSystem = std::make_unique<ScriptSystem>();
         inputControllerSystem = std::make_unique<InputControllerSystem>();
         physicsDebugSystem = std::make_unique<PhysicsDebugRenderSystem>();
+        audioSystem = std::make_unique<AudioSystem>();
+        if (!audioSystem->Init())
+        {
+            Logger::Log(LogLevel::WARNING, "AudioSystem failed to initialize");
+        }
 
         InitializeAS();
 
@@ -252,6 +252,8 @@ protected:
         UpdateMainCamera();
 
         scriptSystem->Update(*ecsModule->GetECS(), GetInput(), deltaTime);
+        if (audioSystem)
+            audioSystem->Update(ecsModule->GetECS());
     }
 
     void UpdateMainCamera()
@@ -355,6 +357,9 @@ protected:
         Logger::Log(LogLevel::INFO, "Shutting down engine...");
         Logger::Log(LogLevel::INFO, "==================================");
 
+        if (audioSystem)
+            audioSystem->Shutdown();
+
         mm->ShutdownAll();
         
         Logger::Log(LogLevel::INFO, "==================================");
@@ -386,7 +391,7 @@ private:
         
         try 
         {
-            InitAS(ecsModule->GetECS(), GetInput());
+            InitAS(ecsModule->GetECS(), GetInput(), audioSystem.get());
             Logger::Log(LogLevel::INFO, "AngelScript initialized successfully");
         }
         catch (const std::exception& e)

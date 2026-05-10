@@ -1,12 +1,10 @@
 module;
 
 #include <string>
-#include <memory>
+#include <type_traits>
 #include <vector>
-#include <unordered_map>
 #include <entt/entt.hpp>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
 export module WFE.ECS.ECSWorld;
 
@@ -53,17 +51,37 @@ public:
     }
     
     template<typename T, typename... Args>
-    T& AddComponent(entt::entity entity, Args&&... args) 
+    std::enable_if_t<std::is_empty_v<T> && sizeof...(Args) == 0, void>
+    AddComponent(entt::entity entity)
     {
         if (registry.all_of<T>(entity))
             registry.remove<T>(entity);
+
+        registry.emplace<T>(entity);
+    }
+
+    template<typename T, typename... Args>
+    std::enable_if_t<!std::is_empty_v<T> || sizeof...(Args) != 0, T&>
+    AddComponent(entt::entity entity, Args&&... args)
+    {
+        if (registry.all_of<T>(entity))
+            registry.remove<T>(entity);
+
         return registry.emplace<T>(entity, std::forward<Args>(args)...);
     }
     
     template<typename T>
-    T& GetComponent(entt::entity entity) 
+    std::enable_if_t<!std::is_empty_v<T>, T&>
+    GetComponent(entt::entity entity) 
     {
         return registry.get<T>(entity);
+    }
+
+    template<typename T>
+    std::enable_if_t<std::is_empty_v<T>, void>
+    GetComponent(entt::entity entity) 
+    {
+        registry.get<T>(entity);
     }
     
     template<typename T>

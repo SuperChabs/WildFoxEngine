@@ -1,8 +1,6 @@
 module;
 
-#include <string>
-#include <vector>
-#include <memory>
+#include <cstddef>
 
 export module WFE.Rendering.Primitive.PrimitiveGenerator;
 

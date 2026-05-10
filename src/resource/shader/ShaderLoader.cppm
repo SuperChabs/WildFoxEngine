@@ -1,8 +1,6 @@
 module;
 
 #include <string>
-#include <memory>
-#include <vector>
 #include <filesystem>
 #include <fstream>
 #include <sstream>

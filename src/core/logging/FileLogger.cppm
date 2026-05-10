@@ -3,7 +3,6 @@ module;
 #include <string>
 #include <fstream>
 #include <mutex>
-#include <memory>
 #include <atomic>
 #include <filesystem>
 #include <chrono>

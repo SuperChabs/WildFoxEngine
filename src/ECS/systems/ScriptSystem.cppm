@@ -1,12 +1,10 @@
 module;
 
-#include <angelscript.h>
-#include <scriptbuilder.h>
 #include <string>
-#include <memory>
-#include <vector>
 #include <filesystem>
+#include <angelscript.h>
 
+#include <scriptbuilder.h>
 #include <entt/entt.hpp>
 
 export module WFE.ECS.Systems.ScriptSystem;

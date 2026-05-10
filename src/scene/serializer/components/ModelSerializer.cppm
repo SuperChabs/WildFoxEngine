@@ -1,12 +1,10 @@
 module;
 
 #include <string>
-#include <memory>
-#include <vector>
+
 #include <nlohmann/json.hpp>
 #include <entt/entt.hpp>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
 export module WFE.Scene.Serializer.Component.ModelSerializer;
 

@@ -2,8 +2,6 @@ module;
 
 #include <string>
 #include <print>
-#include <mutex>
-#include <memory>
 #include <chrono>
 #include <ctime>
 #include <iomanip>

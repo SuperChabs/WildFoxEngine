@@ -26,6 +26,7 @@ import WFE.UI.Panels.MaterialPanel;
 import WFE.UI.Panels.LightPanel;
 import WFE.UI.Panels.CameraPanel;
 import WFE.UI.Panels.ScriptPanel;
+import WFE.UI.Panels.AudioPanel;
 
 export class InspectorWindow 
 {
@@ -38,6 +39,7 @@ private:
     LightPanel lightPanel;
     CameraPanel cameraPanel;
     ScriptPanel scriptPanel;
+    AudioPanel audioPanel;
 
 public:
     void Render(ECSWorld* ecs, entt::entity selectedEntity, 
@@ -122,6 +124,8 @@ private:
         if (ecs->HasComponent<CameraComponent>(selectedEntity) &&
             ecs->HasComponent<CameraOrientationComponent>(selectedEntity))
             cameraPanel.Render(ecs, entity);
+        if (ecs->HasComponent<AudioSourceComponent>(selectedEntity) || ecs->HasComponent<AudioListenerComponent>(selectedEntity))
+            audioPanel.Render(ecs, entity);
         if (ecs->HasComponent<ScriptComponent>(selectedEntity))
             scriptPanel.Render(ecs, entity);
 
@@ -148,6 +152,14 @@ private:
                     ecs->AddComponent<CameraComponent>(entity);
                     ecs->AddComponent<CameraOrientationComponent>(entity);
                 }
+
+            if (!ecs->HasComponent<AudioSourceComponent>(entity))
+                if (ImGui::MenuItem("Audio Source"))
+                    ecs->AddComponent<AudioSourceComponent>(entity);
+
+            if (!ecs->HasComponent<AudioListenerComponent>(entity))
+                if (ImGui::MenuItem("Audio Listener"))
+                    ecs->AddComponent<AudioListenerComponent>(entity);
 
             if (!ecs->HasComponent<ScriptComponent>(entity))
                 if (ImGui::MenuItem("Script"))

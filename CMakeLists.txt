@@ -12,6 +12,7 @@ set(CMAKE_CXX_COMPILER_LAUNCHER ccache)
 set(CMAKE_BUILD_PARALLEL_LEVEL 0)
 
 find_package(OpenGL REQUIRED)
+find_package(OpenAL REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(glm REQUIRED)
 find_package(assimp REQUIRED)
@@ -176,6 +177,8 @@ target_link_libraries(${PROJECT_NAME}
     angelscript
     scriptbuilder
     scriptstdstring
+    OpenAL::OpenAL 
+    sndfile
 )
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE

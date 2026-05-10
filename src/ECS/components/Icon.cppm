@@ -1,8 +1,6 @@
 module;
 
 #include <string>
-#include <memory>
-#include <vector>
 
 export module WFE.ECS.Components.Icon;
 

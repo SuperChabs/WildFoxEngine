@@ -1,8 +1,8 @@
 module;
 
-#include <string>
-#include <memory>
-#include <vector>
+#include <unordered_map>
+#include <cstdint>
+
 #include <nlohmann/json.hpp>
 #include <entt/entt.hpp>
 

@@ -121,7 +121,7 @@ public:
             if (!currentTriggers.count(p))
             {    
                 CommandManager::ExecuteCommand("OnTriggerExit", {p.first, p.second});
-                Logger::Log(LogLevel::INFO, "Enter trigger");
+                Logger::Log(LogLevel::INFO, "Exit trigger");
             }
 
         m_activeTriggers = currentTriggers;

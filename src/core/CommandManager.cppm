@@ -5,7 +5,6 @@ module;
 #include <vector>
 #include <variant>
 #include <functional>
-#include <memory>
 
 #include <glm/glm.hpp>
 #include <entt/entt.hpp>

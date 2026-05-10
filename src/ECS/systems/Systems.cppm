@@ -6,5 +6,6 @@ export import WFE.ECS.Systems.CameraSystem;
 export import WFE.ECS.Systems.InputControllerSystem;
 export import WFE.ECS.Systems.IconRenderSystem;
 export import WFE.ECS.Systems.ScriptSystem;
+export import WFE.ECS.Systems.AudioSystem;
 export import WFE.ECS.Systems.PhysicsDebugRenderSystem;
 export import WFE.ECS.Systems.PhysicsSystem;

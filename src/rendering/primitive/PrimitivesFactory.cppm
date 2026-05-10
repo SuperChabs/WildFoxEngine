@@ -1,8 +1,8 @@
 module;
 
 #include <string>
-#include <vector>
 #include <memory>
+
 #include <glm/glm.hpp>
 
 export module WFE.Rendering.Primitive.PrimitivesFactory;

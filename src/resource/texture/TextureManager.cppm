@@ -3,8 +3,8 @@ module;
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stb_image.h>
+
 #include <string>
-#include <memory>
 #include <vector>
 #include <unordered_map>
 
