@@ -1,0 +1,18 @@
+#pragma once
+
+#include "scene/serializer/components/CameraSerializer.h"
+#include "scene/serializer/components/ColorSerializer.h"
+#include "scene/serializer/components/LightSerializer.h"
+#include "scene/serializer/components/MaterialSerializer.h"
+#include "scene/serializer/components/MeshSerializer.h"
+#include "scene/serializer/components/ModelSerializer.h"
+#include "scene/serializer/components/ScriptSerializer.h"
+#include "scene/serializer/components/TransformSerializer.h"
+#include "scene/serializer/components/VisibilitySerializer.h"
+#include "scene/serializer/components/IconSerializer.h"
+#include "scene/serializer/components/RigidBodySerializer.h"
+#include "scene/serializer/components/ColliderSerializer.h"
+//#include "scene/serializer/components/HierarchyDerializer.h"
+#include "scene/serializer/components/IComponentSerializer.h"
+#include "scene/serializer/components/AudioListenerSerializer.h"
+#include "scene/serializer/components/AudioSourceSerializer.h"

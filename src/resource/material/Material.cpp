@@ -1,0 +1,99 @@
+#include "Material.h"
+
+#include <glad/glad.h>
+
+#include "core/logging/Logger.h"
+
+Material::Material(const std::vector<Texture> &textures, const std::string &materialName)
+    : name(materialName), type("texture"), textures(textures), useColor(false), color(1.0f, 1.0f, 1.0f) {
+    if (textures.empty()) {
+        useColor = true;
+        color = glm::vec3(1.0f, 1.0f, 1.0f);
+        Logger::Log(LogLevel::WARNING, LogCategory::RENDERING,
+                    "Material '" + name + "' created with white color (no textures)");
+    } else {
+        useColor = false;
+        Logger::Log(LogLevel::INFO, LogCategory::RENDERING,
+                    "Material '" + name + "' created with " + std::to_string(textures.size()) + " textures");
+    }
+}
+
+Material::Material(const glm::vec3 &solidColor, const std::string &materialName)
+    : name(materialName), type("color"), color(solidColor), useColor(true) {
+    Logger::Log(LogLevel::INFO, LogCategory::RENDERING,
+                "Material '" + name + "' created with color: (" +
+                std::to_string(color.x) + ", " +
+                std::to_string(color.y) + ", " +
+                std::to_string(color.z) + ")");
+}
+
+Material &Material::operator=(Material &other) {
+    if (this == &other)
+        return *this;
+
+    this->name = other.name;
+    this->type = other.type;
+    this->color = other.color;
+    this->textures = other.textures;
+    this->useColor = other.useColor;
+
+    return *this;
+}
+
+void Material::Bind(ShaderManager &shaderManager, const std::string &shaderName) {
+    shaderManager.Bind(shaderName);
+
+    shaderManager.SetBool(shaderName, "useColor", useColor);
+
+    if (useColor) {
+        shaderManager.SetVec3(shaderName, "material.color", color);
+    } else {
+        unsigned int diffuseNr = 1;
+        unsigned int specularNr = 1;
+        unsigned int normalNr = 1;
+        unsigned int heightNr = 1;
+
+        for (unsigned int i = 0; i < textures.size(); i++) {
+            glActiveTexture(GL_TEXTURE0 + i);
+
+            std::string number;
+            std::string texType = textures[i].type;
+
+            if (texType == "texture_diffuse")
+                number = std::to_string(diffuseNr++);
+            else if (texType == "texture_specular")
+                number = std::to_string(specularNr++);
+            else if (texType == "texture_normal")
+                number = std::to_string(normalNr++);
+            else if (texType == "texture_height")
+                number = std::to_string(heightNr++);
+
+            std::string uniformName = "material." + texType + number;
+            shaderManager.SetInt(shaderName, uniformName.c_str(), i);
+            glBindTexture(GL_TEXTURE_2D, textures[i].id);
+        }
+
+        glActiveTexture(GL_TEXTURE0);
+    }
+}
+
+void Material::Unbind() {
+    if (!useColor) {
+        for (unsigned int i = 0; i < textures.size(); i++) {
+            glActiveTexture(GL_TEXTURE0 + i);
+            glBindTexture(GL_TEXTURE_2D, 0);
+        }
+        glActiveTexture(GL_TEXTURE0);
+    }
+}
+
+void Material::SetColor(glm::vec3 newColor) {
+    color = newColor;
+    useColor = true;
+    textures.clear();
+}
+
+void Material::SetTextures(std::vector<Texture> newTextures) {
+    textures = newTextures;
+    useColor = false;
+}
