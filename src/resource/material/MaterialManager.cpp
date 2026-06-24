@@ -204,3 +204,13 @@ void MaterialManager::RegisterCommands() {
                                     }
     );
 }
+
+// --- split_headers: auto-generated ---
+
+size_t MaterialManager::GetMaterialsCount() const {
+    return materials.size();
+}
+
+const std::unordered_map<std::string, std::shared_ptr<Material> > &MaterialManager::GetMaterialsMap() const {
+    return materials;
+}

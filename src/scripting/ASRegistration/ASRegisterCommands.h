@@ -12,7 +12,7 @@
 #include "ECS/World.h"
 #include "ECS/components/Components.h"
 
-void DispatchTrigger(ECSWorld *ecs, const std::string &fnDecl,
+inline void DispatchTrigger(ECSWorld *ecs, const std::string &fnDecl,
                      entt::entity a, entt::entity b) {
     auto tryCall = [&](entt::entity self, entt::entity other) {
         if (!ecs->HasComponent<ScriptComponent>(self)) return;
@@ -31,7 +31,7 @@ void DispatchTrigger(ECSWorld *ecs, const std::string &fnDecl,
     tryCall(b, a);
 }
 
-void RegisterCommands(ECSWorld *ecs) {
+inline void RegisterCommands(ECSWorld *ecs) {
     CommandManager::RegisterCommand("OnTriggerEnter",
                                     [ecs](const CommandArgs &args) {
                                         entt::entity a = std::get<entt::entity>(args[0]);

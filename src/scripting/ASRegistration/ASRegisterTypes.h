@@ -10,25 +10,25 @@
 #include "core/logging/Logger.h"
 #include "ECS/components/Components.h"
 
-void RegisterVec3(asIScriptEngine * engine);
-void RegisterTransformComponent(asIScriptEngine * engine);
+inline void RegisterVec3(asIScriptEngine * engine);
+inline void RegisterTransformComponent(asIScriptEngine * engine);
 
-void Vec3Add(const glm::vec3 &other, const glm::vec3 &self, glm::vec3 &out);
+inline void Vec3Add(const glm::vec3 &other, const glm::vec3 &self, glm::vec3 &out);
 
-void Vec3Sub(const glm::vec3 &other, const glm::vec3 &self, glm::vec3 &out);
+inline void Vec3Sub(const glm::vec3 &other, const glm::vec3 &self, glm::vec3 &out);
 
-void Vec3Mul(float scalar, const glm::vec3 &self, glm::vec3 &out);
+inline void Vec3Mul(float scalar, const glm::vec3 &self, glm::vec3 &out);
 
-void Vec3Constructor(glm::vec3 * self);
+inline void Vec3Constructor(glm::vec3 * self);
 
-void Vec3ConstructorXYZ(float x, float y, float z, glm::vec3 *self);
+inline void Vec3ConstructorXYZ(float x, float y, float z, glm::vec3 *self);
 
-void RegisterTypes(asIScriptEngine *engine) {
+inline void RegisterTypes(asIScriptEngine *engine) {
     RegisterVec3(engine);
     RegisterTransformComponent(engine);
 }
 
-void RegisterVec3(asIScriptEngine *engine) {
+inline void RegisterVec3(asIScriptEngine *engine) {
     int r;
 
     r = engine->RegisterObjectType("vec3", sizeof(glm::vec3),
@@ -78,7 +78,7 @@ void RegisterVec3(asIScriptEngine *engine) {
     AS_CHECK(r, "vec3 mul");
 }
 
-void RegisterTransformComponent(asIScriptEngine *engine) {
+inline void RegisterTransformComponent(asIScriptEngine *engine) {
     int r;
 
     r = engine->RegisterObjectType("Transform", 0, asOBJ_REF | asOBJ_NOCOUNT);
@@ -97,23 +97,23 @@ void RegisterTransformComponent(asIScriptEngine *engine) {
 
 /// @name glm::vec3 
 /// @{
-void Vec3Add(const glm::vec3 &other, const glm::vec3 &self, glm::vec3 &out) {
+inline void Vec3Add(const glm::vec3 &other, const glm::vec3 &self, glm::vec3 &out) {
     out = self + other;
 }
 
-void Vec3Sub(const glm::vec3 &other, const glm::vec3 &self, glm::vec3 &out) {
+inline void Vec3Sub(const glm::vec3 &other, const glm::vec3 &self, glm::vec3 &out) {
     out = self - other;
 }
 
-void Vec3Mul(float scalar, const glm::vec3 &self, glm::vec3 &out) {
+inline void Vec3Mul(float scalar, const glm::vec3 &self, glm::vec3 &out) {
     out = self * scalar;
 }
 
-void Vec3Constructor(glm::vec3 *self) {
+inline void Vec3Constructor(glm::vec3 *self) {
     new(self) glm::vec3(0.0f);
 }
 
-void Vec3ConstructorXYZ(float x, float y, float z, glm::vec3 *self) {
+inline void Vec3ConstructorXYZ(float x, float y, float z, glm::vec3 *self) {
     new(self) glm::vec3(x, y, z);
 }
 

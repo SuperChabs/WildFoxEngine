@@ -5,12 +5,10 @@
 #include <vector>
 
 #include <entt/entt.hpp>
-#include <glm/glm.hpp>
 
 #include "rendering/passes/RenderPass.h"
 #include "rendering/core/GLContext.h"
 #include "resource/shader/ShaderManager.h"
-#include "core/logging/Logger.h"
 #include "ECS/World.h"
 #include "ECS/components/Components.h"
 
@@ -22,53 +20,19 @@ protected:
     ShaderManager *shaderManager;
 
 public:
-    RenderPipeline(const std::string &n, GLContext *ctx, ShaderManager *sm)
-        : name(n), context(ctx), shaderManager(sm) {
-        Logger::Log(LogLevel::DEBUG, "RenderPipeline '" + name + "' constructed");
-    }
+    RenderPipeline(const std::string &n, GLContext *ctx, ShaderManager *sm);
 
     virtual ~RenderPipeline() = default;
 
     virtual void Initialize() = 0;
 
-    virtual void Execute(ECSWorld &ecs, entt::entity cameraEntity, int width, int height) {
-        if (ecs.HasComponent<CameraComponent>(cameraEntity) &&
-            ecs.HasComponent<TransformComponent>(cameraEntity) &&
-            ecs.HasComponent<CameraOrientationComponent>(cameraEntity)) {
-            auto &camera = ecs.GetComponent<CameraComponent>(cameraEntity);
-            auto &transform = ecs.GetComponent<TransformComponent>(cameraEntity);
-            auto &orientation = ecs.GetComponent<CameraOrientationComponent>(cameraEntity);
+    virtual void Execute(ECSWorld &ecs, entt::entity cameraEntity, int width, int height);
 
-            float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
-            glm::mat4 projection = camera.GetProjectionMatrix(aspectRatio);
-            glm::mat4 view = orientation.GetViewMatrix(transform.position);
+    void AddPass(std::unique_ptr<RenderPass> pass);
 
-            for (auto &pass: passes)
-                if (pass && pass->IsEnabled())
-                    pass->Execute(view, projection);
-        } else {
-            return;
-        }
-    }
+    RenderPass *GetPass(const std::string &passName);
 
-    void AddPass(std::unique_ptr<RenderPass> pass) {
-        if (!pass) {
-            Logger::Log(LogLevel::ERROR, "Attempted to add null pass!");
-            return;
-        }
+    const std::string &GetName() const;
 
-        std::string passName = pass->GetName();
-        passes.push_back(std::move(pass));
-        Logger::Log(LogLevel::DEBUG, "Added pass: " + passName);
-    }
-
-    RenderPass *GetPass(const std::string &passName) {
-        for (auto &pass: passes)
-            if (pass && pass->GetName() == passName)
-                return pass.get();
-        return nullptr;
-    }
-
-    const std::string &GetName() const { return name; }
-    size_t GetPassCount() const { return passes.size(); }
+    size_t GetPassCount() const;
 };

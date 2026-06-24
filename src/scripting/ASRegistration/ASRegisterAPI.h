@@ -4,7 +4,6 @@
 #include <scriptbuilder.h>
 #include <scriptstdstring.h>
 
-#include "scripting/ASState.h"
 #include "ECS/World.h"
 #include "core/Input.h"
 
@@ -18,16 +17,5 @@
 
 class ASRegisterAPI {
 public:
-    static void RegisterAll(ECSWorld *ecs, Input *input, AudioSystem *audioSystem) {
-        asIScriptEngine *engine = ASState::Get();
-
-        RegisterStdString(engine);
-
-        RegisterTypes(engine);
-        RegisterCommands(ecs);
-        RegisterECS(engine, ecs);
-        RegisterInput(engine, input);
-        RegisterMath(engine);
-        RegisterAudio(engine, audioSystem);
-    }
+    static void RegisterAll(ECSWorld *ecs, Input *input, AudioSystem *audioSystem);
 };

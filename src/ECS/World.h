@@ -75,7 +75,8 @@ public:
 
     std::unordered_set<entt::entity> GetChildren(entt::entity entity);
 
-    entt::registry &GetRegistry() { return registry; }
+    entt::registry &GetRegistry();
+
 
     size_t GetEntityCount() const;
 

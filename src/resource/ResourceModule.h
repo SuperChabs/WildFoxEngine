@@ -1,10 +1,8 @@
 #pragma once
 
-#include <string>
 #include <memory>
 
 #include "core/IModule.h"
-#include "core/logging/Logger.h"
 #include "resource/shader/ShaderManager.h"
 #include "resource/texture/TextureManager.h"
 #include "resource/material/MaterialManager.h"
@@ -19,66 +17,27 @@ class ResourceModule : public IModule {
 public:
     ResourceModule() = default;
 
-    bool Initialize() override {
-        Logger::Log(LogLevel::INFO, "Creating resource managers...");
+    bool Initialize() override;
 
-        try {
-            textureManager = std::make_unique<TextureManager>();
-            Logger::Log(LogLevel::DEBUG, "  TextureManager created");
+    void Update(float deltaTime) override;
 
-            materialManager = std::make_unique<MaterialManager>(textureManager.get());
-            Logger::Log(LogLevel::DEBUG, "  MaterialManager created");
-
-            shaderManager = std::make_unique<ShaderManager>();
-            Logger::Log(LogLevel::DEBUG, "  ShaderManager created");
-            Logger::Log(LogLevel::DEBUG, "  ShaderManager address: " +
-                                         std::to_string(reinterpret_cast<uintptr_t>(shaderManager.get())));
-
-            modelManager = std::make_unique<ModelManager>();
-            modelManager->SetMaterialManager(materialManager.get());
-            Logger::Log(LogLevel::DEBUG, "  ModelManager created");
-
-            isInitialized = true;
-
-            return true;
-        } catch (const std::exception &e) {
-            Logger::Log(LogLevel::ERROR,
-                        "Exception creating resource managers: " + std::string(e.what()));
-
-            isInitialized = false;
-
-            return false;
-        }
-    }
-
-    void Update(float deltaTime) override {
-    }
-
-    void Shutdown() override {
-        Logger::Log(LogLevel::INFO, "Shutting down ResourceModule...");
-
-        if (shaderManager) {
-            shaderManager->ClearAll();
-            shaderManager.reset();
-        }
-
-        modelManager.reset();
-        materialManager.reset();
-        textureManager.reset();
-
-        isInitialized = false;
-        Logger::Log(LogLevel::INFO, "RenderingModule shutdown complete");
-    }
+    void Shutdown() override;
 
     /// @name IModule interface
     /// @{
-    const char *GetName() const override { return "Resource"; }
-    int GetPriority() const override { return 20; }
-    bool IsRequired() const override { return true; }
+    const char *GetName() const override;
+
+    int GetPriority() const override;
+
+    bool IsRequired() const override;
+
     /// @}
 
-    ModelManager *GetModelManager() { return modelManager.get(); }
-    ShaderManager *GetShaderManager() { return shaderManager.get(); }
-    TextureManager *GetTextureManager() { return textureManager.get(); }
-    MaterialManager *GetMaterialManager() { return materialManager.get(); }
+    ModelManager *GetModelManager();
+
+    ShaderManager *GetShaderManager();
+
+    TextureManager *GetTextureManager();
+
+    MaterialManager *GetMaterialManager();
 };

@@ -13,35 +13,27 @@ class PhysicsModule : public IModule {
     ECSWorld *m_ecs = nullptr;
 
 public:
-    PhysicsModule(ECSWorld *ecs)
-        : m_ecs(ecs) {
-    }
+    PhysicsModule(ECSWorld *ecs);
 
-    bool Initialize() override {
-        try {
-            m_physics = std::make_unique<PhysicsSystem>();
-            isInitialized = true;
-            return true;
-        } catch (...) {
-            isInitialized = false;
-            return false;
-        }
-    }
 
-    void Update(float deltaTime) override {
-        m_physics->Update(*m_ecs, deltaTime);
-    }
+    bool Initialize() override;
 
-    void Shutdown() override {
-        m_physics.reset();
-    }
+
+    void Update(float deltaTime) override;
+
+
+    void Shutdown() override;
+
 
     /// @name IModule interface
     /// @{
-    const char *GetName() const override { return "Physics"; }
-    int GetPriority() const override { return 80; }
-    bool IsRequired() const override { return true; }
+    const char *GetName() const override;
+
+    int GetPriority() const override;
+
+    bool IsRequired() const override;
+
     /// @}
 
-    PhysicsSystem *GetPhysics() { return m_physics.get(); }
+    PhysicsSystem *GetPhysics();
 };

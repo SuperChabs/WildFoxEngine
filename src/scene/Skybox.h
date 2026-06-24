@@ -19,91 +19,26 @@ private:
 
     std::string shaderName;
 
-    void SetupSkybox() {
-        float skyboxVertices[] =
-        {
-            -1.0f, 1.0f, -1.0f,
-            -1.0f, -1.0f, -1.0f,
-            1.0f, -1.0f, -1.0f,
-            1.0f, -1.0f, -1.0f,
-            1.0f, 1.0f, -1.0f,
-            -1.0f, 1.0f, -1.0f,
-
-            -1.0f, -1.0f, 1.0f,
-            -1.0f, -1.0f, -1.0f,
-            -1.0f, 1.0f, -1.0f,
-            -1.0f, 1.0f, -1.0f,
-            -1.0f, 1.0f, 1.0f,
-            -1.0f, -1.0f, 1.0f,
-
-            1.0f, -1.0f, -1.0f,
-            1.0f, -1.0f, 1.0f,
-            1.0f, 1.0f, 1.0f,
-            1.0f, 1.0f, 1.0f,
-            1.0f, 1.0f, -1.0f,
-            1.0f, -1.0f, -1.0f,
-
-            -1.0f, -1.0f, 1.0f,
-            -1.0f, 1.0f, 1.0f,
-            1.0f, 1.0f, 1.0f,
-            1.0f, 1.0f, 1.0f,
-            1.0f, -1.0f, 1.0f,
-            -1.0f, -1.0f, 1.0f,
-
-            -1.0f, 1.0f, -1.0f,
-            1.0f, 1.0f, -1.0f,
-            1.0f, 1.0f, 1.0f,
-            1.0f, 1.0f, 1.0f,
-            -1.0f, 1.0f, 1.0f,
-            -1.0f, 1.0f, -1.0f,
-
-            -1.0f, -1.0f, -1.0f,
-            -1.0f, -1.0f, 1.0f,
-            1.0f, -1.0f, -1.0f,
-            1.0f, -1.0f, -1.0f,
-            -1.0f, -1.0f, 1.0f,
-            1.0f, -1.0f, 1.0f
-        };
-
-        skyboxVAO = std::make_unique<VertexArray>();
-        skyboxVBO = std::make_unique<VertexBuffer>();
-
-        skyboxVBO->SetData(skyboxVertices, sizeof(skyboxVertices));
-        skyboxVAO->Bind();
-        skyboxVBO->Bind();
-        skyboxVAO->AddAttribute(0, 3, GL_FLOAT, false, 3 * sizeof(float), 0);
-        skyboxVAO->Unbind();
-    }
+    void SetupSkybox();
 
 public:
-    Skybox(unsigned int cubemapTex, const std::string &shaderName)
-        : cubemapTexture(cubemapTex), shaderName(shaderName) {
-        SetupSkybox();
-    }
+    Skybox(unsigned int cubemapTex, const std::string &shaderName);
+
 
     //~Skybox() = default;
 
     void Render(ShaderManager &shaderManager, const glm::mat4 &view, const glm::mat4 &projection,
-                bool useSkybox = true) {
-        glDepthFunc(GL_LEQUAL);
-        shaderManager.Bind(shaderName);
+                bool useSkybox = true);
 
-        shaderManager.SetMat4(shaderName, "view", view);
-        shaderManager.SetMat4(shaderName, "projection", projection);
 
-        skyboxVAO->Bind();
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        skyboxVAO->Unbind();
+    void SetShader(const std::string &newShaderName);
 
-        glDepthFunc(GL_LESS);
-    }
+    void SetCubemapTexture(const unsigned int newCubemap);
 
-    void SetShader(const std::string &newShaderName) { shaderName = newShaderName; }
-    void SetCubemapTexture(const unsigned int newCubemap) { cubemapTexture = newCubemap; }
 
-    std::string GetShader() const { return shaderName; }
-    unsigned int GetTexture() const { return cubemapTexture; }
-    GLint GetVAO() const { return skyboxVAO->GetID(); }
+    std::string GetShader() const;
+
+    unsigned int GetTexture() const;
+
+    GLint GetVAO() const;
 };

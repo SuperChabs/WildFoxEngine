@@ -42,15 +42,14 @@ public:
 
     bool HasMaterial(const std::string &name) const;
 
-    size_t GetMaterialsCount() const { return materials.size(); }
+    size_t GetMaterialsCount() const;
+
 
     std::shared_ptr<Material> GetMaterial(const std::string &name);
 
     std::vector<std::string> GetMaterialNames() const;
 
-    const std::unordered_map<std::string, std::shared_ptr<Material> > &GetMaterialsMap() const {
-        return materials;
-    }
+    const std::unordered_map<std::string, std::shared_ptr<Material> > &GetMaterialsMap() const;
 
 private:
     void CreateDefaultMaterials();

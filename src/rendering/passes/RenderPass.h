@@ -16,22 +16,19 @@ protected:
     bool enabled = true;
 
 public:
-    RenderPass(const std::string &n, GLContext *ctx, ShaderManager *sm)
-        : name(n), context(ctx), shaderManager(sm) {
-    }
+    RenderPass(const std::string &n, GLContext *ctx, ShaderManager *sm);
 
-    virtual ~RenderPass() = default;
+    virtual ~RenderPass();
 
-    virtual void Setup() {
-    }
+    virtual void Setup() = 0;
 
     virtual void Execute(const glm::mat4 &view, const glm::mat4 &projection) = 0;
 
-    virtual void Cleanup() {
-    }
+    virtual void Cleanup() = 0;
 
-    void SetEnabled(bool e) { enabled = e; }
-    bool IsEnabled() const { return enabled; }
+    void SetEnabled(bool e);
 
-    const std::string &GetName() const { return name; }
+    bool IsEnabled() const;
+
+    const std::string &GetName() const;
 };

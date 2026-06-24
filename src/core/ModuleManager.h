@@ -5,7 +5,6 @@
 #include <memory>
 #include <vector>
 
-#include "core/logging/Logger.h"
 #include "core/IModule.h"
 #include "core/Time.h"
 
@@ -23,36 +22,11 @@ public:
         return ptr;
     }
 
-    void InitializeAll() {
-        std::sort(modules.begin(), modules.end(), [](auto &a, auto &b) {
-            return a->GetPriority() < b->GetPriority();
-        });
+    void InitializeAll();
 
-        for (auto &module: modules) {
-            Logger::Log(LogLevel::INFO, std::string("Initializing ") + module->GetName() + "...");
+    void UpdateAll(float deltaTime);
 
-            if (!module->Initialize()) {
-                if (module->IsRequired()) {
-                    Logger::Log(LogLevel::CRITICAL,
-                                std::string("Required module failed: ") + module->GetName());
-                    throw std::runtime_error("Critical module init failed");
-                } else {
-                    Logger::Log(LogLevel::WARNING,
-                                std::string("Optional module failed: ") + module->GetName());
-                }
-            }
-        }
-    }
-
-    void UpdateAll(float deltaTime) {
-        for (auto &module: modules)
-            module->Update(deltaTime);
-    }
-
-    void ShutdownAll() {
-        for (auto &module: modules)
-            module->Shutdown();
-    }
+    void ShutdownAll();
 
     template<typename T>
     T *GetModule(const std::string &name) {
@@ -62,8 +36,5 @@ public:
         return nullptr;
     }
 
-    bool IsModuleActive(const std::string &name) const {
-        auto it = moduleMap.find(name);
-        return it != moduleMap.end();
-    }
+    bool IsModuleActive(const std::string &name) const;
 };

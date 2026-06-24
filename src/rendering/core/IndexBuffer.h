@@ -8,34 +8,23 @@ private:
     unsigned int count = 0;
 
 public:
-    IndexBuffer() {
-        glGenBuffers(1, &EBO);
-    }
+    IndexBuffer();
 
-    ~IndexBuffer() {
-        glDeleteBuffers(1, &EBO);
-    }
 
-    void Bind() const {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    }
+    ~IndexBuffer();
 
-    void Unbind() const {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    }
+
+    void Bind() const;
+
+
+    void Unbind() const;
+
 
     void SetData(const unsigned int *data, unsigned int cnt,
-                 GLenum usage = GL_STATIC_DRAW) {
-        count = cnt;
-        Bind();
-        glBufferData(
-            GL_ELEMENT_ARRAY_BUFFER,
-            count * sizeof(unsigned int),
-            data,
-            usage
-        );
-    }
+                 GLenum usage = GL_STATIC_DRAW);
 
-    unsigned int GetCount() const { return count; }
-    unsigned int GetID() const { return EBO; }
+
+    unsigned int GetCount() const;
+
+    unsigned int GetID() const;
 };

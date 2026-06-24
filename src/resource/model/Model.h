@@ -25,42 +25,12 @@ class Model {
     std::string name;
 
 public:
-    Model(const std::string &path)
-        : filepath(path) {
-        size_t lastSlash = path.find_last_of("/");
-        size_t lastDot = path.find_last_of(".");
+    Model(const std::string &path);
 
-        if (lastSlash != std::string::npos && lastDot != std::string::npos)
-            name = path.substr(lastSlash + 1, lastDot - lastSlash - 1);
-        else
-            name = path;
+    void AddMesh(Mesh &&mesh);
+    void AddMesh(std::shared_ptr<Mesh> mesh);
 
-        rootNode = std::make_shared<ModelNode>("Root");
-    }
-
-    void AddMesh(Mesh &&mesh) {
-        meshes.push_back(std::make_shared<Mesh>(std::move(mesh)));
-    }
-
-    void AddMesh(std::shared_ptr<Mesh> mesh) {
-        meshes.push_back(mesh);
-    }
-
-    std::shared_ptr<Mesh> GetMesh(size_t index) {
-        if (index < meshes.size())
-            return meshes[index];
-        return nullptr;
-    }
-
-    const std::vector<std::shared_ptr<Mesh> > &GetMeshes() const {
-        return meshes;
-    }
-
-    void Draw(ShaderManager &shaderManager, const std::string &shaderName) {
-        for (auto &mesh: meshes)
-            if (mesh)
-                mesh->Draw(shaderManager, shaderName);
-    }
+    void Draw(ShaderManager &shaderManager, const std::string &shaderName);
 
     // void SetColor(const glm::vec3& color) 
     // {
@@ -69,29 +39,17 @@ public:
     //             mesh->SetColor(color);
     // }
 
-    void SetTextures(const std::vector<Texture> &textures) {
-        for (auto &mesh: meshes)
-            if (mesh)
-                mesh->SetTextures(textures);
-    }
+    void SetTextures(const std::vector<Texture> &textures);
+    void SetMaterial(std::shared_ptr<Material> material, size_t index);
+    void SetMaterialForAll(std::shared_ptr<Material> material);
+    void SetName(const std::string &n);
+    void SetFilepath(const std::string &path);
+    void SetRootNode(std::shared_ptr<ModelNode> node);
 
-    void SetMaterial(std::shared_ptr<Material> material, size_t index) {
-        if (meshes[index])
-            meshes[index]->SetMaterial(material);
-    }
-
-    void SetMaterialForAll(std::shared_ptr<Material> material) {
-        for (auto &mesh: meshes)
-            if (mesh)
-                mesh->SetMaterial(material);
-    }
-
-    size_t GetMeshCount() const { return meshes.size(); }
-    const std::string &GetName() const { return name; }
-    const std::string &GetFilepath() const { return filepath; }
-    std::shared_ptr<ModelNode> GetRootNode() const { return rootNode; }
-
-    void SetName(const std::string &n) { name = n; }
-    void SetFilepath(const std::string &path) { filepath = path; }
-    void SetRootNode(std::shared_ptr<ModelNode> node) { rootNode = node; }
+    size_t GetMeshCount() const;
+    const std::string &GetName() const;
+    const std::string &GetFilepath() const;
+    std::shared_ptr<ModelNode> GetRootNode() const;
+    std::shared_ptr<Mesh> GetMesh(size_t index);
+    const std::vector<std::shared_ptr<Mesh> > &GetMeshes() const;
 };

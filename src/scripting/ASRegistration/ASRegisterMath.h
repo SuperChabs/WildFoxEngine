@@ -9,27 +9,27 @@
 
 #include "core/logging/Logger.h"
 
-float FuncSqrt(float x) {
+inline float FuncSqrt(float x) {
     return std::sqrt(x);
 }
 
-float FuncCos(float x) {
+inline float FuncCos(float x) {
     return std::cos(x);
 }
 
-float FuncSin(float x) {
+inline float FuncSin(float x) {
     return std::sin(x);
 }
 
-float FuncATan2(float x, float y) {
+inline float FuncATan2(float x, float y) {
     return std::atan2(x, y);
 }
 
-float FuncAbs(float x) {
+inline float FuncAbs(float x) {
     return std::abs(x);
 }
 
-void RegisterMath(asIScriptEngine *engine) {
+inline void RegisterMath(asIScriptEngine *engine) {
     int r;
 
     r = engine->RegisterGlobalFunction(

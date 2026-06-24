@@ -21,9 +21,11 @@ public:
 
     void Resize(int newWidth, int newHeight);
 
-    unsigned int GetTextureID() const { return textureID; }
-    int GetWidth() const { return width; }
-    int GetHeight() const { return height; }
+    unsigned int GetTextureID() const;
+
+    int GetWidth() const;
+
+    int GetHeight() const;
 
 private:
     void Invalidate();

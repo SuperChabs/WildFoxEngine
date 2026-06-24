@@ -110,3 +110,17 @@ void Framebuffer::Resize(int newWidth, int newHeight) {
     height = newHeight;
     Invalidate();
 }
+
+// --- split_headers: auto-generated ---
+
+unsigned int Framebuffer::GetTextureID() const {
+    return textureID;
+}
+
+int Framebuffer::GetWidth() const {
+    return width;
+}
+
+int Framebuffer::GetHeight() const {
+    return height;
+}

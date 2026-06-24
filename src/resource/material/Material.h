@@ -30,14 +30,22 @@ public:
 
     void SetTextures(std::vector<Texture> newTextures);
 
-    void SetColorUsing(bool newUsing) { useColor = newUsing; }
-    void SetName(const std::string &newName) { name = newName; }
-    void SetType(const std::string &newType) { type = newType; }
+    void SetColorUsing(bool newUsing);
 
-    const std::vector<Texture> &GetTextures() const { return textures; }
-    size_t GetTextureCount() const { return textures.size(); }
-    glm::vec3 GetColor() const { return color; }
-    bool IsUsingColor() const { return useColor; }
-    const std::string &GetName() const { return name; }
-    const std::string &GetType() const { return type; }
+    void SetName(const std::string &newName);
+
+    void SetType(const std::string &newType);
+
+
+    const std::vector<Texture> &GetTextures() const;
+
+    size_t GetTextureCount() const;
+
+    glm::vec3 GetColor() const;
+
+    bool IsUsingColor() const;
+
+    const std::string &GetName() const;
+
+    const std::string &GetType() const;
 };

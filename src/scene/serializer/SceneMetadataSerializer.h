@@ -12,19 +12,11 @@ private:
     SceneFileHandler &fileHandler;
 
 public:
-    explicit SceneMetadataSerializer(SceneFileHandler &handler)
-        : fileHandler(handler) {
-    }
+    explicit SceneMetadataSerializer(SceneFileHandler &handler);
 
-    json SerializeMetadata(const std::string &sceneName, entt::entity mainCamera = entt::null) {
-        json metadata;
-        metadata["name"] = sceneName;
-        metadata["timestamp"] = fileHandler.GetCurrentTimestamp();
-        if (mainCamera != entt::null)
-            metadata["mainCamera"] = static_cast<uint32_t>(mainCamera);
-        return metadata;
-    }
 
-    void DeserializeMetadata(const json &data) {
-    }
+    json SerializeMetadata(const std::string &sceneName, entt::entity mainCamera = entt::null);
+
+
+    void DeserializeMetadata(const json &data);
 };

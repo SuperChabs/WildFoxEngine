@@ -231,3 +231,21 @@ ShaderObj *ShaderManager::GetShader(const std::string &name) const {
 
     return nullptr;
 }
+
+// --- split_headers: auto-generated ---
+
+GLuint ShaderManager::GetCurrentShader() {
+    return currentShader;
+}
+
+size_t ShaderManager::GetCount() {
+    return shaders.size();
+}
+
+const std::unordered_map<std::string, std::unique_ptr<ShaderObj> > &ShaderManager::GetShaderMap() const {
+    return shaders;
+}
+
+bool ShaderManager::IsShaderValid(const std::string &name) const {
+    return GetShader(name)->IsValid();
+}

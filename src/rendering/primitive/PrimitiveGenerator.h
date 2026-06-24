@@ -62,18 +62,11 @@ static const float QUAD_VERTICES[] =
 
 class PrimitiveGenerator {
 public:
-    static const float *GetCubeData(size_t &outSize) {
-        outSize = sizeof(CUBE_VERTICES);
-        return CUBE_VERTICES;
-    }
+    static const float *GetCubeData(size_t &outSize);
 
-    static const float *GetQuadData(size_t &outSize) {
-        outSize = sizeof(QUAD_VERTICES);
-        return QUAD_VERTICES;
-    }
 
-    static const float *GetPlaneData(size_t &outSize) {
-        outSize = 0;
-        return nullptr;
-    }
+    static const float *GetQuadData(size_t &outSize);
+
+
+    static const float *GetPlaneData(size_t &outSize);
 };

@@ -16,6 +16,7 @@ void OnUpdate(float deltaTime)
     if (t is null) return;
     
     t.rotation.y += 90.0f * deltaTime;
+    t.rotation.x += 10.f * deltaTime;
 }
 
 void OnStop()

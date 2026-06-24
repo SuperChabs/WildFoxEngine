@@ -97,3 +97,41 @@ void Material::SetTextures(std::vector<Texture> newTextures) {
     textures = newTextures;
     useColor = false;
 }
+
+// --- split_headers: auto-generated ---
+
+void Material::SetColorUsing(bool newUsing) {
+    useColor = newUsing;
+}
+
+void Material::SetName(const std::string &newName) {
+    name = newName;
+}
+
+void Material::SetType(const std::string &newType) {
+    type = newType;
+}
+
+const std::vector<Texture> &Material::GetTextures() const {
+    return textures;
+}
+
+size_t Material::GetTextureCount() const {
+    return textures.size();
+}
+
+glm::vec3 Material::GetColor() const {
+    return color;
+}
+
+bool Material::IsUsingColor() const {
+    return useColor;
+}
+
+const std::string &Material::GetName() const {
+    return name;
+}
+
+const std::string &Material::GetType() const {
+    return type;
+}

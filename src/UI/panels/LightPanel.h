@@ -4,166 +4,27 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <ImGuizmo.h>
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "ECS/World.h"
 #include "ECS/components/Components.h"
-#include "scene/Light.h"
 
 class LightPanel {
 public:
-    void Render(ECSWorld *ecs, entt::entity entity) {
-        if (!ecs->HasComponent<LightComponent>(entity)) return;
-        if (!ImGui::CollapsingHeader("Light", ImGuiTreeNodeFlags_DefaultOpen)) return;
-
-        auto &light = ecs->GetComponent<LightComponent>(entity);
-
-        RenderLightType(light);
-
-        ImGui::Spacing();
-        ImGui::Separator();
-        ImGui::Spacing();
-
-        RenderLightSettings(light);
-
-        ImGui::Spacing();
-        ImGui::Separator();
-        ImGui::Spacing();
-
-        if (light.type == LightType::DIRECTIONAL || light.type == LightType::SPOT)
-            RenderLightDirection(light);
-
-        RenderLightIntensity(light);
-        RenderLightColors(light);
-
-        if (light.type == LightType::POINT || light.type == LightType::SPOT)
-            RenderLightAttenuation(light);
-
-        if (light.type == LightType::SPOT)
-            RenderSpotLightCone(light);
-    }
+    void Render(ECSWorld *ecs, entt::entity entity);
 
 private:
-    void RenderLightType(LightComponent &light) {
-        const char *lightTypes[] = {"Directional", "Point", "Spot"};
-        int currentType = static_cast<int>(light.type);
+    void RenderLightType(LightComponent &light);
 
-        ImGui::Text("Light Type");
-        if (ImGui::Combo("##LightType", &currentType, lightTypes, 3)) {
-            light.type = static_cast<LightType>(currentType);
+    void RenderLightSettings(LightComponent &light);
 
-            switch (light.type) {
-                case LightType::DIRECTIONAL:
-                    light.ambient = glm::vec3(0.05f);
-                    light.diffuse = glm::vec3(0.4f);
-                    light.specular = glm::vec3(0.5f);
-                    break;
-                case LightType::POINT:
-                    light.ambient = glm::vec3(0.05f);
-                    light.diffuse = glm::vec3(0.8f);
-                    light.specular = glm::vec3(1.0f);
-                    break;
-                case LightType::SPOT:
-                    light.ambient = glm::vec3(0.0f);
-                    light.diffuse = glm::vec3(1.0f);
-                    light.specular = glm::vec3(1.0f);
-                    break;
-                case LightType::NONE:
-                    light.ambient = glm::vec3(0.0f);
-                    light.diffuse = glm::vec3(0.0f);
-                    light.specular = glm::vec3(0.0f);
-                    break;
-            }
-        }
-    }
+    void RenderLightDirection(LightComponent &light);
 
-    void RenderLightSettings(LightComponent &light) {
-        ImGui::Checkbox("Active##Light", &light.isActive);
-        ImGui::SameLine();
-        ImGui::Checkbox("Cast Shadows", &light.castShadows);
-    }
+    void RenderLightIntensity(LightComponent &light);
 
-    void RenderLightDirection(LightComponent &light) {
-        ImGui::Text("Direction");
-        ImGui::DragFloat3("##Direction", &light.direction[0], 0.1f, -1.0f, 1.0f);
+    void RenderLightColors(LightComponent &light);
 
-        if (glm::length(light.direction) > 0.001f)
-            light.direction = glm::normalize(light.direction);
+    void RenderLightAttenuation(LightComponent &light);
 
-        ImGui::Spacing();
-        ImGui::Separator();
-        ImGui::Spacing();
-    }
-
-    void RenderLightIntensity(LightComponent &light) {
-        ImGui::Text("Intensity");
-        ImGui::DragFloat("##Intensity", &light.intensity, 0.01f, 0.0f, 10.0f);
-
-        ImGui::Spacing();
-        ImGui::Separator();
-        ImGui::Spacing();
-    }
-
-    void RenderLightColors(LightComponent &light) {
-        ImGui::Text("Ambient Color");
-        float ambient[3] = {light.ambient.x, light.ambient.y, light.ambient.z};
-        if (ImGui::ColorEdit3("##Ambient", ambient))
-            light.ambient = glm::vec3(ambient[0], ambient[1], ambient[2]);
-
-        ImGui::Spacing();
-
-        ImGui::Text("Diffuse Color");
-        float diffuse[3] = {light.diffuse.x, light.diffuse.y, light.diffuse.z};
-        if (ImGui::ColorEdit3("##Diffuse", diffuse))
-            light.diffuse = glm::vec3(diffuse[0], diffuse[1], diffuse[2]);
-
-        ImGui::Spacing();
-
-        ImGui::Text("Specular Color");
-        float specular[3] = {light.specular.x, light.specular.y, light.specular.z};
-        if (ImGui::ColorEdit3("##Specular", specular))
-            light.specular = glm::vec3(specular[0], specular[1], specular[2]);
-
-        ImGui::Spacing();
-        ImGui::Separator();
-        ImGui::Spacing();
-    }
-
-    void RenderLightAttenuation(LightComponent &light) {
-        ImGui::Text("Attenuation");
-
-        ImGui::Text("Constant");
-        ImGui::DragFloat("##Constant", &light.constant, 0.01f, 0.0f, 10.0f);
-
-        ImGui::Text("Linear");
-        ImGui::DragFloat("##Linear", &light.linear, 0.001f, 0.0f, 1.0f);
-
-        ImGui::Text("Quadratic");
-        ImGui::DragFloat("##Quadratic", &light.quadratic, 0.001f, 0.0f, 1.0f);
-
-        ImGui::Text("Radius");
-        ImGui::DragFloat("##Radius", &light.radius, 0.5f, 1.0f, 100.0f);
-
-        ImGui::Spacing();
-        ImGui::Separator();
-        ImGui::Spacing();
-    }
-
-    void RenderSpotLightCone(LightComponent &light) {
-        ImGui::Text("Spot Cone");
-
-        ImGui::Text("Inner Cutoff (degrees)");
-        ImGui::DragFloat("##InnerCutoff", &light.innerCutoff, 0.5f, 0.0f, 90.0f);
-
-        ImGui::Text("Outer Cutoff (degrees)");
-        ImGui::DragFloat("##OuterCutoff", &light.outerCutoff, 0.5f, 0.0f, 90.0f);
-
-        if (light.outerCutoff < light.innerCutoff)
-            light.outerCutoff = light.innerCutoff;
-
-        ImGui::Spacing();
-        ImGui::Separator();
-        ImGui::Spacing();
-    }
+    void RenderSpotLightCone(LightComponent &light);
 };

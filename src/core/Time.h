@@ -15,20 +15,20 @@ private:
     float timeScale;
 
 public:
-    Time()
-        : currentFrame(0.0f), lastFrame(0.0f), deltaTime(0.0f), timeScale(1.0f) {
-    }
+    Time();
 
-    void Update() {
-        currentFrame = glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
-    }
 
-    float GetDeltaTime() const { return deltaTime * timeScale; }
-    float GetTime() const { return currentFrame; }
-    float GetTimeScale() const { return timeScale; }
-    void SetTimeScale(float scale) { timeScale = scale; }
+    void Update();
 
-    float GetFPS() const { return 1.0f / deltaTime; }
+
+    float GetDeltaTime() const;
+
+    float GetTime() const;
+
+    float GetTimeScale() const;
+
+    void SetTimeScale(float scale);
+
+
+    float GetFPS() const;
 };

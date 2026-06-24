@@ -31,25 +31,18 @@ public:
 
     void DrawDepthOnly();
 
-    void SetColor(const glm::vec3 &color) {
-        if (!material) return;
+    void SetColor(const glm::vec3 &color);
 
-        material->SetColor(color);
-        material->SetColorUsing(true);
-    }
 
-    void SetTextures(const std::vector<Texture> &textures) {
-        if (!material) return;
+    void SetTextures(const std::vector<Texture> &textures);
 
-        material->SetTextures(textures);
-        material->SetColorUsing(false);
-    }
 
-    void SetMaterial(std::shared_ptr<Material> newMaterial) {
-        material = newMaterial;
-    }
+    void SetMaterial(std::shared_ptr<Material> newMaterial);
 
-    glm::vec3 GetColor() const { return material ? material->GetColor() : glm::vec3(1.0f); }
-    MeshRenderer *GetMeshRenderer() { return meshRenderer.get(); }
-    std::shared_ptr<Material> GetMaterial() { return material; }
+
+    glm::vec3 GetColor() const;
+
+    MeshRenderer *GetMeshRenderer();
+
+    std::shared_ptr<Material> GetMaterial();
 };

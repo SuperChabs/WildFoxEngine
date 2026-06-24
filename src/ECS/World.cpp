@@ -153,3 +153,9 @@ entt::entity ECSWorld::FindGameCamera() {
 
     return result;
 }
+
+// --- split_headers: auto-generated ---
+
+entt::registry &ECSWorld::GetRegistry() {
+    return registry;
+}

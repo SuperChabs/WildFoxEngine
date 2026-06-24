@@ -9,10 +9,8 @@
 #include "resource/model/Model.h"
 #include "resource/model/ModelLoader.h"
 #include "resource/material/MaterialManager.h"
-#include "resource/material/Material.h"
-#include "core/logging/Logger.h"
+
 #include "ECS/World.h"
-#include "core/CommandManager.h"
 
 class ModelManager {
 private:
@@ -21,156 +19,31 @@ private:
     MaterialManager *materialManager = nullptr;
 
 public:
-    ModelManager() {
-        CommandManager::RegisterCommand("onModelManagerCacheCleaning",
-                                        [this](const CommandArgs &) {
-                                            UnloadAll();
-                                        });
-    }
+    ModelManager();
 
-    ~ModelManager() {
-        UnloadAll();
-    }
+    ~ModelManager();
 
-    void SetMaterialManager(MaterialManager *mm) {
-        materialManager = mm;
-    }
+    void SetMaterialManager(MaterialManager *mm);
 
-    std::shared_ptr<Model> Load(const std::string &filepath) {
-        auto it = loadedModels.find(filepath);
-        if (it != loadedModels.end()) {
-            Logger::Log(LogLevel::INFO,
-                        "Model already loaded (from cache): " + filepath);
-            return it->second;
-        }
+    std::shared_ptr<Model> Load(const std::string &filepath);
 
-        if (!materialManager) {
-            Logger::Log(LogLevel::ERROR,
-                        "MaterialManager not set in ModelManager!");
-            return nullptr;
-        }
+    entt::entity LoadWithECS(const std::string &filepath, ECSWorld *world, bool isBaseShape = false);
 
-        std::string fullPath = assetsPath + filepath;
-        auto [rawModel, _] = LoadModelFromFile(fullPath, *materialManager);
+    std::shared_ptr<Model> Get(const std::string &filepath);
 
-        if (!rawModel) {
-            Logger::Log(LogLevel::ERROR,
-                        "Failed to load model: " + filepath);
-            return nullptr;
-        }
+    void Unload(const std::string &filepath);
 
-        std::shared_ptr<Model> model(rawModel);
-        loadedModels[filepath] = model;
+    void CleanupUnused();
 
-        Logger::Log(LogLevel::INFO,
-                    "Model cached: " + filepath +
-                    " (total models: " + std::to_string(loadedModels.size()) + ")");
+    void UnloadAll();
 
-        return model;
-    }
+    bool IsLoaded(const std::string &filepath) const;
 
-    entt::entity LoadWithECS(const std::string &filepath, ECSWorld *world, bool isBaseShape = false) {
-        if (!materialManager) {
-            Logger::Log(LogLevel::ERROR,
-                        "MaterialManager not set in ModelManager!");
-            return entt::null;
-        }
+    size_t GetLoadedCount() const;
 
-        std::string fullPath = assetsPath + filepath;
-        auto [rawModel, rootEntity] = LoadModelFromFile(fullPath, *materialManager, world, isBaseShape);
+    std::vector<std::string> GetLoadedModelNames() const;
 
-        if (!rawModel) {
-            Logger::Log(LogLevel::ERROR,
-                        "Failed to load model: " + filepath);
-            return entt::null;
-        }
+    void SetAssetsPath(const std::string &path);
 
-        std::shared_ptr<Model> model(rawModel);
-        loadedModels[filepath] = model;
-
-        Logger::Log(LogLevel::INFO,
-                    "Model cached: " + filepath +
-                    " (total models: " + std::to_string(loadedModels.size()) + ")");
-
-        return rootEntity;
-    }
-
-    std::shared_ptr<Model> Get(const std::string &filepath) {
-        auto it = loadedModels.find(filepath);
-        if (it != loadedModels.end()) {
-            return it->second;
-        }
-
-        Logger::Log(LogLevel::WARNING,
-                    "Model not loaded: " + filepath);
-        return nullptr;
-    }
-
-    void Unload(const std::string &filepath) {
-        auto it = loadedModels.find(filepath);
-        if (it != loadedModels.end()) {
-            Logger::Log(LogLevel::INFO,
-                        "Model unloaded: " + filepath +
-                        " (use_count before erase: " +
-                        std::to_string(it->second.use_count()) + ")");
-            loadedModels.erase(it);
-        }
-    }
-
-    void CleanupUnused() {
-        auto it = loadedModels.begin();
-        int removed = 0;
-
-        while (it != loadedModels.end()) {
-            if (it->second.use_count() == 1) {
-                Logger::Log(LogLevel::DEBUG,
-                            "Cleaning unused model: " + it->first);
-                it = loadedModels.erase(it);
-                removed++;
-            } else {
-                ++it;
-            }
-        }
-
-        if (removed > 0) {
-            Logger::Log(LogLevel::INFO,
-                        "Cleaned " + std::to_string(removed) +
-                        " unused models (remaining: " +
-                        std::to_string(loadedModels.size()) + ")");
-        }
-    }
-
-    void UnloadAll() {
-        if (!loadedModels.empty()) {
-            Logger::Log(LogLevel::INFO,
-                        "Unloading all models (" +
-                        std::to_string(loadedModels.size()) + ")");
-            loadedModels.clear();
-        }
-    }
-
-
-    bool IsLoaded(const std::string &filepath) const {
-        return loadedModels.find(filepath) != loadedModels.end();
-    }
-
-    size_t GetLoadedCount() const {
-        return loadedModels.size();
-    }
-
-    std::vector<std::string> GetLoadedModelNames() const {
-        std::vector<std::string> names;
-        for (const auto &[name, _]: loadedModels) {
-            names.push_back(name);
-        }
-        return names;
-    }
-
-    void SetAssetsPath(const std::string &path) {
-        assetsPath = path;
-    }
-
-    const std::string &GetAssetsPath() const {
-        return assetsPath;
-    }
+    const std::string &GetAssetsPath() const;
 };

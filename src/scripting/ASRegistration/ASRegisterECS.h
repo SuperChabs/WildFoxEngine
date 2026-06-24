@@ -11,21 +11,21 @@
 #include "ECS/World.h"
 #include "ECS/components/Components.h"
 
-TransformComponent *GetTransform(ECSWorld *ecs, entt::entity e) {
+inline TransformComponent *GetTransform(ECSWorld *ecs, entt::entity e) {
     if (!ecs->HasComponent<TransformComponent>(e))
         return nullptr;
     return &ecs->GetComponent<TransformComponent>(e);
 }
 
-bool IsValid(ECSWorld *ecs, entt::entity e) {
+inline bool IsValid(ECSWorld *ecs, entt::entity e) {
     return ecs->IsValid(e);
 }
 
-void DestroyEntity(ECSWorld *ecs, entt::entity e) {
+inline void DestroyEntity(ECSWorld *ecs, entt::entity e) {
     ecs->DestroyEntity(e);
 }
 
-entt::entity GetEntityByName(ECSWorld *ecs, const std::string &name) {
+inline entt::entity GetEntityByName(ECSWorld *ecs, const std::string &name) {
     entt::entity result = entt::null;
     ecs->Each<TagComponent>([&](entt::entity e, TagComponent &tag) {
         if (tag.name == name)
@@ -34,7 +34,7 @@ entt::entity GetEntityByName(ECSWorld *ecs, const std::string &name) {
     return result;
 }
 
-void RegisterECS(asIScriptEngine *engine, ECSWorld *ecs) {
+inline void RegisterECS(asIScriptEngine *engine, ECSWorld *ecs) {
     int r;
 
     r = engine->RegisterGlobalFunction(

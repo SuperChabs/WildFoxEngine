@@ -9,19 +9,19 @@
 #include "core/Input.h"
 #include "core/logging/Logger.h"
 
-bool IsKeyPressed(Input *input, Key key) {
+inline bool IsKeyPressed(Input *input, Key key) {
     return input->IsKeyPressed(key);
 }
 
-bool IsKeyJustPressed(Input *input, Key key) {
+inline bool IsKeyJustPressed(Input *input, Key key) {
     return input->IsKeyJustPressed(key);
 }
 
-bool IsKeyReleased(Input *input, Key key) {
+inline bool IsKeyReleased(Input *input, Key key) {
     return input->IsKeyReleased(key);
 }
 
-void RegisterInput(asIScriptEngine *engine, Input *input) {
+inline void RegisterInput(asIScriptEngine *engine, Input *input) {
     int r;
 
     r = engine->RegisterEnum("Key");

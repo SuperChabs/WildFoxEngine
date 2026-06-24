@@ -11,24 +11,11 @@ using json = nlohmann::json;
 
 class VisibilitySerializer : public IComponentSerializer {
 public:
-    json Serialize(ECSWorld *world, entt::entity entity) override {
-        if (!world->HasComponent<VisibilityComponent>(entity))
-            return json::object();
+    json Serialize(ECSWorld *world, entt::entity entity) override;
 
-        auto &vis = world->GetComponent<VisibilityComponent>(entity);
-        return json{
-            {"isActive", vis.isActive},
-            {"visible", vis.visible}
-        };
-    }
 
-    void Deserialize(ECSWorld *world, entt::entity entity, const json &data) override {
-        auto &visComp = world->AddComponent<VisibilityComponent>(entity);
-        visComp.isActive = data.value("isActive", true);
-        visComp.visible = data.value("visible", true);
-    }
+    void Deserialize(ECSWorld *world, entt::entity entity, const json &data) override;
 
-    bool CanSerialize(ECSWorld *world, entt::entity entity) const override {
-        return world->HasComponent<VisibilityComponent>(entity);
-    }
+
+    bool CanSerialize(ECSWorld *world, entt::entity entity) const override;
 };

@@ -8,7 +8,6 @@
 #include "core/Window.h"
 #include "core/Input.h"
 #include "core/Time.h"
-#include "core/logging/Logger.h"
 #include "core/logging/ConsoleLogger.h"
 #include "core/logging/FileLogger.h"
 #include "core/ModuleManager.h"
@@ -41,11 +40,7 @@ private:
 
     bool isRunning;
 
-    void Update() {
-        float deltaTime = time->GetDeltaTime();
-
-        OnUpdate(deltaTime);
-    }
+    void Update();
 
 protected:
     /**
@@ -54,13 +49,7 @@ protected:
      * @param width Window width in pixels
      * @param height Window height in pixels
      */
-    Application(int width, int height, const std::string &title)
-        : window(nullptr), input(nullptr), time(nullptr),
-          isRunning(false) {
-        window = std::make_unique<Window>(width, height, title);
-
-        Logger::Log(LogLevel::INFO, "Application created");
-    }
+    Application(int width, int height, const std::string &title);
 
     virtual void OnInitialize() {
     }
@@ -81,9 +70,7 @@ public:
      * @brief Destructor
      * Releases all resources used by the application
      */
-    virtual ~Application() {
-        Shutdown();
-    }
+    virtual ~Application();
 
     Application(const Application &) = delete;
 
@@ -97,73 +84,34 @@ public:
      * @brief main initializer
      * Initialize all systems required for base working of engine
      */
-    bool Initialize() {
-        if (!window->Initialize()) {
-            Logger::Log(LogLevel::ERROR, "Failed to initialize Window");
-            return false;
-        }
-
-        glfwSetWindowUserPointer(window->GetGLFWWindow(), this);
-
-        input = std::make_unique<Input>(window->GetGLFWWindow());
-        time = std::make_unique<Time>();
-
-        moduleManager = std::make_unique<ModuleManager>();
-
-        Logger::AddSink(&console);
-        Logger::AddSink(&file);
-
-        OnInitialize();
-
-        Logger::Log(LogLevel::INFO, "Application initialized successfully");
-
-        return true;
-    }
+    bool Initialize();
 
     /**
      * @brief Starts the main application loop
      * @note Calls OnUpdate() and OnRender() every frame
      */
-    void Run() {
-        isRunning = true;
-
-        while (isRunning && !window->ShouldClose()) {
-            time->Update();
-
-            Update();
-            OnRender();
-
-            window->SwapBuffers();
-            window->PollEvents();
-        }
-    }
+    void Run();
 
     /**
      * @brief well, it do what in method name stands for
      */
-    void Shutdown() {
-        OnShutdown();
-
-        Logger::RemoveSink(&console);
-        Logger::RemoveSink(&file);
-
-        Logger::Log(LogLevel::INFO, "Application shutdown complete");
-    }
+    void Shutdown();
 
     /**
      * @brief Closes the application
      * Stops the main loop
      */
-    void Stop() {
-        isRunning = false;
-    }
+    void Stop();
 
     /// \name Getters
     /// @{
-    Window *GetWindow() { return window.get(); }
-    Input *GetInput() { return input.get(); }
-    Time *GetTime() const { return time.get(); }
+    Window *GetWindow();
 
-    ModuleManager *GetModuleManager() { return moduleManager.get(); }
+    Input *GetInput();
+
+    Time *GetTime() const;
+
+    ModuleManager *GetModuleManager();
+
     /// @}
 };

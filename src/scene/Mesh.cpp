@@ -43,3 +43,35 @@ void Mesh::DrawDepthOnly() {
     if (meshRenderer)
         meshRenderer->Draw();
 }
+
+// --- split_headers: auto-generated ---
+
+void Mesh::SetColor(const glm::vec3 &color) {
+    if (!material) return;
+
+    material->SetColor(color);
+    material->SetColorUsing(true);
+}
+
+void Mesh::SetTextures(const std::vector<Texture> &textures) {
+    if (!material) return;
+
+    material->SetTextures(textures);
+    material->SetColorUsing(false);
+}
+
+void Mesh::SetMaterial(std::shared_ptr<Material> newMaterial) {
+    material = newMaterial;
+}
+
+glm::vec3 Mesh::GetColor() const {
+    return material ? material->GetColor() : glm::vec3(1.0f);
+}
+
+MeshRenderer *Mesh::GetMeshRenderer() {
+    return meshRenderer.get();
+}
+
+std::shared_ptr<Material> Mesh::GetMaterial() {
+    return material;
+}

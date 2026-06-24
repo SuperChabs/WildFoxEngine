@@ -9,26 +9,20 @@ private:
     unsigned int VBO = 0;
 
 public:
-    VertexBuffer() {
-        glGenBuffers(1, &VBO);
-    }
+    VertexBuffer();
 
-    ~VertexBuffer() {
-        glDeleteBuffers(1, &VBO);
-    }
 
-    void Bind() const {
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    }
+    ~VertexBuffer();
 
-    void Unbind() const {
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
 
-    void SetData(const void *data, size_t size, GLenum usage = GL_STATIC_DRAW) {
-        Bind();
-        glBufferData(GL_ARRAY_BUFFER, size, data, usage);
-    }
+    void Bind() const;
 
-    unsigned int GetID() const { return VBO; }
+
+    void Unbind() const;
+
+
+    void SetData(const void *data, size_t size, GLenum usage = GL_STATIC_DRAW);
+
+
+    unsigned int GetID() const;
 };

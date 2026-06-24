@@ -67,10 +67,13 @@ public:
 
     ShaderObj *GetShader(const std::string &name) const;
 
-    GLuint GetCurrentShader() { return currentShader; }
-    size_t GetCount() { return shaders.size(); }
+    GLuint GetCurrentShader();
 
-    const std::unordered_map<std::string, std::unique_ptr<ShaderObj> > &GetShaderMap() const { return shaders; }
+    size_t GetCount();
 
-    bool IsShaderValid(const std::string &name) const { return GetShader(name)->IsValid(); }
+
+    const std::unordered_map<std::string, std::unique_ptr<ShaderObj> > &GetShaderMap() const;
+
+
+    bool IsShaderValid(const std::string &name) const;
 };

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <string>
 #include <memory>
 #include <vector>
 
@@ -10,11 +9,8 @@
 
 #include "core/IModule.h"
 #include "core/ModuleManager.h"
-#include "core/logging/Logger.h"
 #include "UI/ImGuiManager.h"
 #include "ECS/World.h"
-#include "resource/ResourceModule.h"
-#include "rendering/RenderingModule.h"
 #include "scene/SceneManager.h"
 
 class UIModule : public IModule {
@@ -28,65 +24,26 @@ class UIModule : public IModule {
 
 public:
     UIModule(ECSWorld *ecs, entt::entity *cameraEntity, SceneManager *sceneManager, ModuleManager *mm,
-             GLFWwindow *window)
-        : ecs(ecs), mainCameraEntity(cameraEntity), m_sceneManager(sceneManager), mm(mm), window(window) {
-        if (!ecs)
-            Logger::Log(LogLevel::ERROR, "RenderingModule: ecs is null!");
-    }
+             GLFWwindow *window);
 
-    bool Initialize() override {
-        try {
-            imGuiManager = std::make_unique<ImGuiManager>();
+    bool Initialize() override;
 
-            if (!imGuiManager->Initialize(window)) {
-                Logger::Log(LogLevel::ERROR, "Failed to initialize ImGuiManager");
-                return false;
-            }
+    void Update(float deltaTime) override;
 
-            Logger::Log(LogLevel::INFO,
-                        "Successfully created UI Mdoule");
+    void RenderUI();
 
-            isInitialized = true;
-
-            return true;
-        } catch (const std::exception &e) {
-            Logger::Log(LogLevel::ERROR,
-                        "Exception creating ui module: " + std::string(e.what()));
-
-            isInitialized = true;
-
-            return false;
-        }
-    }
-
-    void Update(float deltaTime) override {
-    }
-
-    void RenderUI() {
-        /*editorLayout->RenderEditor(
-            ecs, 
-            *mainCameraEntity,
-            mm->GetModule<RenderingModule>("Rendering")->GetRenderer(), 
-            mm->GetModule<ResourceModule>("Resource")->GetShaderManager(), 
-            mm->GetModule<ResourceModule>("Resource")->GetMaterialManager(),
-            m_sceneManager ? m_sceneManager->IsInPlayMode() : false
-        );*/
-    }
-
-    void Shutdown() override {
-        imGuiManager->Shutdown();
-
-        imGuiManager.reset();
-        //editorLayout.reset();
-    }
+    void Shutdown() override;
 
     /// @name IModule interface
-    /// @{
-    const char *GetName() const override { return "UI"; }
-    int GetPriority() const override { return 100; }
-    bool IsRequired() const override { return true; }
+        /// @{
+    const char *GetName() const override;
+
+    int GetPriority() const override;
+
+    bool IsRequired() const override;
+
     /// }@
 
     //EditorLayout* GetEditorLayout() { return editorLayout.get(); }
-    ImGuiManager *GetImGuiManager() { return imGuiManager.get(); }
+    ImGuiManager *GetImGuiManager();
 };

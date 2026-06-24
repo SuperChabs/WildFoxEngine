@@ -20,6 +20,7 @@ find_package(assimp REQUIRED)
 # ========== Glad =============
 add_library(glad STATIC vendor/glad/src/glad.c)
 target_include_directories(glad PUBLIC vendor/glad/include)
+target_link_libraries(glad PUBLIC ${CMAKE_DL_LIBS})
 
 # ========== Stb_image =============
 add_library(stb_image STATIC vendor/stb_image/stb_image.cpp)
@@ -164,7 +165,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 )
 
 target_link_libraries(${PROJECT_NAME}
-    OpenGL::GL
+    # OpenGL::GL
     glfw
     glad
     glm::glm
@@ -182,6 +183,7 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE
+    <glad/glad.h>
     [["glm_fix.h"]]
     <glm/glm.hpp>
     <glm/gtc/quaternion.hpp>

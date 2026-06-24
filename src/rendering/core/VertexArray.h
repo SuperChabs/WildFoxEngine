@@ -9,11 +9,15 @@ private:
     unsigned int VAO = 0;
 
 public:
-    VertexArray() { glGenVertexArrays(1, &VAO); }
-    ~VertexArray() { glDeleteVertexArrays(1, &VAO); }
+    VertexArray();
 
-    void Bind() const { glBindVertexArray(VAO); }
-    void Unbind() const { glBindVertexArray(0); }
+    ~VertexArray();
+
+
+    void Bind() const;
+
+    void Unbind() const;
+
 
     void AddAttribute(
         unsigned int index,
@@ -22,18 +26,8 @@ public:
         bool normalized,
         int stride,
         size_t offset
-    ) {
-        Bind();
-        glEnableVertexAttribArray(index);
-        glVertexAttribPointer(
-            index,
-            size,
-            type,
-            normalized ? GL_TRUE : GL_FALSE,
-            stride,
-            reinterpret_cast<void *>(offset)
-        );
-    }
+    );
 
-    unsigned int GetID() const { return VAO; }
+
+    unsigned int GetID() const;
 };

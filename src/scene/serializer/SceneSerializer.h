@@ -2,13 +2,11 @@
 
 #include <string>
 
-#include <glm/glm.hpp>
 #include <entt/entt.hpp>
 #include <nlohmann/json.hpp>
 
 #include "ECS/World.h"
 #include "ECS/components/Components.h"
-#include "core/logging/Logger.h"
 #include "scene/Light.h"
 #include "resource/material/MaterialManager.h"
 #include "resource/texture/TextureManager.h"
@@ -19,10 +17,8 @@
 
 #include "scene/serializer/SceneFileHandler.h"
 #include "scene/serializer/SerializerRegistry.h"
-#include "scene/serializer/SceneMetadataSerializer.h"
 #include "scene/serializer/components/ComponentSerializers.h"
 #include "scene/serializer/SceneMaterialSerializer.h"
-#include "scene/serializer/components/HierarchyDeserializer.h"
 
 using json = nlohmann::json;
 
@@ -34,221 +30,45 @@ private:
     SceneMaterialSerializer m_material;
 
 public:
-    explicit SceneSerializer(ECSWorld *w)
-        : world(w), fileHandler("../saves/") {
-    }
+    explicit SceneSerializer(ECSWorld *w);
 
-    void SetSavesDirectory(const std::string &directory) {
-        fileHandler.SetSavesDirectory(directory);
-    }
+    void SetSavesDirectory(const std::string &directory);
 
-    std::string GetSavesDirectory() const {
-        return fileHandler.GetSavesDirectory();
-    }
+    std::string GetSavesDirectory() const;
 
-    bool SaveScene(const std::string &filename, MaterialManager *materialManager) {
-        return SaveScene(filename, materialManager, true);
-    }
+    bool SaveScene(const std::string &filename, MaterialManager *materialManager);
 
-    bool SaveScene(const std::string &filename, MaterialManager *materialManager, bool pretty) {
-        json sceneData;
-        SceneMetadataSerializer metaSerializer(fileHandler);
-
-        entt::entity mainCam = world->FindEditorCamera();
-        sceneData["scene"]["metadata"] = metaSerializer.SerializeMetadata(filename, mainCam);
-        SerializeEntities(sceneData);
-
-        json materialsData = m_material.Serialize(materialManager);
-        fileHandler.WriteMaterials(filename, materialsData, pretty);
-
-        return WriteSceneToFile(filename, sceneData, pretty);
-    }
+    bool SaveScene(const std::string &filename, MaterialManager *materialManager, bool pretty);
 
     bool LoadScene(const std::string &filename,
                    MaterialManager *materialManager,
                    TextureManager *textureManager,
-                   ModelManager *modelManager) {
-        json sceneData = fileHandler.ReadScene(filename);
+                   ModelManager *modelManager);
 
-        if (sceneData.is_null() || !sceneData.contains("scene")) {
-            Logger::Log(LogLevel::ERROR, "Invalid scene data");
-            return false;
-        }
+    std::vector<std::string> GetAvailableScenes();
 
-        json materialsData = fileHandler.ReadMaterials(filename);
-        if (materialsData.is_array())
-            m_material.Deserialize(materialManager, materialsData);
-
-        world->Clear();
-        std::unordered_map<uint64_t, entt::entity> createdEntities;
-
-        int loadedCount = DeserializeEntities(sceneData, modelManager, createdEntities);
-
-        SetupHierarchies(sceneData, createdEntities);
-
-        DeserializeMaterials(sceneData, materialManager, createdEntities);
-
-        ApplyColors(sceneData, createdEntities);
-
-        Logger::Log(LogLevel::INFO,
-                    "Scene loaded: " + filename + " (" + std::to_string(loadedCount) + " entities)");
-
-        return true;
-    }
-
-    std::vector<std::string> GetAvailableScenes() {
-        return fileHandler.GetAvailableScenes();
-    }
-
-    bool DeleteScene(const std::string &filename) {
-        return fileHandler.DeleteScene(filename);
-    }
+    bool DeleteScene(const std::string &filename);
 
 private:
-    void SerializeEntities(json &sceneData) {
-        sceneData["scene"]["entities"] = json::array();
+    void SerializeEntities(json &sceneData);
 
-        world->Each<IDComponent, TagComponent>(
-            [&](entt::entity entity, IDComponent &id, TagComponent &tag) {
-                if (IsModelChild(world, entity))
-                    return;
+    void SerializeHierarchyParent(ECSWorld *w, entt::entity entity, json &entityData);
 
-                json entityData;
-                entityData["_id"] = id.id;
-                entityData["_name"] = tag.name;
-
-                json componentData = registry.SerializeAllComponents(world, entity);
-                entityData.merge_patch(componentData);
-
-                SerializeHierarchyParent(world, entity, entityData);
-
-                sceneData["scene"]["entities"].push_back(entityData);
-            });
-    }
-
-    void SerializeHierarchyParent(ECSWorld *w, entt::entity entity, json &entityData) {
-        if (!w->HasComponent<HierarchyComponent>(entity))
-            return;
-
-        auto &h = w->GetComponent<HierarchyComponent>(entity);
-        if (h.parent != entt::null && w->HasComponent<IDComponent>(h.parent)) {
-            entityData["_parentId"] = w->GetComponent<IDComponent>(h.parent).id;
-        }
-    }
-
-    bool WriteSceneToFile(const std::string &filename, const json &sceneData, bool pretty) {
-        bool success = fileHandler.WriteScene(filename, sceneData, pretty);
-
-        if (success) {
-            Logger::Log(LogLevel::INFO, "Scene saved: " + filename +
-                                        " (" + std::to_string(sceneData["scene"]["entities"].size()) + " entities)");
-        }
-
-        return success;
-    }
+    bool WriteSceneToFile(const std::string &filename, const json &sceneData, bool pretty);
 
     int DeserializeEntities(const json &sceneData,
                             ModelManager *modelManager,
-                            std::unordered_map<uint64_t, entt::entity> &createdEntities) {
-        int loadedCount = 0;
-
-        for (const auto &entityData: sceneData["scene"]["entities"]) {
-            std::string entityName = entityData.value("_name", "Entity");
-            uint64_t uuid = entityData["_id"];
-
-            entt::entity entity;
-            if (createdEntities.count(uuid)) {
-                entity = createdEntities[uuid];
-            } else {
-                entity = world->CreateEntity(entityName);
-                createdEntities[uuid] = entity;
-            }
-
-            bool isModelChild = entityData.value("modelChild", false);
-            if (isModelChild) {
-                registry.DeserializeAllComponents(world, entity, entityData);
-                loadedCount++;
-                continue;
-            }
-
-            bool meshHandled = false;
-            if (entityData.contains("mesh")) {
-                meshHandled = ModelSerializer::HandleModelLoading(
-                    world, entity, entityData, modelManager, createdEntities);
-            }
-
-            if (!meshHandled) {
-                registry.DeserializeAllComponents(world, entity, entityData);
-            } else {
-                auto it = createdEntities.find(uuid);
-                if (it == createdEntities.end()) {
-                    loadedCount++;
-                    continue;
-                }
-                entity = it->second;
-
-                if (world->HasComponent<TagComponent>(entity))
-                    world->GetComponent<TagComponent>(entity).name = entityName;
-
-                json otherComponents = entityData;
-                otherComponents.erase("mesh");
-
-                otherComponents.erase("transform");
-                otherComponents.erase("script");
-                registry.DeserializeAllComponents(world, entity, otherComponents);
-            }
-
-            if (!world->HasComponent<VisibilityComponent>(entity)) {
-                world->AddComponent<VisibilityComponent>(entity, true);
-            }
-
-            loadedCount++;
-        }
-
-        return loadedCount;
-    }
+                            std::unordered_map<uint64_t, entt::entity> &createdEntities);
 
     void SetupHierarchies(const json &sceneData,
-                          std::unordered_map<uint64_t, entt::entity> &createdEntities) {
-        HierarchyDeserializer hierarchyDeserializer(world, createdEntities);
-        hierarchyDeserializer.SetupHierarchy(sceneData);
-    }
+                          std::unordered_map<uint64_t, entt::entity> &createdEntities);
 
     void DeserializeMaterials(const json &sceneData,
                               MaterialManager *materialManager,
-                              std::unordered_map<uint64_t, entt::entity> &createdEntities) {
-        MaterialSerializer::DeserializeMaterials(sceneData, materialManager, world, createdEntities);
-    }
+                              std::unordered_map<uint64_t, entt::entity> &createdEntities);
 
     void ApplyColors(const json &sceneData,
-                     std::unordered_map<uint64_t, entt::entity> &createdEntities) {
-        for (const auto &entityData: sceneData["scene"]["entities"]) {
-            if (!entityData.contains("color"))
-                continue;
+                     std::unordered_map<uint64_t, entt::entity> &createdEntities);
 
-            uint64_t uuid = entityData["_id"];
-            auto it = createdEntities.find(uuid);
-            if (it == createdEntities.end())
-                continue;
-
-            entt::entity entity = it->second;
-
-            if (!world->HasComponent<MaterialComponent>(entity)) {
-                const auto &col = entityData["color"];
-                glm::vec3 color = {col[0], col[1], col[2]};
-                world->AddComponent<ColorComponent>(entity, color);
-            }
-        }
-    }
-
-    bool IsModelChild(ECSWorld *w, entt::entity entity) {
-        if (!w->HasComponent<HierarchyComponent>(entity))
-            return false;
-
-        const auto &h = w->GetComponent<HierarchyComponent>(entity);
-        if (h.parent == entt::null)
-            return false;
-
-        return w->HasComponent<ModelComponent>(h.parent);
-    }
+    bool IsModelChild(ECSWorld *w, entt::entity entity);
 };
