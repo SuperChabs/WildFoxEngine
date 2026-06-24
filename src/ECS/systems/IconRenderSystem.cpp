@@ -1,0 +1,97 @@
+#include "IconRenderSystem.h"
+#include <entt/entt.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include "core/logging/Logger.h"
+
+void IconRenderSystem::SetupQuad() {
+    float quadVertices[] = {
+        // positions   // texCoords
+        -0.5f, 0.5f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 0.0f, 0.0f,
+        0.5f, -0.5f, 1.0f, 0.0f,
+
+        -0.5f, 0.5f, 0.0f, 1.0f,
+        0.5f, -0.5f, 1.0f, 0.0f,
+        0.5f, 0.5f, 1.0f, 1.0f
+    };
+
+    quadVAO = std::make_unique<VertexArray>();
+    quadVBO = std::make_unique<VertexBuffer>();
+
+    quadVBO->SetData(quadVertices, sizeof(quadVertices));
+    quadVAO->Bind();
+    quadVBO->Bind();
+
+    quadVAO->AddAttribute(0, 2, GL_FLOAT, false, 4 * sizeof(float), 0);
+    quadVAO->AddAttribute(1, 2, GL_FLOAT, false, 4 * sizeof(float), 2 * sizeof(float));
+
+    quadVAO->Unbind();
+}
+
+IconRenderSystem::IconRenderSystem(TextureManager *tm)
+    : textureManager(tm) {
+    SetupQuad();
+}
+
+void IconRenderSystem::Update(ECSWorld &world, ShaderManager &shaderManager,
+                              const std::string &shaderName, const glm::mat4 &view,
+                              const glm::mat4 &projection) {
+    shaderManager.Bind(shaderName);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDisable(GL_DEPTH_TEST);
+
+    world.Each<TransformComponent, IconComponent, VisibilityComponent>(
+        [&](entt::entity entity,
+            TransformComponent &transform,
+            IconComponent &icon,
+            VisibilityComponent &vis) {
+            if (!vis.isActive || !vis.visible) return;
+
+            if (icon.textureID == 0 && !icon.iconTexturePath.empty()) {
+                icon.textureID = textureManager->LoadTexture(icon.iconTexturePath);
+                if (icon.textureID == 0) {
+                    Logger::Log(LogLevel::WARNING,
+                                "Failed to load icon texture: " + icon.iconTexturePath);
+                    return;
+                }
+            }
+
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, transform.position);
+
+            if (icon.billboardMode) {
+                model[0][0] = view[0][0];
+                model[0][1] = view[1][0];
+                model[0][2] = view[2][0];
+
+                model[1][0] = view[0][1];
+                model[1][1] = view[1][1];
+                model[1][2] = view[2][1];
+
+                model[2][0] = view[0][2];
+                model[2][1] = view[1][2];
+                model[2][2] = view[2][2];
+            } else {
+                model *= glm::mat4_cast(transform.rotation);
+            }
+
+            model = glm::scale(model, glm::vec3(icon.scale));
+
+            shaderManager.SetMat4(shaderName, "model", model);
+
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, icon.textureID);
+            shaderManager.SetInt(shaderName, "iconTexture", 0);
+
+            quadVAO->Bind();
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+            quadVAO->Unbind();
+        });
+
+    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
+
+    shaderManager.Unbind();
+}
