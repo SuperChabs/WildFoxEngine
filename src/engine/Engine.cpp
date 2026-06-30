@@ -32,11 +32,7 @@ void Engine::MouseCallback(GLFWwindow *window, double xpos, double ypos) {
 
         if (orientation.pitch > 89.0f) orientation.pitch = 89.0f;
         if (orientation.pitch < -89.0f) orientation.pitch = -89.0f;
-        return;
     }
-
-    if (ImGuizmo::IsUsing() || ImGui::GetIO().WantCaptureMouse)
-        return;
 }
 
 void Engine::MouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
@@ -267,12 +263,8 @@ void Engine::OnShutdown() {
 }
 
 bool Engine::ShouldAllowCameraControl() const {
-    if (sceneModule &&sceneModule
-    
-    ->
-    GetSceneManager()
-    )
-    return !sceneModule->GetSceneManager()->IsInPlayMode();
+    if (sceneModule && sceneModule->GetSceneManager())
+        return !sceneModule->GetSceneManager()->IsInPlayMode();
 
     return true;
 }
@@ -308,8 +300,8 @@ void Engine::ProcessInput() {
 
 void Engine::RegistraterCoreCommands() {
     CommandManager::RegisterCommand("onExit",
-                                    [this](const CommandArgs &) {
-                                        Logger::Log(LogLevel::INFO, "Exit requested from menu");
-                                        Stop();
-                                    });
+        [this](const CommandArgs &) {
+            Logger::Log(LogLevel::INFO, "Exit requested from menu");
+            Stop();
+        });
 }

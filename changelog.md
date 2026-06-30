@@ -20,22 +20,22 @@
 
 ### v0.1.5
 ##### 14.02.2026
--- Implemented input registration in Lua with functions for key and mouse events.
--- Created a cube controller script for movement and rotation using keyboard inputs.
--- Added a simple rotation script for continuous rotation of objects.
--- Established a SceneModule for scene serialization and management.
+-- Implemented input registration in Lua with functions for key and mouse events.  
+-- Created a cube controller script for movement and rotation using keyboard inputs.  
+-- Added a simple rotation script for continuous rotation of objects.  
+-- Established a SceneModule for scene serialization and management.  
 
 ### v0.1.6
 ##### 15.02.2026
--- Introduced an EditorCommandHandler for managing editor commands.
--- Add EventBus class
--- Update SceneModule with adding in it SceneManager
--- Fix Camera movement
--- Will show only those components an entity has
+-- Introduced an EditorCommandHandler for managing editor commands.  
+-- Add EventBus class  
+-- Update SceneModule with adding in it SceneManager  
+-- Fix Camera movement  
+-- Will show only those components an entity has  
 
 ### v0.1.7
 ##### 18.02.2026
--- Enchance mesh rendering
+-- Enchance mesh rendering  
 -- Fix gizmo rotation feedback loop
 
 ### v0.1.8
@@ -44,24 +44,30 @@
 
 ### v0.1.9
 ##### 25.02.2026
--- Updated ScriptPanel to change default script file extension from .lua to .as.
--- Enhanced UpdateScript method to properly release AngelScript context and module.
--- Modified TransformPanel to handle quaternion rotations using degrees.
--- Improved InspectorWindow to allow adding components via a popup menu.
--- Fixed MenuBarWindow to ensure scene loading only occurs if a valid path is provided.
--- Refactored Engine to initialize AngelScript instead of Lua, removing Lua-related code.
+-- Updated ScriptPanel to change default script file extension from .lua to .as.  
+-- Enhanced UpdateScript method to properly release AngelScript context and module.  
+-- Modified TransformPanel to handle quaternion rotations using degrees.  
+-- Improved InspectorWindow to allow adding components via a popup menu.  
+-- Fixed MenuBarWindow to ensure scene loading only occurs if a valid path is provided.  
+-- Refactored Engine to initialize AngelScript instead of Lua, removing Lua-related code.  
 -- Updated EngineCommandHandler to accommodate changes in model loading and component addition.
--- Adjusted ModelLoader to return both model and root entity upon loading.
--- Changed ModelManager to return root entity when loading models with ECS.
--- Enhanced SceneManager to properly reset script components when entering play mode.
--- Updated SceneSerializer to handle model components and hierarchy during scene loading.
--- Removed Lua bindings and related files, transitioning to AngelScript bindings.
--- Added new AngelScript bindings and registration API for ECS and input handling.
--- Introduced a sample controller script for player movement using AngelScript.
+-- Adjusted ModelLoader to return both model and root entity upon loading.  
+-- Changed ModelManager to return root entity when loading models with ECS.  
+-- Enhanced SceneManager to properly reset script components when entering play mode.  
+-- Updated SceneSerializer to handle model components and hierarchy during scene loading.  
+-- Removed Lua bindings and related files, transitioning to AngelScript bindings.  
+-- Added new AngelScript bindings and registration API for ECS and input handling.  
+-- Introduced a sample controller script for player movement using AngelScript.  
 
 ### v0.2.0
 ##### 29.03.2026
-yo, long time I haven't updated herre this shit
--- created pch wrapper for std and vendor libraries
--- i forgot what i have added
+yo, long time I haven't updated herre this shit  
+-- created pch wrapper for std and vendor libraries  
+-- i forgot what i have added  
 -- uv tiling or wtf its name is
+
+### v0.2.1
+##### 30.06.2026
+very long time, im getting lazy  
+-- added shadow casting to omnidirectional light source
+-- some minor updates in code appearance (really minor)
