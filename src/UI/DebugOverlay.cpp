@@ -1,6 +1,7 @@
 #include "DebugOverlay.h"
+
 #include <glm/glm.hpp>
-#include "scene/Light.h"
+
 #include "core/logging/Logger.h"
 
 void DebugOverlay::Render(ECSWorld *ecs, entt::entity cameraEntity,
@@ -165,11 +166,9 @@ void DebugOverlay::RenderInspectorTab(ECSWorld *ecs, MaterialManager *materialMa
         materialPanel.Render(ecs, m_selected, materialManager);
     if (ecs->HasComponent<LightComponent>(m_selected))
         lightPanel.Render(ecs, m_selected);
-    if (ecs->HasComponent<CameraComponent>(m_selected) &&
-        ecs->HasComponent<CameraOrientationComponent>(m_selected))
+    if (ecs->HasComponent<CameraComponent>(m_selected) && ecs->HasComponent<CameraOrientationComponent>(m_selected))
         cameraPanel.Render(ecs, m_selected);
-    if (ecs->HasComponent<AudioSourceComponent>(m_selected) || ecs->HasComponent<
-            AudioListenerComponent>(m_selected))
+    if (ecs->HasComponent<AudioSourceComponent>(m_selected) || ecs->HasComponent<AudioListenerComponent>(m_selected))
         audioPanel.Render(ecs, m_selected);
     if (ecs->HasComponent<ScriptComponent>(m_selected))
         scriptPanel.Render(ecs, m_selected);
@@ -286,9 +285,6 @@ void DebugOverlay::RenderCreateEntityTab() {
 
     if (ImGui::MenuItem("Open Model"))
         m_showOpenModelDialog = true;
-
-    if (ImGui::MenuItem("New Material"))
-        m_showOpenMaterialDialog = true;
 }
 
 void DebugOverlay::RenderOpenModelDialog() {
@@ -326,78 +322,6 @@ void DebugOverlay::RenderOpenModelDialog() {
 
         if (ImGui::Button("Cancel")) {
             m_showOpenModelDialog = false;
-            ImGui::CloseCurrentPopup();
-        }
-
-        ImGui::EndPopup();
-    }
-}
-
-void DebugOverlay::RenderOpenMaterialDialog() {
-    if (!m_showOpenMaterialDialog) return;
-
-    ImGui::OpenPopup("NewMaterial");
-
-    if (ImGui::BeginPopupModal(
-        "NewMaterial",
-        &m_showOpenMaterialDialog,
-        ImGuiWindowFlags_AlwaysAutoResize)) {
-        ImGui::Text("Name:");
-        ImGui::InputTextWithHint(
-            "##name",
-            "material",
-            m_name,
-            sizeof(m_name));
-
-        ImGui::Text("Diff path:");
-        ImGui::InputTextWithHint(
-            "##diffpath",
-            "/home/user/texture.png",
-            m_diffusePath,
-            sizeof(m_diffusePath));
-
-        ImGui::Text("Spec path:");
-        ImGui::InputTextWithHint(
-            "##specpath",
-            "/home/user/texture.png",
-            m_specularPath,
-            sizeof(m_specularPath));
-
-        ImGui::Text("Norm path:");
-        ImGui::InputTextWithHint(
-            "##normpath",
-            "/home/user/texture.png",
-            m_normalPath,
-            sizeof(m_normalPath));
-
-        ImGui::Text("Height path:");
-        ImGui::InputTextWithHint(
-            "##heightpath",
-            "/home/user/texture.png",
-            m_heightPath,
-            sizeof(m_heightPath));
-
-        ImGui::Spacing();
-
-        if (ImGui::Button("Open")) {
-            Execute("onCreateMaterial",
-                    {
-                        m_name,
-                        m_diffusePath,
-                        m_specularPath,
-                        m_normalPath,
-                        m_heightPath
-                    }
-            );
-
-            m_showOpenMaterialDialog = false;
-            ImGui::CloseCurrentPopup();
-        }
-
-        ImGui::SameLine();
-
-        if (ImGui::Button("Cancel")) {
-            m_showOpenMaterialDialog = false;
             ImGui::CloseCurrentPopup();
         }
 

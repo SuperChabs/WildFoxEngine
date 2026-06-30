@@ -34,7 +34,7 @@ bool Application::Initialize() {
     moduleManager = std::make_unique<ModuleManager>();
 
     Logger::AddSink(&console);
-    Logger::AddSink(&file);
+    // Logger::AddSink(&file);
 
     OnInitialize();
 
@@ -61,7 +61,7 @@ void Application::Shutdown() {
     OnShutdown();
 
     Logger::RemoveSink(&console);
-    Logger::RemoveSink(&file);
+    // Logger::RemoveSink(&file);
 
     Logger::Log(LogLevel::INFO, "Application shutdown complete");
 }

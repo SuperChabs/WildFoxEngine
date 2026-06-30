@@ -1,10 +1,9 @@
 #pragma once
 
 #include <memory>
-#include <vector>
+
 
 #include <entt/entt.hpp>
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include "core/IModule.h"

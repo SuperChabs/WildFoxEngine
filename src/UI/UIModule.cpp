@@ -1,5 +1,7 @@
 #include "UIModule.h"
+
 #include <string>
+
 #include "core/logging/Logger.h"
 #include "resource/ResourceModule.h"
 #include "rendering/RenderingModule.h"

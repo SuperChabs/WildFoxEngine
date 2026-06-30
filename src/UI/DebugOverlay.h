@@ -32,19 +32,12 @@ private:
     entt::entity m_selected = entt::null;
 
     char m_scenePathBuf[512] = "scene.json";
-    char m_scriptPathBuf[256] = "";
+    char m_scriptPathBuf[256] = "assets/scripts/script.as";
     char m_entityNameBuf[128] = "New Entity";
 
     char m_modelPath[512]{};
 
-    char m_name[128]{};
-    char m_diffusePath[512]{};
-    char m_specularPath[512]{};
-    char m_normalPath[512]{};
-    char m_heightPath[512]{};
-
     bool m_showOpenModelDialog = false;
-    bool m_showOpenMaterialDialog = false;
 
     TagPanel tagPanel;
     TransformPanel transformPanel;
@@ -67,8 +60,6 @@ private:
     void RenderCreateEntityTab();
 
     void RenderOpenModelDialog();
-
-    void RenderOpenMaterialDialog();
 
     inline void Execute(const char *name, const CommandArgs &args) {
         if (CommandManager::HasCommand(name))

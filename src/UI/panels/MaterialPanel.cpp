@@ -1,4 +1,5 @@
 #include "MaterialPanel.h"
+
 #include "core/logging/Logger.h"
 
 void MaterialPanel::Render(ECSWorld *ecs, entt::entity entity, MaterialManager *materialManager) {
@@ -29,6 +30,11 @@ void MaterialPanel::Render(ECSWorld *ecs, entt::entity entity, MaterialManager *
 
     if (ImGui::Button("Remove Material", ImVec2(-1, 0)))
         RemoveMaterial(ecs, entity);
+
+    if (ImGui::Button("Add Material", ImVec2(-1, 0)))
+        m_showOpenMaterialDialog = true;
+
+    RenderOpenMaterialDialog();
 }
 
 void MaterialPanel::AssignMaterial(ECSWorld *ecs, entt::entity entity,
@@ -55,4 +61,76 @@ void MaterialPanel::RemoveMaterial(ECSWorld *ecs, entt::entity entity) {
         Logger::Log(LogLevel::INFO, LogCategory::RENDERING,
                     "Material removed from entity");
     }
+}
+
+void MaterialPanel::RenderOpenMaterialDialog() {
+    if (!m_showOpenMaterialDialog) return;
+
+    ImGui::OpenPopup("NewMaterial");
+
+    if (ImGui::BeginPopupModal(
+        "NewMaterial",
+        &m_showOpenMaterialDialog,
+        ImGuiWindowFlags_AlwaysAutoResize)) {
+        ImGui::Text("Name:");
+        ImGui::InputTextWithHint(
+            "##name",
+            "material",
+            m_name,
+            sizeof(m_name));
+
+        ImGui::Text("Diff path:");
+        ImGui::InputTextWithHint(
+            "##diffpath",
+            "/home/user/texture.png",
+            m_diffusePath,
+            sizeof(m_diffusePath));
+
+        ImGui::Text("Spec path:");
+        ImGui::InputTextWithHint(
+            "##specpath",
+            "/home/user/texture.png",
+            m_specularPath,
+            sizeof(m_specularPath));
+
+        ImGui::Text("Norm path:");
+        ImGui::InputTextWithHint(
+            "##normpath",
+            "/home/user/texture.png",
+            m_normalPath,
+            sizeof(m_normalPath));
+
+        ImGui::Text("Height path:");
+        ImGui::InputTextWithHint(
+            "##heightpath",
+            "/home/user/texture.png",
+            m_heightPath,
+            sizeof(m_heightPath));
+
+        ImGui::Spacing();
+
+        if (ImGui::Button("Open")) {
+            Execute("onCreateMaterial",
+                    {
+                        m_name,
+                        m_diffusePath,
+                        m_specularPath,
+                        m_normalPath,
+                        m_heightPath
+                    }
+            );
+
+            m_showOpenMaterialDialog = false;
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::SameLine();
+
+        if (ImGui::Button("Cancel")) {
+            m_showOpenMaterialDialog = false;
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::EndPopup();
+        }
 }

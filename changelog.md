@@ -12,7 +12,7 @@
 ### v0.1.3
 ##### 09.02.2026
 -- Add ECS module
--- Delete all legacy camera mantions
+-- Delete all legacy camera mentions
 
 ### v0.1.4
 ##### 12.02.2026
@@ -35,7 +35,7 @@
 
 ### v0.1.7
 ##### 18.02.2026
--- Enchance mesh rendering  
+-- Enhance mesh rendering  
 -- Fix gizmo rotation feedback loop
 
 ### v0.1.8
@@ -63,7 +63,7 @@
 ##### 29.03.2026
 yo, long time I haven't updated herre this shit  
 -- created pch wrapper for std and vendor libraries  
--- i forgot what i have added  
+-- I forgot what I have added  
 -- uv tiling or wtf its name is
 
 ### v0.2.1
@@ -71,3 +71,9 @@ yo, long time I haven't updated herre this shit
 very long time, im getting lazy  
 -- added shadow casting to omnidirectional light source
 -- some minor updates in code appearance (really minor)
+
+### v0.2.3
+##### 30.06.2026
+-- deleted Theme class  
+-- hard-coded theme in ImGuiManager  
+-- moved material creating button to material panel cuz its more intuitive I think 
