@@ -12,5 +12,5 @@
 class LightSystem {
 public:
     void Update(ECSWorld &world, ShaderManager &shaderManager, const std::string &shaderName,
-                const std::vector<int> *shadowMapIndices = nullptr);
+                const std::vector<int> *shadowMapIndices = nullptr, const std::vector<int> *pointShadowIndices = nullptr);
 };

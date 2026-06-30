@@ -34,6 +34,8 @@ protected:
     float innerCutoff;
     float outerCutoff;
 
+    float farPlane;
+
 public:
     Light(LightType type, const std::string &name = "Light")
         : type(type)
@@ -51,7 +53,8 @@ public:
           , quadratic(0.032f)
           , radius(50.0f)
           , innerCutoff(12.5f)
-          , outerCutoff(17.5f) {
+          , outerCutoff(17.5f)
+          , farPlane(100.0f) {
     }
 
     virtual ~Light() = default;
@@ -72,6 +75,7 @@ public:
     float GetRadius() const { return radius; }
     float GetInnerCutoff() const { return innerCutoff; }
     float GetOuterCutoff() const { return outerCutoff; }
+    float GetFarPlane() const { return farPlane; }
 
     void SetName(const std::string &n) { name = n; }
     void SetPosition(const glm::vec3 &pos) { position = pos; }
@@ -89,6 +93,7 @@ public:
     void SetInnerCutoff(float angle) { innerCutoff = angle; }
     void SetOuterCutoff(float angle) { outerCutoff = angle; }
     void SetType(LightType newType) { type = newType; }
+    void SetFarPlane(float f) { farPlane = f; }
 };
 
 class DirectionalLight : public Light {
@@ -114,6 +119,7 @@ public:
         linear = 0.09f;
         quadratic = 0.032f;
         radius = 50.0f;
+        farPlane = 100.0f;
     }
 };
 

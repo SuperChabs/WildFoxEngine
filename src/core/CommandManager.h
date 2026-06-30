@@ -8,6 +8,7 @@
 
 #include <glm/glm.hpp>
 #include <entt/entt.hpp>
+#include <glad/glad.h>
 
 using CommandArg =
 std::variant<
@@ -19,7 +20,8 @@ std::variant<
     glm::mat4,
     std::vector<glm::mat4>,
     std::vector<int>,
-    entt::entity
+    entt::entity,
+    GLuint
 >;
 
 using CommandArgs = std::vector<CommandArg>;

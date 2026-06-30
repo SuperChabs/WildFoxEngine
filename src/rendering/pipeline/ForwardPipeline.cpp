@@ -21,18 +21,18 @@ void ForwardPipeline::Initialize() {
     AddPass(std::move(skyboxPass));
     Logger::Log(LogLevel::DEBUG, "SkyboxPass created");
 
+    // --- GeometryPass ---
+    auto geometryPassOwned = std::make_unique<GeometryPass>(context, shaderManager, world);
+    m_GeometryPassPtr = geometryPassOwned.get();
+    AddPass(std::move(geometryPassOwned));
+    Logger::Log(LogLevel::DEBUG, "GeometryPass created");
+
     // --- ShadowPass ---
     auto shadowPassOwned = std::make_unique<ShadowPass>(context, shaderManager, world);
     m_ShadowPassPtr = shadowPassOwned.get();
     shadowPassOwned->SetEnabled(true);
     AddPass(std::move(shadowPassOwned));
     Logger::Log(LogLevel::DEBUG, "ShadowPass created");
-
-    // --- GeometryPass ---
-    auto geometryPassOwned = std::make_unique<GeometryPass>(context, shaderManager, world);
-    m_GeometryPassPtr = geometryPassOwned.get();
-    AddPass(std::move(geometryPassOwned));
-    Logger::Log(LogLevel::DEBUG, "GeometryPass created");
 
     // --- UIPass ---
     auto uiPass = std::make_unique<UIPass>(context, shaderManager);
@@ -72,7 +72,9 @@ void ForwardPipeline::Execute(ECSWorld &ecs, entt::entity cameraEntity,
         m_GeometryPassPtr->SetShadowData(
             m_ShadowPassPtr->GetLightMatrices(),
             m_ShadowPassPtr->GetShadowMapArray(),
-            m_ShadowPassPtr->GetShadowMapIndices()
+            m_ShadowPassPtr->GetShadowMapIndices(),
+            m_ShadowPassPtr->GetCubeShadowMapArray(),
+            m_ShadowPassPtr->GetPointShadowMapIndices()
         );
     }
     else
@@ -83,8 +85,12 @@ void ForwardPipeline::Execute(ECSWorld &ecs, entt::entity cameraEntity,
     for (auto &pass: passes) {
         if (!pass || !pass->IsEnabled()) continue;
         if (pass.get() == m_ShadowPassPtr) continue;
+        if (pass.get() == m_GeometryPassPtr) continue;
         pass->Execute(view, projection);
     }
+
+    if (m_GeometryPassPtr && m_GeometryPassPtr->IsEnabled())
+        m_GeometryPassPtr->Execute(view, projection);
 }
 
 ShadowPass *ForwardPipeline::GetShadowPass() const {

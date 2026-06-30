@@ -13,20 +13,23 @@
 #include "core/logging/Logger.h"
 
 class GeometryPass : public RenderPass {
-private:
     ECSWorld *world;
 
     std::vector<glm::mat4> m_LightSpaceMatrices;
     std::vector<int> m_ShadowMapIndices;
     GLuint m_shadowMapArray;
+    GLuint m_CubeShadowMapArray;
+    std::vector<int> m_CubeShadowMapIndices;
 
-    static constexpr int SHADOW_MAP_TEXTURE_SLOT = 8;
+    static constexpr int SHADOW_MAP_TEXTURE_SLOT = 6;
+    static constexpr int CUBE_SHADOW_MAP_TEXTURE_SLOT = 4;
 
 public:
     GeometryPass(GLContext *ctx, ShaderManager *sm, ECSWorld *w);
 
     void SetShadowData(const std::vector<glm::mat4> &lightSpaceMatrices, GLuint shadowMapArray,
-                       const std::vector<int> &shadowMapIndices = {});
+                       const std::vector<int> &shadowMapIndices = {}, GLuint shadowCubeMapArray = 0,
+                       const std::vector<int> &CubeShadowMapIndices = {});
 
     void Setup() override;
 

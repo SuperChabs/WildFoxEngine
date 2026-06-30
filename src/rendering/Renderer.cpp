@@ -183,72 +183,84 @@ void Renderer::RegisterRenderCommands() {
                     "Renderer: Renderer_RenderGeometry already registered — skipping (hot-reload path?)");
     } else
         CommandManager::RegisterCommand("Renderer_RenderGeometry",
-                                        [this](const CommandArgs &args) {
-                                            if (args.size() < 3) {
-                                                Logger::Log(LogLevel::ERROR,
-                                                            "Renderer_RenderGeometry: needs ≥3 args");
-                                                return;
-                                            }
+            [this](const CommandArgs &args) {
+                if (args.size() < 3) {
+                    Logger::Log(LogLevel::ERROR,
+                                "Renderer_RenderGeometry: needs ≥3 args");
+                    return;
+                }
 
-                                            const auto &view = std::get<glm::mat4>(args[0]);
-                                            const auto &projection = std::get<glm::mat4>(args[1]);
-                                            const auto &shaderName = std::get<std::string>(args[2]);
+                const auto &view = std::get<glm::mat4>(args[0]);
+                const auto &projection = std::get<glm::mat4>(args[1]);
+                const auto &shaderName = std::get<std::string>(args[2]);
 
-                                            shaderManager->Bind(shaderName);
-                                            shaderManager->SetMat4(shaderName, "projection", projection);
-                                            shaderManager->SetMat4(shaderName, "view", view);
+                shaderManager->Bind(shaderName);
+                shaderManager->SetMat4(shaderName, "projection", projection);
+                shaderManager->SetMat4(shaderName, "view", view);
 
-                                            bool shadowsEnabled = false;
-                                            if (args.size() >= 5) {
-                                                const auto &lightSpaceMatrices = std::get<std::vector<glm::mat4> >(
-                                                    args[3]);
-                                                int shadowTexID = std::get<int>(args[4]);
+                bool shadowsEnabled = false;
+                if (args.size() >= 5) {
+                    const auto &lightSpaceMatrices = std::get<std::vector<glm::mat4> >(
+                        args[3]);
+                    GLuint shadowTexID = std::get<GLuint>(args[4]);
 
-                                                for (int i = 0; i < lightSpaceMatrices.size(); i++)
-                                                    shaderManager->SetMat4(shaderName,
-                                                                           "lightSpaceMatrices[" + std::to_string(i)
-                                                                           + "]", lightSpaceMatrices[i]);
+                    for (int i = 0; i < lightSpaceMatrices.size(); i++)
+                        shaderManager->SetMat4(shaderName,
+                                               "lightSpaceMatrices[" + std::to_string(i)
+                                               + "]", lightSpaceMatrices[i]);
 
-                                                if (shadowTexID != 0) {
-                                                    shadowsEnabled = true;
-                                                    shaderManager->SetBool(shaderName, "shadowsEnabled", true);
-                                                    shaderManager->SetInt(
-                                                        shaderName, "shadowMapArray", SHADOW_MAP_SLOT);
+                    if (shadowTexID != 0) {
+                        shadowsEnabled = true;
+                        shaderManager->SetBool(shaderName, "shadowsEnabled", true);
 
-                                                    glActiveTexture(GL_TEXTURE0 + SHADOW_MAP_SLOT);
-                                                    glBindTexture(GL_TEXTURE_2D_ARRAY, shadowTexID);
-                                                }
-                                            }
+                        shaderManager->SetInt(shaderName, "shadowMapArray", SHADOW_MAP_SLOT);
+                        glActiveTexture(GL_TEXTURE0 + SHADOW_MAP_SLOT);
+                        glBindTexture(GL_TEXTURE_2D_ARRAY, shadowTexID);
 
-                                            if (!shadowsEnabled)
-                                                shaderManager->SetBool(shaderName, "shadowsEnabled", false);
+                        if (args.size() >= 7) {
+                            GLuint cubeShadowTexID = std::get<GLuint>(args[6]);
+                            shaderManager->SetInt(shaderName, "shadowCubeArray", CUBE_SHADOW_MAP_SLOTS);
+                            shaderManager->SetFloat(shaderName, "pointLightFarPlane", 100.0f);
+                            glActiveTexture(GL_TEXTURE0 + CUBE_SHADOW_MAP_SLOTS);
+                            glBindTexture(GL_TEXTURE_CUBE_MAP_ARRAY, cubeShadowTexID);
+                        }
+                    }
+                }
 
-                                            const std::vector<int> *shadowMapIndices = nullptr;
-                                            if (args.size() >= 6) {
-                                                shadowMapIndices = &std::get<std::vector<int> >(args[5]);
-                                            }
+                if (!shadowsEnabled)
+                    shaderManager->SetBool(shaderName, "shadowsEnabled", false);
 
-                                            lightSystem->Update(*world, *shaderManager, shaderName,
-                                                                shadowMapIndices);
-                                            renderSystem->Update(*world, *shaderManager, shaderName);
+                const std::vector<int> *shadowMapIndices = nullptr;
+                if (args.size() >= 6) {
+                    shadowMapIndices = &std::get<std::vector<int> >(args[5]);
+                }
 
-                                            shaderManager->Unbind();
-                                        });
+                const std::vector<int> *cubeShadowMapIndices = nullptr;
+                if (args.size() >= 8) {
+                    cubeShadowMapIndices = &std::get<std::vector<int> >(args[7]);
+                }
+
+                lightSystem->Update(*world, *shaderManager, shaderName,
+                                    shadowMapIndices, cubeShadowMapIndices);
+                renderSystem->Update(*world, *shaderManager, shaderName);
+
+                shaderManager->Unbind();
+            });
 
     if (!CommandManager::HasCommand("Renderer_RenderUI"))
         CommandManager::RegisterCommand("Renderer_RenderUI",
-                                        [this](const CommandArgs &args) {
-                                            if (args.size() < 3) return;
+            [this](const CommandArgs &args) {
+                if (args.size() < 3) return;
 
-                                            const auto &view = std::get<glm::mat4>(args[0]);
-                                            const auto &projection = std::get<glm::mat4>(args[1]);
-                                            const auto &shaderName = std::get<std::string>(args[2]);
+                const auto &view = std::get<glm::mat4>(args[0]);
+                const auto &projection = std::get<glm::mat4>(args[1]);
+                const auto &shaderName = std::get<std::string>(args[2]);
 
-                                            shaderManager->Bind(shaderName);
-                                            shaderManager->SetMat4(shaderName, "projection", projection);
-                                            shaderManager->SetMat4(shaderName, "view", view);
-                                            shaderManager->Unbind();
-                                        });
+                shaderManager->Bind(shaderName);
+                shaderManager->SetMat4(shaderName, "projection", projection);
+                shaderManager->SetMat4(shaderName, "view", view);
+                shaderManager->Unbind();
+            });
 
     Logger::Log(LogLevel::INFO, "Render commands registered");
 }

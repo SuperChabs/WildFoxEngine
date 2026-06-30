@@ -2,28 +2,34 @@
     "shader": [
         {
             "name": "skybox",
-            "vertex": "vertex/skybox.vs",
-            "fragment": "fragment/skybox.fs"
+            "vertex": "vertex/skybox.vsh",
+            "fragment": "fragment/skybox.fsh"
         },
         {
             "name": "basic",
-            "vertex": "vertex/basic.vs",
-            "fragment": "fragment/basic.fs"
+            "vertex": "vertex/basic.vsh",
+            "fragment": "fragment/basic.fsh"
         },
         {
             "name": "icon",
-            "vertex": "vertex/icon.vs",
-            "fragment": "fragment/icon.fs"
+            "vertex": "vertex/icon.vsh",
+            "fragment": "fragment/icon.fsh"
         },
         {
             "name": "shadow_depth",
-            "vertex": "vertex/shadow_depth.vs",
-            "fragment": "fragment/shadow_depth.fs"
+            "vertex": "vertex/shadow_depth.vsh",
+            "fragment": "fragment/shadow_depth.fsh"
         },
         {
             "name": "aabbDebug",
-            "vertex": "vertex/aabbDebug.vs",
-            "fragment": "fragment/aabbDebug.fs"
+            "vertex": "vertex/aabbDebug.vsh",
+            "fragment": "fragment/aabbDebug.fsh"
+        },
+        {
+            "name": "shadowCubeMapDepth",
+            "vertex": "vertex/shadowCubeMapDepth.vsh",
+            "geometry": "geometry/shadowCubeMapDepth.gsh",
+            "fragment": "fragment/shadowCubeMapDepth.fsh"
         }
     ]
 }

@@ -17,7 +17,8 @@
 #include "ECS/World.h"
 #include "ECS/systems/Systems.h"
 
-static constexpr int SHADOW_MAP_SLOT = 8;
+static constexpr int SHADOW_MAP_SLOT = 6;
+static constexpr int CUBE_SHADOW_MAP_SLOTS = 4;
 
 class Renderer : public IRenderer {
     std::unique_ptr<GLContext> context;

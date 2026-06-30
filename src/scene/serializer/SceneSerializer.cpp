@@ -24,8 +24,12 @@ bool SceneSerializer::SaveScene(const std::string &filename, MaterialManager *ma
     json sceneData;
     SceneMetadataSerializer metaSerializer(fileHandler);
 
-    entt::entity mainCam = world->FindEditorCamera();
-    sceneData["scene"]["metadata"] = metaSerializer.SerializeMetadata(filename, mainCam);
+    entt::entity mainCam = entt::null;
+    world->Each<CameraComponent>([&](entt::entity e, CameraComponent &cam) {
+        if (cam.isMainCamera)
+            mainCam = e;
+    });
+    sceneData["scene"]["metadata"] = metaSerializer.SerializeMetadata(world, filename, mainCam);
     SerializeEntities(sceneData);
 
     json materialsData = m_material.Serialize(materialManager);
@@ -56,12 +60,28 @@ bool SceneSerializer::LoadScene(const std::string &filename,
 
     SetupHierarchies(sceneData, createdEntities);
 
+    SceneMetadataSerializer metaSerializer(fileHandler);
+    metaSerializer.DeserializeMetadata(
+        sceneData["scene"]["metadata"],
+        createdEntities,
+        world
+    );
+
     DeserializeMaterials(sceneData, materialManager, createdEntities);
 
     ApplyColors(sceneData, createdEntities);
 
     Logger::Log(LogLevel::INFO,
                 "Scene loaded: " + filename + " (" + std::to_string(loadedCount) + " entities)");
+
+    world->Each<CameraComponent>([&](entt::entity e, CameraComponent &cam) {
+        if (!world->HasComponent<CameraTypeComponent>(e)) {
+            auto type = cam.isMainCamera
+                ? CameraTypeComponent::Type::GAME
+                : CameraTypeComponent::Type::EDITOR;
+            world->AddComponent<CameraTypeComponent>(e, type);
+        }
+    });
 
     return true;
 }
