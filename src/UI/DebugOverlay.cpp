@@ -1,11 +1,13 @@
 #include "DebugOverlay.h"
 
+#include <fstream>
+
 #include <glm/glm.hpp>
 
 #include "core/logging/Logger.h"
 
-void DebugOverlay::Render(ECSWorld *ecs, entt::entity cameraEntity,
-                          MaterialManager *materialManager) {
+void DebugOverlay::Render(ECSWorld *ecs,
+                          MaterialManager *materialManager, SceneSerializer * ss) {
     if (!visible || !ecs) return;
 
     ImGui::SetNextWindowPos({10.f, 10.f}, ImGuiCond_FirstUseEver);
@@ -20,7 +22,7 @@ void DebugOverlay::Render(ECSWorld *ecs, entt::entity cameraEntity,
 
     if (ImGui::BeginTabBar("##sbo_tabs")) {
         if (ImGui::BeginTabItem("Scene")) {
-            RenderSceneTab(ecs);
+            RenderSceneTab(ecs, ss);
             ImGui::EndTabItem();
         }
         if (ImGui::BeginTabItem("Hierarchy")) {
@@ -43,7 +45,10 @@ void DebugOverlay::Render(ECSWorld *ecs, entt::entity cameraEntity,
     ImGui::End();
 }
 
-void DebugOverlay::RenderSceneTab(ECSWorld *ecs) {
+void DebugOverlay::RenderSceneTab(ECSWorld *ecs, SceneSerializer *ss) {
+    if (!m_scenesLoaded)
+        RefreshAvailableScenes(*ss);
+
     ImGui::Spacing();
     ImGui::Text("Scene file:");
     ImGui::SetNextItemWidth(-1.f);
@@ -51,9 +56,6 @@ void DebugOverlay::RenderSceneTab(ECSWorld *ecs) {
     ImGui::Spacing();
 
     float btnW = (ImGui::GetContentRegionAvail().x - 8.f) / 2.f;
-
-    if (ImGui::Button("Load", {btnW, 0}))
-        Execute("onLoadScene", m_scenePathBuf);
 
     ImGui::SameLine();
 
@@ -75,6 +77,25 @@ void DebugOverlay::RenderSceneTab(ECSWorld *ecs) {
                         : "Command NOT registered!");
         Execute("onDebugPauseToggle");
     }
+
+    ImGui::Separator();
+    ImGui::Spacing();
+
+    ImGui::Text("Available Scenes");
+    ImGui::SameLine();
+    if (ImGui::Button("Refresh"))
+        RefreshAvailableScenes(*ss);
+
+    ImGui::BeginChild("SceneList", ImVec2(0, 150), true);
+    for (int i = 0; i < static_cast<int>(m_availableScenes.size()); i++) {
+        const bool isSelected = (m_selectedScene == i);
+        if (ImGui::Selectable(m_availableScenes[i].c_str(), isSelected))
+            m_selectedScene = i;
+
+        if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+            Execute("onLoadScene", m_availableScenes[i].c_str());
+    }
+    ImGui::EndChild();
 }
 
 void DebugOverlay::RenderHierarchyTab(ECSWorld *ecs) {
@@ -345,4 +366,11 @@ void DebugOverlay::RenderOpenModelDialog() {
 
         ImGui::EndPopup();
     }
+}
+
+void DebugOverlay::RefreshAvailableScenes(SceneSerializer &ss) {
+    m_availableScenes = ss.GetAvailableScenes();
+    std::sort(m_availableScenes.begin(), m_availableScenes.end());
+    m_selectedScene = -1;
+    m_scenesLoaded = true;
 }

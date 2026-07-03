@@ -59,3 +59,5 @@ private:
 
     bool IsModelChild(ECSWorld *w, entt::entity entity);
 };
+
+SceneSerializer GetSceneSerializer();

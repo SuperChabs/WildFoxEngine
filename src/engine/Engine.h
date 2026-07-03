@@ -50,8 +50,6 @@ private:
     SceneModule *sceneModule;
     PhysicsModule *m_physicsModule;
 
-    DebugOverlay m_overlay;
-
     bool cameraControlEnabled;
     bool showUI;
 

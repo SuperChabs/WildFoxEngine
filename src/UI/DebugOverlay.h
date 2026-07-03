@@ -8,6 +8,7 @@
 #include "ECS/components/Components.h"
 #include "resource/material/MaterialManager.h"
 #include "core/CommandManager.h"
+#include "scene/serializer/SceneSerializer.h"
 
 #include "UI/panels/TagPanel.h"
 #include "UI/panels/TransformPanel.h"
@@ -23,10 +24,8 @@
 class DebugOverlay {
 public:
     bool visible = true;
-    AudioPanel audioPanel;
 
-    void Render(ECSWorld *ecs, entt::entity cameraEntity,
-                MaterialManager *materialManager);
+    void Render(ECSWorld *ecs, MaterialManager *materialManager, SceneSerializer * ss);
 
 private:
     entt::entity m_selected = entt::null;
@@ -39,6 +38,7 @@ private:
 
     bool m_showOpenModelDialog = false;
 
+    AudioPanel audioPanel;
     TagPanel tagPanel;
     TransformPanel transformPanel;
     MaterialPanel materialPanel;
@@ -49,7 +49,11 @@ private:
     RigidBodyPanel rigidPanel;
     ColliderPanel colliderPanel;
 
-    void RenderSceneTab(ECSWorld *ecs);
+    std::vector<std::string> m_availableScenes;
+    int m_selectedScene = -1;
+    bool m_scenesLoaded = false;
+
+    void RenderSceneTab(ECSWorld *ecs, SceneSerializer *ss);
 
     void RenderHierarchyTab(ECSWorld *ecs);
 
@@ -61,22 +65,24 @@ private:
 
     void RenderOpenModelDialog();
 
-    inline void Execute(const char *name, const CommandArgs &args) {
+    void RefreshAvailableScenes(SceneSerializer &ss);
+
+    static inline void Execute(const char *name, const CommandArgs &args) {
         if (CommandManager::HasCommand(name))
             CommandManager::ExecuteCommand(name, args);
     }
 
-    inline void ExecuteItem(const char *label, const char *command) {
+    static inline void ExecuteItem(const char *label, const char *command) {
         if (ImGui::MenuItem(label))
             Execute(command);
     }
 
-    inline void Execute(const char *name) {
-        CommandArgs args;
+    static inline void Execute(const char *name) {
+        constexpr CommandArgs args;
         Execute(name, args);
     }
 
-    inline void Execute(const char *name, const std::string &arg) {
+    static inline void Execute(const char *name, const std::string &arg) {
         CommandArgs args;
         args.emplace_back(arg);
         Execute(name, args);

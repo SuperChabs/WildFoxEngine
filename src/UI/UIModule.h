@@ -11,9 +11,11 @@
 #include "UI/ImGuiManager.h"
 #include "ECS/World.h"
 #include "scene/SceneManager.h"
+#include "DebugOverlay.h"
 
 class UIModule : public IModule {
     std::unique_ptr<ImGuiManager> imGuiManager;
+    std::unique_ptr<DebugOverlay> debugOverlay;
 
     ECSWorld *ecs = nullptr;
     entt::entity *mainCameraEntity = nullptr;
@@ -43,6 +45,6 @@ public:
 
     /// }@
 
-    //EditorLayout* GetEditorLayout() { return editorLayout.get(); }
+    DebugOverlay *GetDebugOverlay();
     ImGuiManager *GetImGuiManager();
 };

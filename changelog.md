@@ -87,3 +87,6 @@ very long time, im getting lazy
 ### v0.2.5
 ##### 03.07.2026
 -- added sorting to the hierarchy tab cuz why not
+
+### v0.2.6
+-- added list of selectable scenes in the scene tab

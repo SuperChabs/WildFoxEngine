@@ -244,7 +244,7 @@ void Engine::OnRender() {
         );
 
         uiModule->GetImGuiManager()->BeginFrame();
-        m_overlay.Render(ecs, mainCameraEntity, resourceModule->GetMaterialManager());
+        uiModule->RenderUI();
         uiModule->GetImGuiManager()->EndFrame();
     }
 }

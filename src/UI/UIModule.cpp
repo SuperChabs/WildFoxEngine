@@ -5,10 +5,11 @@
 #include "core/logging/Logger.h"
 #include "resource/ResourceModule.h"
 #include "rendering/RenderingModule.h"
+#include "scene/SceneModule.h"
 
 UIModule::UIModule(ECSWorld *ecs, entt::entity *cameraEntity, SceneManager *sceneManager, ModuleManager *mm,
                    GLFWwindow *window)
-    : ecs(ecs), mainCameraEntity(cameraEntity), m_sceneManager(sceneManager), mm(mm), window(window) {
+    : ecs(ecs), mainCameraEntity(cameraEntity), mm(mm), window(window), m_sceneManager(sceneManager) {
     if (!ecs)
         Logger::Log(LogLevel::ERROR, "RenderingModule: ecs is null!");
 }
@@ -16,14 +17,15 @@ UIModule::UIModule(ECSWorld *ecs, entt::entity *cameraEntity, SceneManager *scen
 bool UIModule::Initialize() {
     try {
         imGuiManager = std::make_unique<ImGuiManager>();
-
         if (!imGuiManager->Initialize(window)) {
             Logger::Log(LogLevel::ERROR, "Failed to initialize ImGuiManager");
             return false;
         }
 
+        debugOverlay = std::make_unique<DebugOverlay>();
+
         Logger::Log(LogLevel::INFO,
-                    "Successfully created UI Mdoule");
+                    "Successfully created UI Module");
 
         isInitialized = true;
 
@@ -42,21 +44,15 @@ void UIModule::Update(float deltaTime) {
 }
 
 void UIModule::RenderUI() {
-    /*editorLayout->RenderEditor(
-        ecs, 
-        *mainCameraEntity,
-        mm->GetModule<RenderingModule>("Rendering")->GetRenderer(), 
-        mm->GetModule<ResourceModule>("Resource")->GetShaderManager(), 
-        mm->GetModule<ResourceModule>("Resource")->GetMaterialManager(),
-        m_sceneManager ? m_sceneManager->IsInPlayMode() : false
-    );*/
+    debugOverlay->Render(ecs, mm->GetModule<ResourceModule>("Resource")->GetMaterialManager(),
+        mm->GetModule<SceneModule>("Scene")->GetSceneSerializer());
 }
 
 void UIModule::Shutdown() {
     imGuiManager->Shutdown();
 
     imGuiManager.reset();
-    //editorLayout.reset();
+    debugOverlay.reset();
 }
 
 const char *UIModule::GetName() const {
@@ -69,6 +65,10 @@ int UIModule::GetPriority() const {
 
 bool UIModule::IsRequired() const {
     return true;
+}
+
+DebugOverlay * UIModule::GetDebugOverlay() {
+    return debugOverlay.get();
 }
 
 ImGuiManager *UIModule::GetImGuiManager() {
