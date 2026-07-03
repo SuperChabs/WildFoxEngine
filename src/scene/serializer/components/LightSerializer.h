@@ -15,7 +15,7 @@ public:
     json Serialize(ECSWorld *world, entt::entity entity) override;
 
 
-    void Deserialize(ECSWorld *world, entt::entity entity, const json &data) override;
+    entt::entity Deserialize(DeserializeContext &dcx, entt::entity entity, const json &data) override;
 
 
     bool CanSerialize(ECSWorld *world, entt::entity entity) const override;

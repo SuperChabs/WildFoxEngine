@@ -34,9 +34,9 @@ json ColliderSerializer::Serialize(ECSWorld *world, entt::entity entity) {
     return json::object();
 }
 
-void ColliderSerializer::Deserialize(ECSWorld *world, entt::entity entity, const json &data) {
+entt::entity ColliderSerializer::Deserialize(DeserializeContext &dcx, entt::entity entity, const json &data) {
     if (!data.contains("type"))
-        return;
+        return entt::null;
 
     bool isTrigger;
 
@@ -51,13 +51,15 @@ void ColliderSerializer::Deserialize(ECSWorld *world, entt::entity entity, const
         AABB aabb;
         aabb.min = Vec3FromJson(data.value("min", json::array({0.0f, 0.0f, 0.0f})));
         aabb.max = Vec3FromJson(data.value("max", json::array({0.0f, 0.0f, 0.0f})));
-        world->AddComponent<ColliderComponent>(entity, aabb, isTrigger);
+        dcx.world->AddComponent<ColliderComponent>(entity, aabb, isTrigger);
     } else if (type == "Sphere") {
         Sphere sphere;
         sphere.centre = Vec3FromJson(data.value("centre", json::array({0.0f, 0.0f, 0.0f})));
         sphere.radius = data.value("radius", 0.0f);
-        world->AddComponent<ColliderComponent>(entity, sphere, isTrigger);
+        dcx.world->AddComponent<ColliderComponent>(entity, sphere, isTrigger);
     }
+
+    return entity;
 }
 
 bool ColliderSerializer::CanSerialize(ECSWorld *world, entt::entity entity) const {

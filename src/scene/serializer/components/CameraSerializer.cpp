@@ -26,8 +26,8 @@ json CameraSerializer::Serialize(ECSWorld *world, entt::entity entity) {
     return camData;
 }
 
-void CameraSerializer::Deserialize(ECSWorld *world, entt::entity entity, const json &data) {
-    auto &camComp = world->AddComponent<CameraComponent>(entity);
+entt::entity CameraSerializer::Deserialize(DeserializeContext &dcx, entt::entity entity, const json &data) {
+    auto &camComp = dcx.world->AddComponent<CameraComponent>(entity);
     camComp.fov = data.value("fov", 55.0f);
     camComp.nearPlane = data.value("nearPlane", 0.1f);
     camComp.farPlane = data.value("farPlane", 1000.0f);
@@ -38,10 +38,12 @@ void CameraSerializer::Deserialize(ECSWorld *world, entt::entity entity, const j
 
     if (data.contains("orientation")) {
         auto &orient = data["orientation"];
-        auto &orientComp = world->AddComponent<CameraOrientationComponent>(entity);
+        auto &orientComp = dcx.world->AddComponent<CameraOrientationComponent>(entity);
         orientComp.yaw = orient.value("yaw", -95.0f);
         orientComp.pitch = orient.value("pitch", 0.0f);
     }
+
+    return entity;
 }
 
 bool CameraSerializer::CanSerialize(ECSWorld *world, entt::entity entity) const {

@@ -76,4 +76,10 @@ very long time, im getting lazy
 ##### 30.06.2026
 -- deleted Theme class  
 -- hard-coded theme in ImGuiManager  
--- moved material creating button to material panel cuz its more intuitive I think 
+-- moved material creating button to material panel cuz its more intuitive I think
+
+### v0.2.4
+##### 2.07.2026
+-- README update  
+-- rewrote deserialization system to improve, idk, something  
+   anyway, its looks better

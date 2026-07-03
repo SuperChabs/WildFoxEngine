@@ -23,46 +23,38 @@ json MaterialSerializer::Serialize(ECSWorld *world, entt::entity entity) {
     return data;
 }
 
-void MaterialSerializer::Deserialize(ECSWorld *world,
-                                     entt::entity entity,
-                                     const json &data) {
+entt::entity MaterialSerializer::Deserialize(DeserializeContext &dcx, entt::entity entity, const json &data) {
+    std::string materialName = data.value("name", "");
+
+    if (!dcx.materialManager) {
+        Logger::Log(LogLevel::WARNING, "MaterialManager is null");
+        return entity;
+    }
+
+    auto material = dcx.materialManager->GetMaterial(materialName);
+    if (!material) {
+        Logger::Log(LogLevel::WARNING, "Material not found in manager: " + materialName);
+        return entity;
+    }
+
+    ApplyMaterial(dcx.world, entity, material, data);
+    return entity;
 }
 
-void MaterialSerializer::DeserializeMaterials(const json &sceneData,
-                                              MaterialManager *materialManager,
-                                              ECSWorld *world,
-                                              std::unordered_map<uint64_t, entt::entity> &idMap) {
-    if (!materialManager) {
-        Logger::Log(LogLevel::WARNING, "MaterialManager is null");
-        return;
-    }
-
-    for (const auto &entityData: sceneData["scene"]["entities"]) {
-        if (!entityData.contains("material"))
-            continue;
-
-        uint64_t uuid = entityData["_id"];
-        auto it = idMap.find(uuid);
-        if (it == idMap.end())
-            continue;
-
-        entt::entity entity = it->second;
-        const auto &matData = entityData["material"];
-
-        std::string materialName = matData.value("name", "");
-        auto material = materialManager->GetMaterial(materialName);
-
-        if (material) {
-            world->AddComponent<MaterialComponent>(entity, material);
-
-            if (matData.contains("tiling")) {
-                auto &matComp = world->GetComponent<MaterialComponent>(entity);
-                matComp.tiling.x = matData["tiling"]["x"];
-                matComp.tiling.y = matData["tiling"]["y"];
-            }
-        } else {
-            Logger::Log(LogLevel::WARNING,
-                        "Material not found in manager: " + materialName);
+void MaterialSerializer::ApplyMaterial(ECSWorld *ecs, entt::entity entity, const std::shared_ptr<Material> &material,
+                                        const json &data) {
+    if (ecs->HasComponent<MeshComponent>(entity)) {
+        auto &matComp = ecs->AddComponent<MaterialComponent>(entity, material);
+        if (data.contains("tiling")) {
+            matComp.tiling.x = data["tiling"]["x"];
+            matComp.tiling.y = data["tiling"]["y"];
         }
     }
+
+    if (!ecs->HasComponent<HierarchyComponent>(entity))
+        return;
+
+    auto &hier = ecs->GetComponent<HierarchyComponent>(entity);
+    for (entt::entity child : hier.children)
+        ApplyMaterial(ecs, child, material, data);
 }

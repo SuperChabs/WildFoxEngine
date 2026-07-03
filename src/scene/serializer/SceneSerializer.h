@@ -23,7 +23,6 @@
 using json = nlohmann::json;
 
 class SceneSerializer {
-private:
     ECSWorld *world;
     SceneFileHandler fileHandler;
     SerializerRegistry registry;
@@ -32,22 +31,17 @@ private:
 public:
     explicit SceneSerializer(ECSWorld *w);
 
-    void SetSavesDirectory(const std::string &directory);
-
-    std::string GetSavesDirectory() const;
-
     bool SaveScene(const std::string &filename, MaterialManager *materialManager);
-
     bool SaveScene(const std::string &filename, MaterialManager *materialManager, bool pretty);
 
-    bool LoadScene(const std::string &filename,
-                   MaterialManager *materialManager,
-                   TextureManager *textureManager,
-                   ModelManager *modelManager);
-
-    std::vector<std::string> GetAvailableScenes();
+    bool LoadScene(const std::string &filename, MaterialManager *materialManager, ModelManager *modelManager);
 
     bool DeleteScene(const std::string &filename);
+
+    std::vector<std::string> GetAvailableScenes();
+    std::string GetSavesDirectory() const;
+
+    void SetSavesDirectory(const std::string &directory);
 
 private:
     void SerializeEntities(json &sceneData);
@@ -56,19 +50,12 @@ private:
 
     bool WriteSceneToFile(const std::string &filename, const json &sceneData, bool pretty);
 
-    int DeserializeEntities(const json &sceneData,
-                            ModelManager *modelManager,
-                            std::unordered_map<uint64_t, entt::entity> &createdEntities);
+    int  DeserializeEntities(const json &sceneData, ModelManager *modelManager, MaterialManager *materialManager,
+                             std::unordered_map<uint64_t, entt::entity> &createdEntities);
 
-    void SetupHierarchies(const json &sceneData,
-                          std::unordered_map<uint64_t, entt::entity> &createdEntities);
+    void SetupHierarchies(const json &sceneData, std::unordered_map<uint64_t, entt::entity> &createdEntities);
 
-    void DeserializeMaterials(const json &sceneData,
-                              MaterialManager *materialManager,
-                              std::unordered_map<uint64_t, entt::entity> &createdEntities);
-
-    void ApplyColors(const json &sceneData,
-                     std::unordered_map<uint64_t, entt::entity> &createdEntities);
+    void ApplyColors(const json &sceneData, std::unordered_map<uint64_t, entt::entity> &createdEntities);
 
     bool IsModelChild(ECSWorld *w, entt::entity entity);
 };

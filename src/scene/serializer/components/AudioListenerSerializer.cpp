@@ -7,8 +7,10 @@ json AudioListenerSerializer::Serialize(ECSWorld *world, entt::entity entity) {
     return json::object();
 }
 
-void AudioListenerSerializer::Deserialize(ECSWorld *world, entt::entity entity, const json &data) {
-    world->AddComponent<AudioListenerComponent>(entity);
+entt::entity AudioListenerSerializer::Deserialize(DeserializeContext &dcx, entt::entity entity, const json &data) {
+    dcx.world->AddComponent<AudioListenerComponent>(entity);
+
+    return entity;
 }
 
 bool AudioListenerSerializer::CanSerialize(ECSWorld *world, entt::entity entity) const {

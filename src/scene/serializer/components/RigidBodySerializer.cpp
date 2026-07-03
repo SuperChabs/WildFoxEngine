@@ -15,19 +15,22 @@ json RigidBodySerializer::Serialize(ECSWorld *world, entt::entity entity) {
     };
 }
 
-void RigidBodySerializer::Deserialize(ECSWorld *world, entt::entity entity, const json &data) {
+entt::entity RigidBodySerializer::Deserialize(DeserializeContext &dcx, entt::entity entity, const json &data) {
     if (!data.contains("inv_mass"))
-        return;
+        return entt::null;
 
-    RigidBodyComponent rb;
-    rb.inv_mass = data.value("inv_mass", 0.0f);
-    rb.velocity = Vec3FromJson(data.value("velocity", json::array({0.0f, 0.0f, 0.0f})));
-    rb.angular_velocity = Vec3FromJson(data.value("angular_velocity", json::array({0.0f, 0.0f, 0.0f})));
-    rb.inertia = Vec3FromJson(data.value("inertia", json::array({0.0f, 0.0f, 0.0f})));
-    rb.force_accum = Vec3FromJson(data.value("force_accum", json::array({0.0f, 0.0f, 0.0f})));
-    rb.torque_accum = Vec3FromJson(data.value("torque_accum", json::array({0.0f, 0.0f, 0.0f})));
+    RigidBodyComponent rb{
+        .inv_mass = data.value("inv_mass", 0.0f),
+        .velocity = Vec3FromJson(data.value("velocity", json::array({0.0f, 0.0f, 0.0f}))),
+        .angular_velocity = Vec3FromJson(data.value("angular_velocity", json::array({0.0f, 0.0f, 0.0f}))),
+        .inertia = Vec3FromJson(data.value("inertia", json::array({0.0f, 0.0f, 0.0f}))),
+        .force_accum = Vec3FromJson(data.value("force_accum", json::array({0.0f, 0.0f, 0.0f}))),
+        .torque_accum = Vec3FromJson(data.value("torque_accum", json::array({0.0f, 0.0f, 0.0f})))
+    };
 
-    world->AddComponent<RigidBodyComponent>(entity, rb);
+    dcx.world->AddComponent<RigidBodyComponent>(entity, rb);
+
+    return entity;
 }
 
 bool RigidBodySerializer::CanSerialize(ECSWorld *world, entt::entity entity) const {

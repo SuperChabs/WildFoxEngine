@@ -39,7 +39,6 @@ void DebugOverlay::Render(ECSWorld *ecs, entt::entity cameraEntity,
     }
 
     RenderOpenModelDialog();
-    RenderOpenMaterialDialog();
 
     ImGui::End();
 }

@@ -14,7 +14,6 @@
 using json = nlohmann::json;
 
 class SerializerRegistry {
-private:
     std::unordered_map<std::string, std::unique_ptr<IComponentSerializer> > serializers;
 
 public:
@@ -31,7 +30,7 @@ public:
 
     json SerializeAllComponents(ECSWorld *world, entt::entity entity);
 
-    void DeserializeAllComponents(ECSWorld *world, entt::entity entity, const json &entityData);
+    entt::entity DeserializeAllComponents(DeserializeContext ctx, entt::entity entity, const json &entityData);
 
     std::vector<std::string> GetSerializerNames() const;
 

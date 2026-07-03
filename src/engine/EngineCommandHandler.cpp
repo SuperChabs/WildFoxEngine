@@ -240,7 +240,6 @@ void EditorCommandHandler::RegisterSceneCommands() {
                                         bool success = m_sceneModule->GetSceneSerializer()->LoadScene(
                                             filename,
                                             m_resModule->GetMaterialManager(),
-                                            m_resModule->GetTextureManager(),
                                             m_resModule->GetModelManager()
                                         );
 

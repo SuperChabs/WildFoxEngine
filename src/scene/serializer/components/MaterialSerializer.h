@@ -16,12 +16,9 @@ public:
 
     json Serialize(ECSWorld *world, entt::entity entity) override;
 
-    void Deserialize(ECSWorld *world,
-                     entt::entity entity,
-                     const json &data) override;
+    entt::entity Deserialize(DeserializeContext &dcx, entt::entity entity, const json &data) override;
 
-    static void DeserializeMaterials(const json &sceneData,
-                                     MaterialManager *materialManager,
-                                     ECSWorld *world,
-                                     std::unordered_map<uint64_t, entt::entity> &idMap);
+private:
+    static void ApplyMaterial(ECSWorld* ecs, entt::entity entity, const std::shared_ptr<Material> &material,
+                                const json &data);
 };

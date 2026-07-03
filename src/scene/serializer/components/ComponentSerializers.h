@@ -5,7 +5,6 @@
 #include "scene/serializer/components/LightSerializer.h"
 #include "scene/serializer/components/MaterialSerializer.h"
 #include "scene/serializer/components/MeshSerializer.h"
-#include "scene/serializer/components/ModelSerializer.h"
 #include "scene/serializer/components/ScriptSerializer.h"
 #include "scene/serializer/components/TransformSerializer.h"
 #include "scene/serializer/components/VisibilitySerializer.h"

@@ -11,13 +11,11 @@
 using json = nlohmann::json;
 
 class HierarchyDeserializer {
-private:
     ECSWorld *world;
     const std::unordered_map<uint64_t, entt::entity> &idMap;
 
 public:
     HierarchyDeserializer(ECSWorld *w, const std::unordered_map<uint64_t, entt::entity> &entityMap);
-
 
     void SetupHierarchy(const json &sceneData);
 };

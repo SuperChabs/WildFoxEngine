@@ -8,10 +8,12 @@ json ScriptSerializer::Serialize(ECSWorld *world, entt::entity entity) {
     return json{{"path", script.scriptPath}};
 }
 
-void ScriptSerializer::Deserialize(ECSWorld *world, entt::entity entity, const json &data) {
+entt::entity ScriptSerializer::Deserialize(DeserializeContext &dcx, entt::entity entity, const json &data) {
     std::string scriptPath = data.value("path", "");
-    auto &scriptComp = world->AddComponent<ScriptComponent>(entity);
+    auto &scriptComp = dcx.world->AddComponent<ScriptComponent>(entity);
     scriptComp.scriptPath = scriptPath;
+
+    return entity;
 }
 
 bool ScriptSerializer::CanSerialize(ECSWorld *world, entt::entity entity) const {

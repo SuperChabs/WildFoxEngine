@@ -31,18 +31,30 @@ json SerializerRegistry::SerializeAllComponents(ECSWorld *world, entt::entity en
     return entityData;
 }
 
-void SerializerRegistry::DeserializeAllComponents(ECSWorld *world, entt::entity entity, const json &entityData) {
-    for (auto &[key, value]: entityData.items()) {
-        auto it = serializers.find(key);
-        if (it != serializers.end() && !key.empty() && key[0] != '_') {
-            try {
-                it->second->Deserialize(world, entity, value);
-            } catch (const std::exception &e) {
-                Logger::Log(LogLevel::WARNING,
-                            std::string("Failed to deserialize component ") + key + ": " + e.what());
-            }
+entt::entity SerializerRegistry::DeserializeAllComponents(DeserializeContext ctx, entt::entity entity, const json &entityData) {
+    if (entityData.contains("mesh"))
+        entity = serializers["mesh"]->Deserialize(ctx, entity, entityData["mesh"]);
+
+    static std::vector<std::string> kOrder = {"material", "color"};
+    for (const auto &k: kOrder) {
+        if (!entityData.contains(k)) continue;
+        entity = serializers[k]->Deserialize(ctx, entity, entityData[k]);
+    }
+
+    for (auto &[key, serializer]: serializers) {
+        if (key == "mesh" || key == "material" || key == "color") continue;
+        if (key.empty() || key[0] == '_') continue;
+        if (!entityData.contains(key)) continue;
+
+        try {
+            entity = serializer->Deserialize(ctx, entity, entityData[key]);
+        }
+        catch (const std::exception &e) {
+            Logger::Log(LogLevel::WARNING, "Failed to deserialize component:" + key + ": " + e.what());
         }
     }
+
+    return entity;
 }
 
 std::vector<std::string> SerializerRegistry::GetSerializerNames() const {
@@ -59,7 +71,6 @@ void SerializerRegistry::RegisterDefaultSerializers() {
     RegisterSerializer<MaterialSerializer>("material");
     RegisterSerializer<LightSerializer>("light");
     RegisterSerializer<CameraSerializer>("camera");
-    //RegisterSerializer<CameraTypeSerializer>("cameraType");
     RegisterSerializer<ScriptSerializer>("script");
     RegisterSerializer<AudioSourceSerializer>("audioSource");
     RegisterSerializer<AudioListenerSerializer>("audioListener");

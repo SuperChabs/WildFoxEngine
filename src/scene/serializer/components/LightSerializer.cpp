@@ -24,9 +24,9 @@ json LightSerializer::Serialize(ECSWorld *world, entt::entity entity) {
     };
 }
 
-void LightSerializer::Deserialize(ECSWorld *world, entt::entity entity, const json &data) {
+entt::entity LightSerializer::Deserialize(DeserializeContext &dcx, entt::entity entity, const json &data) {
     LightType type = static_cast<LightType>(data.value("type", 0));
-    auto &lightComp = world->AddComponent<LightComponent>(entity, type);
+    auto &lightComp = dcx.world->AddComponent<LightComponent>(entity, type);
 
     if (data.contains("position"))
         lightComp.position = {data["position"][0], data["position"][1], data["position"][2]};
@@ -48,6 +48,8 @@ void LightSerializer::Deserialize(ECSWorld *world, entt::entity entity, const js
     lightComp.radius = data.value("radius", 50.0f);
     lightComp.innerCutoff = data.value("innerCutoff", 12.5f);
     lightComp.outerCutoff = data.value("outerCutoff", 17.5f);
+
+    return entity;
 }
 
 bool LightSerializer::CanSerialize(ECSWorld *world, entt::entity entity) const {

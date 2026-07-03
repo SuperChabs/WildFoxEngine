@@ -11,12 +11,14 @@ json ColorSerializer::Serialize(ECSWorld *world, entt::entity entity) {
     return json{color.color.x, color.color.y, color.color.z};
 }
 
-void ColorSerializer::Deserialize(ECSWorld *world, entt::entity entity, const json &data) {
-    if (world->HasComponent<MaterialComponent>(entity))
-        return;
+entt::entity ColorSerializer::Deserialize(DeserializeContext &dcx, entt::entity entity, const json &data) {
+    if (dcx.world->HasComponent<MaterialComponent>(entity))
+        return entt::null;
 
     glm::vec3 color = {data[0], data[1], data[2]};
-    world->AddComponent<ColorComponent>(entity, color);
+    dcx.world->AddComponent<ColorComponent>(entity, color);
+
+    return entity;
 }
 
 bool ColorSerializer::CanSerialize(ECSWorld *world, entt::entity entity) const {

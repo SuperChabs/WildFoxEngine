@@ -11,10 +11,12 @@ json VisibilitySerializer::Serialize(ECSWorld *world, entt::entity entity) {
     };
 }
 
-void VisibilitySerializer::Deserialize(ECSWorld *world, entt::entity entity, const json &data) {
-    auto &visComp = world->AddComponent<VisibilityComponent>(entity);
+entt::entity VisibilitySerializer::Deserialize(DeserializeContext &dcx, entt::entity entity, const json &data) {
+    auto &visComp = dcx.world->AddComponent<VisibilityComponent>(entity);
     visComp.isActive = data.value("isActive", true);
     visComp.visible = data.value("visible", true);
+
+    return entity;
 }
 
 bool VisibilitySerializer::CanSerialize(ECSWorld *world, entt::entity entity) const {

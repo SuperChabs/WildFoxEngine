@@ -18,9 +18,9 @@ json TransformSerializer::Serialize(ECSWorld *world, entt::entity entity) {
     };
 }
 
-void TransformSerializer::Deserialize(ECSWorld *world, entt::entity entity, const json &data) {
+entt::entity TransformSerializer::Deserialize(DeserializeContext &dcx, entt::entity entity, const json &data) {
     if (!data.contains("position") || !data.contains("rotation"))
-        return;
+        return entt::null;
 
     glm::vec3 pos = {data["position"][0], data["position"][1], data["position"][2]};
     glm::vec3 eulerDeg(data["rotation"][0], data["rotation"][1], data["rotation"][2]);
@@ -29,7 +29,9 @@ void TransformSerializer::Deserialize(ECSWorld *world, entt::entity entity, cons
                         ? glm::vec3{data["scale"][0], data["scale"][1], data["scale"][2]}
                         : glm::vec3{1.0f};
 
-    world->AddComponent<TransformComponent>(entity, pos, rot, scl);
+    dcx.world->AddComponent<TransformComponent>(entity, pos, rot, scl);
+
+    return entity;
 }
 
 bool TransformSerializer::CanSerialize(ECSWorld *world, entt::entity entity) const {

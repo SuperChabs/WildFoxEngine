@@ -13,11 +13,13 @@ json IconSerializer::Serialize(ECSWorld *world, entt::entity entity) {
     };
 }
 
-void IconSerializer::Deserialize(ECSWorld *world, entt::entity entity, const json &data) {
+entt::entity IconSerializer::Deserialize(DeserializeContext &dcx, entt::entity entity, const json &data) {
     std::string path = data.value("path", "");
     float scale = data.value("scale", 0.5f);
-    auto &iconComp = world->AddComponent<IconComponent>(entity, path, scale);
+    auto &iconComp = dcx.world->AddComponent<IconComponent>(entity, path, scale);
     iconComp.billboardMode = data.value("billboardMode", true);
+
+    return entity;
 }
 
 bool IconSerializer::CanSerialize(ECSWorld *world, entt::entity entity) const {
