@@ -83,6 +83,8 @@ void DebugOverlay::RenderHierarchyTab(ECSWorld *ecs) {
     ImGui::Separator();
 
     entt::entity toDelete = entt::null;
+    std::vector<entt::entity> roots;
+    static bool sortAlphabetically = false;
 
     ecs->Each<TagComponent, IDComponent>(
         [&](entt::entity e, TagComponent &tag, IDComponent &) {
@@ -90,9 +92,26 @@ void DebugOverlay::RenderHierarchyTab(ECSWorld *ecs) {
                 if (ecs->GetComponent<HierarchyComponent>(e).HasParent())
                     return;
 
-            RenderEntityNode(e, ecs, toDelete);
+            roots.push_back(e);
         }
     );
+
+    if (ImGui::Button("Sort")) {
+        sortAlphabetically = !sortAlphabetically;
+    }
+
+    if (sortAlphabetically) {
+        std::sort(roots.begin(), roots.end(),
+            [&](entt::entity a, entt::entity b) {
+                auto &tagA = ecs->GetComponent<TagComponent>(a);
+                auto &tagB = ecs->GetComponent<TagComponent>(b);
+                return tagA.name < tagB.name;
+            });
+    }
+
+    for (auto e : roots) {
+        RenderEntityNode(e, ecs, toDelete);
+    }
 
     if (toDelete != entt::null) {
         if (m_selected == toDelete) m_selected = entt::null;

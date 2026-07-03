@@ -83,3 +83,7 @@ very long time, im getting lazy
 -- README update  
 -- rewrote deserialization system to improve, idk, something  
    anyway, its looks better
+
+### v0.2.5
+##### 03.07.2026
+-- added sorting to the hierarchy tab cuz why not
