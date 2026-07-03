@@ -2,10 +2,6 @@
 #include "core/logging/Logger.h"
 
 int main() {
-#if defined (__WIN32__)
-    exit()
-#endif
-
     Engine e(1020, 800, "Allusion");
 
     if (!e.Initialize()) {

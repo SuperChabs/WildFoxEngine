@@ -53,6 +53,8 @@ private:
     int m_selectedScene = -1;
     bool m_scenesLoaded = false;
 
+    std::string m_pendingDeleteScene;
+
     void RenderSceneTab(ECSWorld *ecs, SceneSerializer *ss);
 
     void RenderHierarchyTab(ECSWorld *ecs);

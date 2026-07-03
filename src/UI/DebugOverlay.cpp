@@ -49,17 +49,17 @@ void DebugOverlay::RenderSceneTab(ECSWorld *ecs, SceneSerializer *ss) {
     if (!m_scenesLoaded)
         RefreshAvailableScenes(*ss);
 
+    std::string sceneToDelete;
+
     ImGui::Spacing();
     ImGui::Text("Scene file:");
     ImGui::SetNextItemWidth(-1.f);
     ImGui::InputText("##scenepath", m_scenePathBuf, sizeof(m_scenePathBuf));
     ImGui::Spacing();
 
-    float btnW = (ImGui::GetContentRegionAvail().x - 8.f) / 2.f;
-
     ImGui::SameLine();
 
-    if (ImGui::Button("Save", {btnW, 0}))
+    if (ImGui::Button("Save", {-1.f, 0}))
         Execute("onSaveScene", m_scenePathBuf);
 
     ImGui::Spacing();
@@ -86,7 +86,7 @@ void DebugOverlay::RenderSceneTab(ECSWorld *ecs, SceneSerializer *ss) {
     if (ImGui::Button("Refresh"))
         RefreshAvailableScenes(*ss);
 
-    ImGui::BeginChild("SceneList", ImVec2(0, 150), true);
+    ImGui::BeginChild("SceneList", ImVec2(0, 200), true);
     for (int i = 0; i < static_cast<int>(m_availableScenes.size()); i++) {
         const bool isSelected = (m_selectedScene == i);
         if (ImGui::Selectable(m_availableScenes[i].c_str(), isSelected))
@@ -94,8 +94,45 @@ void DebugOverlay::RenderSceneTab(ECSWorld *ecs, SceneSerializer *ss) {
 
         if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
             Execute("onLoadScene", m_availableScenes[i].c_str());
+
+        if (ImGui::BeginPopupContextItem()) {
+            if (ImGui::MenuItem("Delete Scene"))
+                sceneToDelete = m_availableScenes[i].c_str();
+            ImGui::EndPopup();
+        }
     }
     ImGui::EndChild();
+
+    if (!sceneToDelete.empty()) {
+        m_pendingDeleteScene = sceneToDelete;
+        ImGui::OpenPopup("Confirm Delete Scene");
+    }
+
+    if (ImGui::BeginPopupModal("Confirm Delete Scene", nullptr,
+        ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings)) {
+        ImGui::Text("Delete Scene '%s'?", m_pendingDeleteScene.c_str());
+        ImGui::TextColored(ImVec4(1, 0.4f, 0.4f, 1), "This cannot be undone!");
+        ImGui::Spacing();
+
+        if (ImGui::Button("Delete", {120.f, 0})) {
+            if (ss->DeleteScene(m_pendingDeleteScene))
+                Logger::Log(LogLevel::INFO, "Deleted scene: " + m_pendingDeleteScene);
+            else
+                Logger::Log(LogLevel::INFO, "Failed to delete scene: 2" + m_pendingDeleteScene);
+
+            RefreshAvailableScenes(*ss);
+            m_pendingDeleteScene.clear();
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::SameLine();
+        if (ImGui::Button("Cancel", {120.f, 0})) {
+            m_pendingDeleteScene.clear();
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::EndPopup();
+    }
 }
 
 void DebugOverlay::RenderHierarchyTab(ECSWorld *ecs) {
