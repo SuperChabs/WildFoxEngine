@@ -89,7 +89,13 @@ very long time, im getting lazy
 -- added sorting to the hierarchy tab cuz why not
 
 ### v0.2.6
+##### 03.07.2026
 -- added list of selectable scenes in the scene tab
 
 ### v0.2.7
+##### 05.07.2026
 -- some light and model loading bug fixes
+
+### v0.2.8
+##### 05.07.2026
+-- add AngelScript module to .gitmodules
