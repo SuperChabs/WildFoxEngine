@@ -6,12 +6,8 @@
 #include "core/logging/Logger.h"
 #include "ECS/components/Components.h"
 
-std::pair<Model *, entt::entity> LoadModelFromFile(
-    std::string & path,
-    MaterialManager & materialManager,
-    ECSWorld * world,
-    const bool isBaseShape)
-{
+std::pair<Model *, entt::entity> LoadModelFromFile( std::string & path, MaterialManager & materialManager,
+    ECSWorld * world, const bool isBaseShape) {
     Logger::Log(LogLevel::INFO, "=== LoadModelFromFile START ===");
 
     std::string removePath = "../assets/objects/";
@@ -25,10 +21,12 @@ std::pair<Model *, entt::entity> LoadModelFromFile(
     Assimp::Importer importer;
     
     const aiScene* scene = importer.ReadFile(path, 
-        aiProcess_Triangulate | 
-        aiProcess_FlipUVs | 
-        aiProcess_CalcTangentSpace |
-        aiProcess_GenSmoothNormals
+        aiProcess_Triangulate    |
+        // waiProcess_FlipUVs              |
+        aiProcess_CalcTangentSpace     |
+        aiProcess_GenNormals           |
+        aiProcess_PreTransformVertices |
+        aiProcess_FixInfacingNormals
     );
     
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) 
@@ -111,15 +109,8 @@ std::pair<Model *, entt::entity> LoadModelFromFile(
     return {model, rootEntity};
 }
 
-std::shared_ptr<ModelNode> ProcessNode(
-    aiNode *node,
-    const aiScene *scene,
-    Model *model,
-    const std::string &directory,
-    MaterialManager &materialManager,
-    ECSWorld *world,
-    entt::entity parentEntity,
-    bool isBaseShape)
+std::shared_ptr<ModelNode> ProcessNode( aiNode *node, const aiScene *scene, Model *model, const std::string &directory,
+        MaterialManager &materialManager, ECSWorld *world, entt::entity parentEntity, bool isBaseShape)
 {
     Logger::Log(LogLevel::INFO, "ProcessNode: " + std::string(node->mName.C_Str()));
     Logger::Log(LogLevel::INFO, "  Meshes in this node: " + std::to_string(node->mNumMeshes));
@@ -192,14 +183,8 @@ std::shared_ptr<ModelNode> ProcessNode(
     return modelNode;
 }
 
-std::shared_ptr<Mesh> ProcessMesh(
-    aiMesh *mesh,
-    const aiScene *scene,
-    const std::string &directory,
-    MaterialManager &materialManager,
-    int meshIndex,
-    bool isBaseShape)
-{
+std::shared_ptr<Mesh> ProcessMesh(aiMesh *mesh, const aiScene *scene, const std::string &directory,
+        MaterialManager &materialManager, int meshIndex, bool isBaseShape) {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     std::vector<Texture> textures;
@@ -249,25 +234,25 @@ std::shared_ptr<Mesh> ProcessMesh(
 
         Logger::Log(LogLevel::INFO, "Loading DIFFUSE textures...");
         std::vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse",
-                                                                directory);
+                                                                directory, scene);
         Logger::Log(LogLevel::INFO, "Found " + std::to_string(diffuseMaps.size()) + " diffuse textures");
         textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
         Logger::Log(LogLevel::INFO, "Loading SPECULAR textures...");
         std::vector<Texture> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular",
-                                                                 directory);
+                                                                 directory, scene);
         Logger::Log(LogLevel::INFO, "Found " + std::to_string(specularMaps.size()) + " specular textures");
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
         Logger::Log(LogLevel::INFO, "Loading NORMAL textures...");
         std::vector<Texture> normalMaps = LoadMaterialTextures(material, aiTextureType_NORMALS, "texture_normal",
-                                                               directory);
+                                                               directory, scene);
         Logger::Log(LogLevel::INFO, "Found " + std::to_string(normalMaps.size()) + " normal textures");
         textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 
         Logger::Log(LogLevel::INFO, "Loading HEIGHT textures...");
         std::vector<Texture> heightMaps = LoadMaterialTextures(material, aiTextureType_HEIGHT, "texture_height",
-                                                               directory);
+                                                               directory, scene);
         Logger::Log(LogLevel::INFO, "Found " + std::to_string(heightMaps.size()) + " height textures");
         textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
@@ -334,7 +319,7 @@ std::vector<Texture> LoadMaterialTextures(
     aiMaterial *mat,
     aiTextureType type,
     const std::string &typeName,
-    const std::string &directory) {
+    const std::string &directory, const aiScene *scene) {
     std::vector<Texture> textures;
 
     unsigned int textureCount = mat->GetTextureCount(type);
@@ -344,25 +329,25 @@ std::vector<Texture> LoadMaterialTextures(
     for (unsigned int i = 0; i < textureCount; i++) {
         aiString str;
         mat->GetTexture(type, i, &str);
-
         std::string texturePath = std::string(str.C_Str());
+
+        bool isEmbedded = texturePath[0] == '*';
+        std::string cacheKey = isEmbedded ? (directory + "::" + texturePath) : (directory + "/" + texturePath);
 
         bool skip = false;
         unsigned int textureID = 0;
 
-        std::string fullPath = directory + "/" + texturePath;
-
-        if (loadedTexturesCache.find(fullPath) != loadedTexturesCache.end()) {
-            textureID = loadedTexturesCache[fullPath];
+        if (loadedTexturesCache.find(cacheKey) != loadedTexturesCache.end()) {
+            textureID = loadedTexturesCache[cacheKey];
             skip = true;
             Logger::Log(LogLevel::DEBUG,
                         "Using cached texture: " + texturePath);
         }
 
         if (!skip) {
-            textureID = TextureFromFile(str.C_Str(), directory);
+            textureID = TextureFromFile(str.C_Str(), directory, scene);
             if (textureID != 0) {
-                loadedTexturesCache[fullPath] = textureID;
+                loadedTexturesCache[cacheKey] = textureID;
                 Logger::Log(LogLevel::INFO,
                             "Loaded texture: " + texturePath + " (ID: " + std::to_string(textureID) + ")");
             }
@@ -372,7 +357,7 @@ std::vector<Texture> LoadMaterialTextures(
             Texture texture;
             texture.id = textureID;
             texture.type = typeName;
-            texture.path = fullPath;
+            texture.path = cacheKey;
 
             textures.push_back(texture);
         }
@@ -381,14 +366,37 @@ std::vector<Texture> LoadMaterialTextures(
     return textures;
 }
 
-unsigned int TextureFromFile(const char *path, const std::string &directory) {
+unsigned int TextureFromFile(const char *path, const std::string &directory, const aiScene *scene) {
     std::string filename = directory + '/' + std::string(path);
 
     unsigned int textureID;
     glGenTextures(1, &textureID);
 
     int width, height, nrComponents;
-    unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
+    unsigned char *data = nullptr;
+    bool freeData = true;
+
+    std::string p(path);
+    if (scene && p.size() > 0 && p[0] == '*') {
+        int texIndex = std::atoi(p.c_str() + 1);
+        const aiTexture *aiTex = scene->mTextures[texIndex];
+
+        if (aiTex->mHeight == 0) {
+            data = stbi_load_from_memory(reinterpret_cast<unsigned char *>(aiTex->pcData), aiTex->mWidth, &height,
+                &width, &nrComponents, 0);
+        }
+        else {
+            width = aiTex->mWidth;
+            height = aiTex->mHeight;
+            nrComponents = 4;
+            data = reinterpret_cast<unsigned char *>(aiTex->pcData);
+            freeData = false;
+        }
+    }
+    else {
+        std::string texturePath = directory + '/' + p;
+        data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
+    }
 
     if (data) {
         GLenum format = GL_RGB;

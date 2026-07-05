@@ -55,10 +55,10 @@ std::vector<Texture> LoadMaterialTextures(
     aiMaterial *mat,
     aiTextureType type,
     const std::string &typeName,
-    const std::string &directory
+    const std::string &directory, const aiScene *scene
 );
 
-unsigned int TextureFromFile(const char *path, const std::string &directory);
+unsigned int TextureFromFile(const char *path, const std::string &directory, const aiScene *scene = nullptr);
 
 void DecomposeTransform(
     const glm::mat4 &transform,

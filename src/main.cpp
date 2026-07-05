@@ -2,7 +2,7 @@
 #include "core/logging/Logger.h"
 
 int main() {
-    Engine e(1020, 800, "Allusion");
+    Engine e(1640, 800, "Allusion");
 
     if (!e.Initialize()) {
         Logger::Log(LogLevel::ERROR, "Failed to initialize game");

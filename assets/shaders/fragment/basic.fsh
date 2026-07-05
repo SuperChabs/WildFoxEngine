@@ -109,14 +109,17 @@ float ShadowCalculation(vec3 normal, vec3 lightDir, int index)
     return shadow / 9.0;
 }
 
-float ShadowCalculationPoint(vec3 fragPos, vec3 lightPos, int cubeIndex, float farPlane)
+float ShadowCalculationPoint(vec3 fragPos, vec3 lightPos, vec3 normal, int cubeIndex, float farPlane)
 {
     if (cubeIndex < 0) return 0.0;
 
     vec3 fragToLight = fragPos - lightPos;
     float currentDepth = length(fragToLight);
 
-    float bias = 0.05;
+    vec3 lightDir = normalize(-fragToLight);
+    float cosTheta = max(dot(normal, lightDir), 0.0);
+    float bias = max(0.005 * (1.0 - cosTheta), 0.0005);
+
     float shadow = 0.0;
 
     vec3 sampleOffsetDirections[20] = vec3[](
@@ -250,6 +253,7 @@ void main()
             if (shadowsEnabled && lights[i].shadowIndex >= 0)
                 pointShadow = ShadowCalculationPoint(
                     FragPos, lights[i].position,
+                    norm,
                     lights[i].shadowIndex,
                     lights[i].farPlane
                 );

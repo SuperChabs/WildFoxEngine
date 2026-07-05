@@ -8,8 +8,8 @@ GeometryPass::GeometryPass(GLContext *ctx, ShaderManager *sm, ECSWorld *w)
 }
 
 void GeometryPass::SetShadowData(const std::vector<glm::mat4> &lightSpaceMatrices, GLuint shadowMapArray,
-                                 const std::vector<int> &shadowMapIndices, GLuint shadowCubeMapArray,
-                                 const std::vector<int> &CubeShadowMapIndices) {
+                                 const std::unordered_map<entt::entity, int> &shadowMapIndices, GLuint shadowCubeMapArray,
+                                 const std::unordered_map<entt::entity, int> &CubeShadowMapIndices) {
     m_LightSpaceMatrices = lightSpaceMatrices;
     m_shadowMapArray = shadowMapArray;
     m_ShadowMapIndices = shadowMapIndices;
@@ -19,11 +19,11 @@ void GeometryPass::SetShadowData(const std::vector<glm::mat4> &lightSpaceMatrice
 
 void GeometryPass::Setup() {
     glDepthMask(GL_TRUE);
-    glEnable(GL_DEPTH_TEST); //context->SetDepthTest(true);
-    glDepthFunc(GL_LESS); //context->SetDepthFunc(GL_LESS);
-    glEnable(GL_BLEND); //context->SetBlend(false);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_CULL_FACE); //context->SetCullFace(true);
+    glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 }
 

@@ -16,10 +16,10 @@ class GeometryPass : public RenderPass {
     ECSWorld *world;
 
     std::vector<glm::mat4> m_LightSpaceMatrices;
-    std::vector<int> m_ShadowMapIndices;
+    std::unordered_map<entt::entity, int> m_ShadowMapIndices;
     GLuint m_shadowMapArray;
     GLuint m_CubeShadowMapArray;
-    std::vector<int> m_CubeShadowMapIndices;
+    std::unordered_map<entt::entity, int> m_CubeShadowMapIndices;
 
     static constexpr int SHADOW_MAP_TEXTURE_SLOT = 6;
     static constexpr int CUBE_SHADOW_MAP_TEXTURE_SLOT = 4;
@@ -28,8 +28,8 @@ public:
     GeometryPass(GLContext *ctx, ShaderManager *sm, ECSWorld *w);
 
     void SetShadowData(const std::vector<glm::mat4> &lightSpaceMatrices, GLuint shadowMapArray,
-                       const std::vector<int> &shadowMapIndices = {}, GLuint shadowCubeMapArray = 0,
-                       const std::vector<int> &CubeShadowMapIndices = {});
+                       const std::unordered_map<entt::entity, int> &shadowMapIndices = {}, GLuint shadowCubeMapArray = 0,
+                       const std::unordered_map<entt::entity, int> &CubeShadowMapIndices = {});
 
     void Setup() override;
 

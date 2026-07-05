@@ -90,3 +90,6 @@ very long time, im getting lazy
 
 ### v0.2.6
 -- added list of selectable scenes in the scene tab
+
+### v0.2.7
+-- some light and model loading bug fixes

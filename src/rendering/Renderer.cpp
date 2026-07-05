@@ -230,14 +230,14 @@ void Renderer::RegisterRenderCommands() {
                 if (!shadowsEnabled)
                     shaderManager->SetBool(shaderName, "shadowsEnabled", false);
 
-                const std::vector<int> *shadowMapIndices = nullptr;
+                const std::unordered_map<entt::entity, int> *shadowMapIndices = nullptr;
                 if (args.size() >= 6) {
-                    shadowMapIndices = &std::get<std::vector<int> >(args[5]);
+                    shadowMapIndices = &std::get<std::unordered_map<entt::entity, int>>(args[5]);
                 }
 
-                const std::vector<int> *cubeShadowMapIndices = nullptr;
+                const std::unordered_map<entt::entity, int> *cubeShadowMapIndices = nullptr;
                 if (args.size() >= 8) {
-                    cubeShadowMapIndices = &std::get<std::vector<int> >(args[7]);
+                    cubeShadowMapIndices = &std::get<std::unordered_map<entt::entity, int>>(args[7]);
                 }
 
                 lightSystem->Update(*world, *shaderManager, shaderName,

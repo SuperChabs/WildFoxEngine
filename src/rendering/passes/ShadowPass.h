@@ -25,8 +25,8 @@ class ShadowPass : public RenderPass {
     ECSWorld *m_World = nullptr;
 
     std::vector<glm::mat4> m_LightSpaceMatrices;
-    std::vector<int> m_ShadowMapIndices;
-    std::vector<int> m_PointShadowMapIndices;
+    std::unordered_map<entt::entity, int> m_ShadowMapIndices;
+    std::unordered_map<entt::entity, int> m_PointShadowMapIndices;
 
     float m_OrthoSize = 30.0f;
     float m_NearPlane = 1.0f;
@@ -43,8 +43,8 @@ public:
     GLuint GetShadowMapArray() const;
     GLuint GetCubeShadowMapArray() const;
     const std::vector<glm::mat4> &GetLightMatrices() const;
-    const std::vector<int> &GetShadowMapIndices() const;
-    const std::vector<int> &GetPointShadowMapIndices() const;
+    const std::unordered_map<entt::entity, int> &GetShadowMapIndices() const;
+    const std::unordered_map<entt::entity, int> &GetPointShadowMapIndices() const;
     int GetShadowMapSize() const;
 
     void SetShadowMapSize(int size);

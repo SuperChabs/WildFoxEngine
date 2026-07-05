@@ -21,7 +21,8 @@ std::variant<
     std::vector<glm::mat4>,
     std::vector<int>,
     entt::entity,
-    GLuint
+    GLuint,
+    std::unordered_map<entt::entity, int>
 >;
 
 using CommandArgs = std::vector<CommandArg>;

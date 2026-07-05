@@ -12,7 +12,6 @@
 #include "MeshData.h"
 
 class MeshRenderer {
-private:
     std::unique_ptr<VertexArray> VAO;
     std::unique_ptr<VertexBuffer> VBO;
     std::unique_ptr<IndexBuffer> EBO;

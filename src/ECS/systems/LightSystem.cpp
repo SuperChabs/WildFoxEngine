@@ -3,7 +3,8 @@
 #include <glm/glm.hpp>
 
 void LightSystem::Update(ECSWorld &world, ShaderManager &shaderManager, const std::string &shaderName,
-                         const std::vector<int> *shadowMapIndices, const std::vector<int> *pointShadowIndices) {
+                         const std::unordered_map<entt::entity, int> *shadowMapIndices, const std::unordered_map<entt::entity, int> *
+                         pointShadowIndices) {
     shaderManager.Bind(shaderName);
 
     int lightIndex = 0;
@@ -20,8 +21,14 @@ void LightSystem::Update(ECSWorld &world, ShaderManager &shaderManager, const st
 
             // Set shadow map index
             int shadowIndex = -1;
-            if (shadowMapIndices && lightIndex < shadowMapIndices->size())
-                shadowIndex = (*shadowMapIndices)[lightIndex];
+            const auto &lookup = (light.type == LightType::POINT) ? pointShadowIndices : shadowMapIndices;
+            if (lookup) {
+                auto it = lookup->find(entity);
+                if (it != lookup->end())
+                    shadowIndex = it->second;
+            }
+
+            shaderManager.SetInt(shaderName, base + ".shadowIndex", shadowIndex);
 
             shaderManager.SetInt(shaderName, base + ".type", static_cast<int>(light.type));
             shaderManager.SetInt(shaderName, base + ".shadowIndex", shadowIndex);
@@ -47,15 +54,6 @@ void LightSystem::Update(ECSWorld &world, ShaderManager &shaderManager, const st
                 shaderManager.SetFloat(shaderName, base + ".outerCutoff",
                                        glm::cos(glm::radians(light.outerCutoff)));
             }
-
-            if (light.type == LightType::POINT) {
-                if (pointShadowIndices && lightIndex < pointShadowIndices->size())
-                    shadowIndex = (*pointShadowIndices)[lightIndex];
-            } else {
-                if (shadowMapIndices && lightIndex < shadowMapIndices->size())
-                    shadowIndex = (*shadowMapIndices)[lightIndex];
-            }
-            shaderManager.SetInt(shaderName, base + ".shadowIndex", shadowIndex);
 
             lightIndex++;
         });

@@ -25,8 +25,8 @@ void ShadowPass::Execute(const glm::mat4 &, const glm::mat4 &) {
     if (!enabled || !m_World)
         return;
 
-    m_ShadowMapIndices.assign(8, -1);
-    m_PointShadowMapIndices.assign(8, -1);
+    m_ShadowMapIndices.clear();
+    m_PointShadowMapIndices.clear();
 
     std::vector<LightComponent> shadowLights;
     std::vector<LightComponent> pointShadowLights;
@@ -48,28 +48,19 @@ void ShadowPass::Execute(const glm::mat4 &, const glm::mat4 &) {
             );
     };
 
-    int globalIndex = 0;
-    m_World->Each<LightComponent>(
-        [&](entt::entity, LightComponent &light) {
-            if (!light.isActive) {
-                globalIndex++;
+    m_World->Each<LightComponent, TransformComponent>(
+        [&](entt::entity e, LightComponent &light, TransformComponent) {
+            if (!light.isActive)
                 return;
-            }
 
-            if (globalIndex < MAX_SHADOW_LIGHTS) {
-                if (light.castShadows && light.type == LightType::POINT && shadowLights.size() < MAX_DIR_SPOT_LIGHTS) {
-                    int pointShadowIndex = static_cast<int>(pointShadowLights.size());
-                    m_PointShadowMapIndices[globalIndex] = pointShadowIndex;
-                    pointShadowLights.push_back(light);
-                }
-                else if (light.castShadows && light.type != LightType::POINT && shadowLights.size() < MAX_DIR_SPOT_LIGHTS) {
-                    int shadowIndex = static_cast<int>(shadowLights.size());
-                    m_ShadowMapIndices[globalIndex] = shadowIndex;
-                    shadowLights.push_back(light);
-                    globalLightIndices.push_back(globalIndex);
-                }
+            if (light.castShadows && light.type == LightType::POINT && shadowLights.size() < MAX_DIR_SPOT_LIGHTS) {
+                m_PointShadowMapIndices[e] = static_cast<int>(pointShadowLights.size());
+                pointShadowLights.push_back(light);
             }
-            globalIndex++;
+            else if (light.castShadows && light.type != LightType::POINT && shadowLights.size() < MAX_DIR_SPOT_LIGHTS) {
+                m_ShadowMapIndices[e] = static_cast<int>(shadowLights.size());
+                shadowLights.push_back(light);
+            }
         });
 
     shaderManager->Bind("shadow_depth");
@@ -101,12 +92,14 @@ void ShadowPass::Execute(const glm::mat4 &, const glm::mat4 &) {
     shaderManager->Unbind();
 
     shaderManager->Bind("shadowCubeMapDepth");
+    glBindFramebuffer(GL_FRAMEBUFFER, m_CubeShadowFBO);
+    glViewport(0, 0, m_ShadowMapSize, m_ShadowMapSize);
+    glClear(GL_DEPTH_BUFFER_BIT);
+
     for (int i = 0; i < pointShadowLights.size(); i++) {
         auto &light = pointShadowLights[i];
 
-        glBindFramebuffer(GL_FRAMEBUFFER, m_CubeShadowFBO);
-        glViewport(0, 0, m_ShadowMapSize, m_ShadowMapSize);
-        glClear(GL_DEPTH_BUFFER_BIT);
+        shaderManager->SetInt("shadowCubeMapDepth", "layerOffset", i);
 
         auto matrices = BuildPointSpaceMatrices(light);
         for ( int face = 0; face < 6; face++ ) {
@@ -162,11 +155,11 @@ const std::vector<glm::mat4> &ShadowPass::GetLightMatrices() const {
     return m_LightSpaceMatrices;
 }
 
-const std::vector<int> &ShadowPass::GetShadowMapIndices() const {
+const std::unordered_map<entt::entity, int>& ShadowPass::GetShadowMapIndices() const {
     return m_ShadowMapIndices;
 }
 
-const std::vector<int> & ShadowPass::GetPointShadowMapIndices() const {
+const std::unordered_map<entt::entity, int>& ShadowPass::GetPointShadowMapIndices() const {
     return m_PointShadowMapIndices;
 }
 
@@ -200,8 +193,8 @@ void ShadowPass::InitializeShadowMap(int count) {
     glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_DEPTH_COMPONENT32F,
                    m_ShadowMapSize, m_ShadowMapSize, count);
 
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
@@ -236,8 +229,8 @@ void ShadowPass::InitializeCubeShadowMap(const int count) {
     glTexStorage3D(GL_TEXTURE_CUBE_MAP_ARRAY, 1, GL_DEPTH_COMPONENT32F,
         m_ShadowMapSize, m_ShadowMapSize, count * 6);
 
-    glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
