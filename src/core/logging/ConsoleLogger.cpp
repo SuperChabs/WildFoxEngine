@@ -5,6 +5,8 @@
 #include <sstream>
 #include <print>
 
+#include "core/PlatformTime.h"
+
 void ConsoleLogger::write(const LogData &data) {
     const char *lvl = levelToString(data.lvl);
     const char *cat = categoryToString(data.cat);
@@ -64,7 +66,7 @@ std::string ConsoleLogger::formatTime(const std::chrono::system_clock::time_poin
 
     std::tm tm_snapshot;
 
-    localtime_r(&time, &tm_snapshot); // only for unix-like systems
+    PortableLocalTime(time, tm_snapshot);
 
     std::ostringstream oss;
     oss << std::put_time(&tm_snapshot, "%H:%M:%S");

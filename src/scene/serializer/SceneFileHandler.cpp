@@ -1,7 +1,10 @@
 #include "SceneFileHandler.h"
+
 #include <fstream>
 #include <chrono>
+
 #include "core/logging/Logger.h"
+#include "core/PlatformTime.h"
 
 SceneFileHandler::SceneFileHandler(const std::string &directory)
     : savesDirectory(directory) {
@@ -171,7 +174,7 @@ std::string SceneFileHandler::GetCurrentTimestamp() const {
     std::time_t time = std::chrono::system_clock::to_time_t(now);
 
     std::tm tm_snapshot{};
-    localtime_r(&time, &tm_snapshot);
+    PortableLocalTime(time, tm_snapshot);
 
     char buffer[64];
     std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", &tm_snapshot);

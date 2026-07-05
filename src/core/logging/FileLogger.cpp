@@ -5,6 +5,8 @@
 #include <sstream>
 #include <filesystem>
 
+#include "core/PlatformTime.h"
+
 namespace fs = std::filesystem;
 
 FileLogger::FileLogger()
@@ -93,7 +95,7 @@ std::string FileLogger::FormatTime(const std::chrono::system_clock::time_point &
 
     std::tm tm_snapshot;
 
-    localtime_r(&time, &tm_snapshot); // only for unix-like systems
+    PortableLocalTime(time, tm_snapshot);
 
     std::ostringstream oss;
     oss << std::put_time(&tm_snapshot, "%H:%M:%S");
@@ -106,7 +108,7 @@ std::string FileLogger::FormatDate(const std::chrono::system_clock::time_point &
     auto time = std::chrono::system_clock::to_time_t(tp);
     std::tm tm_snapshot;
 
-    localtime_r(&time, &tm_snapshot);
+    PortableLocalTime(time, tm_snapshot);
 
     std::ostringstream oss;
     oss << std::put_time(&tm_snapshot, "%Y-%m-%d");

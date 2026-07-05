@@ -8,7 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE__COMPILE_COMMANDS ON)
 set(CMAKE_CXX_SCAN_FOR_MODULES ON)
 set(CMAKE_CXX_MODULE_STD 26)
-set(CMAKE_CXX_COMPILER_LAUNCHER ccache)
+# set(CMAKE_CXX_COMPILER_LAUNCHER ccache)
 set(CMAKE_BUILD_PARALLEL_LEVEL 0)
 
 find_package(OpenGL REQUIRED)
@@ -69,7 +69,7 @@ add_subdirectory(vendor/entt)
 
 # ========== nlohmann_json =============
 add_library(json INTERFACE)
-target_include_directories(json INTERFACE ${CMAKE_SOURCE_DIR}/vendor/nlohmann_json/include)
+target_include_directories(json INTERFACE ${CMAKE_SOURCE_DIR}/vendor/nlohmann_json)
 
 # ========== AngelScript ==============
 add_subdirectory(vendor/angelscript/sdk/angelscript/projects/cmake)
@@ -166,8 +166,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 target_link_libraries(${PROJECT_NAME}
     # OpenGL::GL
-    glfw
     glad
+    glfw
     glm::glm
     stb_image
     assimp
@@ -180,6 +180,7 @@ target_link_libraries(${PROJECT_NAME}
     scriptstdstring
     OpenAL::OpenAL 
     sndfile
+    json
 )
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE
@@ -188,7 +189,7 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE
     <glm/glm.hpp>
     <glm/gtc/quaternion.hpp>
     <entt/entt.hpp>
-    <nlohmann/json.hpp>
+    # <nlohmann/json.hpp>
     <string>
     <vector>
     <unordered_map>
