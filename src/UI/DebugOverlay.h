@@ -50,7 +50,9 @@ private:
     ColliderPanel colliderPanel;
 
     std::vector<std::string> m_availableScenes;
+    std::vector<std::string> m_availableObjects;
     int m_selectedScene = -1;
+    int m_selectedObject = -1;
     bool m_scenesLoaded = false;
 
     std::string m_pendingDeleteScene;
@@ -68,6 +70,8 @@ private:
     void RenderOpenModelDialog();
 
     void RefreshAvailableScenes(SceneSerializer &ss);
+
+    std::vector<std::string> GetAvailableObjects();
 
     static inline void Execute(const char *name, const CommandArgs &args) {
         if (CommandManager::HasCommand(name))

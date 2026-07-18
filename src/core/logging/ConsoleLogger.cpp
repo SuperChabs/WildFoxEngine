@@ -13,18 +13,18 @@ void ConsoleLogger::write(const LogData &data) {
     std::string timeStr = formatTime(data.timestamp);
 
     if (data.showOrigin)
-        std::println("[{}] [{}] [{}] {} ({}:{})",
+        std::println("[{}] [{}] {} ({}:{})",
                      timeStr.c_str(),
                      lvl,
-                     cat,
+                     //cat,
                      data.m.c_str(),
                      data.f.c_str(),
                      data.line);
     else
-        std::println("[{}] [{}] [{}] {}",
+        std::println("[{}] [{}] {}",
                      timeStr.c_str(),
                      lvl,
-                     cat,
+                     //cat,
                      data.m.c_str());
 }
 
@@ -42,6 +42,8 @@ const char *ConsoleLogger::levelToString(LogLevel lvl) {
             return "\033[35mINPUT\033[0m"; // magenta
         case LogLevel::CRITICAL:
             return "\033[1;31mCRITICAL\033[0m"; // fat yellow
+        case LogLevel::SCRIPT:
+            return "\033[1;33mSCRIPT\033[0m";
         default:
             return "\033[37mUNKNOWN\033[0m"; // gray
     }

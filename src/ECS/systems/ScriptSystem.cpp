@@ -4,7 +4,7 @@
 #include "core/logging/Logger.h"
 #include "scripting/ASState.h"
 
-void ScriptSystem::Update(ECSWorld &ecs, Input *input, float deltaTime) {
+void ScriptSystem::Update(ECSWorld &ecs, float deltaTime) {
     ecs.Each<ScriptComponent>([&](entt::entity e, ScriptComponent &script) {
         if (script.failed || !script.active)
             return;

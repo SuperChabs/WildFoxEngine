@@ -11,16 +11,14 @@
 
 class ScriptSystem {
 public:
-    void Update(ECSWorld &ecs, Input *input, float deltaTime);
+    void Update(ECSWorld &ecs, float deltaTime);
 
     void Start(ECSWorld &ecs);
-
     void Stop(ECSWorld &ecs);
 
 private:
     void LoadScript(entt::entity e, ScriptComponent &script);
 
     void CallUpdate(ScriptComponent &script, float deltaTime);
-
     void CallFunction(ScriptComponent &script, asIScriptFunction *fn);
 };

@@ -5,6 +5,7 @@
 
 #include <GLFW/glfw3.h>
 
+#include "core/CoreModule.h"
 #include "core/Window.h"
 #include "core/Input.h"
 #include "core/Time.h"
@@ -28,19 +29,13 @@
  * - Resource loading
  */
 class Application {
-private:
-    std::unique_ptr<Window> window;
-    std::unique_ptr<Input> input;
-    std::unique_ptr<Time> time;
-
     std::unique_ptr<ModuleManager> moduleManager;
+    CoreModule *m_coreModule;
 
     ConsoleLogger console;
     FileLogger file;
 
     bool isRunning;
-
-    void Update();
 
 protected:
     /**
@@ -73,11 +68,8 @@ public:
     virtual ~Application();
 
     Application(const Application &) = delete;
-
     Application &operator=(const Application &) = delete;
-
     Application(Application &&) = delete;
-
     Application &operator=(Application &&) = delete;
 
     /**
@@ -105,13 +97,11 @@ public:
 
     /// \name Getters
     /// @{
-    Window *GetWindow();
-
-    Input *GetInput();
-
-    Time *GetTime() const;
 
     ModuleManager *GetModuleManager();
 
     /// @}
+
+private:
+    void Update();
 };

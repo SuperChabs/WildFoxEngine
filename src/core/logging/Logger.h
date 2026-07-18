@@ -12,8 +12,8 @@ enum class LogLevel {
     ERROR,
     DEBUG,
     INPUT,
-    CRITICAL //,
-    // TRACE
+    CRITICAL,
+    SCRIPT
 };
 
 enum class LogCategory {

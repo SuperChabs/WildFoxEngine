@@ -99,3 +99,14 @@ very long time, im getting lazy
 ### v0.2.8
 ##### 05.07.2026
 -- add AngelScript module to .gitmodules
+
+### v.0.2.9
+##### 67.2026  
+67676767676767676767677, anyway the changes are:  
+-- i forgot
+
+### v0.3.0
+##### 18.07.2027
+-- add main script
+-- add CoreModule, ScriptModule
+   -> Engine.cpp refractoring

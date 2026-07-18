@@ -53,8 +53,7 @@ inline void RegisterECS(asIScriptEngine *engine, ECSWorld *ecs) {
                 "uint64 GetEntityByName(const string &in name)",
                 asFUNCTIONPR(GetEntityByName, (ECSWorld *, const std::string &), entt::entity),
             asCALL_CDECL_OBJFIRST, ecs
-    )
-    ;
+    );
     AS_CHECK(r, "GetEntityByName");
 
     r = engine->RegisterGlobalFunction(

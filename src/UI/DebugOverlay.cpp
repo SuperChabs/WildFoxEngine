@@ -6,8 +6,9 @@
 
 #include "core/logging/Logger.h"
 
-void DebugOverlay::Render(ECSWorld *ecs,
-                          MaterialManager *materialManager, SceneSerializer * ss) {
+namespace fs = std::filesystem;
+
+void DebugOverlay::Render(ECSWorld *ecs, MaterialManager *materialManager, SceneSerializer * ss) {
     if (!visible || !ecs) return;
 
     ImGui::SetNextWindowPos({10.f, 10.f}, ImGuiCond_FirstUseEver);
@@ -366,35 +367,38 @@ void DebugOverlay::RenderCreateEntityTab() {
 void DebugOverlay::RenderOpenModelDialog() {
     if (!m_showOpenModelDialog) return;
 
+    m_availableObjects = GetAvailableObjects();
+
     ImGui::OpenPopup("Open Model");
 
-    if (ImGui::BeginPopupModal(
-        "Open Model",
-        &m_showOpenModelDialog,
-        ImGuiWindowFlags_AlwaysAutoResize)) {
-        ImGui::Text("Path to model file:");
-        ImGui::InputTextWithHint(
-            "##modelpath",
-            "/home/user/model.obj",
-            m_modelPath,
-            sizeof(m_modelPath));
+    if (ImGui::BeginPopupModal( "Open Model", &m_showOpenModelDialog, ImGuiWindowFlags_AlwaysAutoResize)) {
 
-        ImGui::Spacing();
+        ImGui::BeginChild("ModelList", ImVec2(250, 200), true);
+        for (int i = 0; i < static_cast<int>(m_availableObjects.size()); i++) {
+            const bool isSelected = (m_selectedObject == i);
 
-        if (ImGui::Button("Open")) {
-            std::string path = m_modelPath;
+            std::string displayName = fs::path(m_availableObjects[i]).filename().string();
 
-            if (!path.empty()) {
-                Logger::Log(LogLevel::INFO,
-                            "Opening model: " + path);
-                Execute("onLoadModel", path);
+            ImGui::PushID(i);
+
+            if (ImGui::Selectable(displayName.c_str(), isSelected))
+                m_selectedObject = i;
+
+            if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+                std::string path = m_availableObjects[i];
+
+                if (!path.empty()) {
+                    Logger::Log(LogLevel::INFO, "Opening model: " + path);
+                    Execute("onLoadModel", path);
+
+                    m_showOpenModelDialog = false;
+                    ImGui::CloseCurrentPopup();
+                }
             }
 
-            m_showOpenModelDialog = false;
-            ImGui::CloseCurrentPopup();
+            ImGui::PopID();
         }
-
-        ImGui::SameLine();
+        ImGui::EndChild();
 
         if (ImGui::Button("Cancel")) {
             m_showOpenModelDialog = false;
@@ -410,4 +414,19 @@ void DebugOverlay::RefreshAvailableScenes(SceneSerializer &ss) {
     std::sort(m_availableScenes.begin(), m_availableScenes.end());
     m_selectedScene = -1;
     m_scenesLoaded = true;
+}
+
+std::vector<std::string> DebugOverlay::GetAvailableObjects() {
+    std::string folderPath = "../assets/objects/";
+    std::vector<std::string> filePaths;
+
+    try {
+        for (const auto& entry : fs::recursive_directory_iterator(folderPath))
+            if (entry.is_regular_file())
+                filePaths.push_back(entry.path().string());
+    } catch (std::exception &e) {
+        Logger::Log(LogLevel::ERROR, e.what());
+    }
+
+    return filePaths;
 }
