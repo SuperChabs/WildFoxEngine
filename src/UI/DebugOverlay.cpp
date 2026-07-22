@@ -79,6 +79,13 @@ void DebugOverlay::RenderSceneTab(ECSWorld *ecs, SceneSerializer *ss) {
         Execute("onDebugPauseToggle");
     }
 
+    if (ImGui::Button("Play"))
+        Execute("onPlayGame");
+
+    ImGui::SameLine();
+    if (ImGui::Button("Stop"))
+        Execute("onStopGame");
+
     ImGui::Separator();
     ImGui::Spacing();
 

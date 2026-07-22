@@ -12,8 +12,7 @@ SceneManager::SceneManager(ECSWorld *ecs)
 }
 
 void SceneManager::StartPlayMode() {
-    /*
-    if (!m_ecs || m_IsPlayMode)
+    if (m_IsPlayMode)
         return;
 
     if (!m_ecs)
@@ -42,15 +41,14 @@ void SceneManager::StartPlayMode() {
 
     m_IsPlayMode = true;
 
-    GetEventBus().Publish("play_mode_started");
+    Logger::Log(LogLevel::INFO, "Publishing play_mode_started, path=" + m_currentScenePath);
+    GetEventBus().Publish("play_mode_started", m_currentScenePath);
 
     Logger::Log(LogLevel::INFO, "SceneManager: Entered Play Mode");
-    */
 }
 
 void SceneManager::StopPlayMode() {
-    /*
-    if (!m_ecs || !m_IsPlayMode)
+    if (!m_IsPlayMode)
         return;
 
     if (!m_ecs)
@@ -96,7 +94,6 @@ void SceneManager::StopPlayMode() {
     GetEventBus().Publish("play_mode_stopped");
 
     Logger::Log(LogLevel::INFO, "SceneManager: Exited Play Mode");
-    */
 }
 
 void SceneManager::PauseScripts() {

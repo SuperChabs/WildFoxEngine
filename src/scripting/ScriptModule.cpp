@@ -4,11 +4,13 @@
 #include "ECS/ECSModule.h"
 #include "scripting/ASBindings.h"
 #include "core/CoreModule.h"
+#include "scene/SceneModule.h"
 
 ScriptModule::ScriptModule(ModuleManager *mm, const std::string &scriptPath)
     : m_moduleManager(mm) {
     m_mainScript = std::make_unique<MainScript>(scriptPath);
     m_scriptSystem = std::make_unique<ScriptSystem>();
+    m_levelScript = std::make_unique<LevelScript>();
 }
 
 bool ScriptModule::Initialize() {
@@ -25,9 +27,15 @@ bool ScriptModule::Initialize() {
             return false;
         }
 
-        m_mainScript->Start();
+
         if (!m_mainScript) {
             Logger::Log(LogLevel::ERROR, "Failed to initialize MainScript");
+            return false;
+        }
+        m_mainScript->Start();
+
+        if (!m_levelScript) {
+            Logger::Log(LogLevel::ERROR, "Failed to initialize LevelScript");
             return false;
         }
 
@@ -44,8 +52,10 @@ bool ScriptModule::Initialize() {
 void ScriptModule::Update(float deltaTime) {
     m_mainScript->Update(deltaTime);
     m_scriptSystem->Update(*m_moduleManager->GetModule<ECSModule>("ECS")->GetECS(), deltaTime);
+    m_levelScript->Update(deltaTime);
 }
 
 void ScriptModule::Shutdown() {
     m_mainScript->Stop();
+    m_levelScript->Stop();
 }

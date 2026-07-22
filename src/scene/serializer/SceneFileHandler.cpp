@@ -200,10 +200,6 @@ std::vector<std::string> SceneFileHandler::GetAvailableScenes() const {
     return scenes;
 }
 
-std::string SceneFileHandler::GetSavesDirectory() const {
-    return savesDirectory;
-}
-
 void SceneFileHandler::SetSavesDirectory(const std::string &directory) {
     savesDirectory = directory;
 }

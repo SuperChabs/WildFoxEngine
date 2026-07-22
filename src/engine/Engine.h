@@ -6,6 +6,7 @@
 #include <entt/entt.hpp>
 #include <GLFW/glfw3.h>
 
+#include "EngineCommandHandler.h"
 #include "application/Application.h"
 #include "ECS/systems/Systems.h"
 #include "ECS/components/Components.h"
@@ -31,6 +32,8 @@ class Engine : public Application {
 
     //std::unique_ptr<AudioSystem> audioSystem;
 
+    std::unique_ptr<EditorCommandHandler> m_ech;
+
     ModuleManager *mm;
     RenderingModule *renderingModule;
     ResourceModule *resourceModule;
@@ -46,9 +49,7 @@ class Engine : public Application {
     entt::entity mainCameraEntity = entt::null;
 
     static void FramebufferSizeCallback(GLFWwindow *window, int width, int height);
-
     static void MouseCallback(GLFWwindow *window, double xpos, double ypos);
-
     static void MouseButtonCallback(GLFWwindow *window, int button, int action, int mods);
 
     void SetCameraControlMode(bool enabled);

@@ -122,7 +122,8 @@ void Engine::OnInitialize() {
     //     Logger::Log(LogLevel::CRITICAL, "AudioSystem failed to initialize");
     // }
 
-    EditorCommandHandler(mm).RegisterAllCommands();
+    m_ech = std::make_unique<EditorCommandHandler>(mm);
+    m_ech->RegisterAllCommands();
     RegistraterCoreCommands();
 
     auto editorCam = ecsModule->GetECS()->CreateCamera("Main Camera", true, true);

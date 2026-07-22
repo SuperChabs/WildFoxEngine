@@ -23,29 +23,29 @@ void EditorCommandHandler::RegisterAllCommands() {
 
 void EditorCommandHandler::RegisterObjectCommands() {
     CommandManager::RegisterCommand("onCreateAABBHitbox",
-                                    [this](const CommandArgs &) {
-                                        auto entity = m_ecsModule->GetECS()->CreateEntity("AABB Hitbox");
+        [this](const CommandArgs &) {
+            auto entity = m_ecsModule->GetECS()->CreateEntity("AABB Hitbox");
 
-                                        m_ecsModule->GetECS()->AddComponent<TransformComponent>(entity,
-                                            glm::vec3(0), glm::vec3(0), glm::vec3(1));
+            m_ecsModule->GetECS()->AddComponent<TransformComponent>(entity,
+                glm::vec3(0), glm::vec3(0), glm::vec3(1));
 
-                                        m_ecsModule->GetECS()->AddComponent<ColliderComponent>(entity,
-                                            AABB{glm::vec3(-0.5f), glm::vec3(0.5f)});
+            m_ecsModule->GetECS()->AddComponent<ColliderComponent>(entity,
+                AABB{glm::vec3(-0.5f), glm::vec3(0.5f)});
 
-                                        RigidBodyComponent rb =
-                                        {
-                                            .inv_mass = 0.0f,
-                                            .velocity = glm::vec3(0.0f),
-                                            .angular_velocity = glm::vec3(0.0f),
-                                            .inertia = glm::vec3(1.0f),
-                                            .force_accum = glm::vec3(0.0f),
-                                            .torque_accum = glm::vec3(0.0f)
-                                        };
+            RigidBodyComponent rb =
+            {
+                .inv_mass = 0.0f,
+                .velocity = glm::vec3(0.0f),
+                .angular_velocity = glm::vec3(0.0f),
+                .inertia = glm::vec3(1.0f),
+                .force_accum = glm::vec3(0.0f),
+                .torque_accum = glm::vec3(0.0f)
+            };
 
-                                        m_ecsModule->GetECS()->AddComponent<RigidBodyComponent>(entity, rb);
+            m_ecsModule->GetECS()->AddComponent<RigidBodyComponent>(entity, rb);
 
-                                        Logger::Log(LogLevel::INFO, "AABB hitbox entity created");
-                                    });
+            Logger::Log(LogLevel::INFO, "AABB hitbox entity created");
+        });
 
     CommandManager::RegisterCommand("onCreateCube",
                                     [this](const CommandArgs &) {
@@ -195,97 +195,104 @@ void EditorCommandHandler::RegisterLightCommands() {
 
 void EditorCommandHandler::RegisterSceneCommands() {
     CommandManager::RegisterCommand("onSaveScene",
-                                    [this](const CommandArgs &args) {
-                                        std::string filename = "scene.json";
+        [this](const CommandArgs &args) {
+            std::string filename = "scene.json";
 
-                                        if (!args.empty()) {
-                                            try {
-                                                filename = std::get<std::string>(args[0]);
-                                            } catch (...) {
-                                                Logger::Log(LogLevel::WARNING,
-                                                            "Invalid filename argument, using default");
-                                            }
-                                        }
+            if (!args.empty()) {
+                try {
+                    filename = std::get<std::string>(args[0]);
+                } catch (...) {
+                    Logger::Log(LogLevel::WARNING,
+                                "Invalid filename argument, using default");
+                }
+            }
 
-                                        if (filename.find(".json") == std::string::npos)
-                                            filename += ".json";
+            if (filename.find(".json") == std::string::npos)
+                filename += ".json";
 
-                                        bool success = m_sceneModule->GetSceneSerializer()->SaveScene(
-                                            filename, m_resModule->GetMaterialManager());
+            bool success = m_sceneModule->GetSceneSerializer()->SaveScene(
+                filename, m_resModule->GetMaterialManager());
 
-                                        if (success)
-                                            Logger::Log(LogLevel::INFO, "Scene saved successfully: " + filename);
-                                        else
-                                            Logger::Log(LogLevel::ERROR, "Failed to save scene: " + filename);
-                                    });
+            if (success)
+                Logger::Log(LogLevel::INFO, "Scene saved successfully: " + filename);
+            else
+                Logger::Log(LogLevel::ERROR, "Failed to save scene: " + filename);
+        });
 
     CommandManager::RegisterCommand("onLoadScene",
-                                    [this](const CommandArgs &args) {
-                                        std::string filename = "scene.json";
+        [this](const CommandArgs &args) {
+            std::string filename = "scene.json";
 
-                                        if (!args.empty()) {
-                                            try {
-                                                filename = std::get<std::string>(args[0]);
-                                            } catch (...) {
-                                                Logger::Log(LogLevel::WARNING,
-                                                            "Invalid filename argument, using default");
-                                            }
-                                        }
+            if (!args.empty()) {
+                try {
+                    filename = std::get<std::string>(args[0]);
+                } catch (...) {
+                    Logger::Log(LogLevel::WARNING,
+                                "Invalid filename argument, using default");
+                }
+            }
 
-                                        if (filename.find(".json") == std::string::npos)
-                                            filename += ".json";
+            if (filename.find(".json") == std::string::npos)
+                filename += ".json";
 
-                                        CommandManager::ExecuteCommand("onModelManagerCacheCleaning", args);
+            CommandManager::ExecuteCommand("onModelManagerCacheCleaning", args);
 
-                                        bool success = m_sceneModule->GetSceneSerializer()->LoadScene(
-                                            filename,
-                                            m_resModule->GetMaterialManager(),
-                                            m_resModule->GetModelManager()
-                                        );
+            bool success = m_sceneModule->GetSceneSerializer()->LoadScene(
+                filename,
+                m_resModule->GetMaterialManager(),
+                m_resModule->GetModelManager()
+            );
 
-                                        if (success)
-                                            Logger::Log(LogLevel::INFO, "Scene loaded successfully: " + filename);
-                                        else
-                                            Logger::Log(LogLevel::ERROR, "Failed to load scene: " + filename);
-                                    });
+            if (success) {
+                Logger::Log(LogLevel::INFO, "Scene loaded successfully: " + filename);
+
+                std::filesystem::path scenePath =
+                    std::filesystem::path(m_sceneModule->GetSceneSerializer()->GetSavesDirectory()) /
+                    std::filesystem::path(filename).stem();
+
+                m_sceneModule->GetSceneManager()->SetCurrentScenePath(scenePath.string());
+            } else {
+                Logger::Log(LogLevel::ERROR, "Failed to load scene: " + filename);
+            }
+        });
 
     CommandManager::RegisterCommand("onQuickSave",
-                                    [this](const CommandArgs &) {
-                                        CommandManager::ExecuteCommand("onSaveScene", {
-                                                                           std::string("quicksave.json")
-                                                                       });
-                                    });
+        [this](const CommandArgs &) {
+            CommandManager::ExecuteCommand("onSaveScene", {
+                                               std::string("quicksave.json")
+                                           });
+        });
 
     CommandManager::RegisterCommand("onQuickLoad",
-                                    [this](const CommandArgs &) {
-                                        CommandManager::ExecuteCommand("onLoadScene", {
-                                                                           std::string("quicksave.json")
-                                                                       });
-                                    });
+        [this](const CommandArgs &) {
+            CommandManager::ExecuteCommand("onLoadScene", {
+                                               std::string("quicksave.json")
+                                           });
+        });
 
     CommandManager::RegisterCommand("onNewScene",
-                                    [this](const CommandArgs &) {
-                                        m_ecsModule->GetECS()->Clear();
+        [this](const CommandArgs &) {
+            m_ecsModule->GetECS()->Clear();
 
-                                        auto cam = m_ecsModule->GetECS()->CreateCamera("Main Camera", true, true);
+            auto cam = m_ecsModule->GetECS()->CreateCamera("Main Camera", true, true);
 
-                                        Logger::Log(LogLevel::INFO, "New scene created");
-                                    });
+            Logger::Log(LogLevel::INFO, "New scene created");
+        });
 
     CommandManager::RegisterCommand("onListScenes",
-                                    [this](const CommandArgs &) {
-                                        auto scenes = m_sceneModule->GetSceneSerializer()->GetAvailableScenes();
+        [this](const CommandArgs &) {
+            auto scenes = m_sceneModule->GetSceneSerializer()->GetAvailableScenes();
 
-                                        if (scenes.empty()) {
-                                            Logger::Log(LogLevel::INFO, "No saved scenes found");
-                                        } else {
-                                            Logger::Log(LogLevel::INFO, "Available scenes (" +
-                                                                        std::to_string(scenes.size()) + "):");
+            if (scenes.empty()) {
+                Logger::Log(LogLevel::INFO, "No saved scenes found");
+            } else {
+                Logger::Log(LogLevel::INFO, "Available scenes (" +
+                                            std::to_string(scenes.size()) + "):");
 
-                                            for (const auto &scene: scenes)
-                                                Logger::Log(LogLevel::INFO, "  - " + scene);
-                                        }
-                                    });
+                for (const auto &scene: scenes)
+                    Logger::Log(LogLevel::INFO, "  - " + scene);
+            }
+        });
 }
 
 void EditorCommandHandler::RegisterScriptCommands() {

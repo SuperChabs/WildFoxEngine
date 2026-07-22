@@ -10,8 +10,10 @@
 
 class SceneManager {
     ECSWorld *m_ecs;
-    bool m_IsPlayMode = false;
+    bool m_IsPlayMode = true;
     bool m_IsDebugPaused = false;
+
+    std::string m_currentScenePath;
 
     glm::vec3 m_SavedEditorCameraPos;
     float m_SavedEditorCameraYaw;
@@ -26,19 +28,19 @@ public:
     SceneManager(ECSWorld *ecs);
 
     void StartPlayMode();
-
     void StopPlayMode();
 
     void PauseScripts();
-
     void ResumeScripts();
 
     bool IsInPlayMode();
-
     bool IsInDebugMode();
+
+    void SetCurrentScenePath(const std::string& path) { m_currentScenePath = path; }
+
+    std::string GetCurrentScenePath() { return m_currentScenePath; }
 
 private:
     void RegisterSceneCommands();
-
     void RegisterDebugEvents();
 };

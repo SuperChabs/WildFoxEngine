@@ -1,5 +1,5 @@
 void OnStart() {
-    Log("Hello ");
+    Log("Hello from main");
 }
 
 void OnUpdate(float dt) {

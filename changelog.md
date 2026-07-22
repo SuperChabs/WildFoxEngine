@@ -105,8 +105,12 @@ very long time, im getting lazy
 67676767676767676767677, anyway the changes are:  
 -- i forgot
 
-### v0.3.0
+### v0.3
 ##### 18.07.2027
 -- add main script
 -- add CoreModule, ScriptModule
    -> Engine.cpp refractoring
+
+### v0.4
+##### 22.07.2026
+-- add level scripting
