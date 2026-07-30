@@ -109,8 +109,12 @@ very long time, im getting lazy
 ##### 18.07.2027
 -- add main script
 -- add CoreModule, ScriptModule
-   -> Engine.cpp refractoring
+   -> Engine.cpp refactoring
 
 ### v0.4
 ##### 22.07.2026
 -- add level scripting
+
+### v0.4.1
+##### 30.07.2026
+-- minor update

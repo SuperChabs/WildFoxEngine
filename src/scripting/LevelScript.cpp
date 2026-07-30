@@ -18,6 +18,11 @@ LevelScript::LevelScript() {
         [this](const std::any &) {
             Stop();
         });
+    m_subTrigger = GetEventBus().Subscribe("trigger_enter",
+        [this](const std::any& payload) {
+            auto pr = std::any_cast<std::pair<entt::entity, entt::entity>>(payload);
+            CallTrigger(pr.first, pr.second);
+        });
 }
 
 void LevelScript::Update(const float deltaTime) {
@@ -124,4 +129,18 @@ void LevelScript::CallFunction(asIScriptFunction *fn) {
                     std::string(m_ctx->GetExceptionString()));
         m_failed = true;
     }
+}
+
+void LevelScript::CallTrigger(entt::entity a, entt::entity b) {
+    if (m_failed || !m_loaded || !m_module)
+        return;
+
+    asIScriptFunction *fn = m_module->GetFunctionByDecl("void OnTriggerEnter(uint64, uint64)");
+    if (!fn)
+        return;
+
+    m_ctx->Prepare(fn);
+    m_ctx->SetArgQWord(0, static_cast<asQWORD>(a));
+    m_ctx->SetArgQWord(1, static_cast<asQWORD>(b));
+    m_ctx->Execute();
 }

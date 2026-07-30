@@ -170,11 +170,11 @@ void Renderer::ApplySettings() {
 }
 
 void Renderer::LogStats() const {
-    Logger::Log(LogLevel::DEBUG,
-                "FPS: " + std::to_string(static_cast<int>(stats.fps)) +
-                " | Frame: " + std::to_string(stats.frameTime) + "ms" +
-                " | Draws: " + std::to_string(stats.drawCalls) +
-                " | Tris: " + std::to_string(stats.triangleCount));
+//     Logger::Log(LogLevel::DEBUG,
+//                 "FPS: " + std::to_string(static_cast<int>(stats.fps)) +
+//                 " | Frame: " + std::to_string(stats.frameTime) + "ms" +
+//                 " | Draws: " + std::to_string(stats.drawCalls) +
+//                 " | Tris: " + std::to_string(stats.triangleCount));
 }
 
 void Renderer::RegisterRenderCommands() {

@@ -21,6 +21,7 @@ class LevelScript {
 
     SubscriberID m_subPlayMode;
     SubscriberID m_subEditMode;
+    SubscriberID m_subTrigger;
 
 public:
     explicit LevelScript();
@@ -38,4 +39,5 @@ private:
 
     void CallUpdate(float deltaTime);
     void CallFunction(asIScriptFunction *fn);
+    void CallTrigger(entt::entity a, entt::entity b);
 };
