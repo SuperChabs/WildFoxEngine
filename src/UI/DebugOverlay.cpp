@@ -8,38 +8,58 @@
 
 namespace fs = std::filesystem;
 
-void DebugOverlay::Render(ECSWorld *ecs, MaterialManager *materialManager, SceneSerializer * ss) {
+DebugOverlay::DebugOverlay() {
+    sceneFramebuffer = std::make_unique<Framebuffer>(1, 1);
+}
+
+void DebugOverlay::Render(ECSWorld *ecs, MaterialManager *materialManager, SceneSerializer * ss, EditorCamera &editorCamera) {
     if (!visible || !ecs) return;
 
-    ImGui::SetNextWindowPos({10.f, 10.f}, ImGuiCond_FirstUseEver);
-    ImGui::SetNextWindowSize({320.f, 700.f}, ImGuiCond_FirstUseEver);
-    ImGui::SetNextWindowBgAlpha(0.92f);
-
-    ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse;
-    if (!ImGui::Begin("Scene Builder", &visible, flags)) {
-        ImGui::End();
+    ImGuiViewport* viewport = ImGui::GetMainViewport();
+    if (!viewport)
+    {
+        Logger::Log(LogLevel::ERROR, "Main viewport is NULL!");
         return;
     }
+    ImGui::SetNextWindowPos(viewport->WorkPos);
+    ImGui::SetNextWindowSize(viewport->WorkSize);
+    ImGui::SetNextWindowViewport(viewport->ID);
 
-    if (ImGui::BeginTabBar("##sbo_tabs")) {
-        if (ImGui::BeginTabItem("Scene")) {
-            RenderSceneTab(ecs, ss);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Hierarchy")) {
-            RenderHierarchyTab(ecs);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Inspector")) {
-            RenderInspectorTab(ecs, materialManager);
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Create")) {
-            RenderCreateEntityTab();
-            ImGui::EndTabItem();
-        }
-        ImGui::EndTabBar();
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+    window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse;
+    window_flags |= ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+    window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+    window_flags |= ImGuiWindowFlags_NoBackground;
+
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
+    ImGui::Begin("DockSpace", nullptr, window_flags);
+    ImGui::PopStyleVar(3);
+
+    ImGuiID dockspace_id = ImGui::GetID("MainDockSpace");
+    ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
+
+    if (ImGui::Begin("Scene"))
+        RenderSceneTab(ecs, ss);
+    ImGui::End();
+
+    if (ImGui::Begin("Hierarchy"))
+        RenderHierarchyTab(ecs);
+    ImGui::End();
+
+    if (ImGui::Begin("Inspector"))
+        RenderInspectorTab(ecs, materialManager);
+    ImGui::End();
+
+    if (ImGui::BeginMenuBar()) {
+        RenderCreateEntityTab();
+        ImGui::EndMenuBar();
     }
+
+    viewportWindow.Render(*ecs, m_selected, sceneFramebuffer.get(), editorCamera.camera,
+        editorCamera.transform, editorCamera.orientation, 1);
 
     RenderOpenModelDialog();
 

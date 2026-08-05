@@ -7,9 +7,9 @@
 #include "rendering/RenderingModule.h"
 #include "scene/SceneModule.h"
 
-UIModule::UIModule(ECSWorld *ecs, entt::entity *cameraEntity, SceneManager *sceneManager, ModuleManager *mm,
+UIModule::UIModule(ECSWorld *ecs, SceneManager *sceneManager, ModuleManager *mm,
                    GLFWwindow *window)
-    : ecs(ecs), mainCameraEntity(cameraEntity), mm(mm), window(window), m_sceneManager(sceneManager) {
+    : ecs(ecs), mm(mm), window(window), m_sceneManager(sceneManager) {
     if (!ecs)
         Logger::Log(LogLevel::ERROR, "RenderingModule: ecs is null!");
 }
@@ -43,9 +43,9 @@ bool UIModule::Initialize() {
 void UIModule::Update(float deltaTime) {
 }
 
-void UIModule::RenderUI() {
+void UIModule::RenderUI(EditorCamera &editorCamera) {
     debugOverlay->Render(ecs, mm->GetModule<ResourceModule>("Resource")->GetMaterialManager(),
-        mm->GetModule<SceneModule>("Scene")->GetSceneSerializer());
+        mm->GetModule<SceneModule>("Scene")->GetSceneSerializer(), editorCamera);
 }
 
 void UIModule::Shutdown() {

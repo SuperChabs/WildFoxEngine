@@ -16,7 +16,6 @@
 #include "ECS/components/Components.h"
 
 class ForwardPipeline : public RenderPipeline {
-private:
     ECSWorld *world;
     GLuint skyboxVAO;
     GLuint cubemapTexture;
@@ -30,8 +29,8 @@ public:
 
     void Initialize() override;
 
-    void Execute(ECSWorld &ecs, entt::entity cameraEntity,
-                 int width, int height) override;
+    void Execute(CameraComponent &camera, TransformComponent &transform,
+        CameraOrientationComponent &orientation, int width, int height) override;
 
     ShadowPass *GetShadowPass() const;
 };

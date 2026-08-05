@@ -274,8 +274,6 @@ void EditorCommandHandler::RegisterSceneCommands() {
         [this](const CommandArgs &) {
             m_ecsModule->GetECS()->Clear();
 
-            auto cam = m_ecsModule->GetECS()->CreateCamera("Main Camera", true, true);
-
             Logger::Log(LogLevel::INFO, "New scene created");
         });
 

@@ -6,6 +6,7 @@
 #include <entt/entt.hpp>
 #include <GLFW/glfw3.h>
 
+#include "EditorCamera.h"
 #include "EngineCommandHandler.h"
 #include "application/Application.h"
 #include "ECS/systems/Systems.h"
@@ -46,7 +47,8 @@ class Engine : public Application {
     bool cameraControlEnabled;
     bool showUI;
 
-    entt::entity mainCameraEntity = entt::null;
+    entt::entity gameCam = entt::null;
+    EditorCamera editorCam;
 
     static void FramebufferSizeCallback(GLFWwindow *window, int width, int height);
     static void MouseCallback(GLFWwindow *window, double xpos, double ypos);
@@ -77,8 +79,6 @@ protected:
     void OnShutdown() override;
 
     bool ShouldAllowCameraControl() const override;
-
-    void SetMainCameraEntity(entt::entity newMainCameraEntity);
 
 public:
     Engine(int w, int h, const std::string &title);

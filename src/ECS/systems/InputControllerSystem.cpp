@@ -2,18 +2,13 @@
 #include <entt/entt.hpp>
 #include <glm/glm.hpp>
 
-void InputControllerSystem::Update(ECSWorld &world, Input &input, float deltaTime, bool isEnabled) {
+void InputControllerSystem::Update(CameraComponent &camera, TransformComponent &trans,
+    CameraOrientationComponent &orientation, Input &input, float deltaTime, bool isEnabled) {
     if (!isEnabled) return;
 
-    world.Each<CameraComponent, TransformComponent, CameraOrientationComponent>(
-        [&](entt::entity entity, CameraComponent &camera,
-            TransformComponent &transform, CameraOrientationComponent &orientation) {
-            if (!camera.isMainCamera || !camera.isActive) return;
-
-            ProcessKeyboard(input, transform, orientation, camera.movementSpeed, deltaTime);
-            ProcessMouse(input, transform, orientation, camera.mouseSensitivity);
-            ProcessScroll(input, camera);
-        });
+    ProcessKeyboard(input, trans, orientation, camera.movementSpeed, deltaTime);
+    ProcessMouse(input, trans, orientation, camera.mouseSensitivity);
+    ProcessScroll(input, camera);
 }
 
 void InputControllerSystem::ProcessKeyboard(Input &input, TransformComponent &transform,

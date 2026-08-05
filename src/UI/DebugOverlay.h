@@ -3,12 +3,15 @@
 #include <imgui.h>
 
 #include <string>
+#include <memory>
 
 #include "ECS/World.h"
 #include "ECS/components/Components.h"
 #include "resource/material/MaterialManager.h"
 #include "core/CommandManager.h"
 #include "scene/serializer/SceneSerializer.h"
+#include "rendering/core/Framebuffer.h"
+#include "engine/EditorCamera.h"
 
 #include "UI/panels/TagPanel.h"
 #include "UI/panels/TransformPanel.h"
@@ -21,13 +24,9 @@
 #include "UI/panels/RigidBodyPanel.h"
 #include "UI/panels/ColliderPanel.h"
 
+#include "UI/windows/ViewportWindow.h"
+
 class DebugOverlay {
-public:
-    bool visible = true;
-
-    void Render(ECSWorld *ecs, MaterialManager *materialManager, SceneSerializer * ss);
-
-private:
     entt::entity m_selected = entt::null;
 
     char m_scenePathBuf[512] = "scene.json";
@@ -49,6 +48,10 @@ private:
     RigidBodyPanel rigidPanel;
     ColliderPanel colliderPanel;
 
+    ViewportWindow viewportWindow;
+
+    std::unique_ptr<Framebuffer> sceneFramebuffer;
+
     std::vector<std::string> m_availableScenes;
     std::vector<std::string> m_availableObjects;
     int m_selectedScene = -1;
@@ -57,16 +60,27 @@ private:
 
     std::string m_pendingDeleteScene;
 
+public:
+    bool visible = true;
+
+    DebugOverlay();
+
+    void Render(ECSWorld *ecs, MaterialManager *materialManager, SceneSerializer *ss, EditorCamera &editorCamera);
+
+    ImVec2 GetViewportSize() const { return viewportWindow.GetViewportSize(); }
+    ImVec2 GetVieportPose()  const { return viewportWindow.GetViewportPos(); }
+    bool IsViewportHovered() const { return viewportWindow.IsHovered(); }
+    bool IsViewportFocused() const { return viewportWindow.IsFocused(); }
+
+    Framebuffer* GetFramebuffer() const { return sceneFramebuffer.get(); }
+
+private:
     void RenderSceneTab(ECSWorld *ecs, SceneSerializer *ss);
-
     void RenderHierarchyTab(ECSWorld *ecs);
-
     void RenderEntityNode(entt::entity e, ECSWorld *ecs, entt::entity &toDelete);
-
     void RenderInspectorTab(ECSWorld *ecs, MaterialManager *materialManager);
 
     void RenderCreateEntityTab();
-
     void RenderOpenModelDialog();
 
     void RefreshAvailableScenes(SceneSerializer &ss);

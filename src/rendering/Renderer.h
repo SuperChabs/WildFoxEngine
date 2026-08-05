@@ -7,7 +7,6 @@
 #include <glm/glm.hpp>
 #include <glad/glad.h>
 
-#include "rendering/IRenderer.h"
 #include "rendering/core/GLContext.h"
 #include "rendering/core/Framebuffer.h"
 #include "rendering/pipeline/RenderPipeline.h"
@@ -20,7 +19,7 @@
 static constexpr int SHADOW_MAP_SLOT = 6;
 static constexpr int CUBE_SHADOW_MAP_SLOTS = 4;
 
-class Renderer : public IRenderer {
+class Renderer {
     std::unique_ptr<GLContext> context;
     std::unique_ptr<RenderPipeline> pipeline;
 
@@ -46,40 +45,40 @@ class Renderer : public IRenderer {
 public:
     Renderer(ShaderManager *sm, ECSWorld *w, TextureManager *tm);
 
-    ~Renderer() override;
+    ~Renderer() ;
 
-    bool Initialize(GLuint skyboxVAO, GLuint cubemapTexture) override;
+    bool Initialize(GLuint skyboxVAO, GLuint cubemapTexture) ;
 
-    void BeginFrame() override;
+    void BeginFrame() ;
 
-    void Render(ECSWorld &ecs, entt::entity cameraEntity,
-                int width, int height) override;
+    void Render(CameraComponent &camera, TransformComponent &transform,
+        CameraOrientationComponent &orientation, int width, int height) ;
 
-    void EndFrame() override;
+    void EndFrame() ;
 
-    void Shutdown() override;
+    void Shutdown() ;
 
-    void SetClearColor(const glm::vec4 &color) override;
+    void SetClearColor(const glm::vec4 &color) ;
 
-    void SetWireframe(bool enable) override;
+    void SetWireframe(bool enable) ;
 
-    void SetEnableShadows(bool enable) override;
+    void SetEnableShadows(bool enable) ;
 
-    GLContext *GetContext() override;
+    GLContext *GetContext() ;
 
-    RenderPipeline *GetPipeline() override;
+    RenderPipeline *GetPipeline() ;
 
-    const RenderStats &GetStats() const override;
+    const RenderStats &GetStats() const ;
 
-    RendererConfig &GetConfig() override;
+    RendererConfig &GetConfig() ;
 
-    ECSWorld *GetWorld() override;
+    ECSWorld *GetWorld() ;
 
-    ShaderManager *GetShaderManager() override;
+    ShaderManager *GetShaderManager() ;
 
     IconRenderSystem *GetIcon();
 
-    bool IsInitialized() const override;
+    bool IsInitialized() const ;
 
 private:
     void ApplySettings();

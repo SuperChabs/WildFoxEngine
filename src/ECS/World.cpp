@@ -22,6 +22,22 @@ entt::entity ECSWorld::CreateEntity(const std::string &name) {
 }
 
 void ECSWorld::DestroyEntity(entt::entity entity) {
+    if (!IsValid(entity))
+        return;
+
+    if (HasComponent<HierarchyComponent>(entity)) {
+        auto children = GetComponent<HierarchyComponent>(entity).children;
+
+        for (auto &child : children)
+            DestroyEntity(child);
+    }
+
+    if (HasComponent<HierarchyComponent>(entity)) {
+        auto &hc = GetComponent<HierarchyComponent>(entity);
+        if (hc.HasParent() && IsValid(hc.parent) && HasComponent<HierarchyComponent>(hc.parent))
+            GetComponent<HierarchyComponent>(hc.parent).RemoveChild(entity);
+    }
+
     if (registry.valid(entity))
         registry.destroy(entity);
 }
@@ -111,7 +127,7 @@ void ECSWorld::ClearParent(entt::entity child) {
     }
 }
 
-entt::entity ECSWorld::CreateCamera(const std::string &name, bool setAsMain, bool isGameCamera) {
+entt::entity ECSWorld::CreateCamera(const std::string &name, bool setAsMain) {
     auto entity = CreateEntity(name);
 
     AddComponent<TransformComponent>(entity, glm::vec3(0, 0, 3), glm::vec3(0), glm::vec3(1));
@@ -119,14 +135,10 @@ entt::entity ECSWorld::CreateCamera(const std::string &name, bool setAsMain, boo
     AddComponent<CameraOrientationComponent>(entity);
     AddComponent<VisibilityComponent>(entity, true);
 
-    auto cameraType = isGameCamera ? CameraTypeComponent::Type::GAME : CameraTypeComponent::Type::EDITOR;
-    AddComponent<CameraTypeComponent>(entity, cameraType);
-
     auto &camera = GetComponent<CameraComponent>(entity);
     camera.isMainCamera = setAsMain;
 
-    Logger::Log(LogLevel::INFO, "Camera entity created: " + name +
-                                (isGameCamera ? " (GAME)" : " (EDITOR)"));
+    Logger::Log(LogLevel::INFO, "Camera entity created: " + name);
     return entity;
 }
 

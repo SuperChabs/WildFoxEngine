@@ -25,11 +25,10 @@ void Engine::MouseCallback(GLFWwindow *window, double xpos, double ypos) {
     if (ImGuizmo::IsUsing() || ImGui::GetIO().WantCaptureMouse)
         return;
 
-    if (engine->cameraControlEnabled && engine->mainCameraEntity != entt::null) {
+    if (engine->cameraControlEnabled) {
         glm::vec2 delta = engine->mm->GetModule<CoreModule>("Core")->GetInput()->GetMouseDelta();
-        auto &orientation = engine->ecsModule->GetECS()->GetComponent<CameraOrientationComponent>(
-            engine->mainCameraEntity);
-        auto &config = engine->ecsModule->GetECS()->GetComponent<CameraComponent>(engine->mainCameraEntity);
+        auto &orientation = engine->editorCam.orientation;
+        auto &config = engine->editorCam.camera;
 
         orientation.yaw += delta.x * config.mouseSensitivity;
         orientation.pitch += delta.y * config.mouseSensitivity;
@@ -107,7 +106,7 @@ void Engine::OnInitialize() {
     m_scriptModule->Initialize();
     if (!m_scriptModule->IsInitialized()) Logger::Log(LogLevel::CRITICAL, "ScriptModule failed to initialize");
 
-    mm->RegisterModule<UIModule>(ecsModule->GetECS(), &mainCameraEntity, sceneModule->GetSceneManager(), mm,
+    mm->RegisterModule<UIModule>(ecsModule->GetECS(), sceneModule->GetSceneManager(), mm,
         mm->GetModule<CoreModule>("Core")->GetWindow()->GetGLFWWindow()
     );
     uiModule = mm->GetModule<UIModule>("UI");
@@ -126,9 +125,9 @@ void Engine::OnInitialize() {
     m_ech->RegisterAllCommands();
     RegistraterCoreCommands();
 
-    auto editorCam = ecsModule->GetECS()->CreateCamera("Main Camera", true, true);
-    SetMainCameraEntity(editorCam);
+    gameCam = ecsModule->GetECS()->CreateCamera("Main Camera", true);
     SetCameraControlMode(false);
+    sceneModule->GetSceneManager()->SetPlayMode(false);
 
     CommandManager::ExecuteCommand("onDebugPauseToggle", {});
 
@@ -143,13 +142,13 @@ void Engine::OnUpdate(float deltaTime) {
 
     bool allowCameraControl = cameraControlEnabled && ShouldAllowCameraControl();
     inputControllerSystem->Update(
-        *ecsModule->GetECS(),
+        editorCam.camera,
+        editorCam.transform,
+        editorCam.orientation,
         *mm->GetModule<CoreModule>("Core")->GetInput(),
         deltaTime,
         allowCameraControl
     );
-
-    UpdateMainCamera();
 
     // if (audioSystem)
     //     audioSystem->Update(ecsModule->GetECS());
@@ -157,58 +156,50 @@ void Engine::OnUpdate(float deltaTime) {
     mm->UpdateAll(deltaTime);
 }
 
-void Engine::UpdateMainCamera() {
-    auto *ecs = ecsModule->GetECS();
-    entt::entity current = mainCameraEntity;
-
-    if (current == entt::null || !ecs->IsValid(current) || !ecs->HasComponent<CameraComponent>(current)) {
-        auto view = ecs->GetRegistry().view < CameraComponent > ();
-        if (!view.empty()) {
-            entt::entity found = entt::null;
-            for (auto entity: view) {
-                if (view.get<CameraComponent>(entity).isMainCamera) {
-                    found = entity;
-                    break;
-                }
-            }
-
-            if (found == entt::null) found = view.front();
-
-            SetMainCameraEntity(found);
-        } else {
-            SetMainCameraEntity(entt::null);
-        }
-    }
-}
-
 void Engine::OnRender() {
     auto *ecs = ecsModule->GetECS();
     auto *renderer = renderingModule->GetRenderer();
 
-    entt::entity camera = ecs->FindGameCamera();
-    if (camera == entt::null) {
-        Logger::Log(LogLevel::WARNING, "No game camera found!");
+    CameraComponent camera;
+    TransformComponent transform;
+    CameraOrientationComponent orientation;
+
+    if (sceneModule->GetSceneManager()->IsInPlayMode()) {
+        camera = ecs->GetComponent<CameraComponent>(gameCam);
+        transform = ecs->GetComponent<TransformComponent>(gameCam);
+        orientation = ecs->GetComponent<CameraOrientationComponent>(gameCam);
+    } else if (!sceneModule->GetSceneManager()->IsInPlayMode()) {
+        camera = editorCam.camera;
+        transform = editorCam.transform;
+        orientation = editorCam.orientation;
+    } else {
+        Logger::Log(LogLevel::CRITICAL, "No camera found");
         return;
     }
 
-    renderer->BeginFrame();
-    renderer->Render(
-        *ecs,
-        camera,
-        mm->GetModule<CoreModule>("Core")->GetWindow()->GetWidth(),
-        mm->GetModule<CoreModule>("Core")->GetWindow()->GetHeight()
-    );
-    renderer->EndFrame();
+    Framebuffer* sceneFB = uiModule->GetDebugOverlay()->GetFramebuffer();
+    ImVec2 sceneViewportSize = uiModule->GetDebugOverlay()->GetViewportSize();
+    if (sceneViewportSize.x <= 0 || sceneViewportSize.y <= 0)
+    {
+        Logger::Log(LogLevel::WARNING, "Invalid scene viewport size, skipping render");
+    }
+    else
+    {
+        sceneFB->Bind();
 
-    if (showUI) {
-        auto &transform = ecs->GetComponent<TransformComponent>(camera);
-        auto &orientation = ecs->GetComponent<CameraOrientationComponent>(camera);
-        auto &camComp = ecs->GetComponent<CameraComponent>(camera);
+        renderer->BeginFrame();
+        renderer->Render(
+            editorCam.camera,
+            editorCam.transform,
+            editorCam.orientation,
+            sceneViewportSize.x,
+            sceneViewportSize.y
+        );
+        renderer->EndFrame();
 
         glm::mat4 view = orientation.GetViewMatrix(transform.position);
-        glm::mat4 projection = camComp.GetProjectionMatrix(
-            (float) mm->GetModule<CoreModule>("Core")->GetWindow()->GetWidth() /
-            (float) mm->GetModule<CoreModule>("Core")->GetWindow()->GetHeight()
+        glm::mat4 projection = camera.GetProjectionMatrix(
+        sceneViewportSize.x / sceneViewportSize.y
         );
 
         physicsDebugSystem->Update(
@@ -223,17 +214,16 @@ void Engine::OnRender() {
             *ecs,
             *resourceModule->GetShaderManager(),
             "icon",
-            ecs->GetComponent<CameraOrientationComponent>(camera).GetViewMatrix(
-                ecs->GetComponent<TransformComponent>(camera).position),
-            ecs->GetComponent<CameraComponent>(camera).GetProjectionMatrix(
-                (float) mm->GetModule<CoreModule>("Core")->GetWindow()->GetWidth() /
-                (float) mm->GetModule<CoreModule>("Core")->GetWindow()->GetHeight())
+            orientation.GetViewMatrix(transform.position),
+            projection
         );
 
-        uiModule->GetImGuiManager()->BeginFrame();
-        uiModule->RenderUI();
-        uiModule->GetImGuiManager()->EndFrame();
+        sceneFB->Unbind();
     }
+
+    uiModule->GetImGuiManager()->BeginFrame(cameraControlEnabled);
+    uiModule->RenderUI(editorCam);
+    uiModule->GetImGuiManager()->EndFrame();
 }
 
 void Engine::OnShutdown() {
@@ -254,10 +244,6 @@ bool Engine::ShouldAllowCameraControl() const {
         return !sceneModule->GetSceneManager()->IsInPlayMode();
 
     return true;
-}
-
-void Engine::SetMainCameraEntity(entt::entity newMainCameraEntity) {
-    mainCameraEntity = newMainCameraEntity;
 }
 
 Engine::Engine(int w, int h, const std::string &title)

@@ -7,24 +7,16 @@ RenderPipeline::RenderPipeline(const std::string &n, GLContext *ctx, ShaderManag
     Logger::Log(LogLevel::DEBUG, "RenderPipeline '" + name + "' constructed");
 }
 
-void RenderPipeline::Execute(ECSWorld &ecs, entt::entity cameraEntity, int width, int height) {
-    if (ecs.HasComponent<CameraComponent>(cameraEntity) &&
-        ecs.HasComponent<TransformComponent>(cameraEntity) &&
-        ecs.HasComponent<CameraOrientationComponent>(cameraEntity)) {
-        auto &camera = ecs.GetComponent<CameraComponent>(cameraEntity);
-        auto &transform = ecs.GetComponent<TransformComponent>(cameraEntity);
-        auto &orientation = ecs.GetComponent<CameraOrientationComponent>(cameraEntity);
+void RenderPipeline::Execute(CameraComponent &camera, TransformComponent &transform,
+    CameraOrientationComponent &orientation, int width, int height) {
 
-        float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
-        glm::mat4 projection = camera.GetProjectionMatrix(aspectRatio);
-        glm::mat4 view = orientation.GetViewMatrix(transform.position);
+    float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+    glm::mat4 projection = camera.GetProjectionMatrix(aspectRatio);
+    glm::mat4 view = orientation.GetViewMatrix(transform.position);
 
-        for (auto &pass: passes)
-            if (pass && pass->IsEnabled())
-                pass->Execute(view, projection);
-    } else {
-        return;
-    }
+    for (auto &pass: passes)
+        if (pass && pass->IsEnabled())
+            pass->Execute(view, projection);
 }
 
 void RenderPipeline::AddPass(std::unique_ptr<RenderPass> pass) {

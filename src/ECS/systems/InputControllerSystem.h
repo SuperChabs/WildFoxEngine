@@ -10,7 +10,8 @@
 
 class InputControllerSystem {
 public:
-    void Update(ECSWorld &world, Input &input, float deltaTime, bool isEnabled);
+    void Update(CameraComponent &camera, TransformComponent &trans,
+    CameraOrientationComponent &orientation, Input &input, float deltaTime, bool isEnabled);
 
 private:
     void ProcessKeyboard(Input &input, TransformComponent &transform,

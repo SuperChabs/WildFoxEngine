@@ -63,7 +63,7 @@ public:
 
     void ClearParent(entt::entity child);
 
-    entt::entity CreateCamera(const std::string &name = "Camera", bool setAsMain = false, bool isGameCamera = false);
+    entt::entity CreateCamera(const std::string &name = "Camera", bool setAsMain = false);
 
     entt::entity FindEditorCamera();
 
@@ -76,7 +76,6 @@ public:
     std::unordered_set<entt::entity> GetChildren(entt::entity entity);
 
     entt::registry &GetRegistry();
-
 
     size_t GetEntityCount() const;
 

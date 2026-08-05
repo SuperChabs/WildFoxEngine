@@ -64,10 +64,10 @@ void Renderer::BeginFrame() {
     context->Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Renderer::Render(ECSWorld &ecs, entt::entity cameraEntity,
-                      int width, int height) {
+void Renderer::Render(CameraComponent &camera, TransformComponent &transform,
+    CameraOrientationComponent &orientation, int width, int height) {
     if (!initialized || !pipeline) return;
-    pipeline->Execute(ecs, cameraEntity, width, height);
+    pipeline->Execute(camera, transform, orientation, width, height);
 }
 
 void Renderer::EndFrame() {
@@ -170,11 +170,11 @@ void Renderer::ApplySettings() {
 }
 
 void Renderer::LogStats() const {
-//     Logger::Log(LogLevel::DEBUG,
-//                 "FPS: " + std::to_string(static_cast<int>(stats.fps)) +
-//                 " | Frame: " + std::to_string(stats.frameTime) + "ms" +
-//                 " | Draws: " + std::to_string(stats.drawCalls) +
-//                 " | Tris: " + std::to_string(stats.triangleCount));
+     Logger::Log(LogLevel::DEBUG,
+                 "FPS: " + std::to_string(static_cast<int>(stats.fps)) +
+                 " | Frame: " + std::to_string(stats.frameTime) + "ms" +
+                 " | Draws: " + std::to_string(stats.drawCalls) +
+                 " | Tris: " + std::to_string(stats.triangleCount));
 }
 
 void Renderer::RegisterRenderCommands() {

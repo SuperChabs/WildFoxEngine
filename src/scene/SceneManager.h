@@ -34,9 +34,9 @@ public:
     void ResumeScripts();
 
     bool IsInPlayMode();
-    bool IsInDebugMode();
 
     void SetCurrentScenePath(const std::string& path) { m_currentScenePath = path; }
+    void SetPlayMode(bool playMode) { m_IsPlayMode = playMode; }
 
     std::string GetCurrentScenePath() { return m_currentScenePath; }
 

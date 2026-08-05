@@ -44,29 +44,19 @@ void ForwardPipeline::Initialize() {
                 std::to_string(GetPassCount()) + " passes");
 }
 
-void ForwardPipeline::Execute(ECSWorld &ecs, entt::entity cameraEntity,
-                              int width, int height) {
-    if (!ecs.HasComponent<CameraComponent>(cameraEntity) ||
-        !ecs.HasComponent<TransformComponent>(cameraEntity) ||
-        !ecs.HasComponent<CameraOrientationComponent>(cameraEntity))
-        return;
-
-    auto &camera = ecs.GetComponent<CameraComponent>(cameraEntity);
-    auto &transform = ecs.GetComponent<TransformComponent>(cameraEntity);
-    auto &orientation = ecs.GetComponent<CameraOrientationComponent>(cameraEntity);
-
+void ForwardPipeline::Execute(CameraComponent &camera, TransformComponent &transform,
+        CameraOrientationComponent &orientation, int width, int height) {
     float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
     glm::mat4 projection = camera.GetProjectionMatrix(aspectRatio);
     glm::mat4 view = orientation.GetViewMatrix(transform.position);
 
-    if (m_ShadowPassPtr &&m_ShadowPassPtr
-    
-    ->
-    IsEnabled()
-    )
-    {
+    GLint prevFBO = 0;
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &prevFBO);
+
+    if (m_ShadowPassPtr &&m_ShadowPassPtr->IsEnabled()) {
         m_ShadowPassPtr->Execute(view, projection);
 
+        glBindFramebuffer(GL_FRAMEBUFFER, prevFBO);
         glViewport(0, 0, width, height);
 
         m_GeometryPassPtr->SetShadowData(

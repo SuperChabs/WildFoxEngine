@@ -157,10 +157,6 @@ bool SceneManager::IsInPlayMode() {
     return m_IsPlayMode;
 }
 
-bool SceneManager::IsInDebugMode() {
-    return m_IsDebugPaused;
-}
-
 void SceneManager::RegisterSceneCommands() {
     CommandManager::RegisterCommand("onPlayGame",
                                     [this](const CommandArgs &) {

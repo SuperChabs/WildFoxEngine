@@ -400,12 +400,10 @@ unsigned int TextureFromFile(const char *path, const std::string &directory, con
 
     if (data) {
         GLenum format = GL_RGB;
-        if (nrComponents == 1)
-            format = GL_RED;
-        else if (nrComponents == 3)
-            format = GL_RGB;
-        else if (nrComponents == 4)
-            format = GL_RGBA;
+        if (nrComponents == 1)      format = GL_RED;
+        else if (nrComponents == 2) format = GL_RG;
+        else if (nrComponents == 3) format = GL_RGB;
+        else if (nrComponents == 4) format = GL_RGBA;
 
         glBindTexture(GL_TEXTURE_2D, textureID);
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
@@ -416,7 +414,8 @@ unsigned int TextureFromFile(const char *path, const std::string &directory, con
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        stbi_image_free(data);
+        if (freeData)
+            stbi_image_free(data);
 
         Logger::Log(LogLevel::INFO,
                     "Texture loaded successfully: " + filename +
@@ -424,7 +423,8 @@ unsigned int TextureFromFile(const char *path, const std::string &directory, con
                     ", " + std::to_string(nrComponents) + " channels)");
     } else {
         Logger::Log(LogLevel::ERROR, "Failed to load texture: " + filename);
-        stbi_image_free(data);
+        if (freeData)
+            stbi_image_free(data);
         return 0;
     }
 

@@ -118,3 +118,11 @@ very long time, im getting lazy
 ### v0.4.1
 ##### 30.07.2026
 -- minor update
+
+### v0.5
+##### 05.08.2026
+-- add Blender like ui
+-- some refactoring  
+-- add viewport window  
+-- add editor camera  
+-- some other changes

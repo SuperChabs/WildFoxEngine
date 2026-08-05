@@ -42,6 +42,9 @@ void Framebuffer::Invalidate() {
         0
     );
 
+    GLenum drawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
+    glDrawBuffers(1, drawBuffers);
+
     // Depth + stencil
     glGenRenderbuffers(1, &RBO);
     glBindRenderbuffer(GL_RENDERBUFFER, RBO);

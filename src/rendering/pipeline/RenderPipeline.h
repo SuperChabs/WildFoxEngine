@@ -26,7 +26,8 @@ public:
 
     virtual void Initialize() = 0;
 
-    virtual void Execute(ECSWorld &ecs, entt::entity cameraEntity, int width, int height);
+    virtual void Execute(CameraComponent &camera, TransformComponent &transform,
+        CameraOrientationComponent &orientation, int width, int height);
 
     void AddPass(std::unique_ptr<RenderPass> pass);
 

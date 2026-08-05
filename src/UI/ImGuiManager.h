@@ -18,10 +18,10 @@ public:
     bool Initialize(GLFWwindow *window);
     void Shutdown();
 
-    void BeginFrame();
+    void BeginFrame(bool cameraControl);
     void EndFrame();
 
-    void SetupImGuiAmberYellowStyle();
+    void RedFoxTheme();
 
     [[nodiscard]]
     bool IsInitialized() const;
