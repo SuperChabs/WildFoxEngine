@@ -12,7 +12,7 @@ ECSWorld::~ECSWorld() {
 }
 
 entt::entity ECSWorld::CreateEntity(const std::string &name) {
-    auto entity = registry.create();
+    const auto entity = registry.create();
 
     registry.emplace<IDComponent>(entity, nextID++);
     registry.emplace<TagComponent>(entity, name);
@@ -42,12 +42,24 @@ void ECSWorld::DestroyEntity(entt::entity entity) {
         registry.destroy(entity);
 }
 
-bool ECSWorld::IsValid(entt::entity entity) const {
+bool ECSWorld::IsValid(const entt::entity entity) const {
     return registry.valid(entity);
 }
 
 void ECSWorld::Clear() {
-    registry.clear();
+    std::vector<entt::entity> entities;
+
+    for (auto entity : registry.view<IDComponent>())
+    {
+        if (HasComponent<CameraComponent>(entity))
+            continue;
+
+        entities.push_back(entity);
+    }
+
+    for (auto entity : entities)
+        DestroyEntity(entity);
+
     nextID = 1;
 }
 
@@ -71,15 +83,15 @@ entt::entity ECSWorld::GetParent(entt::entity entity) {
 
 glm::mat4 ECSWorld::GetGlobalTransform(entt::entity entity, int depth) {
     if (!IsValid(entity) || !HasComponent<TransformComponent>(entity))
-        return glm::mat4(1.0f);
+        return {1.0f};
 
     if (depth > 64) {
         Logger::Log(LogLevel::ERROR, "Hierarchy cycle detected!");
-        return glm::mat4(1.0f);
+        return {1.0f};
     }
 
-    auto &transform = GetComponent<TransformComponent>(entity);
-    glm::mat4 localTransform = transform.GetModelMatrix();
+    const auto &transform = GetComponent<TransformComponent>(entity);
+    const glm::mat4 localTransform = transform.GetModelMatrix();
 
     if (HasComponent<HierarchyComponent>(entity)) {
         auto &hierarchy = GetComponent<HierarchyComponent>(entity);
@@ -90,7 +102,7 @@ glm::mat4 ECSWorld::GetGlobalTransform(entt::entity entity, int depth) {
     return localTransform;
 }
 
-void ECSWorld::SetParent(entt::entity child, entt::entity parent) {
+void ECSWorld::SetParent(const entt::entity child, const entt::entity parent) {
     if (!IsValid(child) || !IsValid(parent))
         return;
 
@@ -118,9 +130,7 @@ void ECSWorld::ClearParent(entt::entity child) {
     if (!IsValid(child) || !HasComponent<HierarchyComponent>(child))
         return;
 
-    auto &childHierarchy = GetComponent<HierarchyComponent>(child);
-
-    if (childHierarchy.HasParent()) {
+    if (auto &childHierarchy = GetComponent<HierarchyComponent>(child); childHierarchy.HasParent()) {
         auto &parentHierarchy = GetComponent<HierarchyComponent>(childHierarchy.parent);
         parentHierarchy.RemoveChild(child);
         childHierarchy.parent = entt::null;
@@ -128,12 +138,13 @@ void ECSWorld::ClearParent(entt::entity child) {
 }
 
 entt::entity ECSWorld::CreateCamera(const std::string &name, bool setAsMain) {
-    auto entity = CreateEntity(name);
+    const auto entity = CreateEntity(name);
 
     AddComponent<TransformComponent>(entity, glm::vec3(0, 0, 3), glm::vec3(0), glm::vec3(1));
     AddComponent<CameraComponent>(entity);
     AddComponent<CameraOrientationComponent>(entity);
     AddComponent<VisibilityComponent>(entity, true);
+    AddComponent<IconComponent>(entity, "assets/textures/icons/camera.png", 0.3f);
 
     auto &camera = GetComponent<CameraComponent>(entity);
     camera.isMainCamera = setAsMain;
@@ -141,32 +152,6 @@ entt::entity ECSWorld::CreateCamera(const std::string &name, bool setAsMain) {
     Logger::Log(LogLevel::INFO, "Camera entity created: " + name);
     return entity;
 }
-
-entt::entity ECSWorld::FindEditorCamera() {
-    entt::entity result = entt::null;
-
-    Each<CameraComponent, CameraTypeComponent>(
-        [&](entt::entity entity, CameraComponent &cam, CameraTypeComponent &type) {
-            if (type.type == CameraTypeComponent::Type::EDITOR && cam.isActive)
-                result = entity;
-        });
-
-    return result;
-}
-
-entt::entity ECSWorld::FindGameCamera() {
-    entt::entity result = entt::null;
-
-    Each<CameraComponent, CameraTypeComponent>(
-        [&](entt::entity entity, CameraComponent &cam, CameraTypeComponent &type) {
-            if (type.type == CameraTypeComponent::Type::GAME && cam.isActive)
-                result = entity;
-        });
-
-    return result;
-}
-
-// --- split_headers: auto-generated ---
 
 entt::registry &ECSWorld::GetRegistry() {
     return registry;

@@ -126,3 +126,10 @@ very long time, im getting lazy
 -- add viewport window  
 -- add editor camera  
 -- some other changes
+
+### v0.5.1
+##### 21.08.2026
+-- add reflection for components  
+-- add gameViewportWindow  
+-- delete unused code  
+-- tiny changes and bug fixes

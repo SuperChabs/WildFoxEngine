@@ -21,17 +21,6 @@ void SceneManager::StartPlayMode() {
         return;
     }
 
-    entt::entity editorCam = m_ecs->FindEditorCamera();
-    if (editorCam != entt::null && m_ecs->IsValid(editorCam))
-    {
-        auto& transform = m_ecs->GetComponent<TransformComponent>(editorCam);
-        auto& orientation = m_ecs->GetComponent<CameraOrientationComponent>(editorCam);
-
-        m_SavedEditorCameraPos = transform.position;
-        m_SavedEditorCameraYaw = orientation.yaw;
-        m_SavedEditorCameraPitch = orientation.pitch;
-    }
-
     m_ecs->Each<ScriptComponent>([&](entt::entity e, ScriptComponent& script)
     {
         script.active = true;
@@ -55,17 +44,6 @@ void SceneManager::StopPlayMode() {
     {
         Logger::Log(LogLevel::ERROR, "ECSWorld is NULL!");
         return;
-    }
-
-    entt::entity editorCam = m_ecs->FindEditorCamera();
-    if (editorCam != entt::null && m_ecs->IsValid(editorCam))
-    {
-        auto& transform = m_ecs->GetComponent<TransformComponent>(editorCam);
-        auto& orientation = m_ecs->GetComponent<CameraOrientationComponent>(editorCam);
-
-        transform.position = m_SavedEditorCameraPos;
-        orientation.yaw = m_SavedEditorCameraYaw;
-        orientation.pitch = m_SavedEditorCameraPitch;
     }
 
     m_ecs->Each<ScriptComponent>([&](entt::entity e, ScriptComponent& script)
@@ -99,21 +77,6 @@ void SceneManager::StopPlayMode() {
 void SceneManager::PauseScripts() {
     if (!m_ecs || m_IsDebugPaused) return;
 
-    entt::entity gameCam = m_ecs->FindGameCamera();
-    if (gameCam != entt::null && m_ecs->IsValid(gameCam)
-        && m_ecs->HasComponent<TransformComponent>(gameCam)
-        && m_ecs->HasComponent<CameraOrientationComponent>(gameCam)) {
-        auto &transform = m_ecs->GetComponent<TransformComponent>(gameCam);
-        auto &orientation = m_ecs->GetComponent<CameraOrientationComponent>(gameCam);
-
-        m_SavedDebugCameraPos = transform.position;
-        m_SavedDebugCameraYaw = orientation.yaw;
-        m_SavedDebugCameraPitch = orientation.pitch;
-        m_HasSavedDebugCamera = true;
-
-        Logger::Log(LogLevel::INFO, "SceneManager: Camera state saved for debug pause");
-    }
-
     m_ecs->Each<ScriptComponent>([](entt::entity, ScriptComponent &script) {
         script.active = false;
     });
@@ -125,23 +88,6 @@ void SceneManager::PauseScripts() {
 
 void SceneManager::ResumeScripts() {
     if (!m_ecs || !m_IsDebugPaused) return;
-
-    if (m_HasSavedDebugCamera) {
-        entt::entity gameCam = m_ecs->FindGameCamera();
-        if (gameCam != entt::null && m_ecs->IsValid(gameCam)
-            && m_ecs->HasComponent<TransformComponent>(gameCam)
-            && m_ecs->HasComponent<CameraOrientationComponent>(gameCam)) {
-            auto &transform = m_ecs->GetComponent<TransformComponent>(gameCam);
-            auto &orientation = m_ecs->GetComponent<CameraOrientationComponent>(gameCam);
-
-            transform.position = m_SavedDebugCameraPos;
-            orientation.yaw = m_SavedDebugCameraYaw;
-            orientation.pitch = m_SavedDebugCameraPitch;
-
-            Logger::Log(LogLevel::INFO, "SceneManager: Camera state restored after debug pause");
-        }
-        m_HasSavedDebugCamera = false;
-    }
 
     m_ecs->Each<ScriptComponent>([](entt::entity, ScriptComponent &script) {
         if (!script.failed)

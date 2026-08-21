@@ -2,14 +2,14 @@
 
 #include <string>
 #include <cstdint>
+#include <utility>
 
 struct TagComponent {
     std::string name;
 
     TagComponent() = default;
 
-    TagComponent(const std::string &n) : name(n) {
-    }
+    explicit TagComponent(std::string n) : name(std::move(n)) {}
 };
 
 struct IDComponent {
@@ -17,19 +17,7 @@ struct IDComponent {
 
     IDComponent() = default;
 
-    IDComponent(uint64_t i) : id(i) {
-    }
-};
-
-struct CameraTypeComponent {
-    enum class Type { EDITOR, GAME };
-
-    Type type = Type::EDITOR;
-
-    CameraTypeComponent() = default;
-
-    CameraTypeComponent(Type t) : type(t) {
-    }
+    explicit IDComponent(const uint64_t i) : id(i) {}
 };
 
 struct ModelComponent {
@@ -37,6 +25,5 @@ struct ModelComponent {
 
     ModelComponent() = default;
 
-    ModelComponent(const std::string &path) : filePath(path) {
-    }
+    explicit ModelComponent(std::string path) : filePath(std::move(path)) {}
 };

@@ -73,15 +73,6 @@ bool SceneSerializer::LoadScene(const std::string &filename,
     Logger::Log(LogLevel::INFO,
                 "Scene loaded: " + filename + " (" + std::to_string(loadedCount) + " entities)");
 
-    world->Each<CameraComponent>([&](entt::entity e, CameraComponent &cam) {
-        if (!world->HasComponent<CameraTypeComponent>(e)) {
-            auto type = cam.isMainCamera
-                ? CameraTypeComponent::Type::GAME
-                : CameraTypeComponent::Type::EDITOR;
-            world->AddComponent<CameraTypeComponent>(e, type);
-        }
-    });
-
     return true;
 }
 

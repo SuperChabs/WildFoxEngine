@@ -1,14 +1,12 @@
 #pragma once
 
 #include <string>
-#include <type_traits>
 #include <unordered_set>
 #include <entt/entt.hpp>
 #include <glm/glm.hpp>
 
 
 class ECSWorld {
-private:
     entt::registry registry;
     uint64_t nextID = 1;
 
@@ -37,7 +35,7 @@ public:
     }
 
     template<typename T>
-    bool HasComponent(entt::entity entity) const {
+    [[nodiscard]] bool HasComponent(entt::entity entity) const {
         return registry.all_of<T>(entity);
     }
 
@@ -65,10 +63,6 @@ public:
 
     entt::entity CreateCamera(const std::string &name = "Camera", bool setAsMain = false);
 
-    entt::entity FindEditorCamera();
-
-    entt::entity FindGameCamera();
-
     glm::mat4 GetGlobalTransform(entt::entity entity, int depth = 0);
 
     entt::entity GetParent(entt::entity entity);
@@ -77,7 +71,7 @@ public:
 
     entt::registry &GetRegistry();
 
-    size_t GetEntityCount() const;
+    [[nodiscard]] size_t GetEntityCount() const;
 
-    bool IsValid(entt::entity entity) const;
+    [[nodiscard]] bool IsValid(entt::entity entity) const;
 };

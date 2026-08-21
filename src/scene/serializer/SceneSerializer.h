@@ -10,7 +10,6 @@
 #include "scene/Light.h"
 #include "resource/material/MaterialManager.h"
 #include "resource/texture/TextureManager.h"
-#include "rendering/primitive/PrimitivesFactory.h"
 #include "scene/Mesh.h"
 #include "UI/ImGuiManager.h"
 #include "resource/model/ModelManager.h"

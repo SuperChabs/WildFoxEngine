@@ -24,7 +24,8 @@
 #include "UI/panels/RigidBodyPanel.h"
 #include "UI/panels/ColliderPanel.h"
 
-#include "UI/windows/ViewportWindow.h"
+#include "UI/windows/EditViewportWindow.h"
+#include "UI/windows/GameViewportWindow.h"
 
 class DebugOverlay {
     entt::entity m_selected = entt::null;
@@ -48,9 +49,11 @@ class DebugOverlay {
     RigidBodyPanel rigidPanel;
     ColliderPanel colliderPanel;
 
-    ViewportWindow viewportWindow;
+    EditViewportWindow editorViewportWindow;
+    GameViewportWindow gameViewportWindow;
 
-    std::unique_ptr<Framebuffer> sceneFramebuffer;
+    std::unique_ptr<Framebuffer> editorFramebuffer;
+    std::unique_ptr<Framebuffer> gameFramebuffer;
 
     std::vector<std::string> m_availableScenes;
     std::vector<std::string> m_availableObjects;
@@ -67,15 +70,24 @@ public:
 
     void Render(ECSWorld *ecs, MaterialManager *materialManager, SceneSerializer *ss, EditorCamera &editorCamera);
 
-    ImVec2 GetViewportSize() const { return viewportWindow.GetViewportSize(); }
-    ImVec2 GetVieportPose()  const { return viewportWindow.GetViewportPos(); }
-    bool IsViewportHovered() const { return viewportWindow.IsHovered(); }
-    bool IsViewportFocused() const { return viewportWindow.IsFocused(); }
+    [[nodiscard]] ImVec2 GetEditorViewportSize() const { return editorViewportWindow.GetViewportSize(); }
+    [[nodiscard]] ImVec2 GetEditorViewportPose() const { return editorViewportWindow.GetViewportPos(); }
+    [[nodiscard]] bool IsEditorViewportHovered() const { return editorViewportWindow.IsHovered(); }
+    [[nodiscard]] bool IsEditorViewportFocused() const { return editorViewportWindow.IsFocused(); }
 
-    Framebuffer* GetFramebuffer() const { return sceneFramebuffer.get(); }
+    [[nodiscard]] ImVec2 GetGameViewportSize() const { return gameViewportWindow.GetViewportSize(); }
+    [[nodiscard]] ImVec2 GetGameViewportPos()  const { return gameViewportWindow.GetViewportPos(); }
+    [[nodiscard]] bool IsGameViewportHovered() const { return gameViewportWindow.IsHovered(); }
+    [[nodiscard]] bool IsGameViewportFocused() const { return gameViewportWindow.IsFocused(); }
+
+    [[nodiscard]] Framebuffer* GetEditorFramebuffer() const { return editorFramebuffer.get(); }
+    [[nodiscard]] Framebuffer* GetGameFramebuffer()   const { return gameFramebuffer.get(); }
+
+    [[nodiscard]] EditViewportWindow* GetEditViewportWindow() { return &editorViewportWindow; }
+    [[nodiscard]] GameViewportWindow* GetGameViewportWindow() { return &gameViewportWindow; }
 
 private:
-    void RenderSceneTab(ECSWorld *ecs, SceneSerializer *ss);
+    void RenderSceneTab(SceneSerializer *ss);
     void RenderHierarchyTab(ECSWorld *ecs);
     void RenderEntityNode(entt::entity e, ECSWorld *ecs, entt::entity &toDelete);
     void RenderInspectorTab(ECSWorld *ecs, MaterialManager *materialManager);

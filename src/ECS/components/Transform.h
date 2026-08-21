@@ -20,15 +20,15 @@ struct TransformComponent {
         : position(pos), rotation(rot), scale(scl) {
     }
 
-    glm::mat4 GetModelMatrix() const {
-        glm::mat4 model = glm::mat4(1.0f);
+    [[nodiscard]] glm::mat4 GetModelMatrix() const {
+        auto model = glm::mat4(1.0f);
         model = glm::translate(model, position);
         model *= glm::mat4_cast(rotation);
         model = glm::scale(model, scale);
         return model;
     }
 
-    glm::vec3 GetEulerDegrees() const {
+    [[nodiscard]] glm::vec3 GetEulerDegrees() const {
         return glm::degrees(glm::eulerAngles(rotation));
     }
 };

@@ -16,7 +16,7 @@ struct CameraComponent {
 
     CameraComponent() = default;
 
-    glm::mat4 GetProjectionMatrix(float aspectRatio) const {
+    [[nodiscard]] glm::mat4 GetProjectionMatrix(const float aspectRatio) const {
         return glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
     }
 };
@@ -27,7 +27,7 @@ struct CameraOrientationComponent {
 
     CameraOrientationComponent() = default;
 
-    glm::vec3 GetFront() const {
+    [[nodiscard]] glm::vec3 GetFront() const {
         glm::vec3 front;
         front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
         front.y = sin(glm::radians(pitch));
@@ -35,19 +35,19 @@ struct CameraOrientationComponent {
         return glm::normalize(front);
     }
 
-    glm::vec3 GetRight() const {
-        glm::vec3 front = GetFront();
+    [[nodiscard]] glm::vec3 GetRight() const {
+        const glm::vec3 front = GetFront();
         return glm::normalize(glm::cross(front, glm::vec3(0, 1, 0)));
     }
 
-    glm::vec3 GetUp() const {
-        glm::vec3 front = GetFront();
-        glm::vec3 right = GetRight();
+    [[nodiscard]] glm::vec3 GetUp() const {
+        const glm::vec3 front = GetFront();
+        const glm::vec3 right = GetRight();
         return glm::normalize(glm::cross(right, front));
     }
 
-    glm::mat4 GetViewMatrix(const glm::vec3 &position) const {
-        glm::vec3 front = GetFront();
+    [[nodiscard]] glm::mat4 GetViewMatrix(const glm::vec3 &position) const {
+        const glm::vec3 front = GetFront();
         return glm::lookAt(position, position + front, GetUp());
     }
 };

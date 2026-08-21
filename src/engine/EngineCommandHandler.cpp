@@ -48,95 +48,95 @@ void EditorCommandHandler::RegisterObjectCommands() {
         });
 
     CommandManager::RegisterCommand("onCreateCube",
-                                    [this](const CommandArgs &) {
-                                        auto entity = m_resModule->GetModelManager()->LoadWithECS(
-                                            "assets/objects/shapes/cube/cube.obj",
-                                            m_ecsModule->GetECS(), true);
+        [this](const CommandArgs &) {
+            auto entity = m_resModule->GetModelManager()->LoadWithECS(
+                "assets/objects/shapes/cube/cube.obj",
+                m_ecsModule->GetECS(), true);
 
-                                        Logger::Log(LogLevel::INFO, "Cube entity created");
-                                    });
+            Logger::Log(LogLevel::INFO, "Cube entity created");
+        });
 
     CommandManager::RegisterCommand("onCreateSphere",
-                                    [this](const CommandArgs &) {
-                                        auto entity = m_resModule->GetModelManager()->LoadWithECS(
-                                            "assets/objects/shapes/sphere/sphere.obj",
-                                            m_ecsModule->GetECS(), true);
+        [this](const CommandArgs &) {
+            auto entity = m_resModule->GetModelManager()->LoadWithECS(
+                "assets/objects/shapes/sphere/sphere.obj",
+                m_ecsModule->GetECS(), true);
 
-                                        Logger::Log(LogLevel::INFO, "Cube entity created");
-                                    });
+            Logger::Log(LogLevel::INFO, "Cube entity created");
+        });
 
     CommandManager::RegisterCommand("onCreatePlane",
-                                    [this](const CommandArgs &) {
-                                        auto entity = m_resModule->GetModelManager()->LoadWithECS(
-                                            "assets/objects/shapes/plane/plane.obj",
-                                            m_ecsModule->GetECS(), true);
+        [this](const CommandArgs &) {
+            auto entity = m_resModule->GetModelManager()->LoadWithECS(
+                "assets/objects/shapes/plane/plane.obj",
+                m_ecsModule->GetECS(), true);
 
-                                        Logger::Log(LogLevel::INFO, "Plane entity created");
-                                    });
+            Logger::Log(LogLevel::INFO, "Plane entity created");
+        });
 
     CommandManager::RegisterCommand("onCreateCone",
-                                    [this](const CommandArgs &) {
-                                        auto entity = m_resModule->GetModelManager()->LoadWithECS(
-                                            "assets/objects/shapes/cone/cone.obj",
-                                            m_ecsModule->GetECS(), true);
+        [this](const CommandArgs &) {
+            auto entity = m_resModule->GetModelManager()->LoadWithECS(
+                "assets/objects/shapes/cone/cone.obj",
+                m_ecsModule->GetECS(), true);
 
-                                        Logger::Log(LogLevel::INFO, "Cone entity created");
-                                    });
+            Logger::Log(LogLevel::INFO, "Cone entity created");
+        });
 
     CommandManager::RegisterCommand("onCreateCylinder",
-                                    [this](const CommandArgs &) {
-                                        auto entity = m_resModule->GetModelManager()->LoadWithECS(
-                                            "assets/objects/shapes/cylinder/cylinder.obj",
-                                            m_ecsModule->GetECS(), true);
+        [this](const CommandArgs &) {
+            auto entity = m_resModule->GetModelManager()->LoadWithECS(
+                "assets/objects/shapes/cylinder/cylinder.obj",
+                m_ecsModule->GetECS(), true);
 
-                                        Logger::Log(LogLevel::INFO, "Cylinder entity created");
-                                    });
+            Logger::Log(LogLevel::INFO, "Cylinder entity created");
+        });
 
     CommandManager::RegisterCommand("onCreateTorus",
-                                    [this](const CommandArgs &) {
-                                        auto entity = m_resModule->GetModelManager()->LoadWithECS(
-                                            "assets/objects/shapes/torus/torus.obj",
-                                            m_ecsModule->GetECS(), true);
+        [this](const CommandArgs &) {
+            auto entity = m_resModule->GetModelManager()->LoadWithECS(
+                "assets/objects/shapes/torus/torus.obj",
+                m_ecsModule->GetECS(), true);
 
-                                        Logger::Log(LogLevel::INFO, "Torus entity created");
-                                    });
+            Logger::Log(LogLevel::INFO, "Torus entity created");
+        });
 
     CommandManager::RegisterCommand("onLoadModel",
-                                    [this](const CommandArgs &args) {
-                                        Logger::Log(LogLevel::INFO, "=== onLoadModel command called ===");
+        [this](const CommandArgs &args) {
+            Logger::Log(LogLevel::INFO, "=== onLoadModel command called ===");
 
-                                        if (args.empty()) {
-                                            Logger::Log(LogLevel::ERROR, "onLoadModel requires filepath argument");
-                                            return;
-                                        }
+            if (args.empty()) {
+                Logger::Log(LogLevel::ERROR, "onLoadModel requires filepath argument");
+                return;
+            }
 
-                                        std::string filepath = std::get<std::string>(args[0]);
-                                        Logger::Log(LogLevel::INFO, "Filepath: " + filepath);
+            std::string filepath = std::get<std::string>(args[0]);
+            Logger::Log(LogLevel::INFO, "Filepath: " + filepath);
 
-                                        if (!m_resModule->GetModelManager()) {
-                                            Logger::Log(LogLevel::ERROR, "ModelManager is NULL!");
-                                            return;
-                                        }
+            if (!m_resModule->GetModelManager()) {
+                Logger::Log(LogLevel::ERROR, "ModelManager is NULL!");
+                return;
+            }
 
-                                        if (!m_ecsModule->GetECS()) {
-                                            Logger::Log(LogLevel::ERROR, "ECSWorld is NULL!");
-                                            return;
-                                        }
+            if (!m_ecsModule->GetECS()) {
+                Logger::Log(LogLevel::ERROR, "ECSWorld is NULL!");
+                return;
+            }
 
-                                        Logger::Log(LogLevel::INFO, "Calling LoadWithECS...");
-                                        auto entity = m_resModule->GetModelManager()->LoadWithECS(
-                                            filepath, m_ecsModule->GetECS());
+            Logger::Log(LogLevel::INFO, "Calling LoadWithECS...");
+            auto entity = m_resModule->GetModelManager()->LoadWithECS(
+                filepath, m_ecsModule->GetECS());
 
-                                        if (entity == entt::null) {
-                                            Logger::Log(LogLevel::ERROR, "Failed to load model: " + filepath);
-                                            return;
-                                        }
+            if (entity == entt::null) {
+                Logger::Log(LogLevel::ERROR, "Failed to load model: " + filepath);
+                return;
+            }
 
-                                        Logger::Log(LogLevel::INFO,
-                                                    "Total entities in world: " + std::to_string(
-                                                        m_ecsModule->GetECS()->GetEntityCount()));
-                                        Logger::Log(LogLevel::INFO, "=== onLoadModel command complete ===\n");
-                                    });
+            Logger::Log(LogLevel::INFO,
+                        "Total entities in world: " + std::to_string(
+                            m_ecsModule->GetECS()->GetEntityCount()));
+            Logger::Log(LogLevel::INFO, "=== onLoadModel command complete ===\n");
+        });
 
     CommandManager::RegisterCommand("onCreateCamera", [this](const CommandArgs &) {
         auto *ecs = m_ecsModule->GetECS();
@@ -154,43 +154,43 @@ void EditorCommandHandler::RegisterObjectCommands() {
 
 void EditorCommandHandler::RegisterLightCommands() {
     CommandManager::RegisterCommand("onCreateDirectionalLight",
-                                    [this](const CommandArgs &) {
-                                        auto entity = m_ecsModule->GetECS()->CreateEntity("Directional Light");
-                                        m_ecsModule->GetECS()->AddComponent<TransformComponent>(entity,
-                                            glm::vec3(0, 10, 0), glm::vec3(45, 0, 0), glm::vec3(1));
-                                        m_ecsModule->GetECS()->AddComponent<LightComponent>(
-                                            entity, LightType::DIRECTIONAL);
-                                        m_ecsModule->GetECS()->AddComponent<VisibilityComponent>(entity, true);
-                                        m_ecsModule->GetECS()->AddComponent<IconComponent>(entity,
-                                            "assets/textures/icons/light_directional.png", 0.3f);
-                                        Logger::Log(LogLevel::INFO, "Directional light created with icon");
-                                    });
+        [this](const CommandArgs &) {
+            auto entity = m_ecsModule->GetECS()->CreateEntity("Directional Light");
+            m_ecsModule->GetECS()->AddComponent<TransformComponent>(entity,
+                glm::vec3(0, 10, 0), glm::vec3(45, 0, 0), glm::vec3(1));
+            m_ecsModule->GetECS()->AddComponent<LightComponent>(
+                entity, LightType::DIRECTIONAL);
+            m_ecsModule->GetECS()->AddComponent<VisibilityComponent>(entity, true);
+            m_ecsModule->GetECS()->AddComponent<IconComponent>(entity,
+                "assets/textures/icons/light_directional.png", 0.3f);
+            Logger::Log(LogLevel::INFO, "Directional light created with icon");
+        });
 
     CommandManager::RegisterCommand("onCreatePointLight",
-                                    [this](const CommandArgs &) {
-                                        auto entity = m_ecsModule->GetECS()->CreateEntity("Point Light");
-                                        m_ecsModule->GetECS()->AddComponent<TransformComponent>(entity,
-                                            glm::vec3(0, 5, 0), glm::vec3(0), glm::vec3(1));
-                                        m_ecsModule->GetECS()->AddComponent<LightComponent>(
-                                            entity, LightType::POINT);
-                                        m_ecsModule->GetECS()->AddComponent<VisibilityComponent>(entity, true);
-                                        m_ecsModule->GetECS()->AddComponent<IconComponent>(entity,
-                                            "assets/textures/icons/light_point.png", 0.4f);
-                                        Logger::Log(LogLevel::INFO, "Point light created with icon");
-                                    });
+        [this](const CommandArgs &) {
+            auto entity = m_ecsModule->GetECS()->CreateEntity("Point Light");
+            m_ecsModule->GetECS()->AddComponent<TransformComponent>(entity,
+                glm::vec3(0, 5, 0), glm::vec3(0), glm::vec3(1));
+            m_ecsModule->GetECS()->AddComponent<LightComponent>(
+                entity, LightType::POINT);
+            m_ecsModule->GetECS()->AddComponent<VisibilityComponent>(entity, true);
+            m_ecsModule->GetECS()->AddComponent<IconComponent>(entity,
+                "assets/textures/icons/light_point.png", 0.4f);
+            Logger::Log(LogLevel::INFO, "Point light created with icon");
+        });
 
     CommandManager::RegisterCommand("onCreateSpotLight",
-                                    [this](const CommandArgs &) {
-                                        auto entity = m_ecsModule->GetECS()->CreateEntity("Spot Light");
-                                        m_ecsModule->GetECS()->AddComponent<TransformComponent>(entity,
-                                            glm::vec3(0, 5, 0), glm::vec3(45, 0, 0), glm::vec3(1));
-                                        m_ecsModule->GetECS()->AddComponent<
-                                            LightComponent>(entity, LightType::SPOT);
-                                        m_ecsModule->GetECS()->AddComponent<VisibilityComponent>(entity, true);
-                                        m_ecsModule->GetECS()->AddComponent<IconComponent>(entity,
-                                            "assets/textures/icons/light_spot.png", 0.35f);
-                                        Logger::Log(LogLevel::INFO, "Spot light created with icon");
-                                    });
+        [this](const CommandArgs &) {
+            auto entity = m_ecsModule->GetECS()->CreateEntity("Spot Light");
+            m_ecsModule->GetECS()->AddComponent<TransformComponent>(entity,
+                glm::vec3(0, 5, 0), glm::vec3(45, 0, 0), glm::vec3(1));
+            m_ecsModule->GetECS()->AddComponent<
+                LightComponent>(entity, LightType::SPOT);
+            m_ecsModule->GetECS()->AddComponent<VisibilityComponent>(entity, true);
+            m_ecsModule->GetECS()->AddComponent<IconComponent>(entity,
+                "assets/textures/icons/light_spot.png", 0.35f);
+            Logger::Log(LogLevel::INFO, "Spot light created with icon");
+        });
 }
 
 void EditorCommandHandler::RegisterSceneCommands() {

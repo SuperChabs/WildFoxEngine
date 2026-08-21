@@ -160,31 +160,13 @@ void Engine::OnRender() {
     auto *ecs = ecsModule->GetECS();
     auto *renderer = renderingModule->GetRenderer();
 
-    CameraComponent camera;
-    TransformComponent transform;
-    CameraOrientationComponent orientation;
-
-    if (sceneModule->GetSceneManager()->IsInPlayMode()) {
-        camera = ecs->GetComponent<CameraComponent>(gameCam);
-        transform = ecs->GetComponent<TransformComponent>(gameCam);
-        orientation = ecs->GetComponent<CameraOrientationComponent>(gameCam);
-    } else if (!sceneModule->GetSceneManager()->IsInPlayMode()) {
-        camera = editorCam.camera;
-        transform = editorCam.transform;
-        orientation = editorCam.orientation;
-    } else {
-        Logger::Log(LogLevel::CRITICAL, "No camera found");
-        return;
-    }
-
-    Framebuffer* sceneFB = uiModule->GetDebugOverlay()->GetFramebuffer();
-    ImVec2 sceneViewportSize = uiModule->GetDebugOverlay()->GetViewportSize();
+    Framebuffer* sceneFB = uiModule->GetDebugOverlay()->GetEditorFramebuffer();
+    ImVec2 sceneViewportSize = uiModule->GetDebugOverlay()->GetEditorViewportSize();
     if (sceneViewportSize.x <= 0 || sceneViewportSize.y <= 0)
     {
         Logger::Log(LogLevel::WARNING, "Invalid scene viewport size, skipping render");
     }
-    else
-    {
+    else if (uiModule->GetDebugOverlay()->GetEditViewportWindow()->IsFocused()) {
         sceneFB->Bind();
 
         renderer->BeginFrame();
@@ -197,8 +179,8 @@ void Engine::OnRender() {
         );
         renderer->EndFrame();
 
-        glm::mat4 view = orientation.GetViewMatrix(transform.position);
-        glm::mat4 projection = camera.GetProjectionMatrix(
+        glm::mat4 view = editorCam.orientation.GetViewMatrix(editorCam.transform.position);
+        glm::mat4 projection = editorCam.camera.GetProjectionMatrix(
         sceneViewportSize.x / sceneViewportSize.y
         );
 
@@ -214,11 +196,32 @@ void Engine::OnRender() {
             *ecs,
             *resourceModule->GetShaderManager(),
             "icon",
-            orientation.GetViewMatrix(transform.position),
+            editorCam.orientation.GetViewMatrix(editorCam.transform.position),
             projection
         );
 
         sceneFB->Unbind();
+    }
+
+    Framebuffer* gameFB = uiModule->GetDebugOverlay()->GetGameFramebuffer();
+    ImVec2 gameViewportSize = uiModule->GetDebugOverlay()->GetGameViewportSize();
+    if (gameViewportSize.x <= 0 || gameViewportSize.y <= 0) {
+        Logger::Log(LogLevel::WARNING, "Invalid game viewport size, skipping render");
+    }
+    else {
+        gameFB->Bind();
+
+        renderer->BeginFrame();
+        renderer->Render(
+            ecs->GetComponent<CameraComponent>(gameCam),
+            ecs->GetComponent<TransformComponent>(gameCam),
+            ecs->GetComponent<CameraOrientationComponent>(gameCam),
+            gameViewportSize.x,
+            gameViewportSize.y
+        );
+        renderer->EndFrame();
+
+        gameFB->Unbind();
     }
 
     uiModule->GetImGuiManager()->BeginFrame(cameraControlEnabled);

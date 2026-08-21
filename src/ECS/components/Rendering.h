@@ -2,25 +2,18 @@
 
 #include <memory>
 #include <glm/glm.hpp>
+#include <utility>
 
 #include "scene/Mesh.h"
 #include "resource/material/Material.h"
-#include "rendering/primitive/PrimitivesFactory.h"
 
 struct MeshComponent {
     std::shared_ptr<Mesh> mesh;
-    PrimitiveType type;
 
     MeshComponent() = default;
 
-    MeshComponent(Mesh *m) : mesh(m) {
-    }
-
-    MeshComponent(Mesh *m, PrimitiveType t) : mesh(m), type(t) {
-    }
-
-    MeshComponent(std::shared_ptr<Mesh> m) : mesh(m) {
-    }
+    explicit MeshComponent(Mesh *m) : mesh(m) {}
+    explicit MeshComponent(std::shared_ptr<Mesh> m) : mesh(std::move(m)) {}
 };
 
 struct MaterialComponent {
@@ -29,8 +22,7 @@ struct MaterialComponent {
 
     MaterialComponent() = default;
 
-    MaterialComponent(std::shared_ptr<Material> mat) : material(mat) {
-    }
+    explicit MaterialComponent(std::shared_ptr<Material> mat) : material(std::move(mat)) {}
 };
 
 struct ColorComponent {
@@ -38,11 +30,9 @@ struct ColorComponent {
 
     ColorComponent() = default;
 
-    ColorComponent(const glm::vec3 &col) : color(col) {
-    }
+    explicit ColorComponent(const glm::vec3 &col) : color(col) {}
 
-    ColorComponent(float r, float g, float b) : color(r, g, b) {
-    }
+    ColorComponent(const float r, const float g, const float b) : color(r, g, b) {}
 };
 
 struct VisibilityComponent {
@@ -51,6 +41,5 @@ struct VisibilityComponent {
 
     VisibilityComponent() = default;
 
-    VisibilityComponent(bool active) : isActive(active) {
-    }
+    explicit VisibilityComponent(const bool active) : isActive(active) {}
 };

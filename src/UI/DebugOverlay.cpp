@@ -7,9 +7,11 @@
 #include "core/logging/Logger.h"
 
 namespace fs = std::filesystem;
+using namespace entt::literals;
 
 DebugOverlay::DebugOverlay() {
-    sceneFramebuffer = std::make_unique<Framebuffer>(1, 1);
+    editorFramebuffer = std::make_unique<Framebuffer>(1, 1);
+    gameFramebuffer   = std::make_unique<Framebuffer>(1, 1);
 }
 
 void DebugOverlay::Render(ECSWorld *ecs, MaterialManager *materialManager, SceneSerializer * ss, EditorCamera &editorCamera) {
@@ -42,7 +44,7 @@ void DebugOverlay::Render(ECSWorld *ecs, MaterialManager *materialManager, Scene
     ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
 
     if (ImGui::Begin("Scene"))
-        RenderSceneTab(ecs, ss);
+        RenderSceneTab(ss);
     ImGui::End();
 
     if (ImGui::Begin("Hierarchy"))
@@ -58,15 +60,17 @@ void DebugOverlay::Render(ECSWorld *ecs, MaterialManager *materialManager, Scene
         ImGui::EndMenuBar();
     }
 
-    viewportWindow.Render(*ecs, m_selected, sceneFramebuffer.get(), editorCamera.camera,
-        editorCamera.transform, editorCamera.orientation, 1);
+    editorViewportWindow.Render(*ecs, m_selected, editorFramebuffer.get(), editorCamera.camera,
+        editorCamera.transform, editorCamera.orientation);
+
+    gameViewportWindow.Render(gameFramebuffer.get());
 
     RenderOpenModelDialog();
 
     ImGui::End();
 }
 
-void DebugOverlay::RenderSceneTab(ECSWorld *ecs, SceneSerializer *ss) {
+void DebugOverlay::RenderSceneTab(SceneSerializer *ss) {
     if (!m_scenesLoaded)
         RefreshAvailableScenes(*ss);
 
@@ -359,6 +363,7 @@ void DebugOverlay::RenderInspectorTab(ECSWorld *ecs, MaterialManager *materialMa
 
         ImGui::EndPopup();
     }
+
 }
 
 void DebugOverlay::RenderCreateEntityTab() {

@@ -10,7 +10,7 @@ struct AABB {
 
 struct Sphere //чіфівффів
 {
-    glm::vec3 centre;
+    glm::vec3 center;
     float radius;
 };
 

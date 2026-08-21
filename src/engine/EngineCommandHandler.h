@@ -9,7 +9,6 @@
 #include "resource/ResourceModule.h"
 #include "UI/UIModule.h"
 #include "scene/SceneModule.h"
-#include "rendering/primitive/PrimitivesFactory.h"
 #include "ECS/components/Components.h"
 #include "core/ModuleManager.h"
 
