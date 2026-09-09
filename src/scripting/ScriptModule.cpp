@@ -19,7 +19,7 @@ bool ScriptModule::Initialize() {
 
         try {
             InitAS(m_moduleManager->GetModule<ECSModule>("ECS")->GetECS(),
-                m_moduleManager->GetModule<CoreModule>("Core")->GetInput(), nullptr);
+                   m_moduleManager->GetModule<CoreModule>("Core")->GetInput(), nullptr);
             Logger::Log(LogLevel::INFO, "AngelScript initialized successfully");
         } catch (const std::exception &e) {
             Logger::Log(LogLevel::ERROR, "Failed to initialize AngelScript: " + std::string(e.what()));

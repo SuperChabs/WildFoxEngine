@@ -32,20 +32,20 @@ void ShadowPass::Execute(const glm::mat4 &, const glm::mat4 &) {
     std::vector<LightComponent> pointShadowLights;
     std::vector<int> globalLightIndices;
 
-    auto renderSceneDepth = [&](const std::string& shaderName) {
+    auto renderSceneDepth = [&](const std::string &shaderName) {
         m_World->Each<TransformComponent, MeshComponent, VisibilityComponent>(
             [&](entt::entity entity,
                 TransformComponent &transform,
                 MeshComponent &meshComp,
-                VisibilityComponent &vis){
-                    if (!vis.isActive || !vis.visible || !meshComp.mesh)
-                        return;
+                VisibilityComponent &vis) {
+                if (!vis.isActive || !vis.visible || !meshComp.mesh)
+                    return;
 
-                    glm::mat4 model = m_World->GetGlobalTransform(entity);
-                    shaderManager->SetMat4(shaderName, "model", model);
-                    meshComp.mesh->DrawDepthOnly();
-                }
-            );
+                glm::mat4 model = m_World->GetGlobalTransform(entity);
+                shaderManager->SetMat4(shaderName, "model", model);
+                meshComp.mesh->DrawDepthOnly();
+            }
+        );
     };
 
     m_World->Each<LightComponent, TransformComponent>(
@@ -56,8 +56,8 @@ void ShadowPass::Execute(const glm::mat4 &, const glm::mat4 &) {
             if (light.castShadows && light.type == LightType::POINT && shadowLights.size() < MAX_DIR_SPOT_LIGHTS) {
                 m_PointShadowMapIndices[e] = static_cast<int>(pointShadowLights.size());
                 pointShadowLights.push_back(light);
-            }
-            else if (light.castShadows && light.type != LightType::POINT && shadowLights.size() < MAX_DIR_SPOT_LIGHTS) {
+            } else if (light.castShadows && light.type != LightType::POINT && shadowLights.size() <
+                       MAX_DIR_SPOT_LIGHTS) {
                 m_ShadowMapIndices[e] = static_cast<int>(shadowLights.size());
                 shadowLights.push_back(light);
             }
@@ -102,7 +102,7 @@ void ShadowPass::Execute(const glm::mat4 &, const glm::mat4 &) {
         shaderManager->SetInt("shadowCubeMapDepth", "layerOffset", i);
 
         auto matrices = BuildPointSpaceMatrices(light);
-        for ( int face = 0; face < 6; face++ ) {
+        for (int face = 0; face < 6; face++) {
             std::string name = "shadowMatrices[" + std::to_string(face) + "]";
             shaderManager->SetMat4("shadowCubeMapDepth", name, matrices[face]);
         }
@@ -155,11 +155,11 @@ const std::vector<glm::mat4> &ShadowPass::GetLightMatrices() const {
     return m_LightSpaceMatrices;
 }
 
-const std::unordered_map<entt::entity, int>& ShadowPass::GetShadowMapIndices() const {
+const std::unordered_map<entt::entity, int> &ShadowPass::GetShadowMapIndices() const {
     return m_ShadowMapIndices;
 }
 
-const std::unordered_map<entt::entity, int>& ShadowPass::GetPointShadowMapIndices() const {
+const std::unordered_map<entt::entity, int> &ShadowPass::GetPointShadowMapIndices() const {
     return m_PointShadowMapIndices;
 }
 
@@ -227,7 +227,7 @@ void ShadowPass::InitializeCubeShadowMap(const int count) {
     glGenTextures(1, &m_CubeShadowMapArray);
     glBindTexture(GL_TEXTURE_CUBE_MAP_ARRAY, m_CubeShadowMapArray);
     glTexStorage3D(GL_TEXTURE_CUBE_MAP_ARRAY, 1, GL_DEPTH_COMPONENT32F,
-        m_ShadowMapSize, m_ShadowMapSize, count * 6);
+                   m_ShadowMapSize, m_ShadowMapSize, count * 6);
 
     glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -300,11 +300,11 @@ std::vector<glm::mat4> ShadowPass::BuildPointSpaceMatrices(const LightComponent 
     glm::vec3 pos = light.position;
 
     return {
-        proj * glm::lookAt(pos, pos + glm::vec3( 1, 0, 0), glm::vec3(0,-1, 0)),
-        proj * glm::lookAt(pos, pos + glm::vec3(-1, 0, 0), glm::vec3(0,-1, 0)),
-        proj * glm::lookAt(pos, pos + glm::vec3( 0, 1, 0), glm::vec3(0, 0, 1)),
-        proj * glm::lookAt(pos, pos + glm::vec3( 0,-1, 0), glm::vec3(0, 0,-1)),
-        proj * glm::lookAt(pos, pos + glm::vec3( 0, 0, 1), glm::vec3(0,-1, 0)),
-        proj * glm::lookAt(pos, pos + glm::vec3( 0, 0,-1), glm::vec3(0,-1, 0))
+        proj * glm::lookAt(pos, pos + glm::vec3(1, 0, 0), glm::vec3(0, -1, 0)),
+        proj * glm::lookAt(pos, pos + glm::vec3(-1, 0, 0), glm::vec3(0, -1, 0)),
+        proj * glm::lookAt(pos, pos + glm::vec3(0, 1, 0), glm::vec3(0, 0, 1)),
+        proj * glm::lookAt(pos, pos + glm::vec3(0, -1, 0), glm::vec3(0, 0, -1)),
+        proj * glm::lookAt(pos, pos + glm::vec3(0, 0, 1), glm::vec3(0, -1, 0)),
+        proj * glm::lookAt(pos, pos + glm::vec3(0, 0, -1), glm::vec3(0, -1, 0))
     };
 }

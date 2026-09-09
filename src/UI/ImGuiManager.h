@@ -7,6 +7,7 @@ class ImGuiManager {
 
 public:
     ImGuiManager();
+
     ~ImGuiManager();
 
     ImGuiManager(const ImGuiManager &) = delete;
@@ -16,9 +17,11 @@ public:
     static ImGuiManager &Instance();
 
     bool Initialize(GLFWwindow *window);
+
     void Shutdown();
 
     void BeginFrame(bool cameraControl);
+
     void EndFrame();
 
     void RedFoxTheme();

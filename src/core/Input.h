@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
 
-/// @file Input.cppm
+/// @file Input.h
 /// @brief 
 /// @author SuperChabs
 /// @date 2026-01-28
@@ -105,62 +105,46 @@ enum class Key {
 };
 
 class Input {
-private:
     GLFWwindow *window;
 
-    float lastMouseX;
-    float lastMouseY;
+    double lastMouseX;
+    double lastMouseY;
     bool firstMouse;
 
-    float mouseDeltaX;
-    float mouseDeltaY;
+    double mouseDeltaX;
+    double mouseDeltaY;
 
     mutable std::unordered_map<Key, bool> keyStates;
 
-    static inline float scrollOffsetX = 0.0f;
-    static inline float scrollOffsetY = 0.0f;
+    static inline double scrollOffsetX = 0.0f;
+    static inline double scrollOffsetY = 0.0f;
 
 public:
-    Input(GLFWwindow *window)
+    explicit Input(GLFWwindow *window)
         : window(window), lastMouseX(0.0f), lastMouseY(0.0f),
           firstMouse(true), mouseDeltaX(0.0f), mouseDeltaY(0.0f) {
     }
 
     bool IsKeyPressed(Key key) const {
-        bool pressed = glfwGetKey(window, static_cast<int>(key)) == GLFW_PRESS;
-
-        // #   ifdef DEBUG
-        //     if (pressed)
-        //         Logger::Log(LogLevel::DEBUG, "Key " + std::string(magic_enum::enum_name(key)) + " is pressed");
-        // #   endif
+        const bool pressed = glfwGetKey(window, static_cast<int>(key)) == GLFW_PRESS;
 
         return pressed;
     }
 
     bool IsKeyReleased(Key key) const {
-        bool released = glfwGetKey(window, static_cast<int>(key)) == GLFW_RELEASE;
-
-        // #   ifdef DEBUG
-        //     if (released)
-        //         Logger::Log(LogLevel::DEBUG, "Key " + std::string(magic_enum::enum_name(key)) + " is released");
-        // #   endif
+        const bool released = glfwGetKey(window, static_cast<int>(key)) == GLFW_RELEASE;
 
         return released;
     }
 
     bool IsKeyDown(Key key) const {
-        bool down = glfwGetKey(window, static_cast<int>(key)) == GLFW_KEY_DOWN;
-
-        // #   ifdef DEBUG
-        //     if (down)
-        //         Logger::Log(LogLevel::DEBUG, "Key " + std::string(magic_enum::enum_name(key)) + " is pressed");
-        // #   endif
+        const bool down = glfwGetKey(window, static_cast<int>(key)) == GLFW_KEY_DOWN;
 
         return down;
     }
 
-    bool IsKeyJustPressed(Key key) const {
-        bool currentState = IsKeyPressed(key);
+    bool IsKeyJustPressed(const Key key) const {
+        const bool currentState = IsKeyPressed(key);
         bool previousState = keyStates[key];
 
         if (keyStates.contains(key))
@@ -171,7 +155,7 @@ public:
         return currentState && !previousState;
     }
 
-    void UpdateMousePosition(double xpos, double ypos) {
+    void UpdateMousePosition(const double xpos, const double ypos) {
         if (firstMouse) {
             lastMouseX = xpos;
             lastMouseY = ypos;
@@ -185,8 +169,8 @@ public:
         lastMouseY = ypos;
     }
 
-    glm::vec2 GetMouseDelta() {
-        return glm::vec2(mouseDeltaX, mouseDeltaY);
+    glm::vec2 GetMouseDelta() const {
+        return {mouseDeltaX, mouseDeltaY};
     }
 
     void ResetMouseDelta() {
@@ -198,14 +182,14 @@ public:
         return glfwGetMouseButton(window, button) == GLFW_PRESS;
     }
 
-    float GetScrollOffset() const { return scrollOffsetY; }
+    static double GetScrollOffset() { return scrollOffsetY; }
 
-    void ResetScrollOffset() {
+    static void ResetScrollOffset() {
         scrollOffsetY = 0.0f;
         scrollOffsetX = 0.0f;
     }
 
-    static void ScrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
+    static void ScrollCallback(const double xoffset, const double yoffset) {
         scrollOffsetX += xoffset;
         scrollOffsetY += yoffset;
     }

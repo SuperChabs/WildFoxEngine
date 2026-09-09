@@ -28,19 +28,22 @@ public:
     SceneManager(ECSWorld *ecs);
 
     void StartPlayMode();
+
     void StopPlayMode();
 
     void PauseScripts();
+
     void ResumeScripts();
 
     bool IsInPlayMode();
 
-    void SetCurrentScenePath(const std::string& path) { m_currentScenePath = path; }
+    void SetCurrentScenePath(const std::string &path) { m_currentScenePath = path; }
     void SetPlayMode(bool playMode) { m_IsPlayMode = playMode; }
 
     std::string GetCurrentScenePath() { return m_currentScenePath; }
 
 private:
     void RegisterSceneCommands();
+
     void RegisterDebugEvents();
 };

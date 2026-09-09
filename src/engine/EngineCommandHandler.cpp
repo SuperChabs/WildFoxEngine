@@ -21,7 +21,7 @@ void EditorCommandHandler::RegisterAllCommands() {
     RegisterScriptCommands();
 }
 
-void EditorCommandHandler::RegisterObjectCommands() {
+void EditorCommandHandler::RegisterObjectCommands() const {
     CommandManager::RegisterCommand("onCreateAABBHitbox",
         [this](const CommandArgs &) {
             auto entity = m_ecsModule->GetECS()->CreateEntity("AABB Hitbox");
@@ -49,7 +49,7 @@ void EditorCommandHandler::RegisterObjectCommands() {
 
     CommandManager::RegisterCommand("onCreateCube",
         [this](const CommandArgs &) {
-            auto entity = m_resModule->GetModelManager()->LoadWithECS(
+            m_resModule->GetModelManager()->LoadWithECS(
                 "assets/objects/shapes/cube/cube.obj",
                 m_ecsModule->GetECS(), true);
 
@@ -58,7 +58,7 @@ void EditorCommandHandler::RegisterObjectCommands() {
 
     CommandManager::RegisterCommand("onCreateSphere",
         [this](const CommandArgs &) {
-            auto entity = m_resModule->GetModelManager()->LoadWithECS(
+             m_resModule->GetModelManager()->LoadWithECS(
                 "assets/objects/shapes/sphere/sphere.obj",
                 m_ecsModule->GetECS(), true);
 
@@ -67,7 +67,7 @@ void EditorCommandHandler::RegisterObjectCommands() {
 
     CommandManager::RegisterCommand("onCreatePlane",
         [this](const CommandArgs &) {
-            auto entity = m_resModule->GetModelManager()->LoadWithECS(
+            m_resModule->GetModelManager()->LoadWithECS(
                 "assets/objects/shapes/plane/plane.obj",
                 m_ecsModule->GetECS(), true);
 
@@ -76,7 +76,7 @@ void EditorCommandHandler::RegisterObjectCommands() {
 
     CommandManager::RegisterCommand("onCreateCone",
         [this](const CommandArgs &) {
-            auto entity = m_resModule->GetModelManager()->LoadWithECS(
+            m_resModule->GetModelManager()->LoadWithECS(
                 "assets/objects/shapes/cone/cone.obj",
                 m_ecsModule->GetECS(), true);
 
@@ -85,7 +85,7 @@ void EditorCommandHandler::RegisterObjectCommands() {
 
     CommandManager::RegisterCommand("onCreateCylinder",
         [this](const CommandArgs &) {
-            auto entity = m_resModule->GetModelManager()->LoadWithECS(
+            m_resModule->GetModelManager()->LoadWithECS(
                 "assets/objects/shapes/cylinder/cylinder.obj",
                 m_ecsModule->GetECS(), true);
 
@@ -94,7 +94,7 @@ void EditorCommandHandler::RegisterObjectCommands() {
 
     CommandManager::RegisterCommand("onCreateTorus",
         [this](const CommandArgs &) {
-            auto entity = m_resModule->GetModelManager()->LoadWithECS(
+           m_resModule->GetModelManager()->LoadWithECS(
                 "assets/objects/shapes/torus/torus.obj",
                 m_ecsModule->GetECS(), true);
 
@@ -110,7 +110,7 @@ void EditorCommandHandler::RegisterObjectCommands() {
                 return;
             }
 
-            std::string filepath = std::get<std::string>(args[0]);
+            const auto filepath = std::get<std::string>(args[0]);
             Logger::Log(LogLevel::INFO, "Filepath: " + filepath);
 
             if (!m_resModule->GetModelManager()) {
@@ -140,22 +140,20 @@ void EditorCommandHandler::RegisterObjectCommands() {
 
     CommandManager::RegisterCommand("onCreateCamera", [this](const CommandArgs &) {
         auto *ecs = m_ecsModule->GetECS();
-        auto newCam = ecs->CreateCamera("Camera", false);
+        const auto newCam = ecs->CreateCamera("Camera", false);
 
-        auto view = ecs->GetRegistry().view < CameraComponent > ();
-        if (view.size() == 1) {
+        if (const auto view = ecs->GetRegistry().view < CameraComponent > (); view.size() == 1) {
             ecs->GetComponent<CameraComponent>(newCam).isMainCamera = true;
-            //SetMainCameraEntity(newCam);
         }
 
         Logger::Log(LogLevel::INFO, "New camera created and assigned as main if needed");
     });
 }
 
-void EditorCommandHandler::RegisterLightCommands() {
+void EditorCommandHandler::RegisterLightCommands() const {
     CommandManager::RegisterCommand("onCreateDirectionalLight",
         [this](const CommandArgs &) {
-            auto entity = m_ecsModule->GetECS()->CreateEntity("Directional Light");
+            const auto entity = m_ecsModule->GetECS()->CreateEntity("Directional Light");
             m_ecsModule->GetECS()->AddComponent<TransformComponent>(entity,
                 glm::vec3(0, 10, 0), glm::vec3(45, 0, 0), glm::vec3(1));
             m_ecsModule->GetECS()->AddComponent<LightComponent>(
@@ -168,7 +166,7 @@ void EditorCommandHandler::RegisterLightCommands() {
 
     CommandManager::RegisterCommand("onCreatePointLight",
         [this](const CommandArgs &) {
-            auto entity = m_ecsModule->GetECS()->CreateEntity("Point Light");
+            const auto entity = m_ecsModule->GetECS()->CreateEntity("Point Light");
             m_ecsModule->GetECS()->AddComponent<TransformComponent>(entity,
                 glm::vec3(0, 5, 0), glm::vec3(0), glm::vec3(1));
             m_ecsModule->GetECS()->AddComponent<LightComponent>(
@@ -181,7 +179,7 @@ void EditorCommandHandler::RegisterLightCommands() {
 
     CommandManager::RegisterCommand("onCreateSpotLight",
         [this](const CommandArgs &) {
-            auto entity = m_ecsModule->GetECS()->CreateEntity("Spot Light");
+            const auto entity = m_ecsModule->GetECS()->CreateEntity("Spot Light");
             m_ecsModule->GetECS()->AddComponent<TransformComponent>(entity,
                 glm::vec3(0, 5, 0), glm::vec3(45, 0, 0), glm::vec3(1));
             m_ecsModule->GetECS()->AddComponent<
@@ -193,7 +191,7 @@ void EditorCommandHandler::RegisterLightCommands() {
         });
 }
 
-void EditorCommandHandler::RegisterSceneCommands() {
+void EditorCommandHandler::RegisterSceneCommands() const {
     CommandManager::RegisterCommand("onSaveScene",
         [this](const CommandArgs &args) {
             std::string filename = "scene.json";
@@ -247,8 +245,9 @@ void EditorCommandHandler::RegisterSceneCommands() {
                 Logger::Log(LogLevel::INFO, "Scene loaded successfully: " + filename);
 
                 std::filesystem::path scenePath =
-                    std::filesystem::path(m_sceneModule->GetSceneSerializer()->GetSavesDirectory()) /
-                    std::filesystem::path(filename).stem();
+                        std::filesystem::path(
+                            m_sceneModule->GetSceneSerializer()->GetSavesDirectory()) /
+                        std::filesystem::path(filename).stem();
 
                 m_sceneModule->GetSceneManager()->SetCurrentScenePath(scenePath.string());
             } else {
@@ -257,17 +256,13 @@ void EditorCommandHandler::RegisterSceneCommands() {
         });
 
     CommandManager::RegisterCommand("onQuickSave",
-        [this](const CommandArgs &) {
-            CommandManager::ExecuteCommand("onSaveScene", {
-                                               std::string("quicksave.json")
-                                           });
+        [](const CommandArgs &) {
+            CommandManager::ExecuteCommand("onSaveScene", { std::string("quicksave.json") });
         });
 
     CommandManager::RegisterCommand("onQuickLoad",
-        [this](const CommandArgs &) {
-            CommandManager::ExecuteCommand("onLoadScene", {
-                                               std::string("quicksave.json")
-                                           });
+        [](const CommandArgs &) {
+            CommandManager::ExecuteCommand("onLoadScene", { std::string("quicksave.json") });
         });
 
     CommandManager::RegisterCommand("onNewScene",
@@ -279,13 +274,10 @@ void EditorCommandHandler::RegisterSceneCommands() {
 
     CommandManager::RegisterCommand("onListScenes",
         [this](const CommandArgs &) {
-            auto scenes = m_sceneModule->GetSceneSerializer()->GetAvailableScenes();
-
-            if (scenes.empty()) {
+            if (const auto scenes = m_sceneModule->GetSceneSerializer()->GetAvailableScenes(); scenes.empty()) {
                 Logger::Log(LogLevel::INFO, "No saved scenes found");
             } else {
-                Logger::Log(LogLevel::INFO, "Available scenes (" +
-                                            std::to_string(scenes.size()) + "):");
+                Logger::Log(LogLevel::INFO, "Available scenes (" + std::to_string(scenes.size()) + "):");
 
                 for (const auto &scene: scenes)
                     Logger::Log(LogLevel::INFO, "  - " + scene);
@@ -293,7 +285,7 @@ void EditorCommandHandler::RegisterSceneCommands() {
         });
 }
 
-void EditorCommandHandler::RegisterScriptCommands() {
+void EditorCommandHandler::RegisterScriptCommands() const {
     CommandManager::RegisterCommand("onAttachScript",
                                     [this](const CommandArgs &args) {
                                         /*

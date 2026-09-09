@@ -11,18 +11,18 @@ LevelScript::LevelScript() {
     Logger::Log(LogLevel::INFO, "LevelScript Subscribing...");
 
     m_subPlayMode = GetEventBus().Subscribe("play_mode_started",
-        [this](const std::any &payload) {
-            Start(std::any_cast<std::string>(payload));
-        });
+                                            [this](const std::any &payload) {
+                                                Start(std::any_cast<std::string>(payload));
+                                            });
     m_subEditMode = GetEventBus().Subscribe("play_mode_stopped",
-        [this](const std::any &) {
-            Stop();
-        });
+                                            [this](const std::any &) {
+                                                Stop();
+                                            });
     m_subTrigger = GetEventBus().Subscribe("trigger_enter",
-        [this](const std::any& payload) {
-            auto pr = std::any_cast<std::pair<entt::entity, entt::entity>>(payload);
-            CallTrigger(pr.first, pr.second);
-        });
+                                           [this](const std::any &payload) {
+                                               auto pr = std::any_cast<std::pair<entt::entity, entt::entity> >(payload);
+                                               CallTrigger(pr.first, pr.second);
+                                           });
 }
 
 void LevelScript::Update(const float deltaTime) {
@@ -44,8 +44,6 @@ void LevelScript::Start(const std::string &scriptPath) {
     }
 
     CallFunction(m_fnOnStart);
-
-
 }
 
 void LevelScript::Stop() {
@@ -126,7 +124,7 @@ void LevelScript::CallFunction(asIScriptFunction *fn) {
 
     if (m_ctx->Execute() == asEXECUTION_EXCEPTION) {
         Logger::Log(LogLevel::ERROR, "Main script exception in " + std::string(fn->GetName()) + ": " +
-                    std::string(m_ctx->GetExceptionString()));
+                                     std::string(m_ctx->GetExceptionString()));
         m_failed = true;
     }
 }

@@ -2,27 +2,29 @@
 #include <entt/entt.hpp>
 #include <glm/glm.hpp>
 
+#include "ECS/components/Components.h"
+
 void LightSystem::Update(ECSWorld &world, ShaderManager &shaderManager, const std::string &shaderName,
-                         const std::unordered_map<entt::entity, int> *shadowMapIndices, const std::unordered_map<entt::entity, int> *
+                         const std::unordered_map<entt::entity, int> *shadowMapIndices,
+                         const std::unordered_map<entt::entity, int> *
                          pointShadowIndices) {
     shaderManager.Bind(shaderName);
 
     int lightIndex = 0;
-    const int maxLights = 8;
+    constexpr int maxLights = 8;
 
     world.Each<LightComponent, TransformComponent>(
-        [&](entt::entity entity, LightComponent &light, TransformComponent &transform) {
+        [&](const entt::entity entity, LightComponent &light, const TransformComponent &transform) {
             if (!light.isActive || lightIndex >= maxLights)
                 return;
 
             light.SyncWithTransform(transform);
 
-            std::string base = "lights[" + std::to_string(lightIndex) + "]";
+            const std::string base = "lights[" + std::to_string(lightIndex) + "]";
 
             // Set shadow map index
             int shadowIndex = -1;
-            const auto &lookup = (light.type == LightType::POINT) ? pointShadowIndices : shadowMapIndices;
-            if (lookup) {
+            if (const auto &lookup = (light.type == LightType::POINT) ? pointShadowIndices : shadowMapIndices) {
                 auto it = lookup->find(entity);
                 if (it != lookup->end())
                     shadowIndex = it->second;

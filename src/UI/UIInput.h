@@ -10,6 +10,7 @@ enum class HoveredZone {
 
 class UIInput {
     HoveredZone hoveredZone = HoveredZone::None;
+
 public:
     void SetHoveredZone(HoveredZone zone) { hoveredZone = zone; }
     void ResetZone() { hoveredZone = HoveredZone::None; }

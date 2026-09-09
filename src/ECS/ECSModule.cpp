@@ -40,6 +40,6 @@ bool ECSModule::IsRequired() const {
     return true;
 }
 
-ECSWorld *ECSModule::GetECS() {
+ECSWorld *ECSModule::GetECS() const {
     return ecsWorld.get();
 }

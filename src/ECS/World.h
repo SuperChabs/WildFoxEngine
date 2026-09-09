@@ -25,22 +25,22 @@ public:
     }
 
     template<typename T>
-    decltype(auto) AddComponent(entt::entity entity) {
+    decltype(auto) AddComponent(const entt::entity entity) {
         return registry.emplace_or_replace<T>(entity);
     }
 
     template<typename T>
-    T &GetComponent(entt::entity entity) {
+    T &GetComponent(const entt::entity entity) {
         return registry.get<T>(entity);
     }
 
     template<typename T>
-    [[nodiscard]] bool HasComponent(entt::entity entity) const {
+    [[nodiscard]] bool HasComponent(const entt::entity entity) const {
         return registry.all_of<T>(entity);
     }
 
     template<typename T>
-    void RemoveComponent(entt::entity entity) {
+    void RemoveComponent(const entt::entity entity) {
         if (registry.all_of<T>(entity))
             registry.remove<T>(entity);
     }

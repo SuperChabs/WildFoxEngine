@@ -6,7 +6,6 @@
 #include <vector>
 
 #include "core/IModule.h"
-#include "core/Time.h"
 
 class ModuleManager {
     std::vector<std::unique_ptr<IModule> > modules;
@@ -24,9 +23,9 @@ public:
 
     void InitializeAll();
 
-    void UpdateAll(float deltaTime);
+    void UpdateAll(float deltaTime) const;
 
-    void ShutdownAll();
+    void ShutdownAll() const;
 
     template<typename T>
     T *GetModule(const std::string &name) {

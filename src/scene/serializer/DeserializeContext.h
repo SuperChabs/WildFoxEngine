@@ -12,5 +12,5 @@ struct DeserializeContext {
     ECSWorld *world;
     ModelManager *modelManager;
     MaterialManager *materialManager;
-    std::unordered_map<uint64_t, entt::entity>* id;
+    std::unordered_map<uint64_t, entt::entity> *id;
 };

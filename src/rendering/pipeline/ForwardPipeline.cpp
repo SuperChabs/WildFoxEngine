@@ -45,7 +45,7 @@ void ForwardPipeline::Initialize() {
 }
 
 void ForwardPipeline::Execute(CameraComponent &camera, TransformComponent &transform,
-        CameraOrientationComponent &orientation, int width, int height) {
+                              CameraOrientationComponent &orientation, int width, int height) {
     float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
     glm::mat4 projection = camera.GetProjectionMatrix(aspectRatio);
     glm::mat4 view = orientation.GetViewMatrix(transform.position);
@@ -53,7 +53,11 @@ void ForwardPipeline::Execute(CameraComponent &camera, TransformComponent &trans
     GLint prevFBO = 0;
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &prevFBO);
 
-    if (m_ShadowPassPtr &&m_ShadowPassPtr->IsEnabled()) {
+    if (m_ShadowPassPtr &&m_ShadowPassPtr
+    ->
+    IsEnabled()
+    )
+    {
         m_ShadowPassPtr->Execute(view, projection);
 
         glBindFramebuffer(GL_FRAMEBUFFER, prevFBO);
@@ -79,8 +83,11 @@ void ForwardPipeline::Execute(CameraComponent &camera, TransformComponent &trans
         pass->Execute(view, projection);
     }
 
-    if (m_GeometryPassPtr && m_GeometryPassPtr->IsEnabled())
-        m_GeometryPassPtr->Execute(view, projection);
+    if (m_GeometryPassPtr &&m_GeometryPassPtr
+    ->
+    IsEnabled()
+    )
+    m_GeometryPassPtr->Execute(view, projection);
 }
 
 ShadowPass *ForwardPipeline::GetShadowPass() const {

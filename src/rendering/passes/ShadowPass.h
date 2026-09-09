@@ -34,28 +34,41 @@ class ShadowPass : public RenderPass {
 
 public:
     ShadowPass(GLContext *ctx, ShaderManager *sm, ECSWorld *world);
+
     ~ShadowPass() override;
 
     void Setup() override;
+
     void Execute(const glm::mat4 &, const glm::mat4 &) override;
+
     void Cleanup() override;
 
     GLuint GetShadowMapArray() const;
+
     GLuint GetCubeShadowMapArray() const;
+
     const std::vector<glm::mat4> &GetLightMatrices() const;
+
     const std::unordered_map<entt::entity, int> &GetShadowMapIndices() const;
+
     const std::unordered_map<entt::entity, int> &GetPointShadowMapIndices() const;
+
     int GetShadowMapSize() const;
 
     void SetShadowMapSize(int size);
+
     void SetOrthoSize(float size);
+
     void SetFarPlane(float farP);
 
 private:
     void InitializeShadowMap(int count);
+
     void InitializeCubeShadowMap(int count);
 
     glm::mat4 BuildLightSpaceMatrix(const glm::vec3 &lightDir) const;
+
     glm::mat4 BuildSpotLightMatrix(const LightComponent &light);
+
     static std::vector<glm::mat4> BuildPointSpaceMatrices(const LightComponent &light);
 };

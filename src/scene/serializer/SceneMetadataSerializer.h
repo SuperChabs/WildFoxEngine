@@ -18,7 +18,7 @@ public:
     json SerializeMetadata(ECSWorld *world, const std::string &sceneName, entt::entity mainCamera = entt::null) const;
 
     static void DeserializeMetadata(
-    const json &data,
-    const std::unordered_map<uint64_t, entt::entity> &createdEntities,
-    ECSWorld *world);
+        const json &data,
+        const std::unordered_map<uint64_t, entt::entity> &createdEntities,
+        ECSWorld *world);
 };

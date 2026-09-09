@@ -15,14 +15,12 @@ void SceneManager::StartPlayMode() {
     if (m_IsPlayMode)
         return;
 
-    if (!m_ecs)
-    {
+    if (!m_ecs) {
         Logger::Log(LogLevel::ERROR, "ECSWorld is NULL!");
         return;
     }
 
-    m_ecs->Each<ScriptComponent>([&](entt::entity e, ScriptComponent& script)
-    {
+    m_ecs->Each<ScriptComponent>([&](entt::entity e, ScriptComponent &script) {
         script.active = true;
         script.loaded = false;
         script.failed = false;
@@ -40,27 +38,23 @@ void SceneManager::StopPlayMode() {
     if (!m_IsPlayMode)
         return;
 
-    if (!m_ecs)
-    {
+    if (!m_ecs) {
         Logger::Log(LogLevel::ERROR, "ECSWorld is NULL!");
         return;
     }
 
-    m_ecs->Each<ScriptComponent>([&](entt::entity e, ScriptComponent& script)
-    {
-        if (script.ctx)
-        {
+    m_ecs->Each<ScriptComponent>([&](entt::entity e, ScriptComponent &script) {
+        if (script.ctx) {
             script.ctx->Release();
             script.ctx = nullptr;
         }
-        if (script.module)
-        {
+        if (script.module) {
             script.module->GetEngine()->DiscardModule(script.module->GetName());
             script.module = nullptr;
         }
-        script.fnOnStart  = nullptr;
+        script.fnOnStart = nullptr;
         script.fnOnUpdate = nullptr;
-        script.fnOnStop   = nullptr;
+        script.fnOnStop = nullptr;
 
         script.active = false;
         script.loaded = false;

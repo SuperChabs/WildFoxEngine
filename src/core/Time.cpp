@@ -1,5 +1,7 @@
 #include "Time.h"
 
+#include <GLFW/glfw3.h>
+
 Time::Time()
     : currentFrame(0.0f), lastFrame(0.0f), deltaTime(0.0f), timeScale(1.0f) {
 }

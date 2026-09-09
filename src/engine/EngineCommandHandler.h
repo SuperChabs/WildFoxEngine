@@ -26,11 +26,11 @@ public:
     void RegisterAllCommands();
 
 private:
-    void RegisterObjectCommands();
+    void RegisterObjectCommands() const;
 
-    void RegisterLightCommands();
+    void RegisterLightCommands() const;
 
-    void RegisterSceneCommands();
+    void RegisterSceneCommands() const;
 
-    void RegisterScriptCommands();
+    void RegisterScriptCommands() const;
 };

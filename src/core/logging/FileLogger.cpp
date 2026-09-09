@@ -18,7 +18,7 @@ FileLogger::FileLogger()
 FileLogger::~FileLogger() {
     isShuttingDown.store(true);
 
-    std::lock_guard<std::mutex> lock(fileMutex);
+    std::lock_guard lock(fileMutex);
     if (file.is_open()) {
         file.flush();
         file.close();
@@ -28,7 +28,7 @@ FileLogger::~FileLogger() {
 void FileLogger::write(const LogData &data) {
     if (isShuttingDown.load()) return;
 
-    std::lock_guard<std::mutex> lock(fileMutex);
+    std::lock_guard lock(fileMutex);
 
     if (!file.is_open())
         OpenLogFile(data);
@@ -64,7 +64,7 @@ void FileLogger::OpenLogFile(const LogData &data) {
     file.open(logPath, std::ios::app);
 }
 
-const char *FileLogger::LevelToString(LogLevel lvl) {
+const char *FileLogger::LevelToString(const LogLevel lvl) {
     switch (lvl) {
         case LogLevel::INFO: return "INFO";
         case LogLevel::WARNING: return "WARNING";
@@ -77,7 +77,7 @@ const char *FileLogger::LevelToString(LogLevel lvl) {
 }
 
 
-const char *FileLogger::CategoryToString(LogCategory cat) {
+const char *FileLogger::CategoryToString(const LogCategory cat) {
     switch (cat) {
         case LogCategory::CORE: return "CORE";
         case LogCategory::RENDERING: return "RENDERING";
@@ -88,8 +88,8 @@ const char *FileLogger::CategoryToString(LogCategory cat) {
 }
 
 std::string FileLogger::FormatTime(const std::chrono::system_clock::time_point &tp) {
-    auto time = std::chrono::system_clock::to_time_t(tp);
-    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+    const auto time = std::chrono::system_clock::to_time_t(tp);
+    const auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
                   tp.time_since_epoch()
               ) % 1000;
 
@@ -105,7 +105,7 @@ std::string FileLogger::FormatTime(const std::chrono::system_clock::time_point &
 }
 
 std::string FileLogger::FormatDate(const std::chrono::system_clock::time_point &tp) {
-    auto time = std::chrono::system_clock::to_time_t(tp);
+    const auto time = std::chrono::system_clock::to_time_t(tp);
     std::tm tm_snapshot;
 
     PortableLocalTime(time, tm_snapshot);

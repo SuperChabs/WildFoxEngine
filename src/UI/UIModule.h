@@ -44,5 +44,6 @@ public:
     /// }@
 
     DebugOverlay *GetDebugOverlay();
+
     ImGuiManager *GetImGuiManager();
 };

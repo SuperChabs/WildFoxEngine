@@ -9,12 +9,12 @@
 class LevelScript {
     std::string m_scriptPath;
 
-    asIScriptModule  *m_module = nullptr;
-    asIScriptContext *m_ctx    = nullptr;
+    asIScriptModule *m_module = nullptr;
+    asIScriptContext *m_ctx = nullptr;
 
-    asIScriptFunction *m_fnOnStart  = nullptr;
+    asIScriptFunction *m_fnOnStart = nullptr;
     asIScriptFunction *m_fnOnUpdate = nullptr;
-    asIScriptFunction *m_fnOnStop   = nullptr;
+    asIScriptFunction *m_fnOnStop = nullptr;
 
     bool m_loaded = false;
     bool m_failed = false;
@@ -29,6 +29,7 @@ public:
     void Update(float deltaTime);
 
     void Start(const std::string &scriptPath);
+
     void Stop();
 
     void SetScriptPath(const std::string &scriptPath) { m_scriptPath = scriptPath; }
@@ -38,6 +39,8 @@ private:
     void LoadScript();
 
     void CallUpdate(float deltaTime);
+
     void CallFunction(asIScriptFunction *fn);
+
     void CallTrigger(entt::entity a, entt::entity b);
 };

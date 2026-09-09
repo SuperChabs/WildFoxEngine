@@ -21,22 +21,18 @@ entt::entity ECSWorld::CreateEntity(const std::string &name) {
     return entity;
 }
 
-void ECSWorld::DestroyEntity(entt::entity entity) {
+void ECSWorld::DestroyEntity(const entt::entity entity) {
     if (!IsValid(entity))
         return;
 
-    if (HasComponent<HierarchyComponent>(entity)) {
-        auto children = GetComponent<HierarchyComponent>(entity).children;
-
-        for (auto &child : children)
+    if (HasComponent<HierarchyComponent>(entity))
+        for (const auto children = GetComponent<HierarchyComponent>(entity).children; auto &child: children)
             DestroyEntity(child);
-    }
 
-    if (HasComponent<HierarchyComponent>(entity)) {
-        auto &hc = GetComponent<HierarchyComponent>(entity);
-        if (hc.HasParent() && IsValid(hc.parent) && HasComponent<HierarchyComponent>(hc.parent))
+    if (HasComponent<HierarchyComponent>(entity))
+        if (const auto &hc = GetComponent<HierarchyComponent>(entity); hc.HasParent()
+            && IsValid(hc.parent) && HasComponent<HierarchyComponent>(hc.parent))
             GetComponent<HierarchyComponent>(hc.parent).RemoveChild(entity);
-    }
 
     if (registry.valid(entity))
         registry.destroy(entity);
@@ -49,15 +45,14 @@ bool ECSWorld::IsValid(const entt::entity entity) const {
 void ECSWorld::Clear() {
     std::vector<entt::entity> entities;
 
-    for (auto entity : registry.view<IDComponent>())
-    {
+    for (auto entity: registry.view<IDComponent>()) {
         if (HasComponent<CameraComponent>(entity))
             continue;
 
         entities.push_back(entity);
     }
 
-    for (auto entity : entities)
+    for (const auto entity: entities)
         DestroyEntity(entity);
 
     nextID = 1;

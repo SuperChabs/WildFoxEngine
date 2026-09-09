@@ -140,8 +140,8 @@ int SceneSerializer::DeserializeEntities(const json &sceneData,
     for (const auto &entityData: sceneData["scene"]["entities"]) {
         uint64_t uuid = entityData["_id"];
         entt::entity entity = createdEntities.count(uuid)
-            ? createdEntities[uuid]
-            : world->CreateEntity(entityData.value("_name", "Entity"));
+                                  ? createdEntities[uuid]
+                                  : world->CreateEntity(entityData.value("_name", "Entity"));
         createdEntities[uuid] = entity;
 
         entt::entity previousEntity = entity;

@@ -1,8 +1,6 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
-
-/// @file Time.cppm
+/// @file Time.h
 /// @brief Time manager
 /// @author SuperChabs
 /// @date 2026-01-28
@@ -18,10 +16,10 @@ public:
 
     void Update();
 
-    float GetDeltaTime() const;
-    float GetTime() const;
-    float GetTimeScale() const;
-    void SetTimeScale(float scale);
+    [[nodiscard]] float GetDeltaTime() const;
+    [[nodiscard]] float GetTime() const;
+    [[nodiscard]] float GetTimeScale() const;
+    [[nodiscard]] float GetFPS() const;
 
-    float GetFPS() const;
+    void SetTimeScale(float scale);
 };

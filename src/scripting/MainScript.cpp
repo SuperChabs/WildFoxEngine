@@ -7,7 +7,8 @@
 #include "scripting/ASState.h"
 
 MainScript::MainScript(const std::string &scriptPath)
-    : m_scriptPath(scriptPath) {}
+    : m_scriptPath(scriptPath) {
+}
 
 void MainScript::Update(const float deltaTime) {
     if (m_failed || !m_loaded)
@@ -100,7 +101,7 @@ void MainScript::CallFunction(asIScriptFunction *fn) {
 
     if (m_ctx->Execute() == asEXECUTION_EXCEPTION) {
         Logger::Log(LogLevel::ERROR, "Main script exception in " + std::string(fn->GetName()) + ": " +
-                    std::string(m_ctx->GetExceptionString()));
+                                     std::string(m_ctx->GetExceptionString()));
         m_failed = true;
     }
 }

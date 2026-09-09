@@ -12,8 +12,11 @@ struct MeshComponent {
 
     MeshComponent() = default;
 
-    explicit MeshComponent(Mesh *m) : mesh(m) {}
-    explicit MeshComponent(std::shared_ptr<Mesh> m) : mesh(std::move(m)) {}
+    explicit MeshComponent(Mesh *m) : mesh(m) {
+    }
+
+    explicit MeshComponent(std::shared_ptr<Mesh> m) : mesh(std::move(m)) {
+    }
 };
 
 struct MaterialComponent {
@@ -22,7 +25,8 @@ struct MaterialComponent {
 
     MaterialComponent() = default;
 
-    explicit MaterialComponent(std::shared_ptr<Material> mat) : material(std::move(mat)) {}
+    explicit MaterialComponent(std::shared_ptr<Material> mat) : material(std::move(mat)) {
+    }
 };
 
 struct ColorComponent {
@@ -30,9 +34,11 @@ struct ColorComponent {
 
     ColorComponent() = default;
 
-    explicit ColorComponent(const glm::vec3 &col) : color(col) {}
+    explicit ColorComponent(const glm::vec3 &col) : color(col) {
+    }
 
-    ColorComponent(const float r, const float g, const float b) : color(r, g, b) {}
+    ColorComponent(const float r, const float g, const float b) : color(r, g, b) {
+    }
 };
 
 struct VisibilityComponent {
@@ -41,5 +47,6 @@ struct VisibilityComponent {
 
     VisibilityComponent() = default;
 
-    explicit VisibilityComponent(const bool active) : isActive(active) {}
+    explicit VisibilityComponent(const bool active) : isActive(active) {
+    }
 };

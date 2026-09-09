@@ -45,40 +45,40 @@ class Renderer {
 public:
     Renderer(ShaderManager *sm, ECSWorld *w, TextureManager *tm);
 
-    ~Renderer() ;
+    ~Renderer();
 
-    bool Initialize(GLuint skyboxVAO, GLuint cubemapTexture) ;
+    bool Initialize(GLuint skyboxVAO, GLuint cubemapTexture);
 
-    void BeginFrame() ;
+    void BeginFrame();
 
     void Render(CameraComponent &camera, TransformComponent &transform,
-        CameraOrientationComponent &orientation, int width, int height) ;
+                CameraOrientationComponent &orientation, int width, int height);
 
-    void EndFrame() ;
+    void EndFrame();
 
-    void Shutdown() ;
+    void Shutdown();
 
-    void SetClearColor(const glm::vec4 &color) ;
+    void SetClearColor(const glm::vec4 &color);
 
-    void SetWireframe(bool enable) ;
+    void SetWireframe(bool enable);
 
-    void SetEnableShadows(bool enable) ;
+    void SetEnableShadows(bool enable);
 
-    GLContext *GetContext() ;
+    GLContext *GetContext();
 
-    RenderPipeline *GetPipeline() ;
+    RenderPipeline *GetPipeline();
 
-    const RenderStats &GetStats() const ;
+    const RenderStats &GetStats() const;
 
-    RendererConfig &GetConfig() ;
+    RendererConfig &GetConfig();
 
-    ECSWorld *GetWorld() ;
+    ECSWorld *GetWorld();
 
-    ShaderManager *GetShaderManager() ;
+    ShaderManager *GetShaderManager();
 
     IconRenderSystem *GetIcon();
 
-    bool IsInitialized() const ;
+    bool IsInitialized() const;
 
 private:
     void ApplySettings();

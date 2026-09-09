@@ -9,7 +9,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include "core/logging/Logger.h"
 #include "ECS/World.h"
 #include "ECS/components/Components.h"
 
@@ -35,9 +34,9 @@ static void SetListenerTransform(const TransformComponent &transform) {
     alListener3f(AL_POSITION, transform.position.x, transform.position.y, transform.position.z);
     alListener3f(AL_VELOCITY, 0.0f, 0.0f, 0.0f);
 
-    glm::vec3 forward = transform.rotation * glm::vec3(0.0f, 0.0f, -1.0f);
-    glm::vec3 up = transform.rotation * glm::vec3(0.0f, 1.0f, 0.0f);
-    float orientation[6] = {forward.x, forward.y, forward.z, up.x, up.y, up.z};
+    const glm::vec3 forward = transform.rotation * glm::vec3(0.0f, 0.0f, -1.0f);
+    const glm::vec3 up = transform.rotation * glm::vec3(0.0f, 1.0f, 0.0f);
+    const float orientation[6] = {forward.x, forward.y, forward.z, up.x, up.y, up.z};
     alListenerfv(AL_ORIENTATION, orientation);
 }
 
@@ -61,7 +60,7 @@ public:
     void PlayOneShot(const std::string &path, float volume = 1.0f, float pitch = 1.0f);
 
 private:
-    void SyncListner(ECSWorld *ecs);
+    static void SyncLiseners(ECSWorld *ecs);
 
     void SyncSources(ECSWorld *ecs);
 

@@ -35,10 +35,10 @@ inline entt::entity GetEntityByName(ECSWorld *ecs, const std::string &name) {
     return result;
 }
 
-inline void CreateEntity(ECSWorld &ecs, const EntityDefinition& def) {
+inline void CreateEntity(ECSWorld &ecs, const EntityDefinition &def) {
     auto entity = ecs.CreateEntity(def.name);
 
-    for (const auto& comp : def.components)
+    for (const auto &comp: def.components)
         std::visit(
             [&](const auto &comp) {
                 using T = std::decay_t<decltype(comp)>;
@@ -66,10 +66,11 @@ inline void RegisterECS(asIScriptEngine *engine, ECSWorld *ecs) {
     AS_CHECK(r, "GetTransform");
 
     r = engine->RegisterGlobalFunction(
-            "uint64 GetEntityByName(const string &in name)",
-            asFUNCTIONPR(GetEntityByName, (ECSWorld *, const std::string &), entt::entity),
+                "uint64 GetEntityByName(const string &in name)",
+                asFUNCTIONPR(GetEntityByName, (ECSWorld *, const std::string &), entt::entity),
             asCALL_CDECL_OBJFIRST, ecs
-    );
+    )
+    ;
     AS_CHECK(r, "GetEntityByName");
 
     r = engine->RegisterGlobalFunction(
@@ -80,9 +81,10 @@ inline void RegisterECS(asIScriptEngine *engine, ECSWorld *ecs) {
     AS_CHECK(r, "IsValidEntity");
 
     r = engine->RegisterGlobalFunction(
-        "void CreateEntity(const EntityDefinition &in)",
-        asFUNCTIONPR(CreateEntity, (ECSWorld&, const EntityDefinition&), void),
-        asCALL_CDECL_OBJFIRST, ecs
-    );
+                "void CreateEntity(const EntityDefinition &in)",
+                asFUNCTIONPR(CreateEntity, (ECSWorld &, const EntityDefinition &), void),
+            asCALL_CDECL_OBJFIRST, ecs
+    )
+    ;
     AS_CHECK(r, "CreateEntity");
 }

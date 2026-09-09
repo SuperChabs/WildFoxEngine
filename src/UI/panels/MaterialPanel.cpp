@@ -132,5 +132,5 @@ void MaterialPanel::RenderOpenMaterialDialog() {
         }
 
         ImGui::EndPopup();
-        }
+    }
 }

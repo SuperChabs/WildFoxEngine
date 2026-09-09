@@ -31,7 +31,8 @@ json SerializerRegistry::SerializeAllComponents(ECSWorld *world, entt::entity en
     return entityData;
 }
 
-entt::entity SerializerRegistry::DeserializeAllComponents(DeserializeContext ctx, entt::entity entity, const json &entityData) {
+entt::entity SerializerRegistry::DeserializeAllComponents(DeserializeContext ctx, entt::entity entity,
+                                                          const json &entityData) {
     if (entityData.contains("mesh"))
         entity = serializers["mesh"]->Deserialize(ctx, entity, entityData["mesh"]);
 
@@ -48,8 +49,7 @@ entt::entity SerializerRegistry::DeserializeAllComponents(DeserializeContext ctx
 
         try {
             entity = serializer->Deserialize(ctx, entity, entityData[key]);
-        }
-        catch (const std::exception &e) {
+        } catch (const std::exception &e) {
             Logger::Log(LogLevel::WARNING, "Failed to deserialize component:" + key + ": " + e.what());
         }
     }

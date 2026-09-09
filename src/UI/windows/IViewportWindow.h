@@ -16,13 +16,14 @@ public:
     virtual ~IViewportWindow() = default;
 
     bool IsOpen() const { return isOpen; }
-    ImVec2 GetViewportSize() const
-    {
+
+    ImVec2 GetViewportSize() const {
         return ImVec2(
             std::max(viewportSize.x, 1.0f),
             std::max(viewportSize.y, 1.0f)
         );
     }
+
     ImVec2 GetViewportPos() const { return viewportPos; }
     bool IsHovered() const { return isHovered; }
     bool IsFocused() const { return isFocused; }

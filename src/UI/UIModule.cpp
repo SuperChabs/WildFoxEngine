@@ -45,7 +45,7 @@ void UIModule::Update(float deltaTime) {
 
 void UIModule::RenderUI(EditorCamera &editorCamera) {
     debugOverlay->Render(ecs, mm->GetModule<ResourceModule>("Resource")->GetMaterialManager(),
-        mm->GetModule<SceneModule>("Scene")->GetSceneSerializer(), editorCamera);
+                         mm->GetModule<SceneModule>("Scene")->GetSceneSerializer(), editorCamera);
 }
 
 void UIModule::Shutdown() {
@@ -67,7 +67,7 @@ bool UIModule::IsRequired() const {
     return true;
 }
 
-DebugOverlay * UIModule::GetDebugOverlay() {
+DebugOverlay *UIModule::GetDebugOverlay() {
     return debugOverlay.get();
 }
 

@@ -8,8 +8,7 @@ RenderPipeline::RenderPipeline(const std::string &n, GLContext *ctx, ShaderManag
 }
 
 void RenderPipeline::Execute(CameraComponent &camera, TransformComponent &transform,
-    CameraOrientationComponent &orientation, int width, int height) {
-
+                             CameraOrientationComponent &orientation, int width, int height) {
     float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
     glm::mat4 projection = camera.GetProjectionMatrix(aspectRatio);
     glm::mat4 view = orientation.GetViewMatrix(transform.position);

@@ -31,6 +31,7 @@ public:
     explicit SceneSerializer(ECSWorld *w);
 
     bool SaveScene(const std::string &filename, MaterialManager *materialManager);
+
     bool SaveScene(const std::string &filename, MaterialManager *materialManager, bool pretty);
 
     bool LoadScene(const std::string &filename, MaterialManager *materialManager, ModelManager *modelManager);
@@ -38,6 +39,7 @@ public:
     bool DeleteScene(const std::string &filename);
 
     std::vector<std::string> GetAvailableScenes();
+
     std::string GetSavesDirectory() const;
 
     void SetSavesDirectory(const std::string &directory);
@@ -49,8 +51,8 @@ private:
 
     bool WriteSceneToFile(const std::string &filename, const json &sceneData, bool pretty);
 
-    int  DeserializeEntities(const json &sceneData, ModelManager *modelManager, MaterialManager *materialManager,
-                             std::unordered_map<uint64_t, entt::entity> &createdEntities);
+    int DeserializeEntities(const json &sceneData, ModelManager *modelManager, MaterialManager *materialManager,
+                            std::unordered_map<uint64_t, entt::entity> &createdEntities);
 
     void SetupHierarchies(const json &sceneData, std::unordered_map<uint64_t, entt::entity> &createdEntities);
 

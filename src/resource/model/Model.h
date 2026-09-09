@@ -28,6 +28,7 @@ public:
     Model(const std::string &path);
 
     void AddMesh(Mesh &&mesh);
+
     void AddMesh(std::shared_ptr<Mesh> mesh);
 
     void Draw(ShaderManager &shaderManager, const std::string &shaderName);
@@ -40,16 +41,26 @@ public:
     // }
 
     void SetTextures(const std::vector<Texture> &textures);
+
     void SetMaterial(std::shared_ptr<Material> material, size_t index);
+
     void SetMaterialForAll(std::shared_ptr<Material> material);
+
     void SetName(const std::string &n);
+
     void SetFilepath(const std::string &path);
+
     void SetRootNode(std::shared_ptr<ModelNode> node);
 
     size_t GetMeshCount() const;
+
     const std::string &GetName() const;
+
     const std::string &GetFilepath() const;
+
     std::shared_ptr<ModelNode> GetRootNode() const;
+
     std::shared_ptr<Mesh> GetMesh(size_t index);
+
     const std::vector<std::shared_ptr<Mesh> > &GetMeshes() const;
 };

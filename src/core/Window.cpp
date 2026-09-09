@@ -1,8 +1,10 @@
 #include "Window.h"
+
+#include <utility>
 #include "core/logging/Logger.h"
 
-Window::Window(int width, int height, const std::string &title)
-    : window(nullptr), width(width), height(height), title(title) {
+Window::Window(const int width, const int height, std::string title)
+    : window(nullptr), width(width), height(height), title(std::move(title)) {
 }
 
 Window::~Window() {
@@ -38,13 +40,14 @@ bool Window::Initialize() {
 
     glfwMakeContextCurrent(window);
 
-    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
+    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
         Logger::Log(LogLevel::ERROR, "Failed to initialize GLAD");
         return false;
     }
 
     Logger::Log(LogLevel::INFO, "GLAD initialized successfully");
-    Logger::Log(LogLevel::INFO, "OpenGL version: " + std::string((const char *) glGetString(GL_VERSION)));
+    Logger::Log(LogLevel::INFO,
+                "OpenGL version: " + std::string(reinterpret_cast<const char *>(glGetString(GL_VERSION))));
 
     return true;
 }
@@ -64,7 +67,7 @@ bool Window::ShouldClose() const {
     return glfwWindowShouldClose(window);
 }
 
-void Window::SwapBuffers() {
+void Window::SwapBuffers() const {
     glfwSwapBuffers(window);
 }
 
@@ -72,32 +75,32 @@ void Window::PollEvents() {
     glfwPollEvents();
 }
 
-void Window::SetFramebufferSizeCallback(GLFWframebuffersizefun callback) {
+void Window::SetFramebufferSizeCallback(const GLFWframebuffersizefun callback) const {
     glfwSetFramebufferSizeCallback(window, callback);
 }
 
-void Window::SetCursorPosCallback(GLFWcursorposfun callback) {
+void Window::SetCursorPosCallback(const GLFWcursorposfun callback) const {
     glfwSetCursorPosCallback(window, callback);
 }
 
-void Window::SetScrollCallback(GLFWscrollfun callback) {
+void Window::SetScrollCallback(const GLFWscrollfun callback) const {
     glfwSetScrollCallback(window, callback);
 }
 
-void Window::SetMouseButtonCallback(GLFWmousebuttonfun callback) {
+void Window::SetMouseButtonCallback(const GLFWmousebuttonfun callback) const {
     glfwSetMouseButtonCallback(window, callback);
 }
 
-void Window::SetCursorMode(int mode) {
+void Window::SetCursorMode(const int mode) const {
     glfwSetInputMode(window, GLFW_CURSOR, mode);
 }
 
-void Window::SetSize(int w, int h) {
+void Window::SetSize(const int w, const int h) {
     width = w;
     height = h;
 }
 
-GLFWwindow *Window::GetGLFWWindow() {
+GLFWwindow *Window::GetGLFWWindow() const {
     return window;
 }
 

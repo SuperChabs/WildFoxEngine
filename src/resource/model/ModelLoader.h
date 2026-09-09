@@ -29,7 +29,9 @@ std::pair<Model *, entt::entity> LoadModelFromFile(
     std::string & path,
     MaterialManager & materialManager,
     ECSWorld * world = nullptr,
-    const bool isBaseShape = false);
+    
+const bool isBaseShape = false
+);
 
 std::shared_ptr<ModelNode> ProcessNode(
     aiNode *node,

@@ -9,26 +9,26 @@
 
 void ConsoleLogger::write(const LogData &data) {
     const char *lvl = levelToString(data.lvl);
-    const char *cat = categoryToString(data.cat);
-    std::string timeStr = formatTime(data.timestamp);
+    // const char *cat = categoryToString(data.cat);
+    const std::string timeStr = formatTime(data.timestamp);
 
     if (data.showOrigin)
         std::println("[{}] [{}] {} ({}:{})",
-                     timeStr.c_str(),
+                     timeStr,
                      lvl,
                      //cat,
-                     data.m.c_str(),
-                     data.f.c_str(),
+                     data.m,
+                     data.f,
                      data.line);
     else
         std::println("[{}] [{}] {}",
-                     timeStr.c_str(),
+                     timeStr,
                      lvl,
                      //cat,
-                     data.m.c_str());
+                     data.m);
 }
 
-const char *ConsoleLogger::levelToString(LogLevel lvl) {
+const char *ConsoleLogger::levelToString(const LogLevel lvl) {
     switch (lvl) {
         case LogLevel::INFO:
             return "\033[32mINFO\033[0m"; // green
@@ -50,7 +50,7 @@ const char *ConsoleLogger::levelToString(LogLevel lvl) {
 }
 
 
-const char *ConsoleLogger::categoryToString(LogCategory cat) {
+const char *ConsoleLogger::categoryToString(const LogCategory cat) {
     switch (cat) {
         case LogCategory::CORE: return "CORE";
         case LogCategory::RENDERING: return "RENDERING";
@@ -61,8 +61,8 @@ const char *ConsoleLogger::categoryToString(LogCategory cat) {
 }
 
 std::string ConsoleLogger::formatTime(const std::chrono::system_clock::time_point &tp) {
-    auto time = std::chrono::system_clock::to_time_t(tp);
-    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+    const auto time = std::chrono::system_clock::to_time_t(tp);
+    const auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
                   tp.time_since_epoch()
               ) % 1000;
 

@@ -42,7 +42,7 @@ entt::entity MaterialSerializer::Deserialize(DeserializeContext &dcx, entt::enti
 }
 
 void MaterialSerializer::ApplyMaterial(ECSWorld *ecs, entt::entity entity, const std::shared_ptr<Material> &material,
-                                        const json &data) {
+                                       const json &data) {
     if (ecs->HasComponent<MeshComponent>(entity)) {
         auto &matComp = ecs->AddComponent<MaterialComponent>(entity, material);
         if (data.contains("tiling")) {
@@ -55,6 +55,6 @@ void MaterialSerializer::ApplyMaterial(ECSWorld *ecs, entt::entity entity, const
         return;
 
     auto &hier = ecs->GetComponent<HierarchyComponent>(entity);
-    for (entt::entity child : hier.children)
+    for (entt::entity child: hier.children)
         ApplyMaterial(ecs, child, material, data);
 }

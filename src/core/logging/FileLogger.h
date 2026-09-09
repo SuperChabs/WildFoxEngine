@@ -20,18 +20,18 @@ class FileLogger : public ILogSink {
 public:
     FileLogger();
 
-    ~FileLogger();
+    ~FileLogger() override;
 
     void write(const LogData &data) override;
 
 private:
     void OpenLogFile(const LogData &data);
 
-    const char *LevelToString(LogLevel lvl);
+    static const char *LevelToString(LogLevel lvl);
 
-    const char *CategoryToString(LogCategory cat);
+    static static const char *CategoryToString(LogCategory cat);
 
-    std::string FormatTime(const std::chrono::system_clock::time_point &tp);
+    static static std::string FormatTime(const std::chrono::system_clock::time_point &tp);
 
-    std::string FormatDate(const std::chrono::system_clock::time_point &tp);
+    static std::string FormatDate(const std::chrono::system_clock::time_point &tp);
 };

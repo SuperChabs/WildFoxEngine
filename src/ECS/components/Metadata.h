@@ -9,7 +9,8 @@ struct TagComponent {
 
     TagComponent() = default;
 
-    explicit TagComponent(std::string n) : name(std::move(n)) {}
+    explicit TagComponent(std::string n) : name(std::move(n)) {
+    }
 };
 
 struct IDComponent {
@@ -17,7 +18,8 @@ struct IDComponent {
 
     IDComponent() = default;
 
-    explicit IDComponent(const uint64_t i) : id(i) {}
+    explicit IDComponent(const uint64_t i) : id(i) {
+    }
 };
 
 struct ModelComponent {
@@ -25,5 +27,6 @@ struct ModelComponent {
 
     ModelComponent() = default;
 
-    explicit ModelComponent(std::string path) : filePath(std::move(path)) {}
+    explicit ModelComponent(std::string path) : filePath(std::move(path)) {
+    }
 };

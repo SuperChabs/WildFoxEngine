@@ -7,13 +7,13 @@ PhysicsDebugRenderSystem::PhysicsDebugRenderSystem() {
 
 void PhysicsDebugRenderSystem::Update(ECSWorld &ecs, ShaderManager &shaderManager,
                                       const std::string &shaderName, const glm::mat4 &view,
-                                      const glm::mat4 &projection) {
+                                      const glm::mat4 &projection) const {
     shaderManager.Bind(shaderName);
 
     ecs.Each<TransformComponent, ColliderComponent>(
         [&](entt::entity e,
-            TransformComponent &t,
-            ColliderComponent &c) {
+            const TransformComponent &t,
+            const ColliderComponent &c) {
             shaderManager.SetMat4(shaderName, "view", view);
             shaderManager.SetMat4(shaderName, "projection", projection);
 
@@ -23,9 +23,9 @@ void PhysicsDebugRenderSystem::Update(ECSWorld &ecs, ShaderManager &shaderManage
                 shaderManager.SetVec3(shaderName, "color", {0.0f, 0.0f, 1.0f});
 
             if (std::holds_alternative<AABB>(c.shape)) {
-                AABB &aabb = std::get<AABB>(c.shape);
+                const AABB &aabb = std::get<AABB>(c.shape);
 
-                std::vector<glm::vec3> pts = BuildLines(aabb, t.position);
+                const std::vector<glm::vec3> pts = BuildLines(aabb, t.position);
 
                 VBO->Bind();
                 glBufferSubData(GL_ARRAY_BUFFER, 0, pts.size() * sizeof(glm::vec3), pts.data());

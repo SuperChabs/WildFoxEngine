@@ -10,7 +10,6 @@
 #include "EngineCommandHandler.h"
 #include "application/Application.h"
 #include "ECS/systems/Systems.h"
-#include "ECS/components/Components.h"
 #include "core/ModuleManager.h"
 #include "rendering/RenderingModule.h"
 #include "resource/ResourceModule.h"
@@ -20,7 +19,7 @@
 #include "physics/PhysicsModule.h"
 #include "scripting/ScriptModule.h"
 
-/// @file Engine.cppm
+/// @file Engine.h
 /// @brief Engine class
 /// @author SuperChabs
 
@@ -35,24 +34,26 @@ class Engine : public Application {
 
     std::unique_ptr<EditorCommandHandler> m_ech;
 
-    ModuleManager *mm;
-    RenderingModule *renderingModule;
-    ResourceModule *resourceModule;
-    UIModule *uiModule;
-    ECSModule *ecsModule;
-    ScriptModule *m_scriptModule;
-    SceneModule *sceneModule;
-    PhysicsModule *m_physicsModule;
+    ModuleManager *mm{};
+    RenderingModule *renderingModule{};
+    ResourceModule *resourceModule{};
+    UIModule *uiModule{};
+    ECSModule *ecsModule{};
+    ScriptModule *m_scriptModule{};
+    SceneModule *sceneModule{};
+    PhysicsModule *m_physicsModule{};
 
-    bool cameraControlEnabled;
-    bool showUI;
+    bool cameraControlEnabled{};
+    bool showUI{};
 
     entt::entity gameCam = entt::null;
     EditorCamera editorCam;
 
     static void FramebufferSizeCallback(GLFWwindow *window, int width, int height);
+
     static void MouseCallback(GLFWwindow *window, double xpos, double ypos);
-    static void MouseButtonCallback(GLFWwindow *window, int button, int action, int mods);
+
+    static void MouseButtonCallback(GLFWwindow *window, int button, int action);
 
     void SetCameraControlMode(bool enabled);
 
@@ -65,8 +66,6 @@ protected:
     void OnInitialize() override;
 
     void OnUpdate(float deltaTime) override;
-
-    void UpdateMainCamera();
 
     /**
          * @brief Render scene into framebuffer
@@ -84,9 +83,7 @@ public:
     Engine(int w, int h, const std::string &title);
 
 private:
-    void InitializeAS();
-
     void ProcessInput();
 
-    void RegistraterCoreCommands();
+    void RegistrateCoreCommands();
 };

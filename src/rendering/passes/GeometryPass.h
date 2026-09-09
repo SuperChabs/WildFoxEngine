@@ -28,7 +28,8 @@ public:
     GeometryPass(GLContext *ctx, ShaderManager *sm, ECSWorld *w);
 
     void SetShadowData(const std::vector<glm::mat4> &lightSpaceMatrices, GLuint shadowMapArray,
-                       const std::unordered_map<entt::entity, int> &shadowMapIndices = {}, GLuint shadowCubeMapArray = 0,
+                       const std::unordered_map<entt::entity, int> &shadowMapIndices = {},
+                       GLuint shadowCubeMapArray = 0,
                        const std::unordered_map<entt::entity, int> &CubeShadowMapIndices = {});
 
     void Setup() override;

@@ -32,16 +32,16 @@ inline void DispatchTrigger(ECSWorld *ecs, const std::string &fnDecl, entt::enti
 
 inline void RegisterCommands(ECSWorld *ecs) {
     CommandManager::RegisterCommand("OnTriggerEnter",
-        [ecs](const CommandArgs &args) {
-            entt::entity a = std::get<entt::entity>(args[0]);
-            entt::entity b = std::get<entt::entity>(args[1]);
-            DispatchTrigger(ecs, "void OnTriggerEnter(uint64)", a, b);
-        });
+                                    [ecs](const CommandArgs &args) {
+                                        entt::entity a = std::get<entt::entity>(args[0]);
+                                        entt::entity b = std::get<entt::entity>(args[1]);
+                                        DispatchTrigger(ecs, "void OnTriggerEnter(uint64)", a, b);
+                                    });
 
     CommandManager::RegisterCommand("OnTriggerExit",
-        [ecs](const CommandArgs &args) {
-            entt::entity a = std::get<entt::entity>(args[0]);
-            entt::entity b = std::get<entt::entity>(args[1]);
-            DispatchTrigger(ecs, "void OnTriggerExit(uint64)", a, b);
-        });
+                                    [ecs](const CommandArgs &args) {
+                                        entt::entity a = std::get<entt::entity>(args[0]);
+                                        entt::entity b = std::get<entt::entity>(args[1]);
+                                        DispatchTrigger(ecs, "void OnTriggerExit(uint64)", a, b);
+                                    });
 }

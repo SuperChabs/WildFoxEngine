@@ -8,7 +8,8 @@ SceneMetadataSerializer::SceneMetadataSerializer(SceneFileHandler &handler)
     : fileHandler(handler) {
 }
 
-json SceneMetadataSerializer::SerializeMetadata(ECSWorld *world, const std::string &sceneName, entt::entity mainCamera) const {
+json SceneMetadataSerializer::SerializeMetadata(ECSWorld *world, const std::string &sceneName,
+                                                entt::entity mainCamera) const {
     json metadata;
     metadata["name"] = sceneName;
     metadata["timestamp"] = fileHandler.GetCurrentTimestamp();
@@ -23,8 +24,7 @@ json SceneMetadataSerializer::SerializeMetadata(ECSWorld *world, const std::stri
 void SceneMetadataSerializer::DeserializeMetadata(
     const json &data,
     const std::unordered_map<uint64_t, entt::entity> &createdEntities,
-    ECSWorld *world)
-{
+    ECSWorld *world) {
     if (!data.contains("mainCamera")) return;
 
     uint64_t camUUID = data["mainCamera"];

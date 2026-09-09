@@ -6,8 +6,8 @@
 #include "core/logging/Logger.h"
 #include "ECS/components/Components.h"
 
-std::pair<Model *, entt::entity> LoadModelFromFile( std::string & path, MaterialManager & materialManager,
-    ECSWorld * world, const bool isBaseShape) {
+std::pair<Model *, entt::entity> LoadModelFromFile(std::string &path, MaterialManager &materialManager,
+                                                   ECSWorld *world, const bool isBaseShape) {
     Logger::Log(LogLevel::INFO, "=== LoadModelFromFile START ===");
 
     std::string removePath = "../assets/objects/";
@@ -17,33 +17,31 @@ std::pair<Model *, entt::entity> LoadModelFromFile( std::string & path, Material
 
     Logger::Log(LogLevel::INFO, "Path: " + path);
     Logger::Log(LogLevel::INFO, "World pointer: " + std::string(world ? "OK" : "NULL"));
-    
+
     Assimp::Importer importer;
-    
-    const aiScene* scene = importer.ReadFile(path, 
-        aiProcess_Triangulate    |
-        // waiProcess_FlipUVs              |
-        aiProcess_CalcTangentSpace     |
-        aiProcess_GenNormals           |
-        aiProcess_PreTransformVertices |
-        aiProcess_FixInfacingNormals
+
+    const aiScene *scene = importer.ReadFile(path,
+                                             aiProcess_Triangulate |
+                                             // waiProcess_FlipUVs              |
+                                             aiProcess_CalcTangentSpace |
+                                             aiProcess_GenNormals |
+                                             aiProcess_PreTransformVertices |
+                                             aiProcess_FixInfacingNormals
     );
-    
-    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) 
-    {
-        Logger::Log(LogLevel::ERROR, 
-            "Assimp error: " + std::string(importer.GetErrorString()));
+
+    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+        Logger::Log(LogLevel::ERROR,
+                    "Assimp error: " + std::string(importer.GetErrorString()));
         return {nullptr, entt::null};
     }
-    
+
     std::string directory = path.substr(0, path.find_last_of('/'));
     Logger::Log(LogLevel::INFO, "Directory: " + directory);
-    
-    Model* model = new Model(path);
-    
+
+    Model *model = new Model(path);
+
     entt::entity rootEntity = entt::null;
-    if (world)
-    {
+    if (world) {
         Logger::Log(LogLevel::INFO, "Creating root entity...");
         rootEntity = world->CreateEntity(model->GetName() + (!isBaseShape ? "_Root" : ""));
         world->AddComponent<TransformComponent>(rootEntity, glm::vec3(0, 0, -5), glm::vec3(0), glm::vec3(1));
@@ -52,35 +50,32 @@ std::pair<Model *, entt::entity> LoadModelFromFile( std::string & path, Material
         world->AddComponent<ModelComponent>(rootEntity, path);
 
         Logger::Log(LogLevel::INFO, "Root entity created: " + model->GetName() + "_Root");
-    }
-    else
-    {
+    } else {
         Logger::Log(LogLevel::WARNING, "World is NULL, skipping entity creation");
     }
-    
+
     globalMeshCounter = 0;
-    
+
     Logger::Log(LogLevel::INFO, "Starting ProcessNode...");
 
     std::shared_ptr<ModelNode> rootNode = ProcessNode(
-        scene->mRootNode, 
-        scene, 
-        model, 
-        directory, 
-        materialManager, 
-        world, 
+        scene->mRootNode,
+        scene,
+        model,
+        directory,
+        materialManager,
+        world,
         rootEntity,
         isBaseShape
     );
     model->SetRootNode(rootNode);
 
     auto children = world->GetChildren(rootEntity);
-    if (children.size() == 1)
-    {
+    if (children.size() == 1) {
         auto it = children.begin();
         entt::entity meshEntity = *it;
 
-        auto& modelComp = world->GetComponent<ModelComponent>(rootEntity);
+        auto &modelComp = world->GetComponent<ModelComponent>(rootEntity);
         world->AddComponent<ModelComponent>(meshEntity, modelComp.filePath);
 
         // auto& tag = world->GetComponent<TagComponent>(meshEntity);
@@ -90,28 +85,27 @@ std::pair<Model *, entt::entity> LoadModelFromFile( std::string & path, Material
         world->DestroyEntity(rootEntity);
         rootEntity = meshEntity;
     }
-    
-    Logger::Log(LogLevel::INFO, 
-        "Model loaded: " + path + " (" + 
-        std::to_string(model->GetMeshCount()) + " meshes)");
-    
-    if (world && rootEntity != entt::null)
-    {
+
+    Logger::Log(LogLevel::INFO,
+                "Model loaded: " + path + " (" +
+                std::to_string(model->GetMeshCount()) + " meshes)");
+
+    if (world && rootEntity != entt::null) {
         auto children = world->GetChildren(rootEntity);
-        Logger::Log(LogLevel::INFO, 
-            "Root entity has " + std::to_string(children.size()) + " children");
+        Logger::Log(LogLevel::INFO,
+                    "Root entity has " + std::to_string(children.size()) + " children");
     }
-    
+
     loadedTexturesCache.clear();
-    
+
     Logger::Log(LogLevel::INFO, "=== LoadModelFromFile END ===\n");
-    
+
     return {model, rootEntity};
 }
 
-std::shared_ptr<ModelNode> ProcessNode( aiNode *node, const aiScene *scene, Model *model, const std::string &directory,
-        MaterialManager &materialManager, ECSWorld *world, entt::entity parentEntity, bool isBaseShape)
-{
+std::shared_ptr<ModelNode> ProcessNode(aiNode *node, const aiScene *scene, Model *model, const std::string &directory,
+                                       MaterialManager &materialManager, ECSWorld *world, entt::entity parentEntity,
+                                       bool isBaseShape) {
     Logger::Log(LogLevel::INFO, "ProcessNode: " + std::string(node->mName.C_Str()));
     Logger::Log(LogLevel::INFO, "  Meshes in this node: " + std::to_string(node->mNumMeshes));
     Logger::Log(LogLevel::INFO, "  World: " + std::string(world ? "OK" : "NULL"));
@@ -184,7 +178,7 @@ std::shared_ptr<ModelNode> ProcessNode( aiNode *node, const aiScene *scene, Mode
 }
 
 std::shared_ptr<Mesh> ProcessMesh(aiMesh *mesh, const aiScene *scene, const std::string &directory,
-        MaterialManager &materialManager, int meshIndex, bool isBaseShape) {
+                                  MaterialManager &materialManager, int meshIndex, bool isBaseShape) {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     std::vector<Texture> textures;
@@ -383,24 +377,22 @@ unsigned int TextureFromFile(const char *path, const std::string &directory, con
 
         if (aiTex->mHeight == 0) {
             data = stbi_load_from_memory(reinterpret_cast<unsigned char *>(aiTex->pcData), aiTex->mWidth, &height,
-                &width, &nrComponents, 0);
-        }
-        else {
+                                         &width, &nrComponents, 0);
+        } else {
             width = aiTex->mWidth;
             height = aiTex->mHeight;
             nrComponents = 4;
             data = reinterpret_cast<unsigned char *>(aiTex->pcData);
             freeData = false;
         }
-    }
-    else {
+    } else {
         std::string texturePath = directory + '/' + p;
         data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
     }
 
     if (data) {
         GLenum format = GL_RGB;
-        if (nrComponents == 1)      format = GL_RED;
+        if (nrComponents == 1) format = GL_RED;
         else if (nrComponents == 2) format = GL_RG;
         else if (nrComponents == 3) format = GL_RGB;
         else if (nrComponents == 4) format = GL_RGBA;

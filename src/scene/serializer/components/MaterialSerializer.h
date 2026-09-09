@@ -19,6 +19,6 @@ public:
     entt::entity Deserialize(DeserializeContext &dcx, entt::entity entity, const json &data) override;
 
 private:
-    static void ApplyMaterial(ECSWorld* ecs, entt::entity entity, const std::shared_ptr<Material> &material,
-                                const json &data);
+    static void ApplyMaterial(ECSWorld *ecs, entt::entity entity, const std::shared_ptr<Material> &material,
+                              const json &data);
 };

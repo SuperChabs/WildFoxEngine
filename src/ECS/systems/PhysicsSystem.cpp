@@ -3,11 +3,11 @@
 #include "core/logging/Logger.h"
 #include "core/CommandManager.h"
 
-void PhysicsSystem::Update(ECSWorld &world, float dt) {
+void PhysicsSystem::Update(ECSWorld &world, const float dt) {
     entities.clear();
 
     world.Each<TransformComponent, RigidBodyComponent, ColliderComponent>(
-        [&](entt::entity entity,
+        [&](const entt::entity entity,
             TransformComponent &t,
             RigidBodyComponent &r,
             ColliderComponent &c) {
@@ -74,13 +74,13 @@ void PhysicsSystem::Update(ECSWorld &world, float dt) {
         }
 
     for (auto &p: currentTriggers)
-        if (!m_activeTriggers.count(p)) {
+        if (!m_activeTriggers.contains(p)) {
             CommandManager::ExecuteCommand("OnTriggerEnter", {p.first, p.second});
             Logger::Log(LogLevel::INFO, "Enter trigger");
         }
 
     for (auto &p: m_activeTriggers)
-        if (!currentTriggers.count(p)) {
+        if (!currentTriggers.contains(p)) {
             CommandManager::ExecuteCommand("OnTriggerExit", {p.first, p.second});
             Logger::Log(LogLevel::INFO, "Exit trigger");
         }
@@ -88,24 +88,24 @@ void PhysicsSystem::Update(ECSWorld &world, float dt) {
     m_activeTriggers = currentTriggers;
 }
 
-glm::vec3 PhysicsSystem::GetGravity() {
+glm::vec3 PhysicsSystem::GetGravity() const {
     return gravity;
 }
 
-void PhysicsSystem::SetGravity(glm::vec3 newGravity) {
+void PhysicsSystem::SetGravity(const glm::vec3 newGravity) {
     gravity = newGravity;
 }
 
 bool PhysicsSystem::TestAABB(const AABB &a, const AABB &b, ContactInfo &contact) {
-    float ox = std::min(a.max.x, b.max.x) - std::max(a.min.x, b.min.x);
-    float oy = std::min(a.max.y, b.max.y) - std::max(a.min.y, b.min.y);
-    float oz = std::min(a.max.z, b.max.z) - std::max(a.min.z, b.min.z);
+    const float ox = std::min(a.max.x, b.max.x) - std::max(a.min.x, b.min.x);
+    const float oy = std::min(a.max.y, b.max.y) - std::max(a.min.y, b.min.y);
+    const float oz = std::min(a.max.z, b.max.z) - std::max(a.min.z, b.min.z);
 
     if (ox <= 0 || oy <= 0 || oz <= 0) return false;
 
-    glm::vec3 centerA = (a.min + a.max) * 0.5f;
-    glm::vec3 centerB = (b.min + b.max) * 0.5f;
-    glm::vec3 dir = centerB - centerA;
+    const glm::vec3 centerA = (a.min + a.max) * 0.5f;
+    const glm::vec3 centerB = (b.min + b.max) * 0.5f;
+    const glm::vec3 dir = centerB - centerA;
 
     if (ox < oy && ox < oz) {
         contact.depth = ox;

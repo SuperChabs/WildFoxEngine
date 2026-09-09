@@ -1,23 +1,21 @@
 #pragma once
 
 #include <string>
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-/// @file Window.cppm
+/// @file Window.h
 /// @brief Window class handler
 /// @author SuperChabs
 /// @date 2026-01-28
 
 class Window {
-private:
     GLFWwindow *window;
     int width;
     int height;
     std::string title;
 
 public:
-    Window(int width, int height, const std::string &title);
+    Window(int width, int height, std::string title);
 
     ~Window();
 
@@ -33,29 +31,21 @@ public:
 
     void Terminate();
 
-    bool ShouldClose() const;
+    [[nodiscard]] bool ShouldClose() const;
 
-    void SwapBuffers();
+    void SwapBuffers() const;
 
-    void PollEvents();
+    static void PollEvents();
 
-    void SetFramebufferSizeCallback(GLFWframebuffersizefun callback);
+    GLFWwindow *GetGLFWWindow() const;
+    [[nodiscard]] int GetWidth() const;
+    [[nodiscard]] int GetHeight() const;
+    [[nodiscard]] float GetAspectRatio() const;
 
-    void SetCursorPosCallback(GLFWcursorposfun callback);
-
-    void SetScrollCallback(GLFWscrollfun callback);
-
-    void SetMouseButtonCallback(GLFWmousebuttonfun callback);
-
-    void SetCursorMode(int mode);
-
+    void SetFramebufferSizeCallback(GLFWframebuffersizefun callback) const;
+    void SetCursorPosCallback(GLFWcursorposfun callback) const;
+    void SetScrollCallback(GLFWscrollfun callback) const;
+    void SetMouseButtonCallback(GLFWmousebuttonfun callback) const;
+    void SetCursorMode(int mode) const;
     void SetSize(int w, int h);
-
-    GLFWwindow *GetGLFWWindow();
-
-    int GetWidth() const;
-
-    int GetHeight() const;
-
-    float GetAspectRatio() const;
 };

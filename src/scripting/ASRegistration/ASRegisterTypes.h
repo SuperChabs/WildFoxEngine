@@ -35,7 +35,7 @@ inline void RegisterVec3(asIScriptEngine *engine) {
 
     r = engine->RegisterObjectType(
         "vec3", sizeof(glm::vec3),
-       asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CDAK
+        asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CDAK
     );
     assert(r >= 0);
     AS_CHECK(r, "vec3 type");

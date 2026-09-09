@@ -2,15 +2,16 @@
 #include <entt/entt.hpp>
 #include <glm/glm.hpp>
 
+#include "ECS/components/Components.h"
+
 void RenderSystem::Update(ECSWorld &world, ShaderManager &shaderManager, const std::string &name) {
     shaderManager.Bind(name);
 
-    world.Each<TransformComponent, MeshComponent, MaterialComponent, VisibilityComponent>(
-        [&](entt::entity entity,
-            TransformComponent &transform,
-            MeshComponent &meshComp,
-            MaterialComponent &matComp,
-            VisibilityComponent &vis) {
+    world.Each<MeshComponent, MaterialComponent, VisibilityComponent>(
+        [&](const entt::entity entity,
+            const MeshComponent &meshComp,
+            const MaterialComponent &matComp,
+            const VisibilityComponent &vis) {
             if (!vis.isActive || !vis.visible) return;
 
             const glm::mat4 modelMatrix = world.GetGlobalTransform(entity);

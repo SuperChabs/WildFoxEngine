@@ -11,10 +11,8 @@
 #include "ECS/World.h"
 #include "ECS/components/Components.h"
 
-inline void CreateCube(glm::vec3& pos, glm::vec3& rot, glm::vec3& scale) {
-
+inline void CreateCube(glm::vec3 &pos, glm::vec3 &rot, glm::vec3 &scale) {
 }
 
-inline void RegisterExperimentalStuff(asIScriptEngine* engine) {
-
+inline void RegisterExperimentalStuff(asIScriptEngine *engine) {
 }

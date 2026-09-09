@@ -1,9 +1,10 @@
 #include "EventBus.h"
 #include <functional>
+#include "logging/Logger.h"
 
 void EventBus::RegisterEvent(const EventID &name) {
-    if (m_Subscribers.find(name) == m_Subscribers.end())
-        m_Subscribers.emplace(name, std::vector<std::pair<SubscriberID, Callback>>());
+    if (!m_Subscribers.contains(name))
+        m_Subscribers.emplace(name, std::vector<std::pair<SubscriberID, Callback> >());
 }
 
 SubscriberID EventBus::Subscribe(const EventID &name, Callback callback) {
@@ -20,8 +21,8 @@ void EventBus::Unsubscribe(const EventID &name, SubscriberID id) {
     if (!m_IsPublishing) {
         auto it = m_Subscribers.find(name);
         if (it != m_Subscribers.end() && it->first == name) {
-            auto inner = std::find_if(it->second.begin(), it->second.end(),
-                [id](const auto &pair) { return pair.first == id; });
+            const auto inner = std::ranges::find_if(it->second,
+                                                    [id](const auto &pair) { return pair.first == id; });
 
             if (inner != it->second.end())
                 it->second.erase(inner);
@@ -29,21 +30,22 @@ void EventBus::Unsubscribe(const EventID &name, SubscriberID id) {
     } else {
         auto it = m_Subscribers.find(name);
         if (it != m_Subscribers.end())
-            m_PendingUnsubscribes.push_back({name, id});
+            m_PendingUnsubscribes.emplace_back(name, id);
     }
 }
 
 void EventBus::Publish(const EventID &name, const std::any &payload) {
-    auto it = m_Subscribers.find(name);
+    const auto it = m_Subscribers.find(name);
     if (it == m_Subscribers.end())
         return;
 
     m_IsPublishing = true;
 
-    for (auto &[id, cb]: it->second) {
+    for (auto &cb: it->second | std::views::values) {
         try {
             cb(payload);
         } catch (std::exception &e) {
+            Logger::Log(LogLevel::ERROR, e.what());
         }
     }
 

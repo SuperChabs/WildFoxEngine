@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <variant>
 #include <set>
 #include <utility>
 
@@ -27,10 +26,10 @@ class PhysicsSystem {
 public:
     void Update(ECSWorld &world, float dt);
 
-    glm::vec3 GetGravity();
+    glm::vec3 GetGravity() const;
 
     void SetGravity(glm::vec3 newGravity);
 
 private:
-    bool TestAABB(const AABB &a, const AABB &b, ContactInfo &contact);
+    static bool TestAABB(const AABB &a, const AABB &b, ContactInfo &contact);
 };

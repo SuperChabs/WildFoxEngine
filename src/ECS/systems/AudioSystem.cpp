@@ -1,6 +1,5 @@
 #include "AudioSystem.h"
 #include <entt/entt.hpp>
-#include <algorithm>
 #include <cstring>
 #include <fstream>
 #include <stdexcept>
@@ -19,7 +18,7 @@ bool AudioSystem::Init() {
 }
 
 void AudioSystem::Shutdown() {
-    for (auto &[_, buf]: m_bufferCache)
+    for (auto &buf: m_bufferCache | std::views::values)
         alDeleteBuffers(1, &buf);
 
     for (auto &src: m_oneShotSources)
@@ -31,16 +30,15 @@ void AudioSystem::Shutdown() {
 }
 
 void AudioSystem::Update(ECSWorld *ecs) {
-    SyncListner(ecs);
+    SyncLiseners(ecs);
     SyncSources(ecs);
     CleanUpOneShot();
 }
 
 ALuint AudioSystem::LoadBuffer(const std::string &path) {
-    auto it = m_bufferCache.find(path);
-    if (it != m_bufferCache.end()) return it->second;
+    if (const auto it = m_bufferCache.find(path); it != m_bufferCache.end()) return it->second;
 
-    ALuint buf = LoadWavFromDisk(path);
+    const ALuint buf = LoadWavFromDisk(path);
     m_bufferCache[path] = buf;
     return buf;
 }
@@ -48,7 +46,7 @@ ALuint AudioSystem::LoadBuffer(const std::string &path) {
 void AudioSystem::PlayOneShot(const std::string &path, float volume, float pitch) {
     if (path.empty()) return;
 
-    ALuint buffer = LoadBuffer(path);
+    const ALuint buffer = LoadBuffer(path);
     ALuint source = 0;
     alGenSources(1, &source);
     alSourcei(source, AL_BUFFER, static_cast<ALint>(buffer));
@@ -62,9 +60,9 @@ void AudioSystem::PlayOneShot(const std::string &path, float volume, float pitch
     m_oneShotSources.push_back(source);
 }
 
-void AudioSystem::SyncListner(ECSWorld *ecs) {
+void AudioSystem::SyncLiseners(ECSWorld *ecs) {
     bool listenerFound = false;
-    ecs->Each<AudioListenerComponent, TransformComponent>([&](entt::entity, TransformComponent &transform) {
+    ecs->Each<AudioListenerComponent, TransformComponent>([&](entt::entity, const TransformComponent &transform) {
         if (!listenerFound) {
             SetListenerTransform(transform);
             listenerFound = true;
@@ -72,13 +70,13 @@ void AudioSystem::SyncListner(ECSWorld *ecs) {
     });
 
     if (!listenerFound) {
-        TransformComponent defaultTransform;
+        constexpr TransformComponent defaultTransform;
         SetListenerTransform(defaultTransform);
     }
 }
 
 void AudioSystem::SyncSources(ECSWorld *ecs) {
-    ecs->Each<AudioSourceComponent>([&](entt::entity entity, AudioSourceComponent &audio) {
+    ecs->Each<AudioSourceComponent>([&](const entt::entity entity, AudioSourceComponent &audio) {
         const TransformComponent *transform = nullptr;
         if (ecs->HasComponent<TransformComponent>(entity))
             transform = &ecs->GetComponent<TransformComponent>(entity);
@@ -88,13 +86,12 @@ void AudioSystem::SyncSources(ECSWorld *ecs) {
 
         if (audio._alSource == 0) {
             alGenSources(1, &audio._alSource);
-            ALuint buffer = LoadBuffer(audio.path);
+            const ALuint buffer = LoadBuffer(audio.path);
             alSourcei(audio._alSource, AL_BUFFER, static_cast<ALint>(buffer));
         } else {
             ALint currentBuffer = 0;
             alGetSourcei(audio._alSource, AL_BUFFER, &currentBuffer);
-            ALuint expectedBuffer = LoadBuffer(audio.path);
-            if (static_cast<ALuint>(currentBuffer) != expectedBuffer)
+            if (const ALuint expectedBuffer = LoadBuffer(audio.path); static_cast<ALuint>(currentBuffer) != expectedBuffer)
                 alSourcei(audio._alSource, AL_BUFFER, static_cast<ALint>(expectedBuffer));
         }
 
@@ -129,20 +126,17 @@ void AudioSystem::SyncSources(ECSWorld *ecs) {
 }
 
 void AudioSystem::CleanUpOneShot() {
-    m_oneShotSources.erase(
-        std::remove_if(
-            m_oneShotSources.begin(),
-            m_oneShotSources.end(),
-            [&](ALuint source) {
-                ALint state = 0;
-                alGetSourcei(source, AL_SOURCE_STATE, &state);
-                if (state != AL_PLAYING) {
-                    alDeleteSources(1, &source);
-                    return true;
-                }
-                return false;
-            }),
-        m_oneShotSources.end());
+    std::erase_if(
+        m_oneShotSources,
+        [&](const ALuint source) {
+            ALint state = 0;
+            alGetSourcei(source, AL_SOURCE_STATE, &state);
+            if (state != AL_PLAYING) {
+                alDeleteSources(1, &source);
+                return true;
+            }
+            return false;
+        });
 }
 
 ALuint LoadWavFromDisk(const std::string &path) {

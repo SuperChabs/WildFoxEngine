@@ -1,4 +1,5 @@
 #include "Application.h"
+
 #include "core/logging/Logger.h"
 
 Application::Application(int width, int height, const std::string &title)
@@ -28,7 +29,7 @@ bool Application::Initialize() {
 void Application::Run() {
     isRunning = true;
 
-    while (isRunning && !m_coreModule->GetWindow()->ShouldClose()) {
+    while (!m_coreModule->GetWindow()->ShouldClose()) {
         m_coreModule->GetTime()->Update();
 
         Update();
@@ -52,7 +53,7 @@ void Application::Stop() {
     isRunning = false;
 }
 
-ModuleManager *Application::GetModuleManager() {
+ModuleManager *Application::GetModuleManager() const {
     return moduleManager.get();
 }
 

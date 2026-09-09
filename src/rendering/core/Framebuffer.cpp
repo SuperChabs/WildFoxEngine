@@ -42,7 +42,7 @@ void Framebuffer::Invalidate() {
         0
     );
 
-    GLenum drawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
+    GLenum drawBuffers[1] = {GL_COLOR_ATTACHMENT0};
     glDrawBuffers(1, drawBuffers);
 
     // Depth + stencil

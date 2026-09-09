@@ -30,7 +30,7 @@ public:
     void Initialize() override;
 
     void Execute(CameraComponent &camera, TransformComponent &transform,
-        CameraOrientationComponent &orientation, int width, int height) override;
+                 CameraOrientationComponent &orientation, int width, int height) override;
 
     ShadowPass *GetShadowPass() const;
 };

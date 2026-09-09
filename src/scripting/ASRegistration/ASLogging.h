@@ -7,7 +7,7 @@
 
 #define AS_CHECK(r, msg) if ((r) < 0) { Logger::Log(LogLevel::ERROR, std::string("AS Register failed: ") + msg + " code: " + std::to_string(r)); return; }
 
-inline void ScriptLog(const std::string & msg) { Logger::Log(LogLevel::SCRIPT, msg); }
+inline void ScriptLog(const std::string &msg) { Logger::Log(LogLevel::SCRIPT, msg); }
 
 inline void RegisterLogging(asIScriptEngine *engine) {
     int r = engine->RegisterGlobalFunction(

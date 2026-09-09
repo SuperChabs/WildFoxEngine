@@ -17,13 +17,11 @@ public:
 
     /// @name IModule interface
     /// @{
-    const char *GetName() const override;
-
-    int GetPriority() const override;
-
-    bool IsRequired() const override;
+    [[nodiscard]] const char *GetName() const override;
+    [[nodiscard]] int GetPriority() const override;
+    [[nodiscard]] bool IsRequired() const override;
 
     /// @}
 
-    ECSWorld *GetECS();
+    ECSWorld *GetECS() const;
 };

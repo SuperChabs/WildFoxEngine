@@ -2,9 +2,10 @@
 #include <entt/entt.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "core/logging/Logger.h"
+#include "ECS/components/Components.h"
 
 void IconRenderSystem::SetupQuad() {
-    float quadVertices[] = {
+    constexpr float quadVertices[] = {
         // positions   // texCoords
         -0.5f, 0.5f, 0.0f, 1.0f,
         -0.5f, -0.5f, 0.0f, 0.0f,
@@ -33,9 +34,8 @@ IconRenderSystem::IconRenderSystem(TextureManager *tm)
     SetupQuad();
 }
 
-void IconRenderSystem::Update(ECSWorld &world, ShaderManager &shaderManager,
-                              const std::string &shaderName, const glm::mat4 &view,
-                              const glm::mat4 &projection) {
+void IconRenderSystem::Update(ECSWorld &world, ShaderManager &shaderManager, const std::string &shaderName,
+        const glm::mat4 &view) const {
     shaderManager.Bind(shaderName);
 
     glEnable(GL_BLEND);
@@ -44,9 +44,9 @@ void IconRenderSystem::Update(ECSWorld &world, ShaderManager &shaderManager,
 
     world.Each<TransformComponent, IconComponent, VisibilityComponent>(
         [&](entt::entity entity,
-            TransformComponent &transform,
+            const TransformComponent &transform,
             IconComponent &icon,
-            VisibilityComponent &vis) {
+            const VisibilityComponent &vis) {
             if (!vis.isActive || !vis.visible) return;
 
             if (icon.textureID == 0 && !icon.iconTexturePath.empty()) {
@@ -58,7 +58,7 @@ void IconRenderSystem::Update(ECSWorld &world, ShaderManager &shaderManager,
                 }
             }
 
-            glm::mat4 model = glm::mat4(1.0f);
+            auto model = glm::mat4(1.0f);
             model = glm::translate(model, transform.position);
 
             if (icon.billboardMode) {

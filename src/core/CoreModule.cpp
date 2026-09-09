@@ -25,6 +25,8 @@ CoreModule::CoreModule(int width, int height, const std::string &title) {
 
 bool CoreModule::Initialize() { return true; }
 
-void CoreModule::Update(float deltaTime) {}
+void CoreModule::Update(float deltaTime) {
+}
 
-void CoreModule::Shutdown() {}
+void CoreModule::Shutdown() {
+}

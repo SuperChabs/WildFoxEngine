@@ -11,15 +11,15 @@ using namespace entt::literals;
 
 DebugOverlay::DebugOverlay() {
     editorFramebuffer = std::make_unique<Framebuffer>(1, 1);
-    gameFramebuffer   = std::make_unique<Framebuffer>(1, 1);
+    gameFramebuffer = std::make_unique<Framebuffer>(1, 1);
 }
 
-void DebugOverlay::Render(ECSWorld *ecs, MaterialManager *materialManager, SceneSerializer * ss, EditorCamera &editorCamera) {
+void DebugOverlay::Render(ECSWorld *ecs, MaterialManager *materialManager, SceneSerializer *ss,
+                          EditorCamera &editorCamera) {
     if (!visible || !ecs) return;
 
-    ImGuiViewport* viewport = ImGui::GetMainViewport();
-    if (!viewport)
-    {
+    ImGuiViewport *viewport = ImGui::GetMainViewport();
+    if (!viewport) {
         Logger::Log(LogLevel::ERROR, "Main viewport is NULL!");
         return;
     }
@@ -61,7 +61,7 @@ void DebugOverlay::Render(ECSWorld *ecs, MaterialManager *materialManager, Scene
     }
 
     editorViewportWindow.Render(*ecs, m_selected, editorFramebuffer.get(), editorCamera.camera,
-        editorCamera.transform, editorCamera.orientation);
+                                editorCamera.transform, editorCamera.orientation);
 
     gameViewportWindow.Render(gameFramebuffer.get());
 
@@ -141,7 +141,7 @@ void DebugOverlay::RenderSceneTab(SceneSerializer *ss) {
     }
 
     if (ImGui::BeginPopupModal("Confirm Delete Scene", nullptr,
-        ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings)) {
+                               ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings)) {
         ImGui::Text("Delete Scene '%s'?", m_pendingDeleteScene.c_str());
         ImGui::TextColored(ImVec4(1, 0.4f, 0.4f, 1), "This cannot be undone!");
         ImGui::Spacing();
@@ -192,14 +192,14 @@ void DebugOverlay::RenderHierarchyTab(ECSWorld *ecs) {
 
     if (sortAlphabetically) {
         std::sort(roots.begin(), roots.end(),
-            [&](entt::entity a, entt::entity b) {
-                auto &tagA = ecs->GetComponent<TagComponent>(a);
-                auto &tagB = ecs->GetComponent<TagComponent>(b);
-                return tagA.name < tagB.name;
-            });
+                  [&](entt::entity a, entt::entity b) {
+                      auto &tagA = ecs->GetComponent<TagComponent>(a);
+                      auto &tagB = ecs->GetComponent<TagComponent>(b);
+                      return tagA.name < tagB.name;
+                  });
     }
 
-    for (auto e : roots) {
+    for (auto e: roots) {
         RenderEntityNode(e, ecs, toDelete);
     }
 
@@ -363,7 +363,6 @@ void DebugOverlay::RenderInspectorTab(ECSWorld *ecs, MaterialManager *materialMa
 
         ImGui::EndPopup();
     }
-
 }
 
 void DebugOverlay::RenderCreateEntityTab() {
@@ -403,8 +402,7 @@ void DebugOverlay::RenderOpenModelDialog() {
 
     ImGui::OpenPopup("Open Model");
 
-    if (ImGui::BeginPopupModal( "Open Model", &m_showOpenModelDialog, ImGuiWindowFlags_AlwaysAutoResize)) {
-
+    if (ImGui::BeginPopupModal("Open Model", &m_showOpenModelDialog, ImGuiWindowFlags_AlwaysAutoResize)) {
         ImGui::BeginChild("ModelList", ImVec2(250, 200), true);
         for (int i = 0; i < static_cast<int>(m_availableObjects.size()); i++) {
             const bool isSelected = (m_selectedObject == i);
@@ -453,7 +451,7 @@ std::vector<std::string> DebugOverlay::GetAvailableObjects() {
     std::vector<std::string> filePaths;
 
     try {
-        for (const auto& entry : fs::recursive_directory_iterator(folderPath))
+        for (const auto &entry: fs::recursive_directory_iterator(folderPath))
             if (entry.is_regular_file())
                 filePaths.push_back(entry.path().string());
     } catch (std::exception &e) {

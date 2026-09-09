@@ -2,27 +2,27 @@
 
 #include <cstring>
 
-void Logger::Logger::AddSink(ILogSink *sink) {
-    std::lock_guard<std::mutex> lock(logMutex());
+void Logger::AddSink(ILogSink *sink) {
+    std::lock_guard lock(logMutex());
 
     sinks().push_back(sink);
 }
 
 void Logger::RemoveSink(ILogSink *sink) {
-    std::lock_guard<std::mutex> lock(logMutex());
+    std::lock_guard lock(logMutex());
     auto &s = sinks();
-    s.erase(std::remove(s.begin(), s.end(), sink), s.end());
+    std::erase(s, sink);
 }
 
 void Logger::ClearSinks() {
-    std::lock_guard<std::mutex> lock(logMutex());
+    std::lock_guard lock(logMutex());
     sinks().clear();
 }
 
-void Logger::Log(LogLevel level, const std::string &message) {
-    std::lock_guard<std::mutex> lock(logMutex());
+void Logger::Log(const LogLevel level, const std::string &message) {
+    std::lock_guard lock(logMutex());
 
-    LogData data{
+    const LogData data{
         level,
         LogCategory::OTHER,
         message,
@@ -38,15 +38,15 @@ void Logger::Log(LogLevel level, const std::string &message) {
 }
 
 
-void Logger::Log(LogLevel level, const std::string &message, bool showOrigin, const std::source_location &loc) {
-    std::lock_guard<std::mutex> lock(logMutex());
+void Logger::Log(const LogLevel level, const std::string &message, const bool showOrigin, const std::source_location &loc) {
+    std::lock_guard lock(logMutex());
 
-    LogData data{
+    const LogData data{
         level,
         LogCategory::OTHER,
         message,
         showOrigin ? stripProjectRoot(loc.file_name()) : "",
-        showOrigin ? int(loc.line()) : 0,
+        showOrigin ? static_cast<int>(loc.line()) : 0,
         showOrigin,
         std::chrono::system_clock::now()
     };
@@ -56,10 +56,10 @@ void Logger::Log(LogLevel level, const std::string &message, bool showOrigin, co
             sink->write(data);
 }
 
-void Logger::Log(LogLevel level, LogCategory cat, const std::string &message, bool showOrigin) {
-    std::lock_guard<std::mutex> lock(logMutex());
+void Logger::Log(const LogLevel level, const LogCategory cat, const std::string &message, bool showOrigin) {
+    std::lock_guard lock(logMutex());
 
-    LogData data{
+    const LogData data{
         level,
         cat,
         message,
@@ -75,7 +75,7 @@ void Logger::Log(LogLevel level, LogCategory cat, const std::string &message, bo
 }
 
 const char *Logger::stripProjectRoot(const char *file) {
-    constexpr const char *ROOT = "WFE/";
+    constexpr auto ROOT = "WFE/";
     const char *pos = std::strstr(file, ROOT);
     return pos ? pos : file;
 }

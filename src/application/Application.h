@@ -3,17 +3,12 @@
 #include <string>
 #include <memory>
 
-#include <GLFW/glfw3.h>
-
 #include "core/CoreModule.h"
-#include "core/Window.h"
-#include "core/Input.h"
-#include "core/Time.h"
 #include "core/logging/ConsoleLogger.h"
 #include "core/logging/FileLogger.h"
 #include "core/ModuleManager.h"
 
-/// @file Application.cppm
+/// @file Application.cpp
 /// @brief Main application class for the WildFoxEngine
 /// @author SuperChabs
 /// @date 2026-01-28
@@ -68,8 +63,11 @@ public:
     virtual ~Application();
 
     Application(const Application &) = delete;
+
     Application &operator=(const Application &) = delete;
+
     Application(Application &&) = delete;
+
     Application &operator=(Application &&) = delete;
 
     /**
@@ -85,7 +83,7 @@ public:
     void Run();
 
     /**
-     * @brief well, it do what in method name stands for
+     * @brief well, it does what in method name stands for
      */
     void Shutdown();
 
@@ -98,7 +96,7 @@ public:
     /// \name Getters
     /// @{
 
-    ModuleManager *GetModuleManager();
+    ModuleManager *GetModuleManager() const;
 
     /// @}
 

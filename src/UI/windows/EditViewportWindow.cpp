@@ -3,8 +3,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
 
-void EditViewportWindow::Render(ECSWorld &ecs, entt::entity &selected, Framebuffer *framebuffer, CameraComponent &camera,
-        TransformComponent &transform, CameraOrientationComponent &orientation) {
+void EditViewportWindow::Render(ECSWorld &ecs, entt::entity &selected, Framebuffer *framebuffer,
+                                CameraComponent &camera,
+                                TransformComponent &transform, CameraOrientationComponent &orientation) {
     if (!isOpen) return;
 
     ImGui::SetNextWindowSize({800, 650}, ImGuiCond_FirstUseEver);
@@ -19,20 +20,19 @@ void EditViewportWindow::Render(ECSWorld &ecs, entt::entity &selected, Framebuff
     ImVec2 size = ImGui::GetContentRegionAvail();
 
     if (size.x > 0 && size.y > 0 &&
-        (size.x != viewportSize.x || size.y != viewportSize.y))
-    {
+        (size.x != viewportSize.x || size.y != viewportSize.y)) {
         viewportSize = size;
         if (framebuffer)
             framebuffer->Resize(static_cast<int>(size.x), static_cast<int>(size.y));
 
         Logger::Log(LogLevel::INFO, "Viewport resized to " +
-            std::to_string(static_cast<int>(size.x)) + "x" + std::to_string(static_cast<int>(size.y)));
+                                    std::to_string(static_cast<int>(size.x)) + "x" + std::to_string(
+                                        static_cast<int>(size.y)));
     }
 
     viewportPos = ImGui::GetCursorScreenPos();
 
-    if (framebuffer)
-    {
+    if (framebuffer) {
         ImGui::Image(
             framebuffer->GetTextureID(),
             size,
@@ -40,7 +40,7 @@ void EditViewportWindow::Render(ECSWorld &ecs, entt::entity &selected, Framebuff
             {1, 0}
         );
 
-        if (selected != entt::null && ecs.IsValid(selected)){
+        if (selected != entt::null && ecs.IsValid(selected)) {
             ImGuizmo::SetOrthographic(false);
             ImGuizmo::SetDrawlist();
             ImGuizmo::SetRect(viewportPos.x, viewportPos.y, viewportSize.x, viewportSize.y);
@@ -52,31 +52,27 @@ void EditViewportWindow::Render(ECSWorld &ecs, entt::entity &selected, Framebuff
             if (isFocused)
                 ProcessInput();
 
-            auto& tc = ecs.GetComponent<TransformComponent>(selected);
+            auto &tc = ecs.GetComponent<TransformComponent>(selected);
             glm::mat4 trans = tc.GetModelMatrix();
 
             ImGuizmo::Manipulate(
                 glm::value_ptr(cameraView),
                 glm::value_ptr(cameraProj),
-                (ImGuizmo::OPERATION)m_GizmoOperation,
+                (ImGuizmo::OPERATION) m_GizmoOperation,
                 ImGuizmo::WORLD,
                 glm::value_ptr(trans)
             );
 
-            if (ImGuizmo::IsUsing())
-            {
+            if (ImGuizmo::IsUsing()) {
                 UpdateTransformFromMatrix(tc, trans);
-                if (ecs.HasComponent<CameraOrientationComponent>(selected))
-                {
-                    auto& orient = ecs.GetComponent<CameraOrientationComponent>(selected);
+                if (ecs.HasComponent<CameraOrientationComponent>(selected)) {
+                    auto &orient = ecs.GetComponent<CameraOrientationComponent>(selected);
                     orient.yaw = tc.rotation.y;
                     orient.pitch = tc.rotation.x;
                 }
             }
         }
-    }
-    else
-    {
+    } else {
         ImGui::Text("Framebuffer error");
     }
 

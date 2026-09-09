@@ -8,7 +8,8 @@ GeometryPass::GeometryPass(GLContext *ctx, ShaderManager *sm, ECSWorld *w)
 }
 
 void GeometryPass::SetShadowData(const std::vector<glm::mat4> &lightSpaceMatrices, GLuint shadowMapArray,
-                                 const std::unordered_map<entt::entity, int> &shadowMapIndices, GLuint shadowCubeMapArray,
+                                 const std::unordered_map<entt::entity, int> &shadowMapIndices,
+                                 GLuint shadowCubeMapArray,
                                  const std::unordered_map<entt::entity, int> &CubeShadowMapIndices) {
     m_LightSpaceMatrices = lightSpaceMatrices;
     m_shadowMapArray = shadowMapArray;
@@ -33,14 +34,14 @@ void GeometryPass::Execute(const glm::mat4 &view, const glm::mat4 &projection) {
 
     CommandManager::ExecuteCommand("Renderer_RenderGeometry",
                                    {
-                                       view,                   // 0
-                                       projection,             // 1
+                                       view, // 0
+                                       projection, // 1
                                        std::string("basic"), // 2
-                                       m_LightSpaceMatrices,   // 3
-                                       m_shadowMapArray,       // 4
-                                       m_ShadowMapIndices,     // 5
-                                       m_CubeShadowMapArray,   // 6
-                                       m_CubeShadowMapIndices  // 7
+                                       m_LightSpaceMatrices, // 3
+                                       m_shadowMapArray, // 4
+                                       m_ShadowMapIndices, // 5
+                                       m_CubeShadowMapArray, // 6
+                                       m_CubeShadowMapIndices // 7
                                    });
 
 

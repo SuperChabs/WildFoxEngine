@@ -76,23 +76,27 @@ public:
     [[nodiscard]] bool IsEditorViewportFocused() const { return editorViewportWindow.IsFocused(); }
 
     [[nodiscard]] ImVec2 GetGameViewportSize() const { return gameViewportWindow.GetViewportSize(); }
-    [[nodiscard]] ImVec2 GetGameViewportPos()  const { return gameViewportWindow.GetViewportPos(); }
+    [[nodiscard]] ImVec2 GetGameViewportPos() const { return gameViewportWindow.GetViewportPos(); }
     [[nodiscard]] bool IsGameViewportHovered() const { return gameViewportWindow.IsHovered(); }
     [[nodiscard]] bool IsGameViewportFocused() const { return gameViewportWindow.IsFocused(); }
 
-    [[nodiscard]] Framebuffer* GetEditorFramebuffer() const { return editorFramebuffer.get(); }
-    [[nodiscard]] Framebuffer* GetGameFramebuffer()   const { return gameFramebuffer.get(); }
+    [[nodiscard]] Framebuffer *GetEditorFramebuffer() const { return editorFramebuffer.get(); }
+    [[nodiscard]] Framebuffer *GetGameFramebuffer() const { return gameFramebuffer.get(); }
 
-    [[nodiscard]] EditViewportWindow* GetEditViewportWindow() { return &editorViewportWindow; }
-    [[nodiscard]] GameViewportWindow* GetGameViewportWindow() { return &gameViewportWindow; }
+    [[nodiscard]] EditViewportWindow *GetEditViewportWindow() { return &editorViewportWindow; }
+    [[nodiscard]] GameViewportWindow *GetGameViewportWindow() { return &gameViewportWindow; }
 
 private:
     void RenderSceneTab(SceneSerializer *ss);
+
     void RenderHierarchyTab(ECSWorld *ecs);
+
     void RenderEntityNode(entt::entity e, ECSWorld *ecs, entt::entity &toDelete);
+
     void RenderInspectorTab(ECSWorld *ecs, MaterialManager *materialManager);
 
     void RenderCreateEntityTab();
+
     void RenderOpenModelDialog();
 
     void RefreshAvailableScenes(SceneSerializer &ss);

@@ -4,8 +4,8 @@
 #include "core/logging/Logger.h"
 #include "scripting/ASState.h"
 
-void ScriptSystem::Update(ECSWorld &ecs, float deltaTime) {
-    ecs.Each<ScriptComponent>([&](entt::entity e, ScriptComponent &script) {
+void ScriptSystem::Update(ECSWorld &ecs, const float deltaTime) {
+    ecs.Each<ScriptComponent>([&](const entt::entity e, ScriptComponent &script) {
         if (script.failed || !script.active)
             return;
 
@@ -74,8 +74,7 @@ void ScriptSystem::LoadScript(entt::entity e, ScriptComponent &script) {
 
     script.ctx = engine->CreateContext();
 
-    asIScriptFunction *setEntity = script.module->GetFunctionByDecl("void _SetEntity(uint64)");
-    if (setEntity) {
+    if (asIScriptFunction *setEntity = script.module->GetFunctionByDecl("void _SetEntity(uint64)")) {
         script.ctx->Prepare(setEntity);
         script.ctx->SetArgQWord(0, static_cast<asQWORD>(e));
         script.ctx->Execute();
@@ -87,7 +86,7 @@ void ScriptSystem::LoadScript(entt::entity e, ScriptComponent &script) {
     CallFunction(script, script.fnOnStart);
 }
 
-void ScriptSystem::CallUpdate(ScriptComponent &script, float deltaTime) {
+void ScriptSystem::CallUpdate(ScriptComponent &script, const float deltaTime) {
     if (!script.fnOnUpdate || !script.ctx)
         return;
 
