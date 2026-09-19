@@ -10,7 +10,7 @@ protected:
     ImVec2 viewportSize = {0, 0};
     ImVec2 viewportPos = {0, 0};
     bool isHovered = false;
-    bool isFocused = false;
+    bool isFocused = true;
 
 public:
     virtual ~IViewportWindow() = default;
@@ -28,5 +28,5 @@ public:
     bool IsHovered() const { return isHovered; }
     bool IsFocused() const { return isFocused; }
 
-    void SetOpen(bool open) { isOpen = open; }
+    void SetOpen(const bool open) { isOpen = open; }
 };

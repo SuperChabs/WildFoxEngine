@@ -13,6 +13,9 @@
 /// @author SuperChabs
 /// @date 2026-01-28
 
+constexpr float FIXED_DT = 1.0f / 60.0f;
+static float accumulator = 0.0f;
+
 /**
  * @class Application
  * @brief Core engine class that manages the application lifecycle
@@ -41,17 +44,11 @@ protected:
      */
     Application(int width, int height, const std::string &title);
 
-    virtual void OnInitialize() {
-    }
-
-    virtual void OnUpdate(float deltaTime) {
-    }
-
-    virtual void OnRender() {
-    }
-
-    virtual void OnShutdown() {
-    }
+    virtual void OnInitialize() {}
+    virtual void OnUpdate(float deltaTime) {}
+    virtual void OnRender() {}
+    virtual void OnSimulation(float deltaTime) {}
+    virtual void OnShutdown() {}
 
     virtual bool ShouldAllowCameraControl() const { return true; }
 
@@ -99,7 +96,4 @@ public:
     ModuleManager *GetModuleManager() const;
 
     /// @}
-
-private:
-    void Update();
 };

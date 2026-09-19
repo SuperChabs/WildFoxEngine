@@ -41,7 +41,7 @@ bool ScriptModule::Initialize() {
 
         Logger::Log(LogLevel::INFO, "Initialized ScriptModule successfully");
 
-        isInitialized = true;
+        m_isInitialized = true;
         return true;
     } catch (std::exception &e) {
         Logger::Log(LogLevel::ERROR, "Exception creating ui module: " + std::string(e.what()));

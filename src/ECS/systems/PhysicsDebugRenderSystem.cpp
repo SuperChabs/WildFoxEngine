@@ -24,7 +24,6 @@ void PhysicsDebugRenderSystem::Update(ECSWorld &ecs, ShaderManager &shaderManage
 
             if (std::holds_alternative<AABB>(c.shape)) {
                 const AABB &aabb = std::get<AABB>(c.shape);
-
                 const std::vector<glm::vec3> pts = BuildLines(aabb, t.position);
 
                 VBO->Bind();
@@ -32,7 +31,19 @@ void PhysicsDebugRenderSystem::Update(ECSWorld &ecs, ShaderManager &shaderManage
                 VBO->Unbind();
 
                 VAO->Bind();
-                glDrawArrays(GL_LINES, 0, 24);
+                glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(pts.size()));
+                VAO->Unbind();
+            }
+            else if (std::holds_alternative<Sphere>(c.shape)) {
+                const Sphere &sphere = std::get<Sphere>(c.shape);
+                const std::vector<glm::vec3> pts = BuildSphereLines(sphere, t.position);
+
+                VBO->Bind();
+                glBufferSubData(GL_ARRAY_BUFFER, 0, pts.size() * sizeof(glm::vec3), pts.data());
+                VBO->Unbind();
+
+                VAO->Bind();
+                glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(pts.size()));
                 VAO->Unbind();
             }
         });
@@ -47,7 +58,7 @@ void PhysicsDebugRenderSystem::SetupBuffers() {
     VBO->Bind();
     VAO->Bind();
 
-    VBO->SetData(nullptr, 24 * 3 * sizeof(float), GL_DYNAMIC_DRAW);
+    VBO->SetData(nullptr, 144 * sizeof(glm::vec3), GL_DYNAMIC_DRAW);
     VAO->AddAttribute(0, 3, GL_FLOAT, false, 3 * sizeof(float), 0);
 
     VAO->Unbind();
@@ -81,6 +92,41 @@ std::vector<glm::vec3> PhysicsDebugRenderSystem::BuildLines(const AABB &aabb, co
         pts.push_back(v[e[0]]);
         pts.push_back(v[e[1]]);
     }
+
+    return pts;
+}
+
+std::vector<glm::vec3> PhysicsDebugRenderSystem::BuildSphereLines(const Sphere &sphere, const glm::vec3 &pos, const int segments) {
+    std::vector<glm::vec3> pts;
+    const float r = sphere.m_radius + 0.01f;
+
+    auto addCircle = [&](const int axis) {
+        for (int i = 0; i < segments; ++i) {
+            const float a0 = (static_cast<float>(i) / segments) * glm::two_pi<float>();
+            const float a1 = (static_cast<float>(i + 1) / segments) * glm::two_pi<float>();
+
+            glm::vec3 p0, p1;
+            if (axis == 0) {
+                p0 = { r * cos(a0), r * sin(a0), 0.0f };
+                p1 = { r * cos(a1), r * sin(a1), 0.0f };
+            }
+            if (axis == 1) {
+                p0 = { r * cos(a0), 0.0f, r * sin(a0) };
+                p1 = { r * cos(a1), 0.0f, r * sin(a1) };
+            }
+            if (axis == 2) {
+                p0 = { 0.0f, r * cos(a0), r * sin(a0) };
+                p1 = { 0.0f, r * cos(a1), r * sin(a1) };
+            }
+
+            pts.push_back(p0 + pos);
+            pts.push_back(p1 + pos);
+        }
+    };
+
+    addCircle(0);
+    addCircle(1);
+    addCircle(2);
 
     return pts;
 }

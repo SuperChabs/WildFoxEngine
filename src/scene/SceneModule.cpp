@@ -13,13 +13,13 @@ bool SceneModule::Initialize() {
 
         Logger::Log(LogLevel::INFO, "SceneModule initialized");
 
-        isInitialized = true;
+        m_isInitialized = true;
 
         return true;
     } catch (const std::exception &e) {
         Logger::Log(LogLevel::ERROR, "SceneModule initialization failed: " + std::string(e.what()));
 
-        isInitialized = false;
+        m_isInitialized = false;
 
         return false;
     }

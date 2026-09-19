@@ -3,9 +3,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
 
-void EditViewportWindow::Render(ECSWorld &ecs, entt::entity &selected, Framebuffer *framebuffer,
-                                CameraComponent &camera,
-                                TransformComponent &transform, CameraOrientationComponent &orientation) {
+void EditViewportWindow::Render(ECSWorld &ecs, const entt::entity &selected, Framebuffer *framebuffer,
+    const CameraComponent &camera, const TransformComponent &transform, const CameraOrientationComponent &orientation) {
     if (!isOpen) return;
 
     ImGui::SetNextWindowSize({800, 650}, ImGuiCond_FirstUseEver);
@@ -13,9 +12,6 @@ void EditViewportWindow::Render(ECSWorld &ecs, entt::entity &selected, Framebuff
 
     std::string windowTitle = "Editor Viewport";
     ImGui::Begin(windowTitle.c_str(), &isOpen);
-
-    isHovered = ImGui::IsWindowHovered();
-    isFocused = ImGui::IsWindowFocused();
 
     ImVec2 size = ImGui::GetContentRegionAvail();
 
@@ -58,7 +54,7 @@ void EditViewportWindow::Render(ECSWorld &ecs, entt::entity &selected, Framebuff
             ImGuizmo::Manipulate(
                 glm::value_ptr(cameraView),
                 glm::value_ptr(cameraProj),
-                (ImGuizmo::OPERATION) m_GizmoOperation,
+                static_cast<ImGuizmo::OPERATION>(m_GizmoOperation),
                 ImGuizmo::WORLD,
                 glm::value_ptr(trans)
             );

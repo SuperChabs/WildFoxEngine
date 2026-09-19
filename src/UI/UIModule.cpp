@@ -27,14 +27,14 @@ bool UIModule::Initialize() {
         Logger::Log(LogLevel::INFO,
                     "Successfully created UI Module");
 
-        isInitialized = true;
+        m_isInitialized = true;
 
         return true;
     } catch (const std::exception &e) {
         Logger::Log(LogLevel::ERROR,
                     "Exception creating ui module: " + std::string(e.what()));
 
-        isInitialized = true;
+        m_isInitialized = true;
 
         return false;
     }

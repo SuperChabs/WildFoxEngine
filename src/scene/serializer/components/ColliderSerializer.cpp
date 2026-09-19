@@ -25,8 +25,8 @@ json ColliderSerializer::Serialize(ECSWorld *world, entt::entity entity) {
     if (auto *sphere = std::get_if<Sphere>(&collider.shape)) {
         return json{
             {"type", "Sphere"},
-            {"centre", {sphere->center.x, sphere->center.y, sphere->center.z}},
-            {"radius", sphere->radius},
+            {"centre", {sphere->m_center.x, sphere->m_center.y, sphere->m_center.z}},
+            {"radius", sphere->m_radius},
             {"isTrigger", collider.isTrigger}
         };
     }
@@ -54,8 +54,8 @@ entt::entity ColliderSerializer::Deserialize(DeserializeContext &dcx, entt::enti
         dcx.world->AddComponent<ColliderComponent>(entity, aabb, isTrigger);
     } else if (type == "Sphere") {
         Sphere sphere;
-        sphere.center = Vec3FromJson(data.value("centre", json::array({0.0f, 0.0f, 0.0f})));
-        sphere.radius = data.value("radius", 0.0f);
+        sphere.m_center = Vec3FromJson(data.value("centre", json::array({0.0f, 0.0f, 0.0f})));
+        sphere.m_radius = data.value("radius", 0.0f);
         dcx.world->AddComponent<ColliderComponent>(entity, sphere, isTrigger);
     }
 

@@ -21,14 +21,14 @@ bool ResourceModule::Initialize() {
         modelManager->SetMaterialManager(materialManager.get());
         Logger::Log(LogLevel::DEBUG, "  ModelManager created");
 
-        isInitialized = true;
+        m_isInitialized = true;
 
         return true;
     } catch (const std::exception &e) {
         Logger::Log(LogLevel::ERROR,
                     "Exception creating resource managers: " + std::string(e.what()));
 
-        isInitialized = false;
+        m_isInitialized = false;
 
         return false;
     }
@@ -49,7 +49,7 @@ void ResourceModule::Shutdown() {
     materialManager.reset();
     textureManager.reset();
 
-    isInitialized = false;
+    m_isInitialized = false;
     Logger::Log(LogLevel::INFO, "RenderingModule shutdown complete");
 }
 

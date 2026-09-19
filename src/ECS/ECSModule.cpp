@@ -8,14 +8,14 @@ bool ECSModule::Initialize() {
 
         Logger::Log(LogLevel::INFO, "Successfully initialized ECS module");
 
-        isInitialized = true;
+        m_isInitialized = true;
 
         return true;
     } catch (std::exception &e) {
         Logger::Log(LogLevel::ERROR,
                     "Exception creating ecs module: " + std::string(e.what()));
 
-        isInitialized = false;
+        m_isInitialized = false;
 
         return false;
     }

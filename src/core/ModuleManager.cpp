@@ -23,7 +23,8 @@ void ModuleManager::InitializeAll() {
 
 void ModuleManager::UpdateAll(float deltaTime) const {
     for (auto &module: modules)
-        module->Update(deltaTime);
+        if (module->IsInitialized())
+            module->Update(deltaTime);
 }
 
 void ModuleManager::ShutdownAll() const {

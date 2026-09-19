@@ -100,6 +100,7 @@ void Engine::OnInitialize() {
     mm->RegisterModule<PhysicsModule>(ecsModule->GetECS());
     m_physicsModule = mm->GetModule<PhysicsModule>("Physics");
     m_physicsModule->Initialize();
+    m_physicsModule->SetShouldUpdate(false);
     if (!m_physicsModule->IsInitialized()) Logger::Log(LogLevel::CRITICAL, "PhysicsModule failed to initialize");
 
     m_scriptModule = mm->RegisterModule<ScriptModule>(mm);
@@ -135,6 +136,10 @@ void Engine::OnInitialize() {
 
     Logger::Log(LogLevel::INFO, "==================================");
     Logger::Log(LogLevel::INFO, "Engine initialized successfully");
+}
+
+void Engine::OnSimulation(const float deltaTime) {
+    m_physicsModule->Update(deltaTime);
 }
 
 void Engine::OnUpdate(const float deltaTime) {

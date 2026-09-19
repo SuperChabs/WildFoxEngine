@@ -313,12 +313,11 @@ void DebugOverlay::RenderInspectorTab(ECSWorld *ecs, MaterialManager *materialMa
         if (!ecs->HasComponent<RigidBodyComponent>(m_selected)) {
             if (ImGui::MenuItem("RigidBody")) {
                 RigidBodyComponent rb;
-                rb.inv_mass = 0.0f;
-                rb.velocity = glm::vec3(0.0f);
-                rb.angular_velocity = glm::vec3(0.0f);
-                rb.inertia = glm::vec3(1.0f);
-                rb.force_accum = glm::vec3(0.0f);
-                rb.torque_accum = glm::vec3(0.0f);
+                rb.m_invMass = 0.0f;
+                rb.m_linearVelocity = glm::vec3(0.0f);
+                rb.m_angularVelocity = glm::vec3(0.0f);
+                rb.m_forceAccum = glm::vec3(0.0f);
+                rb.m_torqueAccum = glm::vec3(0.0f);
                 ecs->AddComponent<RigidBodyComponent>(m_selected, rb);
             }
         }

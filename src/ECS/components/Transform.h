@@ -13,7 +13,7 @@ struct TransformComponent {
 
     TransformComponent() = default;
 
-    TransformComponent(const glm::vec3 &pos) : position(pos) {
+    explicit TransformComponent(const glm::vec3 &pos) : position(pos) {
     }
 
     TransformComponent(const glm::vec3 &pos, const glm::quat &rot, const glm::vec3 &scl)

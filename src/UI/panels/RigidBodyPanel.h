@@ -11,16 +11,16 @@
 
 class RigidBodyPanel {
 public:
-    void Render(ECSWorld *ecs, entt::entity entity);
+    static void Render(ECSWorld *ecs, entt::entity entity);
 
 private:
-    void RenderMass(RigidBodyComponent &rb);
+    static void RenderMass(RigidBodyComponent &rb);
 
-    void RenderVelocity(RigidBodyComponent &rb);
+    static void RenderVelocity(RigidBodyComponent &rb);
 
-    void RenderAngularVelocity(RigidBodyComponent &rb);
+    static void RenderAngularVelocity(RigidBodyComponent &rb);
 
-    void RenderInertia(RigidBodyComponent &rb);
+    static void RenderInertia(RigidBodyComponent &rb);
 
-    void RenderAccumulators(RigidBodyComponent &rb);
+    static void RenderAccumulators(RigidBodyComponent &rb);
 };

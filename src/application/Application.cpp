@@ -32,7 +32,17 @@ void Application::Run() {
     while (!m_coreModule->GetWindow()->ShouldClose()) {
         m_coreModule->GetTime()->Update();
 
-        Update();
+        const float deltaTime = m_coreModule->GetTime()->GetDeltaTime();
+
+        accumulator += deltaTime;
+        accumulator = std::min(accumulator, 1.0f);
+
+        while (accumulator >= FIXED_DT) {
+            OnSimulation(FIXED_DT);
+            accumulator -= FIXED_DT;
+        }
+
+        OnUpdate(deltaTime);
         OnRender();
 
         m_coreModule->GetWindow()->SwapBuffers();
@@ -55,10 +65,4 @@ void Application::Stop() {
 
 ModuleManager *Application::GetModuleManager() const {
     return moduleManager.get();
-}
-
-void Application::Update() {
-    float deltaTime = m_coreModule->GetTime()->GetDeltaTime();
-
-    OnUpdate(deltaTime);
 }

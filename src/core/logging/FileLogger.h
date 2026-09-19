@@ -29,9 +29,9 @@ private:
 
     static const char *LevelToString(LogLevel lvl);
 
-    static static const char *CategoryToString(LogCategory cat);
+    static const char *CategoryToString(LogCategory cat);
 
-    static static std::string FormatTime(const std::chrono::system_clock::time_point &tp);
+    static std::string FormatTime(const std::chrono::system_clock::time_point &tp);
 
     static std::string FormatDate(const std::chrono::system_clock::time_point &tp);
 };

@@ -34,12 +34,11 @@ void EditorCommandHandler::RegisterObjectCommands() const {
 
             RigidBodyComponent rb =
             {
-                .inv_mass = 0.0f,
-                .velocity = glm::vec3(0.0f),
-                .angular_velocity = glm::vec3(0.0f),
-                .inertia = glm::vec3(1.0f),
-                .force_accum = glm::vec3(0.0f),
-                .torque_accum = glm::vec3(0.0f)
+                .m_invMass = 0.0f,
+                .m_linearVelocity = glm::vec3(0.0f),
+                .m_angularVelocity = glm::vec3(0.0f),
+                .m_forceAccum = glm::vec3(0.0f),
+                .m_torqueAccum = glm::vec3(0.0f)
             };
 
             m_ecsModule->GetECS()->AddComponent<RigidBodyComponent>(entity, rb);

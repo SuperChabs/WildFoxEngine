@@ -1,39 +1,30 @@
 #pragma once
 
-#include <string>
 #include <memory>
-#include <vector>
 
 #include "core/IModule.h"
-#include "ECS/systems/PhysicsSystem.h"
+#include "Physics.h"
 #include "ECS/World.h"
 
 class PhysicsModule : public IModule {
-    std::unique_ptr<PhysicsSystem> m_physics;
+    std::unique_ptr<Physics> m_physics;
     ECSWorld *m_ecs = nullptr;
 
 public:
-    PhysicsModule(ECSWorld *ecs);
-
+    explicit PhysicsModule(ECSWorld *ecs);
 
     bool Initialize() override;
 
-
     void Update(float deltaTime) override;
-
 
     void Shutdown() override;
 
-
     /// @name IModule interface
     /// @{
-    const char *GetName() const override;
-
-    int GetPriority() const override;
-
-    bool IsRequired() const override;
-
+    [[nodiscard]] const char *GetName() const override { return "Physics"; }
+    [[nodiscard]] int GetPriority() const override { return 80; }
+    [[nodiscard]] bool IsRequired() const override { return true; }
     /// @}
 
-    PhysicsSystem *GetPhysics();
+    [[nodiscard]] Physics *GetPhysics() const { return m_physics.get(); }
 };

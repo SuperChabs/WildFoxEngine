@@ -26,4 +26,5 @@ private:
     void SetupBuffers();
 
     static std::vector<glm::vec3> BuildLines(const AABB &aabb, const glm::vec3 &pos);
+    static std::vector<glm::vec3> BuildSphereLines(const Sphere &sphere, const glm::vec3 &pos, int segments = 24);
 };

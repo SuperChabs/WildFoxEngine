@@ -6,35 +6,19 @@ PhysicsModule::PhysicsModule(ECSWorld *ecs)
 
 bool PhysicsModule::Initialize() {
     try {
-        m_physics = std::make_unique<PhysicsSystem>();
-        isInitialized = true;
+        m_physics = std::make_unique<Physics>(*m_ecs);
+        m_isInitialized = true;
         return true;
     } catch (...) {
-        isInitialized = false;
+        m_isInitialized = false;
         return false;
     }
 }
 
-void PhysicsModule::Update(float deltaTime) {
-    m_physics->Update(*m_ecs, deltaTime);
+void PhysicsModule::Update(const float deltaTime) {
+    m_physics->Simulate(deltaTime);
 }
 
 void PhysicsModule::Shutdown() {
     m_physics.reset();
-}
-
-const char *PhysicsModule::GetName() const {
-    return "Physics";
-}
-
-int PhysicsModule::GetPriority() const {
-    return 80;
-}
-
-bool PhysicsModule::IsRequired() const {
-    return true;
-}
-
-PhysicsSystem *PhysicsModule::GetPhysics() {
-    return m_physics.get();
 }

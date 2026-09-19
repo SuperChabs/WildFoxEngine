@@ -45,7 +45,7 @@ bool RenderingModule::Initialize() {
         return false;
     }
 
-    isInitialized = true;
+    m_isInitialized = true;
     Logger::Log(LogLevel::INFO, "RenderingModule initialized successfully");
     Logger::Log(LogLevel::INFO, "======================================");
 
@@ -65,7 +65,7 @@ void RenderingModule::Shutdown() {
 
     skybox.reset();
 
-    isInitialized = false;
+    m_isInitialized = false;
     Logger::Log(LogLevel::INFO, "RenderingModule shutdown complete");
 }
 

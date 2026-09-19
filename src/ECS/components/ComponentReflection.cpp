@@ -242,17 +242,17 @@ entt::meta_any GetComponent(entt::registry &registry, const entt::entity entity)
 
     entt::meta_factory<Sphere>()
             .type("Sphere"_hs, "Sphere")
-            .data<&Sphere::center>("center"_hs, "Center")
-            .data<&Sphere::radius>("radius"_hs, "Radius");
+            .data<&Sphere::m_center>("center"_hs, "Center")
+            .data<&Sphere::m_radius>("radius"_hs, "Radius")
+            .func<&Sphere::InertiaTensor>("inertia"_hs);
 
     entt::meta_factory<RigidBodyComponent>()
             .type("RigidBodyComponent"_hs, "RigidBodyComponent")
-            .data<&RigidBodyComponent::inv_mass>("inv_mass"_hs, "InverseMass")
-            .data<&RigidBodyComponent::velocity>("velocity"_hs, "Velocity")
-            .data<&RigidBodyComponent::angular_velocity>("angular_velocity"_hs, "AngularVelocity")
-            .data<&RigidBodyComponent::inertia>("inertia"_hs, "Inertia")
-            .data<&RigidBodyComponent::force_accum>("force_accum"_hs, "ForceAccum")
-            .data<&RigidBodyComponent::torque_accum>("torque_accum"_hs, "TorqueAccum")
+            .data<&RigidBodyComponent::m_invMass>("inv_mass"_hs, "InverseMass")
+            .data<&RigidBodyComponent::m_linearVelocity>("velocity"_hs, "Velocity")
+            .data<&RigidBodyComponent::m_angularVelocity>("angular_velocity"_hs, "AngularVelocity")
+            .data<&RigidBodyComponent::m_forceAccum>("force_accum"_hs, "ForceAccum")
+            .data<&RigidBodyComponent::m_torqueAccum>("torque_accum"_hs, "TorqueAccum")
             .func<&HasComponent<RigidBodyComponent>>("has"_hs)
             .func<&GetComponent<RigidBodyComponent>>("get"_hs);
 

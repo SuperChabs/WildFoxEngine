@@ -107,9 +107,9 @@ very long time, im getting lazy
 
 ### v0.3
 ##### 18.07.2027
--- add main script
--- add CoreModule, ScriptModule
-   -> Engine.cpp refactoring
+- add main script  
+- add CoreModule, ScriptModule  
+  → Engine.cpp refactoring
 
 ### v0.4
 ##### 22.07.2026
@@ -121,7 +121,7 @@ very long time, im getting lazy
 
 ### v0.5
 ##### 05.08.2026
--- add Blender like ui
+-- add Blender like ui  
 -- some refactoring  
 -- add viewport window  
 -- add editor camera  
@@ -133,3 +133,10 @@ very long time, im getting lazy
 -- add gameViewportWindow  
 -- delete unused code  
 -- tiny changes and bug fixes
+
+### v0.6
+##### 19.09.2026
+long time no see. im in 11th Grade now and it seems not so difficult as i expected
+- implemented relative hard physics into the engine  
+→ SphereVsSpehere collisions  
+→ basic implementations and adaptations of code from [book](https://gamephysicsweekend.github.io/pdfs/GamePhysicsInOneWeekend.pdf)

@@ -65,16 +65,18 @@ protected:
      */
     void OnInitialize() override;
 
+    void OnSimulation(float deltaTime) override;
+
     void OnUpdate(float deltaTime) override;
 
     /**
-         * @brief Render scene into framebuffer
-         */
+     * @brief Render scene into framebuffer
+     */
     void OnRender() override;
 
     /**
-         * @brief Shutdown classes needed to shut down by hand
-         */
+     * @brief Shutdown classes needed to shut down by hand
+     */
     void OnShutdown() override;
 
     bool ShouldAllowCameraControl() const override;
