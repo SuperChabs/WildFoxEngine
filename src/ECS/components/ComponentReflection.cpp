@@ -243,8 +243,7 @@ entt::meta_any GetComponent(entt::registry &registry, const entt::entity entity)
     entt::meta_factory<Sphere>()
             .type("Sphere"_hs, "Sphere")
             .data<&Sphere::m_center>("center"_hs, "Center")
-            .data<&Sphere::m_radius>("radius"_hs, "Radius")
-            .func<&Sphere::InertiaTensor>("inertia"_hs);
+            .data<&Sphere::m_radius>("radius"_hs, "Radius");
 
     entt::meta_factory<RigidBodyComponent>()
             .type("RigidBodyComponent"_hs, "RigidBodyComponent")

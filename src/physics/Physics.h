@@ -62,6 +62,4 @@ private:
     [[nodiscard]] glm::vec3 WorldSpaceToBodySpace(entt::entity e, const glm::vec3 &worldPt) const;
 
     static glm::vec3 GetCenterOfMassWorldSpace(const ColliderComponent &c, const TransformComponent &t);
-
-    static glm::mat3 GetInertiaTensorFromShape(const ColliderComponent &c);
 };

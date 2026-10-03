@@ -140,3 +140,7 @@ long time no see. im in 11th Grade now and it seems not so difficult as i expect
 - implemented relative hard physics into the engine  
 → SphereVsSpehere collisions  
 → basic implementations and adaptations of code from [book](https://gamephysicsweekend.github.io/pdfs/GamePhysicsInOneWeekend.pdf)
+
+### v0.6.1
+##### 03.10.2026
+-- js some physics again  

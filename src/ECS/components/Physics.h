@@ -4,79 +4,56 @@
 #include <glm/glm.hpp>
 
 #include "physics/Bounds.h"
+#include "physics/shapeFunc/ShapeFunctions.h"
 
-struct AABB {
-    glm::vec3 min;
-    glm::vec3 max;
-
-    [[nodiscard]] static glm::mat3 InertiaTensor() { return {1.0f}; }
-    [[nodiscard]] Bounds GetBounds(const glm::vec3 &pos, const glm::quat &rot) const {
-        Bounds tmp;
-        return tmp;
-    }
-
-    [[nodiscard]] Bounds GetBounds() const {
-        Bounds tmp;
-        return tmp;
-    }
+struct BaseShape {
+    glm::vec3 m_centerOfMass = {0.0f, 0.0f, 0.0f};
 };
 
-struct Sphere
-{
-    glm::vec3 m_center;
+struct AABB : BaseShape {
+    glm::vec3 min = {0.0f, 0.0f, 0.0f};
+    glm::vec3 max = {0.0f, 0.0f, 0.0f};
+};
+
+struct Box : BaseShape {
+    std::vector<glm::vec3> m_points;
+    Bounds m_bounds;
+};
+
+struct Sphere : BaseShape {
+    glm::vec3 m_center = {0.0f, 0.0f, 0.0f};
     float m_radius;
+};
 
-    [[nodiscard]] glm::mat3 InertiaTensor() const {
-        return {2.0f * m_radius * m_radius / 0.5f};
-    }
+struct ConvexHull : BaseShape {
+    std::vector<glm::vec3> m_points;
+    Bounds m_bounds;
+    glm::mat3 m_inertiaTensor = glm::mat3(0.0f);
 
-    [[nodiscard]] Bounds GetBounds(const glm::vec3 &pos, const glm::quat &rot) const {
-        Bounds tmp;
-        tmp.SetMaxs(glm::vec3(m_radius) + pos);
-        tmp.SetMins(glm::vec3(-m_radius) + pos);
-        return tmp;
-    };
-
-    [[nodiscard]] Bounds GetBounds() const {
-        Bounds tmp;
-        tmp.SetMaxs(glm::vec3(m_radius));
-        tmp.SetMins(glm::vec3(-m_radius));
-        return tmp;
+    ConvexHull(const std::vector<glm::vec3> &points, int num) {
+        ssf::Build(this, points, num);
     }
 };
 
 struct ColliderComponent {
-    std::variant<AABB, Sphere> shape;
+    std::variant<AABB, Sphere, ConvexHull, Box> shape;
     bool isTrigger = false;
 
-    [[nodiscard]] static glm::mat3 GetInertiaTensor(const ColliderComponent &c) {
-        return std::visit(
-             [](const auto &shape){
-                 return shape.InertiaTensor();
-             },
-             c.shape
-         );
+    [[nodiscard]] glm::mat3 GetInertiaTensor() const {
+        return std::visit([](const auto& s){ return Shape::InertiaTensor(s); }, shape);
     }
 
     [[nodiscard]] Bounds GetBounds(const glm::vec3 &pos, const glm::quat &rot) {
-        return std::visit(
-             [&pos, &rot](const auto &shape){
-                 return shape.GetBounds(pos, rot);
-             },
-             shape
-         );
+        return std::visit([&](const auto& s) { return Shape::GetBounds(s, pos, rot); }, shape);
     }
 
     [[nodiscard]] Bounds GetBounds() {
-        return std::visit(
-             [](const auto &shape){
-                 return shape.GetBounds();
-             },
-             shape
-         );
+        return std::visit([](const auto& s) { return Shape::GetBounds(s); }, shape);
     }
 
-    glm::vec3 m_centerOfMass;
+    [[nodiscard]] glm::vec3 Support(const glm::vec3 &dir, const glm::vec3 &pos, const glm::quat &rot, float bias) {
+        return std::visit([&](const auto& s){ return Shape::Support(s, dir, pos, rot, bias); }, shape);
+    }
 };
 
 struct RigidBodyComponent {

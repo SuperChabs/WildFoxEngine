@@ -15,7 +15,7 @@ void ColliderPanel::Render(ECSWorld *ecs, entt::entity entity) {
         ImGui::DragFloat3("Max##aabb", &aabb.max[0], 0.01f);
 
         if (ImGui::Button("Set hitbox scale to entity scale")) {
-            AABB aabb;
+            AABB aabb{};
             aabb.min = -t.scale;
             aabb.max = t.scale;
             c.shape = aabb;
@@ -43,7 +43,7 @@ void ColliderPanel::Render(ECSWorld *ecs, entt::entity entity) {
     }
     else if (std::holds_alternative<AABB>(c.shape)) {
         if (ImGui::Button("Set hitbox as Sphere")) {
-            Sphere sphere = { glm::vec3{1.0f} ,1.0f };
+            Sphere sphere = { glm::vec3{1.0f} ,glm::vec3{1.0f} };
             c.shape = sphere;
         }
     }

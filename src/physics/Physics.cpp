@@ -7,6 +7,7 @@
 #include <glm/gtc/matrix_inverse.hpp>
 
 #include "core/CommandManager.h"
+#include "shapeFunc/ShapeFunctions.h"
 
 Physics::Physics(ECSWorld &world) : world(world){
 }
@@ -44,22 +45,22 @@ void Physics::Simulate(const float &dt) {
     std::vector<ContactInfo> contacts;
     contacts.reserve(entities.size() * entities.size());
     for (const auto [fst, snd] : collisionPairs) {
-            const auto &col_a = world.GetComponent<ColliderComponent>(fst);
-            const auto &col_b = world.GetComponent<ColliderComponent>(snd);
-            const auto &r_a = world.GetComponent<RigidBodyComponent>(fst);
-            const auto &r_b = world.GetComponent<RigidBodyComponent>(snd);
+        const auto &col_a = world.GetComponent<ColliderComponent>(fst);
+        const auto &col_b = world.GetComponent<ColliderComponent>(snd);
+        const auto &r_a = world.GetComponent<RigidBodyComponent>(fst);
+        const auto &r_b = world.GetComponent<RigidBodyComponent>(snd);
 
-            if (r_a.m_invMass == 0.0f && r_b.m_invMass == 0.0f) continue;
+        if (r_a.m_invMass == 0.0f && r_b.m_invMass == 0.0f) continue;
 
-            if (ContactInfo contact{}; Intersect(fst, snd, dt, contact)) {
-                if (col_a.isTrigger || col_b.isTrigger) {
-                    currentTriggers.insert({fst, snd});
-                } else {
-                    contacts.push_back(contact);
-                    numContacts++;
-                }
+        if (ContactInfo contact{}; Intersect(fst, snd, dt, contact)) {
+            if (col_a.isTrigger || col_b.isTrigger) {
+                currentTriggers.insert({fst, snd});
+            } else {
+                contacts.push_back(contact);
+                numContacts++;
             }
         }
+    }
 
     if (numContacts > 1)
         std::ranges::sort(contacts,
@@ -296,9 +297,9 @@ void Physics::ResolveContact(const ContactInfo &contact) const {
     const float total = invMassA + invMassB;
     if (total == 0.0f) return;
 
-    const glm::mat3 invWorldInertiaA = GetInverseInertiaTensorWorldSpace(GetInertiaTensorFromShape(col_a), rb_a.m_invMass,
+    const glm::mat3 invWorldInertiaA = GetInverseInertiaTensorWorldSpace(col_a.GetInertiaTensor(), rb_a.m_invMass,
                                                                          t_a.rotation);
-    const glm::mat3 invWorldInertiaB = GetInverseInertiaTensorWorldSpace(GetInertiaTensorFromShape(col_b), rb_b.m_invMass,
+    const glm::mat3 invWorldInertiaB = GetInverseInertiaTensorWorldSpace(col_b.GetInertiaTensor(), rb_b.m_invMass,
                                                                          t_b.rotation);
 
     const glm::vec3 &n = contact.normal;
@@ -380,7 +381,7 @@ void Physics::IntegrateBody(entt::entity entity, float dt) const {
     const glm::vec3 cmToPos = t.position - positionCM;
 
     const glm::mat3 orientation = glm::mat3_cast(t.rotation);
-    const glm::mat3 inertiaTensor = orientation * GetInertiaTensorFromShape(c) * glm::transpose(orientation);
+    const glm::mat3 inertiaTensor = orientation * c.GetInertiaTensor() * glm::transpose(orientation);
     const glm::vec3 alpha = glm::inverse(inertiaTensor) * (-glm::cross(r.m_angularVelocity, inertiaTensor * r.m_angularVelocity));
     r.m_angularVelocity += alpha * dt;
 
@@ -420,7 +421,7 @@ void Physics::ApplyImpulseAngular(RigidBodyComponent &rb, const ColliderComponen
 
     if (std::holds_alternative<Sphere>(c.shape)) {
         const auto sphere = std::get<Sphere>(c.shape);
-        rb.m_angularVelocity += GetInverseInertiaTensorWorldSpace(sphere.InertiaTensor(), rb.m_invMass, t.rotation) * impulse;
+        rb.m_angularVelocity += GetInverseInertiaTensorWorldSpace(Shape::InertiaTensor(sphere), rb.m_invMass, t.rotation) * impulse;
     }
     else if (std::holds_alternative<AABB>(c.shape)) {
         return;
@@ -443,7 +444,10 @@ void Physics::SortBodiesBounds(const std::vector<entt::entity> &entities, const 
         const auto &trans = world.GetComponent<TransformComponent>(entity);
         const auto &rig = world.GetComponent<RigidBodyComponent>(entity);
 
-        Bounds bounds = col.GetBounds(trans.position, trans.rotation);
+        if (!std::holds_alternative<Sphere>(col.shape))
+            continue;
+
+        Bounds bounds = Shape::GetBounds(std::get<Sphere>(col.shape), trans.position, trans.rotation);
 
         // expand the bounds by the linear velocity
         bounds.Expand(bounds.GetMins() + rig.m_linearVelocity * dt);
@@ -527,13 +531,4 @@ glm::vec3 Physics::GetCenterOfMassWorldSpace(const ColliderComponent &c, const T
     const glm::vec3 centerOfMass = c.m_centerOfMass;
     const glm::vec3 pos = t.position + glm::rotate(t.rotation, centerOfMass);
     return pos;
-}
-
-glm::mat3 Physics::GetInertiaTensorFromShape(const ColliderComponent &c) {
-    return std::visit(
-        [](const auto &shape){
-            return shape.InertiaTensor();
-        },
-        c.shape
-    );
 }
