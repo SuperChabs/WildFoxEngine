@@ -29,8 +29,8 @@ void EditorCommandHandler::RegisterObjectCommands() const {
             m_ecsModule->GetECS()->AddComponent<TransformComponent>(entity,
                 glm::vec3(0), glm::vec3(0), glm::vec3(1));
 
-            m_ecsModule->GetECS()->AddComponent<ColliderComponent>(entity,
-                AABB{glm::vec3(-0.5f), glm::vec3(0.5f)});
+            // m_ecsModule->GetECS()->AddComponent<ColliderComponent>(entity,
+            //     AABB{glm::vec3(-0.5f), glm::vec3(0.5f)});
 
             RigidBodyComponent rb =
             {

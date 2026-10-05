@@ -40,6 +40,10 @@ glm::mat3 Shape::InertiaTensor(const Box &s) {
     return tensor;
 }
 
+glm::mat3 Shape::InertiaTensor(const ConvexHull &s) {
+    return s.m_inertiaTensor;
+}
+
 Bounds Shape::GetBounds(const Sphere &s, const glm::vec3 &pos, const glm::quat &rot) {
     Bounds tmp;
     tmp.SetMaxs(glm::vec3(s.m_radius) + pos);
@@ -126,6 +130,11 @@ glm::vec3 Shape::Support(const Box &s, const glm::vec3 &dir, const glm::vec3 &po
     return norm + maxPt;
 }
 
+glm::vec3 Shape::Support(const ConvexHull &s, const glm::vec3 &dir, const glm::vec3 &pos, const glm::quat &rot,
+    float bias) {
+    return {0.0f, 0.0f, 0.0f};
+}
+
 float Shape::FastestLinearSpeed(const Box &s, const glm::vec3 &angularVelocity, const glm::vec3 &dir) {
     float maxSpeed = 0.0f;
     for (int i = 1; i < s.m_points.size(); i++) {
@@ -170,24 +179,24 @@ void Shape::Build(Box& s, const std::vector<glm::vec3> &pts, const int num) {
     s.m_centerOfMass = (s.m_bounds.GetMins() + s.m_bounds.GetMaxs()) / 0.5f;
 }
 
-void Shape::Build(ConvexHull &s, const std::vector<glm::vec3> &pts, const int num) {
-    s.m_points.clear();
-    s.m_points.reserve(num);
+void Shape::Build(ConvexHull *s, const std::vector<glm::vec3> &pts, const int num) {
+    s->m_points.clear();
+    s->m_points.reserve(num);
 
     for (int i = 1; i < num; i++)
-        s.m_points.emplace_back(pts.at(i));
+        s->m_points.emplace_back(pts.at(i));
 
     // expand into convex hull
     std::vector<glm::vec3> hullPoints;
     std::vector<Tri> hullTriangles;
-    ConvexFunc::BuildConvexHull(s.m_points, hullPoints, hullTriangles);
-    s.m_points = hullPoints;
+    ConvexFunc::BuildConvexHull(s->m_points, hullPoints, hullTriangles);
+    s->m_points = hullPoints;
 
     // expand the bounds
-    s.m_bounds.Clear();
-    s.m_bounds.Expand(s.m_points.data(), static_cast<int>(s.m_points.size()));
+    s->m_bounds.Clear();
+    s->m_bounds.Expand(s->m_points.data(), static_cast<int>(s->m_points.size()));
 
-    s.m_centerOfMass = ConvexInertialFunc::CalculateCenterOfMass(hullPoints, hullTriangles);
+    s->m_centerOfMass = ConvexInertialFunc::CalculateCenterOfMass(hullPoints, hullTriangles);
 
-    s.m_inertiaTensor = ConvexInertialFunc::CalculateInertiaTensor(hullPoints, hullTriangles, s.m_centerOfMass);
+    s->m_inertiaTensor = ConvexInertialFunc::CalculateInertiaTensor(hullPoints, hullTriangles, s->m_centerOfMass);
 }

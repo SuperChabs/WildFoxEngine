@@ -29,7 +29,7 @@ public:
 
     void Update(float deltaTime) override;
 
-    void RenderUI(EditorCamera &editorCamera);
+    void RenderUI(EditorCamera &editorCamera, PhysicsDebugRenderSystem *physicsDebugRenderSystem);
 
     void Shutdown() override;
 

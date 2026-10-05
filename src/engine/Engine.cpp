@@ -226,7 +226,7 @@ void Engine::OnRender() {
     }
 
     uiModule->GetImGuiManager()->BeginFrame(cameraControlEnabled);
-    uiModule->RenderUI(editorCam);
+    uiModule->RenderUI(editorCam, physicsDebugSystem.get());
     uiModule->GetImGuiManager()->EndFrame();
 }
 

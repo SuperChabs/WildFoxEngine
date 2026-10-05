@@ -11,7 +11,7 @@
 #include "PhysicsContext.h"
 
 class Physics {
-    glm::vec3 m_gravity = {0, 0, 0};
+    glm::vec3 m_gravity = {0, -9.8, 0};
     std::vector<entt::entity> entities;
 
     std::set<std::pair<entt::entity, entt::entity> > m_activeTriggers;
@@ -24,6 +24,9 @@ public:
     explicit Physics(ECSWorld &world);
 
     void Simulate(const float &dt);
+
+    [[nodiscard]] glm::vec3 GetGravity() const { return m_gravity; }
+    void SetGravity(const glm::vec3 &g) { m_gravity = g; }
 
 private:
     static bool TestAABB(const AABB &a, const AABB &b, ContactInfo &contact) ;

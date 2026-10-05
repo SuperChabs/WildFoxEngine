@@ -23,6 +23,7 @@
 #include "UI/panels/IconPanel.h"
 #include "UI/panels/RigidBodyPanel.h"
 #include "UI/panels/ColliderPanel.h"
+#include "UI/panels/PhysicsControlPanel.h"
 
 #include "UI/windows/EditViewportWindow.h"
 #include "UI/windows/GameViewportWindow.h"
@@ -68,7 +69,8 @@ public:
 
     DebugOverlay();
 
-    void Render(ECSWorld *ecs, MaterialManager *materialManager, SceneSerializer *ss, EditorCamera &editorCamera);
+    void Render(ECSWorld *ecs, MaterialManager *materialManager, SceneSerializer *ss, const EditorCamera &editorCamera,
+        PhysicsModule *physicsModule, PhysicsDebugRenderSystem *physicsDebug);
 
     [[nodiscard]] ImVec2 GetEditorViewportSize() const { return editorViewportWindow.GetViewportSize(); }
     [[nodiscard]] ImVec2 GetEditorViewportPose() const { return editorViewportWindow.GetViewportPos(); }

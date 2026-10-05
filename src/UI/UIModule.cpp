@@ -43,9 +43,10 @@ bool UIModule::Initialize() {
 void UIModule::Update(float deltaTime) {
 }
 
-void UIModule::RenderUI(EditorCamera &editorCamera) {
+void UIModule::RenderUI(EditorCamera &editorCamera, PhysicsDebugRenderSystem *physicsDebugRenderSystem) {
     debugOverlay->Render(ecs, mm->GetModule<ResourceModule>("Resource")->GetMaterialManager(),
-                         mm->GetModule<SceneModule>("Scene")->GetSceneSerializer(), editorCamera);
+                         mm->GetModule<SceneModule>("Scene")->GetSceneSerializer(), editorCamera,
+                         mm->GetModule<PhysicsModule>("Physics"), physicsDebugRenderSystem);
 }
 
 void UIModule::Shutdown() {

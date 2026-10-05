@@ -10,6 +10,10 @@ class PhysicsModule : public IModule {
     std::unique_ptr<Physics> m_physics;
     ECSWorld *m_ecs = nullptr;
 
+    bool m_paused = false;
+    bool m_stepOnce = false;
+    int m_substeps = 1;
+
 public:
     explicit PhysicsModule(ECSWorld *ecs);
 
@@ -27,4 +31,11 @@ public:
     /// @}
 
     [[nodiscard]] Physics *GetPhysics() const { return m_physics.get(); }
+
+    void SetPaused(bool paused) { m_paused = paused; }
+    [[nodiscard]] bool IsPaused() const { return m_paused; }
+    void RequestStep() { m_stepOnce = true; }
+
+    void SetSubsteps(int n) { m_substeps = std::max(1, n); }
+    [[nodiscard]] int GetSubsteps() const { return m_substeps; }
 };

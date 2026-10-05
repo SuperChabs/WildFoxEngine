@@ -14,8 +14,8 @@ DebugOverlay::DebugOverlay() {
     gameFramebuffer = std::make_unique<Framebuffer>(1, 1);
 }
 
-void DebugOverlay::Render(ECSWorld *ecs, MaterialManager *materialManager, SceneSerializer *ss,
-                          EditorCamera &editorCamera) {
+void DebugOverlay::Render(ECSWorld *ecs, MaterialManager *materialManager, SceneSerializer *ss, const EditorCamera &editorCamera,
+        PhysicsModule *physicsModule, PhysicsDebugRenderSystem *physicsDebug) {
     if (!visible || !ecs) return;
 
     ImGuiViewport *viewport = ImGui::GetMainViewport();
@@ -59,6 +59,10 @@ void DebugOverlay::Render(ECSWorld *ecs, MaterialManager *materialManager, Scene
         RenderCreateEntityTab();
         ImGui::EndMenuBar();
     }
+
+    if (ImGui::Begin("Physics"))
+        PhysicsControlPanel::Render(physicsModule, physicsDebug);
+    ImGui::End();
 
     editorViewportWindow.Render(*ecs, m_selected, editorFramebuffer.get(), editorCamera.camera,
                                 editorCamera.transform, editorCamera.orientation);
@@ -322,16 +326,16 @@ void DebugOverlay::RenderInspectorTab(ECSWorld *ecs, MaterialManager *materialMa
             }
         }
 
-        if (!ecs->HasComponent<ColliderComponent>(m_selected)) {
-            if (ImGui::MenuItem("Collider")) {
-                ColliderComponent cl;
-                AABB aabb;
-                aabb.min = glm::vec3(-0.5f, -0.5f, -0.5f);
-                aabb.max = glm::vec3(0.5f, 0.5f, 0.5f);
-                cl.shape = aabb;
-                ecs->AddComponent<ColliderComponent>(m_selected, cl);
-            }
-        }
+        // if (!ecs->HasComponent<ColliderComponent>(m_selected)) {
+        //     if (ImGui::MenuItem("Collider")) {
+        //         ColliderComponent cl;
+        //         AABB aabb;
+        //         aabb.min = glm::vec3(-0.5f, -0.5f, -0.5f);
+        //         aabb.max = glm::vec3(0.5f, 0.5f, 0.5f);
+        //         cl.shape = aabb;
+        //         ecs->AddComponent<ColliderComponent>(m_selected, cl);
+        //     }
+        // }
 
         ImGui::EndPopup();
     }

@@ -16,7 +16,13 @@ bool PhysicsModule::Initialize() {
 }
 
 void PhysicsModule::Update(const float deltaTime) {
-    m_physics->Simulate(deltaTime);
+    if (m_paused && !m_stepOnce) return;
+
+    const float subDt = deltaTime / static_cast<float>(m_substeps);
+    for (int i = 0; i < m_substeps; i++)
+        m_physics->Simulate(subDt);
+
+    m_stepOnce = false;
 }
 
 void PhysicsModule::Shutdown() {

@@ -33,7 +33,7 @@ void Physics::Simulate(const float &dt) {
     // BroadPhase
     //
     CollisionPairs collisionPairs;
-    BroadPhase(entities, collisionPairs, static_cast<int>(collisionPairs.size()), dt);
+    BroadPhase(entities, collisionPairs, static_cast<int>(entities.size()), dt);
 
     //
     // NarrowPhase
@@ -74,11 +74,10 @@ void Physics::Simulate(const float &dt) {
 
         const auto &r_a = world.GetComponent<RigidBodyComponent>(contact.a);
         const auto &r_b = world.GetComponent<RigidBodyComponent>(contact.b);
-
         if (r_a.m_invMass == 0.0f && r_b.m_invMass == 0.0f) continue;
 
-        IntegrateBody(contact.a, dtStep);
-        IntegrateBody(contact.b, dtStep);
+        for (const auto &e : entities)
+            IntegrateBody(e, dtStep);
 
         ResolveContact(contact);
         accumulatedTime += dtStep;
@@ -423,9 +422,9 @@ void Physics::ApplyImpulseAngular(RigidBodyComponent &rb, const ColliderComponen
         const auto sphere = std::get<Sphere>(c.shape);
         rb.m_angularVelocity += GetInverseInertiaTensorWorldSpace(Shape::InertiaTensor(sphere), rb.m_invMass, t.rotation) * impulse;
     }
-    else if (std::holds_alternative<AABB>(c.shape)) {
-        return;
-    }
+    // else if (std::holds_alternative<AABB>(c.shape)) {
+    //     return;
+    // }
 
     constexpr float maxAngularSpeed = 30.0f;
     if (glm::length(rb.m_angularVelocity) > maxAngularSpeed) {
@@ -499,7 +498,7 @@ void Physics::BuildPairs(CollisionPairs &collisionPairs,
 
 void Physics::SweepAndPrune1D(const std::vector<entt::entity> &entities, CollisionPairs &finalPairs, const int num,
         const float dt) const {
-    std::vector<PseudoBody> sortedBodies;
+    std::vector<PseudoBody> sortedBodies(num * 2);
 
     SortBodiesBounds(entities, num, sortedBodies, dt);
     BuildPairs(finalPairs, sortedBodies, num);
@@ -528,7 +527,9 @@ glm::vec3 Physics::WorldSpaceToBodySpace(const entt::entity e, const glm::vec3 &
 }
 
 glm::vec3 Physics::GetCenterOfMassWorldSpace(const ColliderComponent &c, const TransformComponent &t) {
-    const glm::vec3 centerOfMass = c.m_centerOfMass;
+    const glm::vec3 centerOfMass = std::visit([](const auto& shape) {
+        return shape.m_centerOfMass;
+    }, c.shape);
     const glm::vec3 pos = t.position + glm::rotate(t.rotation, centerOfMass);
     return pos;
 }

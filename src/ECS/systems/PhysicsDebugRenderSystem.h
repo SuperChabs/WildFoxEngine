@@ -16,6 +16,8 @@ class PhysicsDebugRenderSystem {
     std::unique_ptr<VertexBuffer> VBO;
 
 public:
+    bool m_enabled = true;
+
     PhysicsDebugRenderSystem();
 
     void Update(ECSWorld &ecs, ShaderManager &shaderManager,

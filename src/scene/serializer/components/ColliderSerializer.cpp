@@ -13,14 +13,14 @@ json ColliderSerializer::Serialize(ECSWorld *world, entt::entity entity) {
 
     auto &collider = world->GetComponent<ColliderComponent>(entity);
 
-    if (auto *aabb = std::get_if<AABB>(&collider.shape)) {
-        return json{
-            {"type", "AABB"},
-            {"min", {aabb->min.x, aabb->min.y, aabb->min.z}},
-            {"max", {aabb->max.x, aabb->max.y, aabb->max.z}},
-            {"isTrigger", collider.isTrigger}
-        };
-    }
+    // if (auto *aabb = std::get_if<AABB>(&collider.shape)) {
+    //     return json{
+    //         {"type", "AABB"},
+    //         {"min", {aabb->min.x, aabb->min.y, aabb->min.z}},
+    //         {"max", {aabb->max.x, aabb->max.y, aabb->max.z}},
+    //         {"isTrigger", collider.isTrigger}
+    //     };
+    // }
 
     if (auto *sphere = std::get_if<Sphere>(&collider.shape)) {
         return json{
@@ -47,12 +47,12 @@ entt::entity ColliderSerializer::Deserialize(DeserializeContext &dcx, entt::enti
     else
         isTrigger = false;
 
-    if (type == "AABB") {
-        AABB aabb;
-        aabb.min = Vec3FromJson(data.value("min", json::array({0.0f, 0.0f, 0.0f})));
-        aabb.max = Vec3FromJson(data.value("max", json::array({0.0f, 0.0f, 0.0f})));
-        dcx.world->AddComponent<ColliderComponent>(entity, aabb, isTrigger);
-    } else if (type == "Sphere") {
+    // if (type == "AABB") {
+    //     AABB aabb;
+    //     aabb.min = Vec3FromJson(data.value("min", json::array({0.0f, 0.0f, 0.0f})));
+    //     aabb.max = Vec3FromJson(data.value("max", json::array({0.0f, 0.0f, 0.0f})));
+    //     dcx.world->AddComponent<ColliderComponent>(entity, aabb, isTrigger);
+    if (type == "Sphere") {
         Sphere sphere;
         sphere.m_center = Vec3FromJson(data.value("centre", json::array({0.0f, 0.0f, 0.0f})));
         sphere.m_radius = data.value("radius", 0.0f);

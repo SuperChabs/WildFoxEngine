@@ -8,6 +8,8 @@ PhysicsDebugRenderSystem::PhysicsDebugRenderSystem() {
 void PhysicsDebugRenderSystem::Update(ECSWorld &ecs, ShaderManager &shaderManager,
                                       const std::string &shaderName, const glm::mat4 &view,
                                       const glm::mat4 &projection) const {
+    if (!m_enabled) return;
+
     shaderManager.Bind(shaderName);
 
     ecs.Each<TransformComponent, ColliderComponent>(
@@ -22,19 +24,19 @@ void PhysicsDebugRenderSystem::Update(ECSWorld &ecs, ShaderManager &shaderManage
             else if (c.isTrigger)
                 shaderManager.SetVec3(shaderName, "color", {0.0f, 0.0f, 1.0f});
 
-            if (std::holds_alternative<AABB>(c.shape)) {
-                const AABB &aabb = std::get<AABB>(c.shape);
-                const std::vector<glm::vec3> pts = BuildLines(aabb, t.position);
-
-                VBO->Bind();
-                glBufferSubData(GL_ARRAY_BUFFER, 0, pts.size() * sizeof(glm::vec3), pts.data());
-                VBO->Unbind();
-
-                VAO->Bind();
-                glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(pts.size()));
-                VAO->Unbind();
-            }
-            else if (std::holds_alternative<Sphere>(c.shape)) {
+            // if (std::holds_alternative<AABB>(c.shape)) {
+            //     const AABB &aabb = std::get<AABB>(c.shape);
+            //     const std::vector<glm::vec3> pts = BuildLines(aabb, t.position);
+            //
+            //     VBO->Bind();
+            //     glBufferSubData(GL_ARRAY_BUFFER, 0, pts.size() * sizeof(glm::vec3), pts.data());
+            //     VBO->Unbind();
+            //
+            //     VAO->Bind();
+            //     glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(pts.size()));
+            //     VAO->Unbind();
+            // }
+            if (std::holds_alternative<Sphere>(c.shape)) {
                 const Sphere &sphere = std::get<Sphere>(c.shape);
                 const std::vector<glm::vec3> pts = BuildSphereLines(sphere, t.position);
 
