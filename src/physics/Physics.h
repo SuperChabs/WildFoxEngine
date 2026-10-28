@@ -29,16 +29,18 @@ public:
     void SetGravity(const glm::vec3 &g) { m_gravity = g; }
 
 private:
-    static bool TestAABB(const AABB &a, const AABB &b, ContactInfo &contact) ;
-    bool TestSphere(const Sphere &a, const Sphere &b, ContactInfo &contact) const;
-
     bool Intersect(entt::entity entityA, entt::entity entityB, float dt, ContactInfo &contact) const;
+    bool Intersect(entt::entity entityA, entt::entity entityB, ContactInfo &contact) const;
+    bool ConservativeAdvance(entt::entity entityA, entt::entity entityB, float dt, ContactInfo &contact) const;
 
     static bool RaySphere(const glm::vec3 &rayStart, const glm::vec3 &rayDir, const glm::vec3 &sphereCenter,
                       const float& sphereRadius, float &t1, float &t2);
 
     static bool SphereSphereDynamic(const Sphere *shapeA, const Sphere *shapeB, glm::vec3 posA, glm::vec3 posB,
-                                    const glm::vec3 &velA, const glm::vec3 &velB, float dt, glm::vec3 &ptOnA, glm::vec3 &ptOnB, float &toi);
+        const glm::vec3 &velA, const glm::vec3 &velB, float dt, glm::vec3 &ptOnA, glm::vec3 &ptOnB, float &toi);
+
+    static bool SphereSphereStatic(const Sphere *shapeA, const Sphere *shapeB, glm::vec3 posA, glm::vec3 posB,
+        glm::vec3 &ptOnA, glm::vec3 &ptOnB);
 
     void ResolveContact(const ContactInfo &contact) const;
 

@@ -13,20 +13,17 @@
 #include "ECS/World.h"
 
 class ModelManager {
-private:
     std::unordered_map<std::string, std::shared_ptr<Model> > loadedModels;
     std::string assetsPath = "../assets/objects/";
     MaterialManager *materialManager = nullptr;
 
 public:
     ModelManager();
-
     ~ModelManager();
 
     void SetMaterialManager(MaterialManager *mm);
 
     std::shared_ptr<Model> Load(const std::string &filepath);
-
     entt::entity LoadWithECS(const std::string &filepath, ECSWorld *world, bool isBaseShape = false);
 
     std::shared_ptr<Model> Get(const std::string &filepath);

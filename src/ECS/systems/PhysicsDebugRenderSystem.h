@@ -24,9 +24,17 @@ public:
                 const std::string &shaderName, const glm::mat4 &view,
                 const glm::mat4 &projection) const;
 
+    struct DebugMesh {
+        std::vector<glm::vec3> tris, lines, points;
+    };
+
 private:
     void SetupBuffers();
+    void Draw(GLenum mode, const std::vector<glm::vec3> &pts) const;
 
+    static void BuildSphereMesh(const Sphere &sphere, const glm::vec3 &pos, DebugMesh &mesh, int segments = 16, int rings = 12);
     static std::vector<glm::vec3> BuildLines(const AABB &aabb, const glm::vec3 &pos);
     static std::vector<glm::vec3> BuildSphereLines(const Sphere &sphere, const glm::vec3 &pos, int segments = 24);
+    static void BuildHullMesh(const ConvexHull &hull, const glm::vec3 &pos, const glm::quat &rot,
+                              const glm::vec3 &scale, DebugMesh &mesh);
 };

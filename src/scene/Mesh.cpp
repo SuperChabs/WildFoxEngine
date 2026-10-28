@@ -1,8 +1,8 @@
 #include "Mesh.h"
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
-           std::vector<Texture> textures) {
-    meshRenderer = std::make_unique<MeshRenderer>(vertices, indices);
+           std::vector<Texture> textures) : vertices(std::move(vertices)) {
+    meshRenderer = std::make_unique<MeshRenderer>(this->vertices, indices);
 }
 
 Mesh::Mesh(MeshRenderer *rendererPtr, Material *materialPtr) {
@@ -66,6 +66,10 @@ void Mesh::SetMaterial(std::shared_ptr<Material> newMaterial) {
 
 glm::vec3 Mesh::GetColor() const {
     return material ? material->GetColor() : glm::vec3(1.0f);
+}
+
+const std::vector<Vertex> &Mesh::GetVertices() const {
+    return vertices;
 }
 
 MeshRenderer *Mesh::GetMeshRenderer() {

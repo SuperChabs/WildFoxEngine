@@ -27,7 +27,7 @@ void Bounds::Expand(const Bounds &rhs) {
 }
 
 bool Bounds::DoesInteract(const Bounds &rhs) const {
-    if (m_maxs.x < rhs.m_mins.x || m_maxs.y < rhs.m_maxs.y || m_maxs.z < rhs.m_maxs.z) return false;
-    if (m_maxs.x > rhs.m_mins.x || m_maxs.y > rhs.m_maxs.y || m_maxs.z > rhs.m_maxs.z) return false;
-    return true;
+    return !(m_maxs.x < rhs.m_mins.x || m_mins.x > rhs.m_maxs.x ||
+             m_maxs.y < rhs.m_mins.y || m_mins.y > rhs.m_maxs.y ||
+             m_maxs.z < rhs.m_mins.z || m_mins.z > rhs.m_maxs.z);
 }

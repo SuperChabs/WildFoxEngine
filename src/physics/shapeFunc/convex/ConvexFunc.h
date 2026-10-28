@@ -17,12 +17,16 @@ namespace ConvexFunc {
     void RemoveInertialPoints(const std::vector<glm::vec3> &hullPoints, const std::vector<Tri> &hullTris, std::vector<glm::vec3> &checkPts);
     void RemoveUnreferencedPoints(std::vector<glm::vec3> &hullPoints, std::vector<Tri> &hullTris);
 
-    void ExpandConvexHull(std::vector<glm::vec3> &hullPts, std::vector<Tri> &hullTris, const std::vector<glm::vec3> &verts);
+    void ExpandConvexHull(std::vector<glm::vec3> &hullPts, std::vector<Tri> &hullTris, const std::vector<glm::vec3> &verts, float epsilon);
 
-    void AddPoint(std::vector<glm::vec3> &hullPts, std::vector<Tri> &hullTris, const glm::vec3 &pt);
+    void AddPoint(std::vector<glm::vec3> &hullPts, std::vector<Tri> &hullTris, const glm::vec3 &pt, float epsilon = 1e-5f);
 
     bool IsEdgeUnique(const std::vector<Tri> &tris, const std::vector<int> &facingTris, const Edge &edge, int ignoreTri);
 
-    void BuildTetrahedron(const std::vector<glm::vec3> &verts, std::vector<glm::vec3> &hullPts, std::vector<Tri> &hullTris, int num);
+    bool BuildTetrahedron(const std::vector<glm::vec3> &verts, std::vector<glm::vec3> &hullPts, std::vector<Tri> &hullTris, int num, float epsilon = 1e-5f);
     void BuildConvexHull(const std::vector<glm::vec3> &verts, std::vector<glm::vec3> &hullPts, std::vector<Tri> &hullTris);
+
+    std::vector<glm::vec3> WeldVertices(const std::vector<glm::vec3> &verts);
+
+    void SimplifyHull(std::vector<glm::vec3> &hullPts, std::vector<Tri> &hullTris, int maxVerts);
 };

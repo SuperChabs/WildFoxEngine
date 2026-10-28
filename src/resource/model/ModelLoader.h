@@ -25,24 +25,10 @@
 static std::unordered_map<std::string, unsigned int> loadedTexturesCache;
 static int globalMeshCounter = 0;
 
-std::pair<Model *, entt::entity> LoadModelFromFile(
-    std::string & path,
-    MaterialManager & materialManager,
-    ECSWorld * world = nullptr,
-    
-const bool isBaseShape = false
-);
+std::pair<Model *, entt::entity> LoadModelFromFile(std::string & path, MaterialManager & materialManager, ECSWorld * world = nullptr, bool isBaseShape = false);
 
-std::shared_ptr<ModelNode> ProcessNode(
-    aiNode *node,
-    const aiScene *scene,
-    Model *model,
-    const std::string &directory,
-    MaterialManager &materialManager,
-    ECSWorld *world = nullptr,
-    entt::entity parentEntity = entt::null,
-    bool isBaseShape = false
-);
+std::shared_ptr<ModelNode> ProcessNode(aiNode *node, const aiScene *scene, Model *model, const std::string &directory, MaterialManager &materialManager,
+    ECSWorld *world = nullptr, entt::entity parentEntity = entt::null, bool isBaseShape = false);
 
 std::shared_ptr<Mesh> ProcessMesh(
     aiMesh *mesh,

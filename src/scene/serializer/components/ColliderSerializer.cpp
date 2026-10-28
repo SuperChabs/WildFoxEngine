@@ -1,5 +1,7 @@
 #include "ColliderSerializer.h"
 
+#include "physics/shapeFunc/ShapeFunctions.h"
+
 glm::vec3 Vec3FromJson(const json &value) {
     if (!value.is_array() || value.size() < 3)
         return glm::vec3(0.0f);
@@ -31,6 +33,18 @@ json ColliderSerializer::Serialize(ECSWorld *world, entt::entity entity) {
         };
     }
 
+    if (auto *hull = std::get_if<ConvexHull>(&collider.shape)) {
+        json points = json::array();
+        for (const glm::vec3 &point : hull->m_points)
+            points.push_back({point.x, point.y, point.z});
+
+        return json{
+            {"type", "ConvexHull"},
+            {"points", std::move(points)},
+            {"isTrigger", collider.isTrigger}
+        };
+    }
+
     return json::object();
 }
 
@@ -57,6 +71,17 @@ entt::entity ColliderSerializer::Deserialize(DeserializeContext &dcx, entt::enti
         sphere.m_center = Vec3FromJson(data.value("centre", json::array({0.0f, 0.0f, 0.0f})));
         sphere.m_radius = data.value("radius", 0.0f);
         dcx.world->AddComponent<ColliderComponent>(entity, sphere, isTrigger);
+    } else if (type == "ConvexHull" && data.contains("points") && data["points"].is_array()) {
+        std::vector<glm::vec3> points;
+        for (const auto &point : data["points"])
+            if (point.is_array() && point.size() >= 3)
+                points.push_back(Vec3FromJson(point));
+
+        ColliderComponent collider;
+        if (collider.GenerateConvexHull(points)) {
+            collider.isTrigger = isTrigger;
+            dcx.world->AddComponent<ColliderComponent>(entity, std::move(collider));
+        }
     }
 
     return entity;

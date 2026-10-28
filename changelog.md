@@ -1,109 +1,108 @@
 # Changelog
 
-## Module Update
 ### v0.1.1
 ##### 08.02.2026
--- Add Rendering and Resource modules
+- Add Rendering and Resource modules
 
 ### v0.1.2
 ##### 08.02.2026
--- Add UIModule add integrate into engine class
+- Add UIModule add integrate into engine class
 
 ### v0.1.3
 ##### 09.02.2026
--- Add ECS module
--- Delete all legacy camera mentions
+- Add ECS module
+- Delete all legacy camera mentions
 
 ### v0.1.4
 ##### 12.02.2026
--- fixed errors related to UI module
+- fixed errors related to UI module
 
 ### v0.1.5
 ##### 14.02.2026
--- Implemented input registration in Lua with functions for key and mouse events.  
--- Created a cube controller script for movement and rotation using keyboard inputs.  
--- Added a simple rotation script for continuous rotation of objects.  
--- Established a SceneModule for scene serialization and management.  
+- Implemented input registration in Lua with functions for key and mouse events.  
+- Created a cube controller script for movement and rotation using keyboard inputs.  
+- Added a simple rotation script for continuous rotation of objects.  
+- Established a SceneModule for scene serialization and management.  
 
 ### v0.1.6
 ##### 15.02.2026
--- Introduced an EditorCommandHandler for managing editor commands.  
--- Add EventBus class  
--- Update SceneModule with adding in it SceneManager  
--- Fix Camera movement  
--- Will show only those components an entity has  
+- Introduced an EditorCommandHandler for managing editor commands.  
+- Add EventBus class  
+- Update SceneModule with adding in it SceneManager  
+- Fix Camera movement  
+- Will show only those components an entity has  
 
 ### v0.1.7
 ##### 18.02.2026
--- Enhance mesh rendering  
--- Fix gizmo rotation feedback loop
+- Enhance mesh rendering  
+- Fix gizmo rotation feedback loop
 
 ### v0.1.8
 ##### 20.02.2026
--- Bug fix
+- Bug fix
 
 ### v0.1.9
 ##### 25.02.2026
--- Updated ScriptPanel to change default script file extension from .lua to .as.  
--- Enhanced UpdateScript method to properly release AngelScript context and module.  
--- Modified TransformPanel to handle quaternion rotations using degrees.  
--- Improved InspectorWindow to allow adding components via a popup menu.  
--- Fixed MenuBarWindow to ensure scene loading only occurs if a valid path is provided.  
--- Refactored Engine to initialize AngelScript instead of Lua, removing Lua-related code.  
--- Updated EngineCommandHandler to accommodate changes in model loading and component addition.
--- Adjusted ModelLoader to return both model and root entity upon loading.  
--- Changed ModelManager to return root entity when loading models with ECS.  
--- Enhanced SceneManager to properly reset script components when entering play mode.  
--- Updated SceneSerializer to handle model components and hierarchy during scene loading.  
--- Removed Lua bindings and related files, transitioning to AngelScript bindings.  
--- Added new AngelScript bindings and registration API for ECS and input handling.  
--- Introduced a sample controller script for player movement using AngelScript.  
+- Updated ScriptPanel to change default script file extension from .lua to .as.  
+- Enhanced UpdateScript method to properly release AngelScript context and module.  
+- Modified TransformPanel to handle quaternion rotations using degrees.  
+- Improved InspectorWindow to allow adding components via a popup menu.  
+- Fixed MenuBarWindow to ensure scene loading only occurs if a valid path is provided.  
+- Refactored Engine to initialize AngelScript instead of Lua, removing Lua-related code.  
+- Updated EngineCommandHandler to accommodate changes in model loading and component addition.
+- Adjusted ModelLoader to return both model and root entity upon loading.  
+- Changed ModelManager to return root entity when loading models with ECS.  
+- Enhanced SceneManager to properly reset script components when entering play mode.  
+- Updated SceneSerializer to handle model components and hierarchy during scene loading.  
+- Removed Lua bindings and related files, transitioning to AngelScript bindings.  
+- Added new AngelScript bindings and registration API for ECS and input handling.  
+- Introduced a sample controller script for player movement using AngelScript.  
 
 ### v0.2.0
 ##### 29.03.2026
 yo, long time I haven't updated herre this shit  
--- created pch wrapper for std and vendor libraries  
--- I forgot what I have added  
--- uv tiling or wtf its name is
+- created pch wrapper for std and vendor libraries  
+- I forgot what I have added  
+- uv tiling or wtf its name is
 
 ### v0.2.1
 ##### 30.06.2026
 very long time, im getting lazy  
--- added shadow casting to omnidirectional light source
--- some minor updates in code appearance (really minor)
+- added shadow casting to omnidirectional light source
+- some minor updates in code appearance (really minor)
 
 ### v0.2.3
 ##### 30.06.2026
--- deleted Theme class  
--- hard-coded theme in ImGuiManager  
--- moved material creating button to material panel cuz its more intuitive I think
+- deleted Theme class  
+- hard-coded theme in ImGuiManager  
+- moved material creating button to material panel cuz its more intuitive I think
 
 ### v0.2.4
 ##### 2.07.2026
--- README update  
--- rewrote deserialization system to improve, idk, something  
+- README update  
+- rewrote deserialization system to improve, idk, something  
    anyway, its looks better
 
 ### v0.2.5
 ##### 03.07.2026
--- added sorting to the hierarchy tab cuz why not
+- added sorting to the hierarchy tab cuz why not
 
 ### v0.2.6
 ##### 03.07.2026
--- added list of selectable scenes in the scene tab
+- added list of selectable scenes in the scene tab
 
 ### v0.2.7
 ##### 05.07.2026
--- some light and model loading bug fixes
+- some light and model loading bug fixes
 
 ### v0.2.8
 ##### 05.07.2026
--- add AngelScript module to .gitmodules
+- add AngelScript module to .gitmodules
 
 ### v.0.2.9
 ##### 67.2026  
 67676767676767676767677, anyway the changes are:  
--- i forgot
+- i forgot
 
 ### v0.3
 ##### 18.07.2027
@@ -113,26 +112,26 @@ very long time, im getting lazy
 
 ### v0.4
 ##### 22.07.2026
--- add level scripting
+- add level scripting
 
 ### v0.4.1
 ##### 30.07.2026
--- minor update
+- minor update
 
 ### v0.5
 ##### 05.08.2026
--- add Blender like ui  
--- some refactoring  
--- add viewport window  
--- add editor camera  
--- some other changes
+- add Blender like ui  
+- some refactoring  
+- add viewport window  
+- add editor camera  
+- some other changes
 
 ### v0.5.1
 ##### 21.08.2026
--- add reflection for components  
--- add gameViewportWindow  
--- delete unused code  
--- tiny changes and bug fixes
+- add reflection for components
+- add gameViewportWindow  
+- delete unused code  
+- tiny changes and bug fixes
 
 ### v0.6
 ##### 19.09.2026
@@ -143,8 +142,14 @@ long time no see. im in 11th Grade now and it seems not so difficult as i expect
 
 ### v0.6.1
 ##### 03.10.2026
--- js some physics again  
+- js some physics again  
 
 ### v0.6.2
 ##### 05.10.2026
--- add physics panel  
+- add physics panel  
+
+### v0.7
+##### 28.10.2026
+- implemented convex hull physics  
+- auto-generation of convex hulls for 3d models
+- rewrite debug shaders for physics for convex hulls  

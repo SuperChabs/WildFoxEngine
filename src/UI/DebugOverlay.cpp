@@ -56,7 +56,7 @@ void DebugOverlay::Render(ECSWorld *ecs, MaterialManager *materialManager, Scene
     ImGui::End();
 
     if (ImGui::BeginMenuBar()) {
-        RenderCreateEntityTab();
+        RenderUpperMenuTab();
         ImGui::EndMenuBar();
     }
 
@@ -70,6 +70,7 @@ void DebugOverlay::Render(ECSWorld *ecs, MaterialManager *materialManager, Scene
     gameViewportWindow.Render(gameFramebuffer.get());
 
     RenderOpenModelDialog();
+    RenderPrefabsDialog();
 
     ImGui::End();
 }
@@ -326,16 +327,15 @@ void DebugOverlay::RenderInspectorTab(ECSWorld *ecs, MaterialManager *materialMa
             }
         }
 
-        // if (!ecs->HasComponent<ColliderComponent>(m_selected)) {
-        //     if (ImGui::MenuItem("Collider")) {
-        //         ColliderComponent cl;
-        //         AABB aabb;
-        //         aabb.min = glm::vec3(-0.5f, -0.5f, -0.5f);
-        //         aabb.max = glm::vec3(0.5f, 0.5f, 0.5f);
-        //         cl.shape = aabb;
-        //         ecs->AddComponent<ColliderComponent>(m_selected, cl);
-        //     }
-        // }
+        if (!ecs->HasComponent<ColliderComponent>(m_selected)) {
+            if (ImGui::MenuItem("Collider")) {
+                ColliderComponent collider;
+                Sphere sphere{};
+                sphere.m_radius = 0.5f;
+                collider.shape = sphere;
+                ecs->AddComponent<ColliderComponent>(m_selected, std::move(collider));
+            }
+        }
 
         ImGui::EndPopup();
     }
@@ -368,7 +368,7 @@ void DebugOverlay::RenderInspectorTab(ECSWorld *ecs, MaterialManager *materialMa
     }
 }
 
-void DebugOverlay::RenderCreateEntityTab() {
+void DebugOverlay::RenderUpperMenuTab() {
     ImGui::Spacing();
 
     if (ImGui::BeginMenu("Mesh")) {
@@ -396,6 +396,9 @@ void DebugOverlay::RenderCreateEntityTab() {
 
     if (ImGui::MenuItem("Open Model"))
         m_showOpenModelDialog = true;
+
+    if (ImGui::MenuItem("Prefabs"))
+        m_showOpenPrefabsDialog = true;
 }
 
 void DebugOverlay::RenderOpenModelDialog() {
@@ -442,9 +445,72 @@ void DebugOverlay::RenderOpenModelDialog() {
     }
 }
 
+void DebugOverlay::RenderPrefabsDialog() {
+    if (m_showOpenPrefabsDialog)
+    {
+        ImGui::OpenPopup("Open Prefabs");
+        m_showOpenPrefabsDialog = false;
+    }
+
+    if (!ImGui::BeginPopupModal("Open Prefabs", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+        return;
+
+    constexpr auto formatPrefab = [](const std::string &prefabName) {
+        std::string result;
+
+        for (int i = 0; i < prefabName.size(); i++) {
+            const char c = prefabName[i];
+
+            if ( i > 0 && std::isupper(static_cast<u_char>(c)) && std::islower(static_cast<unsigned char>(prefabName[i - 1])))
+                result += ' ';
+
+            result += c;
+        }
+
+        return result;
+    };
+
+    constexpr size_t prefixLength = sizeof(PrefabPrefix) - 3;
+
+    std::vector<std::string> prefabs;
+
+    const auto& commands = CommandManager::GetCommands();
+
+    for (const auto& [name, command] : commands)
+        if (name.starts_with(PrefabPrefix))
+            prefabs.emplace_back(name.substr(prefixLength));
+
+    std::ranges::sort(prefabs.begin(), prefabs.end());
+
+    ImGui::BeginChild("PrefabList", ImVec2(250, 200), true);
+
+    for (const auto& prefabName : prefabs) {
+        const std::string displayName = formatPrefab(prefabName);
+
+        if (ImGui::Selectable(displayName.c_str(), false, ImGuiSelectableFlags_AllowDoubleClick))
+            if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+                const std::string commandName = std::string(PrefabPrefix) + prefabName;
+
+                CommandManager::ExecuteCommand(commandName, {});
+
+                ImGui::CloseCurrentPopup();
+                break;
+            }
+    }
+
+    ImGui::EndChild();
+
+    ImGui::Spacing();
+
+    if (ImGui::Button("Cancel"))
+        ImGui::CloseCurrentPopup();
+
+    ImGui::EndPopup();
+}
+
 void DebugOverlay::RefreshAvailableScenes(SceneSerializer &ss) {
     m_availableScenes = ss.GetAvailableScenes();
-    std::sort(m_availableScenes.begin(), m_availableScenes.end());
+    std::ranges::sort(m_availableScenes);
     m_selectedScene = -1;
     m_scenesLoaded = true;
 }

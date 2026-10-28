@@ -21,10 +21,9 @@ std::pair<Model *, entt::entity> LoadModelFromFile(std::string &path, MaterialMa
     Assimp::Importer importer;
 
     const aiScene *scene = importer.ReadFile(path,
-                                             aiProcess_Triangulate |
-                                             // waiProcess_FlipUVs              |
-                                             aiProcess_CalcTangentSpace |
-                                             aiProcess_GenNormals |
+                                             aiProcess_Triangulate    |
+                                             aiProcess_CalcTangentSpace     |
+                                             aiProcess_GenNormals           |
                                              aiProcess_PreTransformVertices |
                                              aiProcess_FixInfacingNormals
     );

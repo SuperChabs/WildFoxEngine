@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 
 #include "physics/Bounds.h"
-#include "physics/shapeFunc/ShapeFunctions.h"
+#include "physics/shapeFunc/convex/ConvexStruct.h"
 
 struct BaseShape {
     glm::vec3 m_centerOfMass = {0.0f, 0.0f, 0.0f};
@@ -27,20 +27,25 @@ struct Sphere : BaseShape {
 
 struct ConvexHull : BaseShape {
     std::vector<glm::vec3> m_points;
+    std::vector<Tri> m_tris;
     Bounds m_bounds;
     glm::mat3 m_inertiaTensor = glm::mat3(0.0f);
 
-    ConvexHull(const std::vector<glm::vec3> &points, int num); // лише оголошення
+    ConvexHull() = default;
+    ConvexHull(const std::vector<glm::vec3> &points, int num);
 };
 
 struct ColliderComponent {
     std::variant<Sphere, ConvexHull, Box> shape;
     bool isTrigger = false;
 
-    [[nodiscard]] glm::mat3 GetInertiaTensor() const;  // без тіла
-    [[nodiscard]] Bounds GetBounds(const glm::vec3 &pos, const glm::quat &rot);
-    [[nodiscard]] Bounds GetBounds();
-    [[nodiscard]] glm::vec3 Support(const glm::vec3 &dir, const glm::vec3 &pos, const glm::quat &rot, float bias);
+    glm::mat3 GetInertiaTensor() const;
+    Bounds GetBounds(const glm::vec3 &pos, const glm::quat &rot, const glm::vec3 &scale);
+    Bounds GetBounds();
+    glm::vec3 Support(const glm::vec3 &dir, const glm::vec3 &pos, const glm::quat &rot, const glm::vec3 &scale, float bias);
+    float FastestLinearSpeed(const glm::vec3 &angularVelocity, const glm::vec3 &dir) const;
+    bool GenerateConvexHull(const std::vector<glm::vec3> &points, int maxVerts = 256);
+
 };
 
 struct RigidBodyComponent {

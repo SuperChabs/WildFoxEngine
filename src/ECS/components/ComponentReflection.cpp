@@ -7,7 +7,7 @@
 
 using namespace entt::literals;
 
-using ColliderShape = std::variant<AABB, Sphere>;
+using ColliderShape = std::variant<Sphere, ConvexHull, Box>;
 
 // --------------------------
 // Helper Functions
@@ -259,8 +259,9 @@ entt::meta_any GetComponent(entt::registry &registry, const entt::entity entity)
             .type("ColliderShape"_hs, "ColliderShape")
             .func<&VariantIndex>("index"_hs)
             .func<&VariantGetActive>("getActive"_hs)
-            .func<&VariantSet<AABB>>("setAABB"_hs)
-            .func<&VariantSet<Sphere>>("setSphere"_hs);
+            .func<&VariantSet<Sphere>>("setSphere"_hs)
+            .func<&VariantSet<ConvexHull>>("setConvexHull"_hs)
+            .func<&VariantSet<Box>>("setBox"_hs);
 
     entt::meta_factory<ColliderComponent>()
             .type("ColliderComponent"_hs, "ColliderComponent")

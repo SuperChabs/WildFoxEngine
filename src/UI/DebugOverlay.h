@@ -38,6 +38,7 @@ class DebugOverlay {
     char m_modelPath[512]{};
 
     bool m_showOpenModelDialog = false;
+    bool m_showOpenPrefabsDialog = false;
 
     AudioPanel audioPanel;
     TagPanel tagPanel;
@@ -63,6 +64,8 @@ class DebugOverlay {
     bool m_scenesLoaded = false;
 
     std::string m_pendingDeleteScene;
+
+    constexpr static auto PrefabPrefix = "PrFb_";
 
 public:
     bool visible = true;
@@ -90,37 +93,32 @@ public:
 
 private:
     void RenderSceneTab(SceneSerializer *ss);
-
     void RenderHierarchyTab(ECSWorld *ecs);
-
     void RenderEntityNode(entt::entity e, ECSWorld *ecs, entt::entity &toDelete);
-
     void RenderInspectorTab(ECSWorld *ecs, MaterialManager *materialManager);
-
-    void RenderCreateEntityTab();
-
+    void RenderUpperMenuTab();
     void RenderOpenModelDialog();
-
+    void RenderPrefabsDialog();
     void RefreshAvailableScenes(SceneSerializer &ss);
 
     std::vector<std::string> GetAvailableObjects();
 
-    static inline void Execute(const char *name, const CommandArgs &args) {
+    static void Execute(const char *name, const CommandArgs &args) {
         if (CommandManager::HasCommand(name))
             CommandManager::ExecuteCommand(name, args);
     }
 
-    static inline void ExecuteItem(const char *label, const char *command) {
+    static void ExecuteItem(const char *label, const char *command) {
         if (ImGui::MenuItem(label))
             Execute(command);
     }
 
-    static inline void Execute(const char *name) {
+    static void Execute(const char *name) {
         constexpr CommandArgs args;
         Execute(name, args);
     }
 
-    static inline void Execute(const char *name, const std::string &arg) {
+    static void Execute(const char *name, const std::string &arg) {
         CommandArgs args;
         args.emplace_back(arg);
         Execute(name, args);

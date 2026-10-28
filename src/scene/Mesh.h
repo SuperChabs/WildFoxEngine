@@ -14,6 +14,7 @@
 class Mesh {
     std::unique_ptr<MeshRenderer> meshRenderer;
     std::shared_ptr<Material> material;
+    std::vector<Vertex> vertices;
 
 public:
     Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
@@ -33,6 +34,8 @@ public:
     void SetMaterial(std::shared_ptr<Material> newMaterial);
 
     glm::vec3 GetColor() const;
+
+    const std::vector<Vertex> &GetVertices() const;
 
     MeshRenderer *GetMeshRenderer();
 

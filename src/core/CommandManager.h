@@ -37,4 +37,6 @@ public:
     static void ExecuteCommand(const std::string &name, const CommandArgs &args);
 
     static bool HasCommand(const std::string &name);
+
+    static const std::unordered_map<std::string, CommandFn>& GetCommands() { return commands; }
 };

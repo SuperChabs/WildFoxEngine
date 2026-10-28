@@ -27,6 +27,5 @@ struct ModelComponent {
 
     ModelComponent() = default;
 
-    explicit ModelComponent(std::string path) : filePath(std::move(path)) {
-    }
+    explicit ModelComponent(std::string path) : filePath(std::move(path)) {}
 };

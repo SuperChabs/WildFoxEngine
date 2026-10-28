@@ -1,13 +1,14 @@
 #include "Engine.h"
 
 #include <imgui.h>
-
 #include <ImGuizmo.h>
 #include <glm/glm.hpp>
+
 #include "core/Input.h"
 #include "core/CommandManager.h"
 #include "core/logging/Logger.h"
 #include "EngineCommandHandler.h"
+#include "prefabs/PrefabsCommands.h"
 
 void Engine::FramebufferSizeCallback(GLFWwindow *window, const int width, const int height) {
     glViewport(0, 0, width, height);
@@ -125,6 +126,7 @@ void Engine::OnInitialize() {
     m_ech = std::make_unique<EditorCommandHandler>(mm);
     m_ech->RegisterAllCommands();
     RegistrateCoreCommands();
+    PrefabsCommands::RegisterPrefabsCommands(ecsModule, resourceModule);
 
     gameCam = ecsModule->GetECS()->CreateCamera("Main Camera", true);
     SetCameraControlMode(false);
