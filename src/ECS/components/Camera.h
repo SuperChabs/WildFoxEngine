@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-struct CameraComponent {
+struct c_Camera {
     float fov = 55.0f;
     float nearPlane = 0.1f;
     float farPlane = 1000.0f;
@@ -14,24 +14,24 @@ struct CameraComponent {
     bool isMainCamera = false;
     bool isActive = true;
 
-    CameraComponent() = default;
+    c_Camera() = default;
 
     [[nodiscard]] glm::mat4 GetProjectionMatrix(const float aspectRatio) const {
         return glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
     }
 };
 
-struct CameraOrientationComponent {
+struct c_CameraOrientation {
     float yaw = -95.0f;
     float pitch = 0.0f;
 
-    CameraOrientationComponent() = default;
+    c_CameraOrientation() = default;
 
     [[nodiscard]] glm::vec3 GetFront() const {
         glm::vec3 front;
-        front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-        front.y = sin(glm::radians(pitch));
-        front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+        front.x = glm::cos(glm::radians(pitch)) * glm::cos(glm::radians(yaw));
+        front.y = glm::sin(glm::radians(pitch));
+        front.z = glm::sin(glm::radians(yaw)) * glm::cos(glm::radians(pitch));
         return glm::normalize(front);
     }
 

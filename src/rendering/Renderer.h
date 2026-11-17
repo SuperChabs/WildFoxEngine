@@ -51,8 +51,8 @@ public:
 
     void BeginFrame();
 
-    void Render(CameraComponent &camera, TransformComponent &transform,
-                CameraOrientationComponent &orientation, int width, int height);
+    void Render(c_Camera &camera, c_Transform &transform,
+                c_CameraOrientation &orientation, int width, int height);
 
     void EndFrame();
 

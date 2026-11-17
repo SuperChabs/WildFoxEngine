@@ -10,6 +10,8 @@
 #include <entt/entt.hpp>
 #include <glad/glad.h>
 
+#include "physics/collision/narrowphase/support/constraint/Constraint.h"
+
 using CommandArg =
 std::variant<
     int,
@@ -22,11 +24,24 @@ std::variant<
     std::vector<int>,
     entt::entity,
     GLuint,
-    std::unordered_map<entt::entity, int>
+    std::unordered_map<entt::entity, int>,
+    std::vector<Constraint*>
 >;
 
 using CommandArgs = std::vector<CommandArg>;
 using CommandFn = std::function<void(const CommandArgs &)>;
+
+void LogCommandArgError(const std::string &command, size_t index);
+
+/// @brief Typed access to a command argument
+/// @return pointer to the argument, or nullptr (with an error logged) if it is missing or has another type
+template<typename T>
+const T *GetArg(const CommandArgs &args, const size_t index, const std::string &command) {
+    const T *value = index < args.size() ? std::get_if<T>(&args[index]) : nullptr;
+    if (!value)
+        LogCommandArgError(command, index);
+    return value;
+}
 
 class CommandManager {
     static std::unordered_map<std::string, CommandFn> commands;

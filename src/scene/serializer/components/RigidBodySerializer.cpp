@@ -1,10 +1,10 @@
 #include "RigidBodySerializer.h"
 
 json RigidBodySerializer::Serialize(ECSWorld *world, entt::entity entity) {
-    if (!world->HasComponent<RigidBodyComponent>(entity))
+    if (!world->HasComponent<c_RigidBody>(entity))
         return json::object();
 
-    auto &rb = world->GetComponent<RigidBodyComponent>(entity);
+    auto &rb = world->GetComponent<c_RigidBody>(entity);
     return json{
         {"inv_mass", rb.m_invMass},
         {"elasticity", rb.m_elasticity},
@@ -20,7 +20,7 @@ entt::entity RigidBodySerializer::Deserialize(DeserializeContext &dcx, entt::ent
     if (!data.contains("inv_mass"))
         return entt::null;
 
-    RigidBodyComponent rb{
+    c_RigidBody rb{
         .m_invMass = data.value("inv_mass", 0.0f),
         .m_elasticity = data.value("elasticity", 0.0f),
         .m_friction = data.value("friction", 0.0f),
@@ -30,11 +30,11 @@ entt::entity RigidBodySerializer::Deserialize(DeserializeContext &dcx, entt::ent
         .m_torqueAccum = Vec3FromJson(data.value("torque_accum", json::array({0.0f, 0.0f, 0.0f})))
     };
 
-    dcx.world->AddComponent<RigidBodyComponent>(entity, rb);
+    dcx.world->AddComponent<c_RigidBody>(entity, rb);
 
     return entity;
 }
 
 bool RigidBodySerializer::CanSerialize(ECSWorld *world, entt::entity entity) const {
-    return world->HasComponent<RigidBodyComponent>(entity);
+    return world->HasComponent<c_RigidBody>(entity);
 }

@@ -4,7 +4,10 @@
 #include "core/logging/Logger.h"
 
 #include "ECS/components/Components.h"
-#include "physics/shapeFunc/ShapeFunctions.h"
+#include "physics/collision/narrowphase/support/constraint/Constraint.h"
+#include "physics/collision/narrowphase/support/constraint/ConstraintDistance.h"
+#include "physics/dynamics/BodyTransform.h"
+#include "physics/geometry/ShapeFunctions.h"
 
 void PrefabsCommands::RegisterPrefabsCommands(ECSModule *ecsModule, ResourceModule *resModule) {
     CommandManager::RegisterCommand("PrFb_CreateSandbox",
@@ -27,18 +30,18 @@ void PrefabsCommands::RegisterPrefabsCommands(ECSModule *ecsModule, ResourceModu
                 };
 
                 Box shape;
-                Shape::Build(shape, points, static_cast<int>(points.size()));
+                ShapeFunc::Build(shape, points, static_cast<int>(points.size()));
 
-                world->AddComponent<TransformComponent>(
+                world->AddComponent<c_Transform>(
                     entity, position, glm::identity<glm::quat>(), scale
                 );
 
-                world->AddComponent<ColliderComponent>(entity, ColliderComponent{
+                world->AddComponent<c_Collider>(entity, c_Collider{
                     .shape = shape,
                     .isTrigger = false
                 });
 
-                world->AddComponent<RigidBodyComponent>(entity, RigidBodyComponent{
+                world->AddComponent<c_RigidBody>(entity, c_RigidBody{
                     .m_invMass = 0.0f,
                     .m_elasticity = elasticity,
                     .m_friction = friction,

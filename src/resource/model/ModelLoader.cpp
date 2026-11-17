@@ -6,6 +6,13 @@
 #include "core/logging/Logger.h"
 #include "ECS/components/Components.h"
 
+namespace ModelLoader {
+
+namespace {
+    std::unordered_map<std::string, unsigned int> loadedTexturesCache;
+    int globalMeshCounter = 0;
+}
+
 std::pair<Model *, entt::entity> LoadModelFromFile(std::string &path, MaterialManager &materialManager,
                                                    ECSWorld *world, const bool isBaseShape) {
     Logger::Log(LogLevel::INFO, "=== LoadModelFromFile START ===");
@@ -37,16 +44,16 @@ std::pair<Model *, entt::entity> LoadModelFromFile(std::string &path, MaterialMa
     std::string directory = path.substr(0, path.find_last_of('/'));
     Logger::Log(LogLevel::INFO, "Directory: " + directory);
 
-    Model *model = new Model(path);
+    auto *model = new Model(path);
 
     entt::entity rootEntity = entt::null;
     if (world) {
         Logger::Log(LogLevel::INFO, "Creating root entity...");
         rootEntity = world->CreateEntity(model->GetName() + (!isBaseShape ? "_Root" : ""));
-        world->AddComponent<TransformComponent>(rootEntity, glm::vec3(0, 0, -5), glm::vec3(0), glm::vec3(1));
-        world->AddComponent<VisibilityComponent>(rootEntity, true);
-        world->AddComponent<HierarchyComponent>(rootEntity);
-        world->AddComponent<ModelComponent>(rootEntity, path);
+        world->AddComponent<c_Transform>(rootEntity, glm::vec3(0, 0, -5), glm::vec3(0), glm::vec3(1));
+        world->AddComponent<c_Visibility>(rootEntity, true);
+        world->AddComponent<c_Hierarchy>(rootEntity);
+        world->AddComponent<c_Model>(rootEntity, path);
 
         Logger::Log(LogLevel::INFO, "Root entity created: " + model->GetName() + "_Root");
     } else {
@@ -74,8 +81,8 @@ std::pair<Model *, entt::entity> LoadModelFromFile(std::string &path, MaterialMa
         auto it = children.begin();
         entt::entity meshEntity = *it;
 
-        auto &modelComp = world->GetComponent<ModelComponent>(rootEntity);
-        world->AddComponent<ModelComponent>(meshEntity, modelComp.filePath);
+        auto &modelComp = world->GetComponent<c_Model>(rootEntity);
+        world->AddComponent<c_Model>(meshEntity, modelComp.filePath);
 
         // auto& tag = world->GetComponent<TagComponent>(meshEntity);
         // tag.name = model->GetName();
@@ -89,10 +96,9 @@ std::pair<Model *, entt::entity> LoadModelFromFile(std::string &path, MaterialMa
                 "Model loaded: " + path + " (" +
                 std::to_string(model->GetMeshCount()) + " meshes)");
 
-    if (world && rootEntity != entt::null) {
-        auto children = world->GetChildren(rootEntity);
-        Logger::Log(LogLevel::INFO,
-                    "Root entity has " + std::to_string(children.size()) + " children");
+    if (rootEntity != entt::null) {
+        children = world->GetChildren(rootEntity);
+        Logger::Log(LogLevel::INFO, "Root entity has " + std::to_string(children.size()) + " children");
     }
 
     loadedTexturesCache.clear();
@@ -103,8 +109,7 @@ std::pair<Model *, entt::entity> LoadModelFromFile(std::string &path, MaterialMa
 }
 
 std::shared_ptr<ModelNode> ProcessNode(aiNode *node, const aiScene *scene, Model *model, const std::string &directory,
-                                       MaterialManager &materialManager, ECSWorld *world, entt::entity parentEntity,
-                                       bool isBaseShape) {
+        MaterialManager &materialManager, ECSWorld *world, entt::entity parentEntity, bool isBaseShape) {
     Logger::Log(LogLevel::INFO, "ProcessNode: " + std::string(node->mName.C_Str()));
     Logger::Log(LogLevel::INFO, "  Meshes in this node: " + std::to_string(node->mNumMeshes));
     Logger::Log(LogLevel::INFO, "  World: " + std::string(world ? "OK" : "NULL"));
@@ -144,14 +149,14 @@ std::shared_ptr<ModelNode> ProcessNode(aiNode *node, const aiScene *scene, Model
             glm::vec3 position, rotation, scale;
             DecomposeTransform(transform, position, rotation, scale);
 
-            world->AddComponent<TransformComponent>(meshEntity, position, rotation, scale);
-            world->AddComponent<MeshComponent>(meshEntity, processedMesh);
+            world->AddComponent<c_Transform>(meshEntity, position, rotation, scale);
+            world->AddComponent<c_Mesh>(meshEntity, processedMesh);
 
             auto meshMaterial = processedMesh->GetMaterial();
             if (meshMaterial)
-                world->AddComponent<MaterialComponent>(meshEntity, meshMaterial);
+                world->AddComponent<c_Material>(meshEntity, meshMaterial);
 
-            world->AddComponent<VisibilityComponent>(meshEntity, true);
+            world->AddComponent<c_Visibility>(meshEntity, true);
             world->SetParent(meshEntity, parentEntity);
         }
 
@@ -159,16 +164,8 @@ std::shared_ptr<ModelNode> ProcessNode(aiNode *node, const aiScene *scene, Model
     }
 
     for (unsigned int i = 0; i < node->mNumChildren; i++) {
-        std::shared_ptr<ModelNode> childNode = ProcessNode(
-            node->mChildren[i],
-            scene,
-            model,
-            directory,
-            materialManager,
-            world,
-            parentEntity,
-            isBaseShape
-        );
+        const auto &childNode = ModelLoader::ProcessNode(node->mChildren[i], scene, model, directory, materialManager,
+            world, parentEntity, isBaseShape);
 
         modelNode->AddChild(childNode);
     }
@@ -422,10 +419,7 @@ unsigned int TextureFromFile(const char *path, const std::string &directory, con
     return textureID;
 }
 
-void DecomposeTransform(const glm::mat4 &transform,
-                        glm::vec3 &position,
-                        glm::vec3 &rotation,
-                        glm::vec3 &scale) {
+void DecomposeTransform(const glm::mat4 &transform, glm::vec3 &position, glm::vec3 &rotation, glm::vec3 &scale) {
     position = glm::vec3(transform[3]);
 
     scale.x = glm::length(glm::vec3(transform[0]));
@@ -442,3 +436,5 @@ void DecomposeTransform(const glm::mat4 &transform,
                                     sqrt(rotMat[1][0] * rotMat[1][0] + rotMat[1][1] * rotMat[1][1])));
     rotation.z = glm::degrees(atan2(rotMat[1][0], rotMat[1][1]));
 }
+
+} // namespace ModelLoader

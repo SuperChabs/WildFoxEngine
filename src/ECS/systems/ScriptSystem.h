@@ -16,9 +16,9 @@ public:
     static void Stop(ECSWorld &ecs);
 
 private:
-    static void LoadScript(entt::entity e, ScriptComponent &script);
+    static void LoadScript(entt::entity e, c_Script &script);
 
-    static void CallUpdate(ScriptComponent &script, float deltaTime);
+    static void CallUpdate(c_Script &script, float deltaTime);
 
-    static void CallFunction(ScriptComponent &script, asIScriptFunction *fn);
+    static void CallFunction(c_Script &script, asIScriptFunction *fn);
 };

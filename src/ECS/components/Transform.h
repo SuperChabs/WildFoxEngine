@@ -4,19 +4,19 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-struct TransformComponent {
+struct c_Transform {
     glm::vec3 position{0.0f};
     glm::quat rotation{glm::identity<glm::quat>()};
     glm::vec3 scale{1.0f};
 
     glm::vec3 eulerHint = glm::vec3(0.0f);
 
-    TransformComponent() = default;
+    c_Transform() = default;
 
-    explicit TransformComponent(const glm::vec3 &pos) : position(pos) {
+    explicit c_Transform(const glm::vec3 &pos) : position(pos) {
     }
 
-    TransformComponent(const glm::vec3 &pos, const glm::quat &rot, const glm::vec3 &scl)
+    c_Transform(const glm::vec3 &pos, const glm::quat &rot, const glm::vec3 &scl)
         : position(pos), rotation(rot), scale(scl) {
     }
 

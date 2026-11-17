@@ -5,7 +5,7 @@
 
 #include "ECS/World.h"
 #include "ECS/components/Components.h"
-#include "scene/serializer/components/IComponentSerializer.h"
+#include "../IComponentSerializer.h"
 #include "scene/Light.h"
 
 using json = nlohmann::json;
@@ -14,9 +14,7 @@ class LightSerializer : public IComponentSerializer {
 public:
     json Serialize(ECSWorld *world, entt::entity entity) override;
 
-
     entt::entity Deserialize(DeserializeContext &dcx, entt::entity entity, const json &data) override;
-
 
     bool CanSerialize(ECSWorld *world, entt::entity entity) const override;
 };

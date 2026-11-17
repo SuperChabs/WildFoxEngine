@@ -14,8 +14,8 @@ ECSWorld::~ECSWorld() {
 entt::entity ECSWorld::CreateEntity(const std::string &name) {
     const auto entity = registry.create();
 
-    registry.emplace<IDComponent>(entity, nextID++);
-    registry.emplace<TagComponent>(entity, name);
+    registry.emplace<c_ID>(entity, nextID++);
+    registry.emplace<c_Tag>(entity, name);
 
     Logger::Log(LogLevel::DEBUG, "Entity created: " + name);
     return entity;
@@ -25,14 +25,14 @@ void ECSWorld::DestroyEntity(const entt::entity entity) {
     if (!IsValid(entity))
         return;
 
-    if (HasComponent<HierarchyComponent>(entity))
-        for (const auto children = GetComponent<HierarchyComponent>(entity).children; auto &child: children)
+    if (HasComponent<c_Hierarchy>(entity))
+        for (const auto children = GetComponent<c_Hierarchy>(entity).children; auto &child: children)
             DestroyEntity(child);
 
-    if (HasComponent<HierarchyComponent>(entity))
-        if (const auto &hc = GetComponent<HierarchyComponent>(entity); hc.HasParent()
-            && IsValid(hc.parent) && HasComponent<HierarchyComponent>(hc.parent))
-            GetComponent<HierarchyComponent>(hc.parent).RemoveChild(entity);
+    if (HasComponent<c_Hierarchy>(entity))
+        if (const auto &hc = GetComponent<c_Hierarchy>(entity); hc.HasParent()
+            && IsValid(hc.parent) && HasComponent<c_Hierarchy>(hc.parent))
+            GetComponent<c_Hierarchy>(hc.parent).RemoveChild(entity);
 
     if (registry.valid(entity))
         registry.destroy(entity);
@@ -45,8 +45,8 @@ bool ECSWorld::IsValid(const entt::entity entity) const {
 void ECSWorld::Clear() {
     std::vector<entt::entity> entities;
 
-    for (auto entity: registry.view<IDComponent>()) {
-        if (HasComponent<CameraComponent>(entity))
+    for (auto entity: registry.view<c_ID>()) {
+        if (HasComponent<c_Persistent>(entity))
             continue;
 
         entities.push_back(entity);
@@ -63,21 +63,21 @@ size_t ECSWorld::GetEntityCount() const {
 }
 
 std::unordered_set<entt::entity> ECSWorld::GetChildren(entt::entity entity) {
-    if (!IsValid(entity) || !HasComponent<HierarchyComponent>(entity))
+    if (!IsValid(entity) || !HasComponent<c_Hierarchy>(entity))
         return {};
 
-    return GetComponent<HierarchyComponent>(entity).children;
+    return GetComponent<c_Hierarchy>(entity).children;
 }
 
 entt::entity ECSWorld::GetParent(entt::entity entity) {
-    if (!IsValid(entity) || !HasComponent<HierarchyComponent>(entity))
+    if (!IsValid(entity) || !HasComponent<c_Hierarchy>(entity))
         return entt::null;
 
-    return GetComponent<HierarchyComponent>(entity).parent;
+    return GetComponent<c_Hierarchy>(entity).parent;
 }
 
 glm::mat4 ECSWorld::GetGlobalTransform(entt::entity entity, int depth) {
-    if (!IsValid(entity) || !HasComponent<TransformComponent>(entity))
+    if (!IsValid(entity) || !HasComponent<c_Transform>(entity))
         return {1.0f};
 
     if (depth > 64) {
@@ -85,11 +85,11 @@ glm::mat4 ECSWorld::GetGlobalTransform(entt::entity entity, int depth) {
         return {1.0f};
     }
 
-    const auto &transform = GetComponent<TransformComponent>(entity);
+    const auto &transform = GetComponent<c_Transform>(entity);
     const glm::mat4 localTransform = transform.GetModelMatrix();
 
-    if (HasComponent<HierarchyComponent>(entity)) {
-        auto &hierarchy = GetComponent<HierarchyComponent>(entity);
+    if (HasComponent<c_Hierarchy>(entity)) {
+        auto &hierarchy = GetComponent<c_Hierarchy>(entity);
         if (hierarchy.HasParent())
             return GetGlobalTransform(hierarchy.parent, depth + 1) * localTransform;
     }
@@ -101,17 +101,17 @@ void ECSWorld::SetParent(const entt::entity child, const entt::entity parent) {
     if (!IsValid(child) || !IsValid(parent))
         return;
 
-    if (!HasComponent<HierarchyComponent>(child))
-        AddComponent<HierarchyComponent>(child);
+    if (!HasComponent<c_Hierarchy>(child))
+        AddComponent<c_Hierarchy>(child);
 
-    if (!HasComponent<HierarchyComponent>(parent))
-        AddComponent<HierarchyComponent>(parent);
+    if (!HasComponent<c_Hierarchy>(parent))
+        AddComponent<c_Hierarchy>(parent);
 
-    auto &childHierarchy = GetComponent<HierarchyComponent>(child);
-    auto &parentHierarchy = GetComponent<HierarchyComponent>(parent);
+    auto &childHierarchy = GetComponent<c_Hierarchy>(child);
+    auto &parentHierarchy = GetComponent<c_Hierarchy>(parent);
 
     if (childHierarchy.HasParent()) {
-        auto &oldParentHierarchy = GetComponent<HierarchyComponent>(childHierarchy.parent);
+        auto &oldParentHierarchy = GetComponent<c_Hierarchy>(childHierarchy.parent);
         oldParentHierarchy.RemoveChild(child);
     }
 
@@ -122,11 +122,11 @@ void ECSWorld::SetParent(const entt::entity child, const entt::entity parent) {
 }
 
 void ECSWorld::ClearParent(entt::entity child) {
-    if (!IsValid(child) || !HasComponent<HierarchyComponent>(child))
+    if (!IsValid(child) || !HasComponent<c_Hierarchy>(child))
         return;
 
-    if (auto &childHierarchy = GetComponent<HierarchyComponent>(child); childHierarchy.HasParent()) {
-        auto &parentHierarchy = GetComponent<HierarchyComponent>(childHierarchy.parent);
+    if (auto &childHierarchy = GetComponent<c_Hierarchy>(child); childHierarchy.HasParent()) {
+        auto &parentHierarchy = GetComponent<c_Hierarchy>(childHierarchy.parent);
         parentHierarchy.RemoveChild(child);
         childHierarchy.parent = entt::null;
     }
@@ -135,13 +135,13 @@ void ECSWorld::ClearParent(entt::entity child) {
 entt::entity ECSWorld::CreateCamera(const std::string &name, bool setAsMain) {
     const auto entity = CreateEntity(name);
 
-    AddComponent<TransformComponent>(entity, glm::vec3(0, 0, 3), glm::vec3(0), glm::vec3(1));
-    AddComponent<CameraComponent>(entity);
-    AddComponent<CameraOrientationComponent>(entity);
-    AddComponent<VisibilityComponent>(entity, true);
-    AddComponent<IconComponent>(entity, "assets/textures/icons/camera.png", 0.3f);
+    AddComponent<c_Transform>(entity, glm::vec3(0, 0, 3), glm::vec3(0), glm::vec3(1));
+    AddComponent<c_Camera>(entity);
+    AddComponent<c_CameraOrientation>(entity);
+    AddComponent<c_Visibility>(entity, true);
+    AddComponent<c_Icon>(entity, "assets/textures/icons/camera.png", 0.3f);
 
-    auto &camera = GetComponent<CameraComponent>(entity);
+    auto &camera = GetComponent<c_Camera>(entity);
     camera.isMainCamera = setAsMain;
 
     Logger::Log(LogLevel::INFO, "Camera entity created: " + name);

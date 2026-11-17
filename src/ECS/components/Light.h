@@ -6,7 +6,7 @@
 #include "Transform.h"
 #include "scene/Light.h"
 
-struct LightComponent {
+struct c_Light {
     LightType type = LightType::DIRECTIONAL;
 
     glm::vec3 position{0.0f, 5.0f, 0.0f};
@@ -28,9 +28,9 @@ struct LightComponent {
     float innerCutoff = 12.5f;
     float outerCutoff = 17.5f;
 
-    LightComponent() = default;
+    c_Light() = default;
 
-    LightComponent(LightType t) : type(t) {
+    explicit c_Light(const LightType t) : type(t) {
         if (t == LightType::DIRECTIONAL) {
             direction = glm::vec3(0.0f, -1.0f, 0.0f);
             ambient = glm::vec3(0.05f);
@@ -47,12 +47,12 @@ struct LightComponent {
         }
     }
 
-    void SyncWithTransform(const TransformComponent &transform) {
+    void SyncWithTransform(const c_Transform &transform) {
         position = transform.position;
 
-        glm::mat4 rotMat = glm::mat4_cast(transform.rotation);
+        const glm::mat4 rotMat = glm::mat4_cast(transform.rotation);
 
-        glm::vec4 dir = rotMat * glm::vec4(0.0f, -1.0f, 0.0f, 0.0f);
+        const glm::vec4 dir = rotMat * glm::vec4(0.0f, -1.0f, 0.0f, 0.0f);
         direction = glm::normalize(glm::vec3(dir));
     }
 };

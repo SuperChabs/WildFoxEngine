@@ -1,7 +1,6 @@
 #pragma once
 
 #include "scene/serializer/components/CameraSerializer.h"
-#include "scene/serializer/components/ColorSerializer.h"
 #include "scene/serializer/components/LightSerializer.h"
 #include "scene/serializer/components/MaterialSerializer.h"
 #include "scene/serializer/components/MeshSerializer.h"
@@ -12,6 +11,6 @@
 #include "scene/serializer/components/RigidBodySerializer.h"
 #include "scene/serializer/components/ColliderSerializer.h"
 //#include "scene/serializer/components/HierarchyDerializer.h"
-#include "scene/serializer/components/IComponentSerializer.h"
+#include "../IComponentSerializer.h"
 #include "scene/serializer/components/AudioListenerSerializer.h"
 #include "scene/serializer/components/AudioSourceSerializer.h"

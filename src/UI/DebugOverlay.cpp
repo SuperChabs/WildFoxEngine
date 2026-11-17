@@ -61,7 +61,7 @@ void DebugOverlay::Render(ECSWorld *ecs, MaterialManager *materialManager, Scene
     }
 
     if (ImGui::Begin("Physics"))
-        PhysicsControlPanel::Render(physicsModule, physicsDebug);
+        physicsControlPanel.Render(ecs, physicsModule, physicsDebug);
     ImGui::End();
 
     editorViewportWindow.Render(*ecs, m_selected, editorFramebuffer.get(), editorCamera.camera,
@@ -108,6 +108,11 @@ void DebugOverlay::RenderSceneTab(SceneSerializer *ss) {
         Execute("onDebugPauseToggle");
     }
 
+    if (ImGui::Checkbox("VSync", &m_vsync))
+        Execute("onSetVSync", CommandArgs{m_vsync});
+    ImGui::SameLine();
+    ImGui::TextDisabled("%.0f FPS", ImGui::GetIO().Framerate);
+
     if (ImGui::Button("Play"))
         Execute("onPlayGame");
 
@@ -152,10 +157,7 @@ void DebugOverlay::RenderSceneTab(SceneSerializer *ss) {
         ImGui::Spacing();
 
         if (ImGui::Button("Delete", {120.f, 0})) {
-            if (ss->DeleteScene(m_pendingDeleteScene))
-                Logger::Log(LogLevel::INFO, "Deleted scene: " + m_pendingDeleteScene);
-            else
-                Logger::Log(LogLevel::INFO, "Failed to delete scene: 2" + m_pendingDeleteScene);
+            Logger::Log(LogLevel::INFO, "Deleted scene: " + m_pendingDeleteScene);
 
             RefreshAvailableScenes(*ss);
             m_pendingDeleteScene.clear();
@@ -181,10 +183,10 @@ void DebugOverlay::RenderHierarchyTab(ECSWorld *ecs) {
     std::vector<entt::entity> roots;
     static bool sortAlphabetically = false;
 
-    ecs->Each<TagComponent, IDComponent>(
-        [&](entt::entity e, TagComponent &tag, IDComponent &) {
-            if (ecs->HasComponent<HierarchyComponent>(e))
-                if (ecs->GetComponent<HierarchyComponent>(e).HasParent())
+    ecs->Each<c_Tag, c_ID>(
+        [&](entt::entity e, c_Tag &tag, c_ID &) {
+            if (ecs->HasComponent<c_Hierarchy>(e))
+                if (ecs->GetComponent<c_Hierarchy>(e).HasParent())
                     return;
 
             roots.push_back(e);
@@ -198,8 +200,8 @@ void DebugOverlay::RenderHierarchyTab(ECSWorld *ecs) {
     if (sortAlphabetically) {
         std::sort(roots.begin(), roots.end(),
                   [&](entt::entity a, entt::entity b) {
-                      auto &tagA = ecs->GetComponent<TagComponent>(a);
-                      auto &tagB = ecs->GetComponent<TagComponent>(b);
+                      auto &tagA = ecs->GetComponent<c_Tag>(a);
+                      auto &tagB = ecs->GetComponent<c_Tag>(b);
                       return tagA.name < tagB.name;
                   });
     }
@@ -217,14 +219,11 @@ void DebugOverlay::RenderHierarchyTab(ECSWorld *ecs) {
 void DebugOverlay::RenderEntityNode(entt::entity e, ECSWorld *ecs, entt::entity &toDelete) {
     if (!ecs->IsValid(e)) return;
 
-    auto &tag = ecs->GetComponent<TagComponent>(e);
+    const auto &tag = ecs->GetComponent<c_Tag>(e);
 
-    bool hasChildren = ecs->HasComponent<HierarchyComponent>(e) &&
-                       ecs->GetComponent<HierarchyComponent>(e).HasChildren();
+    const bool hasChildren = ecs->HasComponent<c_Hierarchy>(e) && ecs->GetComponent<c_Hierarchy>(e).HasChildren();
 
-    ImGuiTreeNodeFlags flags =
-            ImGuiTreeNodeFlags_OpenOnArrow |
-            ImGuiTreeNodeFlags_SpanAvailWidth;
+    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
 
     if (!hasChildren)
         flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
@@ -243,7 +242,7 @@ void DebugOverlay::RenderEntityNode(entt::entity e, ECSWorld *ecs, entt::entity 
     }
 
     if (open && hasChildren) {
-        for (auto child: ecs->GetComponent<HierarchyComponent>(e).children)
+        for (const auto child: ecs->GetComponent<c_Hierarchy>(e).children)
             RenderEntityNode(child, ecs, toDelete);
         ImGui::TreePop();
     }
@@ -258,8 +257,8 @@ void DebugOverlay::RenderInspectorTab(ECSWorld *ecs, MaterialManager *materialMa
         return;
     }
 
-    if (ecs->HasComponent<TagComponent>(m_selected)) {
-        auto &tag = ecs->GetComponent<TagComponent>(m_selected);
+    if (ecs->HasComponent<c_Tag>(m_selected)) {
+        auto &tag = ecs->GetComponent<c_Tag>(m_selected);
         char buf[256];
         strncpy(buf, tag.name.c_str(), sizeof(buf));
         buf[255] = '\0';
@@ -273,23 +272,23 @@ void DebugOverlay::RenderInspectorTab(ECSWorld *ecs, MaterialManager *materialMa
     ImGui::Separator();
     ImGui::Spacing();
 
-    if (ecs->HasComponent<TransformComponent>(m_selected))
+    if (ecs->HasComponent<c_Transform>(m_selected))
         transformPanel.Render(ecs, m_selected);
-    if (ecs->HasComponent<MaterialComponent>(m_selected))
+    if (ecs->HasComponent<c_Material>(m_selected))
         materialPanel.Render(ecs, m_selected, materialManager);
-    if (ecs->HasComponent<LightComponent>(m_selected))
+    if (ecs->HasComponent<c_Light>(m_selected))
         lightPanel.Render(ecs, m_selected);
-    if (ecs->HasComponent<CameraComponent>(m_selected) && ecs->HasComponent<CameraOrientationComponent>(m_selected))
+    if (ecs->HasComponent<c_Camera>(m_selected) && ecs->HasComponent<c_CameraOrientation>(m_selected))
         cameraPanel.Render(ecs, m_selected);
-    if (ecs->HasComponent<AudioSourceComponent>(m_selected) || ecs->HasComponent<AudioListenerComponent>(m_selected))
+    if (ecs->HasComponent<c_AudioSource>(m_selected) || ecs->HasComponent<c_AudioListener>(m_selected))
         audioPanel.Render(ecs, m_selected);
-    if (ecs->HasComponent<ScriptComponent>(m_selected))
+    if (ecs->HasComponent<c_Script>(m_selected))
         scriptPanel.Render(ecs, m_selected);
-    if (ecs->HasComponent<IconComponent>(m_selected))
+    if (ecs->HasComponent<c_Icon>(m_selected))
         iconPanel.Render(ecs, m_selected);
-    if (ecs->HasComponent<RigidBodyComponent>(m_selected))
+    if (ecs->HasComponent<c_RigidBody>(m_selected))
         rigidPanel.Render(ecs, m_selected);
-    if (ecs->HasComponent<ColliderComponent>(m_selected))
+    if (ecs->HasComponent<c_Collider>(m_selected))
         colliderPanel.Render(ecs, m_selected);
 
     ImGui::Spacing();
@@ -299,41 +298,41 @@ void DebugOverlay::RenderInspectorTab(ECSWorld *ecs, MaterialManager *materialMa
         ImGui::OpenPopup("##addcomp");
 
     if (ImGui::BeginPopup("##addcomp")) {
-        if (!ecs->HasComponent<ScriptComponent>(m_selected))
+        if (!ecs->HasComponent<c_Script>(m_selected))
             if (ImGui::MenuItem("Script"))
-                ecs->AddComponent<ScriptComponent>(m_selected);
+                ecs->AddComponent<c_Script>(m_selected);
 
-        if (!ecs->HasComponent<AudioSourceComponent>(m_selected))
+        if (!ecs->HasComponent<c_AudioSource>(m_selected))
             if (ImGui::MenuItem("Audio Source"))
-                ecs->AddComponent<AudioSourceComponent>(m_selected);
+                ecs->AddComponent<c_AudioSource>(m_selected);
 
-        if (!ecs->HasComponent<AudioListenerComponent>(m_selected))
+        if (!ecs->HasComponent<c_AudioListener>(m_selected))
             if (ImGui::MenuItem("Audio Listener"))
-                ecs->AddComponent<AudioListenerComponent>(m_selected);
+                ecs->AddComponent<c_AudioListener>(m_selected);
 
-        if (!ecs->HasComponent<MaterialComponent>(m_selected))
+        if (!ecs->HasComponent<c_Material>(m_selected))
             if (ImGui::MenuItem("Material"))
-                ecs->AddComponent<MaterialComponent>(m_selected);
+                ecs->AddComponent<c_Material>(m_selected);
 
-        if (!ecs->HasComponent<RigidBodyComponent>(m_selected)) {
+        if (!ecs->HasComponent<c_RigidBody>(m_selected)) {
             if (ImGui::MenuItem("RigidBody")) {
-                RigidBodyComponent rb;
+                c_RigidBody rb;
                 rb.m_invMass = 0.0f;
                 rb.m_linearVelocity = glm::vec3(0.0f);
                 rb.m_angularVelocity = glm::vec3(0.0f);
                 rb.m_forceAccum = glm::vec3(0.0f);
                 rb.m_torqueAccum = glm::vec3(0.0f);
-                ecs->AddComponent<RigidBodyComponent>(m_selected, rb);
+                ecs->AddComponent<c_RigidBody>(m_selected, rb);
             }
         }
 
-        if (!ecs->HasComponent<ColliderComponent>(m_selected)) {
+        if (!ecs->HasComponent<c_Collider>(m_selected)) {
             if (ImGui::MenuItem("Collider")) {
-                ColliderComponent collider;
+                c_Collider collider;
                 Sphere sphere{};
                 sphere.m_radius = 0.5f;
                 collider.shape = sphere;
-                ecs->AddComponent<ColliderComponent>(m_selected, std::move(collider));
+                ecs->AddComponent<c_Collider>(m_selected, std::move(collider));
             }
         }
 
@@ -344,25 +343,25 @@ void DebugOverlay::RenderInspectorTab(ECSWorld *ecs, MaterialManager *materialMa
         ImGui::OpenPopup("##removecomp");
 
     if (ImGui::BeginPopup("##removecomp")) {
-        if (ecs->HasComponent<ScriptComponent>(m_selected))
+        if (ecs->HasComponent<c_Script>(m_selected))
             if (ImGui::MenuItem("Script"))
-                ecs->RemoveComponent<ScriptComponent>(m_selected);
+                ecs->RemoveComponent<c_Script>(m_selected);
 
-        if (ecs->HasComponent<AudioSourceComponent>(m_selected))
+        if (ecs->HasComponent<c_AudioSource>(m_selected))
             if (ImGui::MenuItem("Audio Source"))
-                ecs->RemoveComponent<AudioSourceComponent>(m_selected);
+                ecs->RemoveComponent<c_AudioSource>(m_selected);
 
-        if (ecs->HasComponent<AudioListenerComponent>(m_selected))
+        if (ecs->HasComponent<c_AudioListener>(m_selected))
             if (ImGui::MenuItem("Audio Listener"))
-                ecs->RemoveComponent<AudioListenerComponent>(m_selected);
+                ecs->RemoveComponent<c_AudioListener>(m_selected);
 
-        if (ecs->HasComponent<RigidBodyComponent>(m_selected))
+        if (ecs->HasComponent<c_RigidBody>(m_selected))
             if (ImGui::MenuItem("RigidBody"))
-                ecs->RemoveComponent<RigidBodyComponent>(m_selected);
+                ecs->RemoveComponent<c_RigidBody>(m_selected);
 
-        if (ecs->HasComponent<ColliderComponent>(m_selected))
+        if (ecs->HasComponent<c_Collider>(m_selected))
             if (ImGui::MenuItem("Collider"))
-                ecs->RemoveComponent<ColliderComponent>(m_selected);
+                ecs->RemoveComponent<c_Collider>(m_selected);
 
         ImGui::EndPopup();
     }

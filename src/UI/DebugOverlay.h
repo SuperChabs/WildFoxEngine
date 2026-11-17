@@ -39,6 +39,7 @@ class DebugOverlay {
 
     bool m_showOpenModelDialog = false;
     bool m_showOpenPrefabsDialog = false;
+    bool m_vsync = true;
 
     AudioPanel audioPanel;
     TagPanel tagPanel;
@@ -50,6 +51,7 @@ class DebugOverlay {
     IconPanel iconPanel;
     RigidBodyPanel rigidPanel;
     ColliderPanel colliderPanel;
+    PhysicsControlPanel physicsControlPanel;
 
     EditViewportWindow editorViewportWindow;
     GameViewportWindow gameViewportWindow;

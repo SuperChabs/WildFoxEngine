@@ -20,8 +20,8 @@ namespace {
             if (!ecs->IsValid(current) || !visited.insert(current).second)
                 return;
 
-            if (ecs->HasComponent<MeshComponent>(current)) {
-                const auto &meshComponent = ecs->GetComponent<MeshComponent>(current);
+            if (ecs->HasComponent<c_Mesh>(current)) {
+                const auto &meshComponent = ecs->GetComponent<c_Mesh>(current);
                 if (meshComponent.mesh) {
                     const glm::mat4 meshToRoot = worldToRoot * ecs->GetGlobalTransform(current);
                     for (const Vertex &vertex : meshComponent.mesh->GetVertices()) {
@@ -43,11 +43,11 @@ namespace {
 void ColliderPanel::Render(ECSWorld *ecs, entt::entity entity) {
     static int maxHullVertices = 256;
 
-    if (!ecs->HasComponent<ColliderComponent>(entity)) return;
+    if (!ecs->HasComponent<c_Collider>(entity)) return;
     if (!ImGui::CollapsingHeader("Collider", ImGuiTreeNodeFlags_DefaultOpen)) return;
 
-    auto &t = ecs->GetComponent<TransformComponent>(entity);
-    auto &c = ecs->GetComponent<ColliderComponent>(entity);
+    auto &t = ecs->GetComponent<c_Transform>(entity);
+    auto &c = ecs->GetComponent<c_Collider>(entity);
 
     ImGui::Text("Hitbox");
 

@@ -6,7 +6,7 @@
 #include "ECS/World.h"
 #include "ECS/components/Components.h"
 #include "resource/material/MaterialManager.h"
-#include "scene/serializer/components/IComponentSerializer.h"
+#include "../IComponentSerializer.h"
 
 using json = nlohmann::json;
 

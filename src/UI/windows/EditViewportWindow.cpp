@@ -4,7 +4,7 @@
 #include <glm/gtx/matrix_decompose.hpp>
 
 void EditViewportWindow::Render(ECSWorld &ecs, const entt::entity &selected, Framebuffer *framebuffer,
-    const CameraComponent &camera, const TransformComponent &transform, const CameraOrientationComponent &orientation) {
+    const c_Camera &camera, const c_Transform &transform, const c_CameraOrientation &orientation) {
     if (!isOpen) return;
 
     ImGui::SetNextWindowSize({800, 650}, ImGuiCond_FirstUseEver);
@@ -12,6 +12,9 @@ void EditViewportWindow::Render(ECSWorld &ecs, const entt::entity &selected, Fra
 
     std::string windowTitle = "Editor Viewport";
     ImGui::Begin(windowTitle.c_str(), &isOpen);
+
+    isHovered = ImGui::IsWindowHovered();
+    isFocused = ImGui::IsWindowFocused();
 
     ImVec2 size = ImGui::GetContentRegionAvail();
 
@@ -36,7 +39,7 @@ void EditViewportWindow::Render(ECSWorld &ecs, const entt::entity &selected, Fra
             {1, 0}
         );
 
-        if (selected != entt::null && ecs.IsValid(selected)) {
+        if (selected != entt::null && ecs.IsValid(selected) && ecs.HasComponent<c_Transform>(selected)) {
             ImGuizmo::SetOrthographic(false);
             ImGuizmo::SetDrawlist();
             ImGuizmo::SetRect(viewportPos.x, viewportPos.y, viewportSize.x, viewportSize.y);
@@ -48,7 +51,7 @@ void EditViewportWindow::Render(ECSWorld &ecs, const entt::entity &selected, Fra
             if (isFocused)
                 ProcessInput();
 
-            auto &tc = ecs.GetComponent<TransformComponent>(selected);
+            auto &tc = ecs.GetComponent<c_Transform>(selected);
             glm::mat4 trans = tc.GetModelMatrix();
 
             ImGuizmo::Manipulate(
@@ -61,8 +64,8 @@ void EditViewportWindow::Render(ECSWorld &ecs, const entt::entity &selected, Fra
 
             if (ImGuizmo::IsUsing()) {
                 UpdateTransformFromMatrix(tc, trans);
-                if (ecs.HasComponent<CameraOrientationComponent>(selected)) {
-                    auto &orient = ecs.GetComponent<CameraOrientationComponent>(selected);
+                if (ecs.HasComponent<c_CameraOrientation>(selected)) {
+                    auto &orient = ecs.GetComponent<c_CameraOrientation>(selected);
                     orient.yaw = tc.rotation.y;
                     orient.pitch = tc.rotation.x;
                 }
@@ -76,7 +79,7 @@ void EditViewportWindow::Render(ECSWorld &ecs, const entt::entity &selected, Fra
     ImGui::PopStyleVar();
 }
 
-void EditViewportWindow::UpdateTransformFromMatrix(TransformComponent &tc, const glm::mat4 &matrix) {
+void EditViewportWindow::UpdateTransformFromMatrix(c_Transform &tc, const glm::mat4 &matrix) {
     glm::vec3 skew;
     glm::vec4 perspective;
     glm::decompose(matrix, tc.scale, tc.rotation, tc.position, skew, perspective);

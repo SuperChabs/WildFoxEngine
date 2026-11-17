@@ -33,9 +33,9 @@ public:
 
     void SetMaterial(std::shared_ptr<Material> newMaterial);
 
-    glm::vec3 GetColor() const;
+    [[nodiscard]] glm::vec3 GetColor() const;
 
-    const std::vector<Vertex> &GetVertices() const;
+    [[nodiscard]] const std::vector<Vertex> &GetVertices() const;
 
     MeshRenderer *GetMeshRenderer();
 

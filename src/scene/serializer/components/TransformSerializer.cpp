@@ -3,10 +3,10 @@
 #include <glm/gtx/euler_angles.hpp>
 
 json TransformSerializer::Serialize(ECSWorld *world, entt::entity entity) {
-    if (!world->HasComponent<TransformComponent>(entity))
+    if (!world->HasComponent<c_Transform>(entity))
         return json::object();
 
-    auto &t = world->GetComponent<TransformComponent>(entity);
+    auto &t = world->GetComponent<c_Transform>(entity);
 
     glm::quat normRot = glm::normalize(t.rotation);
     glm::vec3 euler = glm::degrees(glm::eulerAngles(normRot));
@@ -29,11 +29,11 @@ entt::entity TransformSerializer::Deserialize(DeserializeContext &dcx, entt::ent
                         ? glm::vec3{data["scale"][0], data["scale"][1], data["scale"][2]}
                         : glm::vec3{1.0f};
 
-    dcx.world->AddComponent<TransformComponent>(entity, pos, rot, scl);
+    dcx.world->AddComponent<c_Transform>(entity, pos, rot, scl);
 
     return entity;
 }
 
 bool TransformSerializer::CanSerialize(ECSWorld *world, entt::entity entity) const {
-    return world->HasComponent<TransformComponent>(entity);
+    return world->HasComponent<c_Transform>(entity);
 }

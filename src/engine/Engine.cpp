@@ -12,24 +12,25 @@
 
 void Engine::FramebufferSizeCallback(GLFWwindow *window, const int width, const int height) {
     glViewport(0, 0, width, height);
-    auto *app = static_cast<Application *>(glfwGetWindowUserPointer(window));
-    if (app && app->GetModuleManager()->GetModule<CoreModule>("Core")->GetWindow())
-        app->GetModuleManager()->GetModule<CoreModule>("Core")->GetWindow()->SetSize(width, height);
+    auto *engine = static_cast<Engine *>(glfwGetWindowUserPointer(window));
+    if (engine)
+        engine->coreModule->GetWindow()->SetSize(width, height);
 }
 
-void Engine::MouseCallback(GLFWwindow *window, const double xpos, const double ypos) {
+void Engine::MouseCallback(GLFWwindow *window, const double xPos, const double yPos) {
     auto *engine = static_cast<Engine *>(glfwGetWindowUserPointer(window));
     if (!engine) return;
 
-    engine->mm->GetModule<CoreModule>("Core")->GetInput()->UpdateMousePosition(xpos, ypos);
+    Input *input = engine->coreModule->GetInput();
+    input->UpdateMousePosition(xPos, yPos);
 
     if (ImGuizmo::IsUsing() || ImGui::GetIO().WantCaptureMouse)
         return;
 
     if (engine->cameraControlEnabled) {
-        glm::vec2 delta = engine->mm->GetModule<CoreModule>("Core")->GetInput()->GetMouseDelta();
+        const glm::vec2 delta = input->GetMouseDelta();
         auto &orientation = engine->editorCam.orientation;
-        auto &config = engine->editorCam.camera;
+        const auto &config = engine->editorCam.camera;
 
         orientation.yaw += delta.x * config.mouseSensitivity;
         orientation.pitch += delta.y * config.mouseSensitivity;
@@ -39,7 +40,7 @@ void Engine::MouseCallback(GLFWwindow *window, const double xpos, const double y
     }
 }
 
-void Engine::MouseButtonCallback(GLFWwindow *window, const int button, const int action) {
+void Engine::MouseButtonCallback(GLFWwindow *window, const int button, const int action, int /*mods*/) {
     auto *engine = static_cast<Engine *>(glfwGetWindowUserPointer(window));
     if (!engine) return;
 
@@ -52,83 +53,83 @@ void Engine::SetCameraControlMode(const bool enabled) {
     cameraControlEnabled = enabled;
 
     if (enabled) {
-        mm->GetModule<CoreModule>("Core")->GetWindow()->SetCursorMode(GLFW_CURSOR_DISABLED);
+        coreModule->GetWindow()->SetCursorMode(GLFW_CURSOR_DISABLED);
         Logger::Log(LogLevel::INFO, "Camera control: ON");
     } else {
-        mm->GetModule<CoreModule>("Core")->GetWindow()->SetCursorMode(GLFW_CURSOR_NORMAL);
+        coreModule->GetWindow()->SetCursorMode(GLFW_CURSOR_NORMAL);
         Logger::Log(LogLevel::INFO, "Camera control: OFF (UI mode)");
     }
 }
 
-void Engine::OnInitialize() {
+template<typename T, typename... Args>
+T *Engine::InitModule(Args &&... args) {
+    T *module = mm->RegisterModule<T>(std::forward<Args>(args)...);
+    if (module->Initialize())
+        return module;
+
+    if (module->IsRequired()) {
+        Logger::Log(LogLevel::CRITICAL, std::string(module->GetName()) + " failed to initialize");
+        return nullptr;
+    }
+
+    Logger::Log(LogLevel::WARNING, std::string("Optional module failed to initialize: ") + module->GetName());
+    return module;
+}
+
+bool Engine::OnInitialize() {
     Logger::Log(LogLevel::INFO, "Initializing WFE...");
     Logger::Log(LogLevel::INFO, "==================================");
 
     mm = GetModuleManager();
+    coreModule = GetCoreModule();
 
-    const auto *core = mm->GetModule<CoreModule>("Core");
-    const auto *window = core->GetWindow();
+    const auto *window = coreModule->GetWindow();
     auto *glfwWin = window->GetGLFWWindow();
 
     glfwSetWindowUserPointer(glfwWin, this);
 
-    mm->GetModule<CoreModule>("Core")->GetWindow()->SetFramebufferSizeCallback(FramebufferSizeCallback);
-    mm->GetModule<CoreModule>("Core")->GetWindow()->SetCursorPosCallback(MouseCallback);
-    mm->GetModule<CoreModule>("Core")->GetWindow()->SetScrollCallback(reinterpret_cast<GLFWscrollfun>(Input::ScrollCallback));
-    mm->GetModule<CoreModule>("Core")->GetWindow()->SetMouseButtonCallback(reinterpret_cast<GLFWmousebuttonfun>(MouseButtonCallback));
+    window->SetFramebufferSizeCallback(FramebufferSizeCallback);
+    window->SetCursorPosCallback(MouseCallback);
+    window->SetScrollCallback(Input::ScrollCallback);
+    window->SetMouseButtonCallback(MouseButtonCallback);
 
-    mm->RegisterModule<ECSModule>();
-    ecsModule = mm->GetModule<ECSModule>("ECS");
-    ecsModule->Initialize();
-    if (!ecsModule->IsInitialized()) Logger::Log(LogLevel::CRITICAL, "ECS failed to initialize");
+    ecsModule = InitModule<ECSModule>();
+    if (!ecsModule) return false;
 
-    mm->RegisterModule<ResourceModule>();
-    resourceModule = mm->GetModule<ResourceModule>("Resource");
-    resourceModule->Initialize();
-    if (!resourceModule->IsInitialized()) Logger::Log(LogLevel::CRITICAL, "RedsourceModule failed to initialize");
+    resourceModule = InitModule<ResourceModule>();
+    if (!resourceModule) return false;
 
-    mm->RegisterModule<RenderingModule>(mm->GetModule<CoreModule>("Core")->GetWindow()->GetGLFWWindow(),
-                                        ecsModule->GetECS(), mm);
-    renderingModule = mm->GetModule<RenderingModule>("Rendering");
-    renderingModule->Initialize();
-    if (!renderingModule->IsInitialized()) Logger::Log(LogLevel::CRITICAL, "RenderingModule failed to initialize");
+    renderingModule = InitModule<RenderingModule>(glfwWin, ecsModule->GetECS(), mm);
+    if (!renderingModule) return false;
 
-    mm->RegisterModule<SceneModule>(ecsModule->GetECS());
-    sceneModule = mm->GetModule<SceneModule>("Scene");
-    sceneModule->Initialize();
-    if (!sceneModule->IsInitialized()) Logger::Log(LogLevel::CRITICAL, "SceneModule failed to initialize");
+    sceneModule = InitModule<SceneModule>(ecsModule->GetECS());
+    if (!sceneModule) return false;
 
-    mm->RegisterModule<PhysicsModule>(ecsModule->GetECS());
-    m_physicsModule = mm->GetModule<PhysicsModule>("Physics");
-    m_physicsModule->Initialize();
-    m_physicsModule->SetShouldUpdate(false);
-    if (!m_physicsModule->IsInitialized()) Logger::Log(LogLevel::CRITICAL, "PhysicsModule failed to initialize");
+    m_physicsModule = InitModule<PhysicsModule>(ecsModule->GetECS());
+    if (!m_physicsModule) return false;
+    m_physicsModule->SetShouldUpdate(false); // physics runs at a fixed step from OnSimulation()
 
-    m_scriptModule = mm->RegisterModule<ScriptModule>(mm);
-    m_scriptModule->Initialize();
-    if (!m_scriptModule->IsInitialized()) Logger::Log(LogLevel::CRITICAL, "ScriptModule failed to initialize");
+    m_scriptModule = InitModule<ScriptModule>(mm);
+    if (!m_scriptModule) return false;
 
-    mm->RegisterModule<UIModule>(ecsModule->GetECS(), sceneModule->GetSceneManager(), mm,
-                                 mm->GetModule<CoreModule>("Core")->GetWindow()->GetGLFWWindow()
-    );
-    uiModule = mm->GetModule<UIModule>("UI");
-    uiModule->Initialize();
-    if (!uiModule->IsInitialized()) Logger::Log(LogLevel::CRITICAL, "UIModule failed to initialize");
-
-    inputControllerSystem = std::make_unique<InputControllerSystem>();
-    physicsDebugSystem = std::make_unique<PhysicsDebugRenderSystem>();
+    uiModule = InitModule<UIModule>(ecsModule->GetECS(), sceneModule->GetSceneManager(), mm, glfwWin);
+    if (!uiModule) return false;
 
     // audioSystem = std::make_unique<AudioSystem>();
     // if (!audioSystem->Init()) {
     //     Logger::Log(LogLevel::CRITICAL, "AudioSystem failed to initialize");
     // }
 
+    inputControllerSystem = std::make_unique<InputControllerSystem>();
+    physicsDebugSystem = std::make_unique<PhysicsDebugRenderSystem>();
+
     m_ech = std::make_unique<EditorCommandHandler>(mm);
     m_ech->RegisterAllCommands();
     RegistrateCoreCommands();
     PrefabsCommands::RegisterPrefabsCommands(ecsModule, resourceModule);
 
-    gameCam = ecsModule->GetECS()->CreateCamera("Main Camera", true);
+    gameCam = ecsModule->GetECS()->CreateCamera("Game Camera", true);
+    ecsModule->GetECS()->AddComponent<c_Persistent>(gameCam);
     SetCameraControlMode(false);
     sceneModule->GetSceneManager()->SetPlayMode(false);
 
@@ -138,6 +139,8 @@ void Engine::OnInitialize() {
 
     Logger::Log(LogLevel::INFO, "==================================");
     Logger::Log(LogLevel::INFO, "Engine initialized successfully");
+
+    return true;
 }
 
 void Engine::OnSimulation(const float deltaTime) {
@@ -152,7 +155,7 @@ void Engine::OnUpdate(const float deltaTime) {
         editorCam.camera,
         editorCam.transform,
         editorCam.orientation,
-        *mm->GetModule<CoreModule>("Core")->GetInput(),
+        *coreModule->GetInput(),
         deltaTime,
         allowCameraControl
     );
@@ -166,12 +169,11 @@ void Engine::OnUpdate(const float deltaTime) {
 void Engine::OnRender() {
     auto *ecs = ecsModule->GetECS();
     auto *renderer = renderingModule->GetRenderer();
+    auto *debugOverlay = uiModule->GetDebugOverlay();
 
-    Framebuffer *sceneFB = uiModule->GetDebugOverlay()->GetEditorFramebuffer();
-    ImVec2 sceneViewportSize = uiModule->GetDebugOverlay()->GetEditorViewportSize();
-    if (sceneViewportSize.x <= 0 || sceneViewportSize.y <= 0) {
-        Logger::Log(LogLevel::WARNING, "Invalid scene viewport size, skipping render");
-    } else if (uiModule->GetDebugOverlay()->GetEditViewportWindow()->IsFocused()) {
+    Framebuffer *sceneFB = debugOverlay->GetEditorFramebuffer();
+    const ImVec2 sceneViewportSize = debugOverlay->GetEditorViewportSize();
+    if (debugOverlay->GetEditViewportWindow()->IsOpen()) {
         sceneFB->Bind();
 
         renderer->BeginFrame();
@@ -207,18 +209,16 @@ void Engine::OnRender() {
         sceneFB->Unbind();
     }
 
-    Framebuffer *gameFB = uiModule->GetDebugOverlay()->GetGameFramebuffer();
-    ImVec2 gameViewportSize = uiModule->GetDebugOverlay()->GetGameViewportSize();
-    if (gameViewportSize.x <= 0 || gameViewportSize.y <= 0) {
-        Logger::Log(LogLevel::WARNING, "Invalid game viewport size, skipping render");
-    } else {
+    Framebuffer *gameFB = debugOverlay->GetGameFramebuffer();
+    const ImVec2 gameViewportSize = debugOverlay->GetGameViewportSize();
+    if (debugOverlay->GetGameViewportWindow()->IsOpen()) {
         gameFB->Bind();
 
         renderer->BeginFrame();
         renderer->Render(
-            ecs->GetComponent<CameraComponent>(gameCam),
-            ecs->GetComponent<TransformComponent>(gameCam),
-            ecs->GetComponent<CameraOrientationComponent>(gameCam),
+            ecs->GetComponent<c_Camera>(gameCam),
+            ecs->GetComponent<c_Transform>(gameCam),
+            ecs->GetComponent<c_CameraOrientation>(gameCam),
             static_cast<int>(gameViewportSize.x),
             static_cast<int>(gameViewportSize.y)
         );
@@ -252,17 +252,19 @@ bool Engine::ShouldAllowCameraControl() const {
     return true;
 }
 
-Engine::Engine(const int w, const int h, const std::string &title)
+Engine::Engine(const int w, const int h, char* &title)
     : Application(w, h, title) {
 }
 
 void Engine::ProcessInput() {
-    if (mm->GetModule<CoreModule>("Core")->GetInput()->IsKeyJustPressed(Key::KEY_F5)) {
+    const auto *input = coreModule->GetInput();
+
+    if (input->IsKeyJustPressed(Key::KEY_F5)) {
         resourceModule->GetShaderManager()->ReloadAll();
         Logger::Log(LogLevel::INFO, "Reloaded all shaders");
     }
 
-    if (mm->GetModule<CoreModule>("Core")->GetInput()->IsKeyJustPressed(Key::KEY_F1))
+    if (input->IsKeyJustPressed(Key::KEY_F1))
         showUI = !showUI;
 }
 
@@ -271,5 +273,14 @@ void Engine::RegistrateCoreCommands() {
         [this](const CommandArgs &) {
             Logger::Log(LogLevel::INFO, "Exit requested from menu");
             Stop();
+        });
+
+    CommandManager::RegisterCommand("onSetVSync",
+        [this](const CommandArgs &args) {
+            const bool *enabled = GetArg<bool>(args, 0, "onSetVSync");
+            if (!enabled) return;
+
+            coreModule->GetWindow()->SetVSync(*enabled);
+            Logger::Log(LogLevel::INFO, std::string("VSync: ") + (*enabled ? "ON" : "OFF"));
         });
 }

@@ -14,7 +14,7 @@ UIModule::UIModule(ECSWorld *ecs, SceneManager *sceneManager, ModuleManager *mm,
         Logger::Log(LogLevel::ERROR, "RenderingModule: ecs is null!");
 }
 
-bool UIModule::Initialize() {
+bool UIModule::OnInitialize() {
     try {
         imGuiManager = std::make_unique<ImGuiManager>();
         if (!imGuiManager->Initialize(window)) {
@@ -27,14 +27,10 @@ bool UIModule::Initialize() {
         Logger::Log(LogLevel::INFO,
                     "Successfully created UI Module");
 
-        m_isInitialized = true;
-
         return true;
     } catch (const std::exception &e) {
         Logger::Log(LogLevel::ERROR,
                     "Exception creating ui module: " + std::string(e.what()));
-
-        m_isInitialized = true;
 
         return false;
     }
@@ -44,9 +40,9 @@ void UIModule::Update(float deltaTime) {
 }
 
 void UIModule::RenderUI(EditorCamera &editorCamera, PhysicsDebugRenderSystem *physicsDebugRenderSystem) {
-    debugOverlay->Render(ecs, mm->GetModule<ResourceModule>("Resource")->GetMaterialManager(),
-                         mm->GetModule<SceneModule>("Scene")->GetSceneSerializer(), editorCamera,
-                         mm->GetModule<PhysicsModule>("Physics"), physicsDebugRenderSystem);
+    debugOverlay->Render(ecs, mm->GetModule<ResourceModule>()->GetMaterialManager(),
+                         mm->GetModule<SceneModule>()->GetSceneSerializer(), editorCamera,
+                         mm->GetModule<PhysicsModule>(), physicsDebugRenderSystem);
 }
 
 void UIModule::Shutdown() {
@@ -58,10 +54,6 @@ void UIModule::Shutdown() {
 
 const char *UIModule::GetName() const {
     return "UI";
-}
-
-int UIModule::GetPriority() const {
-    return 100;
 }
 
 bool UIModule::IsRequired() const {

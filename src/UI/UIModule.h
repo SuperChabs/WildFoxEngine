@@ -25,7 +25,7 @@ public:
     UIModule(ECSWorld *ecs, SceneManager *sceneManager, ModuleManager *mm,
              GLFWwindow *window);
 
-    bool Initialize() override;
+    bool OnInitialize() override;
 
     void Update(float deltaTime) override;
 
@@ -36,8 +36,6 @@ public:
     /// @name IModule interface
         /// @{
     const char *GetName() const override;
-
-    int GetPriority() const override;
 
     bool IsRequired() const override;
 

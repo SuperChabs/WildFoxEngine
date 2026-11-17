@@ -10,33 +10,31 @@
 using json = nlohmann::json;
 namespace fs = std::filesystem;
 
+enum class FileType : uint8_t {
+    ENTITY,
+    MATERIAL,
+    META
+};
+
 class SceneFileHandler {
     std::string savesDirectory;
 
-    static constexpr const char *ENTITIES_FILE = "entities.json";
-    static constexpr const char *MATERIALS_FILE = "materials.json";
+    static constexpr auto ENTITIES_FILE = "entities.json";
+    static constexpr auto MATERIALS_FILE = "materials.json";
+    static constexpr auto META_FILE = "meta.json";
 
 public:
     explicit SceneFileHandler(const std::string &directory = "../saves/");
 
-    std::string EnsureJsonExtension(const std::string &filename) const;
+    [[nodiscard]] static std::string EnsureJsonExtension(const std::string &filename) ;
+    [[nodiscard]] static bool EnsureDirectoryExists(const std::string &path);
 
-    bool EnsureDirectoryExists(const std::string &path) const;
+    json ReadFile(const std::string &filename, FileType type) const;
+    void WriteFile(const std::string &filename, const json &sceneData, FileType type, bool pretty = true) const;
+    void DeleteFile(const std::string &filename) const;
 
-    json ReadScene(const std::string &filename);
-
-    bool WriteScene(const std::string &filename, const json &sceneData, bool pretty = true);
-
-    json ReadMaterials(const std::string &filename);
-
-    bool WriteMaterials(const std::string &filename, const json &sceneData, bool pretty = true);
-
-    bool DeleteScene(const std::string &filename);
-
-    [[nodiscard]] std::string GetCurrentTimestamp() const;
-
+    [[nodiscard]] static std::string GetCurrentTimestamp() ;
     [[nodiscard]] std::vector<std::string> GetAvailableScenes() const;
-
     [[nodiscard]] std::string GetSavesDirectory() const { return savesDirectory; }
 
     void SetSavesDirectory(const std::string &directory);

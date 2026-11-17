@@ -55,6 +55,7 @@ public:
         registry.view<Components...>().each(std::forward<Func>(func));
     }
 
+    /// @brief Destroys every entity except those tagged with c_Persistent
     void Clear();
 
     void SetParent(entt::entity child, entt::entity parent);

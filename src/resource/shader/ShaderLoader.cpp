@@ -26,7 +26,7 @@ ShaderSource ShaderLoader::LoadShader(const char *shaderName, bool isGeometry) {
     return source;
 }
 
-ShaderSource ShaderLoader::LoadShader(const std::string vs, const std::string fs, const std::string gs) {
+ShaderSource ShaderLoader::LoadShader(const std::string &vs, const std::string &fs, const std::string &gs) {
     ShaderSource source;
 
     if (!gs.empty()) {
@@ -72,8 +72,10 @@ std::string ShaderLoader::FileToString(const std::string &path) {
 
     std::string content = buffer.str();
 
-    if (content.empty())
-        Logger::Log(LogLevel::WARNING, "Shader file is empty: " + path);
+    if (content.empty()) {
+        Logger::Log(LogLevel::ERROR, "Shader file is empty: " + path);
+        return "";
+    }
 
     return content;
 }

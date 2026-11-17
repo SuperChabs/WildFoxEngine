@@ -33,7 +33,7 @@ std::shared_ptr<Model> ModelManager::Load(const std::string &filepath) {
     }
 
     std::string fullPath = assetsPath + filepath;
-    auto [rawModel, _] = LoadModelFromFile(fullPath, *materialManager);
+    auto [rawModel, _] = ModelLoader::LoadModelFromFile(fullPath, *materialManager, nullptr);
 
     if (!rawModel) {
         Logger::Log(LogLevel::ERROR,
@@ -59,7 +59,7 @@ entt::entity ModelManager::LoadWithECS(const std::string &filepath, ECSWorld *wo
     }
 
     std::string fullPath = assetsPath + filepath;
-    auto [rawModel, rootEntity] = LoadModelFromFile(fullPath, *materialManager, world, isBaseShape);
+    auto [rawModel, rootEntity] = ModelLoader::LoadModelFromFile(fullPath, *materialManager, world, isBaseShape);
 
     if (!rawModel) {
         Logger::Log(LogLevel::ERROR,

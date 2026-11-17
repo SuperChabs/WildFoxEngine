@@ -9,7 +9,7 @@ class ECSModule : public IModule {
     std::unique_ptr<ECSWorld> ecsWorld;
 
 public:
-    bool Initialize() override;
+    bool OnInitialize() override;
 
     void Update(float deltaTime) override;
 
@@ -18,7 +18,6 @@ public:
     /// @name IModule interface
     /// @{
     [[nodiscard]] const char *GetName() const override;
-    [[nodiscard]] int GetPriority() const override;
     [[nodiscard]] bool IsRequired() const override;
 
     /// @}

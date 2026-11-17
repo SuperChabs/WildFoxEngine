@@ -14,13 +14,13 @@ public:
     static void Render(ECSWorld *ecs, entt::entity entity);
 
 private:
-    static void RenderMass(RigidBodyComponent &rb);
+    static void RenderMass(c_RigidBody &rb);
 
-    static void RenderVelocity(RigidBodyComponent &rb);
+    static void RenderVelocity(c_RigidBody &rb);
 
-    static void RenderAngularVelocity(RigidBodyComponent &rb);
+    static void RenderAngularVelocity(c_RigidBody &rb);
 
-    static void RenderInertia(RigidBodyComponent &rb);
+    static void RenderInertia(c_RigidBody &rb);
 
-    static void RenderAccumulators(RigidBodyComponent &rb);
+    static void RenderAccumulators(c_RigidBody &rb);
 };

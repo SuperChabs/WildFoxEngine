@@ -30,7 +30,7 @@ struct WavHeader {
 
 ALuint LoadWavFromDisk(const std::string &path);
 
-static void SetListenerTransform(const TransformComponent &transform) {
+static void SetListenerTransform(const c_Transform &transform) {
     alListener3f(AL_POSITION, transform.position.x, transform.position.y, transform.position.z);
     alListener3f(AL_VELOCITY, 0.0f, 0.0f, 0.0f);
 

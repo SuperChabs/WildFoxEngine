@@ -4,6 +4,7 @@
 #include "core/logging/Logger.h"
 #include "core/CommandManager.h"
 #include "core/EventBus.h"
+#include "core/Events.h"
 
 SceneManager::SceneManager(ECSWorld *ecs)
     : m_ecs(ecs) {
@@ -20,7 +21,7 @@ void SceneManager::StartPlayMode() {
         return;
     }
 
-    m_ecs->Each<ScriptComponent>([&](entt::entity e, ScriptComponent &script) {
+    m_ecs->Each<c_Script>([&](entt::entity e, c_Script &script) {
         script.active = true;
         script.loaded = false;
         script.failed = false;
@@ -29,7 +30,7 @@ void SceneManager::StartPlayMode() {
     m_IsPlayMode = true;
 
     Logger::Log(LogLevel::INFO, "Publishing play_mode_started, path=" + m_currentScenePath);
-    GetEventBus().Publish("play_mode_started", m_currentScenePath);
+    GetEventBus().Publish(Events::PlayModeStarted, m_currentScenePath);
 
     Logger::Log(LogLevel::INFO, "SceneManager: Entered Play Mode");
 }
@@ -43,7 +44,7 @@ void SceneManager::StopPlayMode() {
         return;
     }
 
-    m_ecs->Each<ScriptComponent>([&](entt::entity e, ScriptComponent &script) {
+    m_ecs->Each<c_Script>([&](entt::entity e, c_Script &script) {
         if (script.ctx) {
             script.ctx->Release();
             script.ctx = nullptr;
@@ -63,7 +64,7 @@ void SceneManager::StopPlayMode() {
 
     m_IsPlayMode = false;
 
-    GetEventBus().Publish("play_mode_stopped");
+    GetEventBus().Publish(Events::PlayModeStopped);
 
     Logger::Log(LogLevel::INFO, "SceneManager: Exited Play Mode");
 }
@@ -71,25 +72,25 @@ void SceneManager::StopPlayMode() {
 void SceneManager::PauseScripts() {
     if (!m_ecs || m_IsDebugPaused) return;
 
-    m_ecs->Each<ScriptComponent>([](entt::entity, ScriptComponent &script) {
+    m_ecs->Each<c_Script>([](entt::entity, c_Script &script) {
         script.active = false;
     });
 
     m_IsDebugPaused = true;
-    GetEventBus().Publish("debug_paused");
+    GetEventBus().Publish(Events::DebugPaused);
     Logger::Log(LogLevel::INFO, "SceneManager: Scripts PAUSED (debug)");
 }
 
 void SceneManager::ResumeScripts() {
     if (!m_ecs || !m_IsDebugPaused) return;
 
-    m_ecs->Each<ScriptComponent>([](entt::entity, ScriptComponent &script) {
+    m_ecs->Each<c_Script>([](entt::entity, c_Script &script) {
         if (!script.failed)
             script.active = true;
     });
 
     m_IsDebugPaused = false;
-    GetEventBus().Publish("debug_resumed");
+    GetEventBus().Publish(Events::DebugResumed);
     Logger::Log(LogLevel::INFO, "SceneManager: Scripts RESUMED");
 }
 
@@ -122,10 +123,10 @@ void SceneManager::RegisterSceneCommands() {
 }
 
 void SceneManager::RegisterDebugEvents() {
-    GetEventBus().Subscribe("debug_pause",
+    GetEventBus().Subscribe(Events::DebugPause,
                             [this](const std::any &) { PauseScripts(); });
 
-    GetEventBus().Subscribe("debug_resume",
+    GetEventBus().Subscribe(Events::DebugResume,
                             [this](const std::any &) { ResumeScripts(); });
 
     CommandManager::RegisterCommand("onDebugPauseToggle",

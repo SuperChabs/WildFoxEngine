@@ -9,8 +9,8 @@
 #include "core/Input.h"
 #include "core/logging/Logger.h"
 
-inline bool IsKeyPressed(Input *input, Key key) {
-    return input->IsKeyPressed(key);
+inline bool IsKeyDown(Input *input, Key key) {
+    return input->IsKeyDown(key);
 }
 
 inline bool IsKeyJustPressed(Input *input, Key key) {
@@ -49,10 +49,10 @@ inline void RegisterInput(asIScriptEngine *engine, Input *input) {
     AS_CHECK(r, "KEY_LEFT_SHIFT");
 
     r = engine->RegisterGlobalFunction(
-        "bool IsKeyPressed(Key key)",
-        asFUNCTIONPR(IsKeyPressed, (Input *, Key), bool),
+        "bool IsKeyDown(Key key)",
+        asFUNCTIONPR(IsKeyDown, (Input *, Key), bool),
         asCALL_CDECL_OBJFIRST, input);
-    AS_CHECK(r, "IsKeyPressed");
+    AS_CHECK(r, "IsKeyDown");
 
     r = engine->RegisterGlobalFunction(
         "bool IsKeyJustPressed(Key key)",

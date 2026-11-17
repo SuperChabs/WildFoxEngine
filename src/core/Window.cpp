@@ -3,8 +3,8 @@
 #include <utility>
 #include "core/logging/Logger.h"
 
-Window::Window(const int width, const int height, std::string title)
-    : window(nullptr), width(width), height(height), title(std::move(title)) {
+Window::Window(const int width, const int height, char* title)
+    : window(nullptr), width(width), height(height), title(title) {
 }
 
 Window::~Window() {
@@ -27,7 +27,7 @@ bool Window::Initialize() {
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
     glfwWindowHint(GLFW_SAMPLES, 4);
 
-    window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
+    window = glfwCreateWindow(width, height, title, nullptr, nullptr);
     if (!window) {
         Logger::Log(LogLevel::ERROR, "Failed to create GLFW window");
         glfwTerminate();
@@ -35,7 +35,7 @@ bool Window::Initialize() {
     }
 
     Logger::Log(LogLevel::INFO,
-                "GLFW window created: " + title + " (" + std::to_string(width) + "x" + std::to_string(height) +
+                "GLFW window created: " + std::string(title) + " (" + std::to_string(width) + "x" + std::to_string(height) +
                 ")");
 
     glfwMakeContextCurrent(window);
@@ -49,6 +49,8 @@ bool Window::Initialize() {
     Logger::Log(LogLevel::INFO,
                 "OpenGL version: " + std::string(reinterpret_cast<const char *>(glGetString(GL_VERSION))));
 
+    SetVSync(vsync);
+
     return true;
 }
 
@@ -56,7 +58,7 @@ void Window::Terminate() {
     if (window) {
         glfwDestroyWindow(window);
         window = nullptr;
-        Logger::Log(LogLevel::INFO, "Window destroyed: " + title);
+        Logger::Log(LogLevel::INFO, "Window destroyed: " + std::string(title));
     }
 
     glfwTerminate();
@@ -98,6 +100,15 @@ void Window::SetCursorMode(const int mode) const {
 void Window::SetSize(const int w, const int h) {
     width = w;
     height = h;
+}
+
+void Window::SetVSync(const bool enabled) {
+    vsync = enabled;
+    glfwSwapInterval(enabled ? 1 : 0);
+}
+
+bool Window::IsVSync() const {
+    return vsync;
 }
 
 GLFWwindow *Window::GetGLFWWindow() const {

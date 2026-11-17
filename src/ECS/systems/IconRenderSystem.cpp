@@ -42,11 +42,11 @@ void IconRenderSystem::Update(ECSWorld &world, ShaderManager &shaderManager, con
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDisable(GL_DEPTH_TEST);
 
-    world.Each<TransformComponent, IconComponent, VisibilityComponent>(
+    world.Each<c_Transform, c_Icon, c_Visibility>(
         [&](entt::entity entity,
-            const TransformComponent &transform,
-            IconComponent &icon,
-            const VisibilityComponent &vis) {
+            const c_Transform &transform,
+            c_Icon &icon,
+            const c_Visibility &vis) {
             if (!vis.isActive || !vis.visible) return;
 
             if (icon.textureID == 0 && !icon.iconTexturePath.empty()) {

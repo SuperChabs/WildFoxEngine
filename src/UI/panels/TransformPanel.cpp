@@ -3,10 +3,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 void TransformPanel::Render(ECSWorld *ecs, entt::entity entity) {
-    if (!ecs->HasComponent<TransformComponent>(entity)) return;
+    if (!ecs->HasComponent<c_Transform>(entity)) return;
     if (!ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) return;
 
-    auto &transform = ecs->GetComponent<TransformComponent>(entity);
+    auto &transform = ecs->GetComponent<c_Transform>(entity);
 
     ImGui::Text("Position");
     ImGui::DragFloat3("##Pos", &transform.position[0], 0.1f);

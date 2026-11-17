@@ -26,8 +26,8 @@ public:
 
     virtual void Initialize() = 0;
 
-    virtual void Execute(CameraComponent &camera, TransformComponent &transform,
-                         CameraOrientationComponent &orientation, int width, int height);
+    virtual void Execute(c_Camera &camera, c_Transform &transform,
+                         c_CameraOrientation &orientation, int width, int height);
 
     void AddPass(std::unique_ptr<RenderPass> pass);
 

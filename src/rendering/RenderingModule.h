@@ -53,7 +53,7 @@ public:
      * @brief Initialize rendering module
      * @return true if successful, false if critical error occurred
      */
-    bool Initialize() override;
+    bool OnInitialize() override;
 
     /**
      * @brief Update module (called every frame)
@@ -69,8 +69,6 @@ public:
     /// @name IModule interface
     /// @{
     const char *GetName() const override;
-
-    int GetPriority() const override;
 
     bool IsRequired() const override;
 

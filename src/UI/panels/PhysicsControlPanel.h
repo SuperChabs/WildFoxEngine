@@ -6,6 +6,14 @@
 #include "ECS/systems/PhysicsDebugRenderSystem.h"
 
 class PhysicsControlPanel {
+    bool m_showOpenJointDialog = false;
+    entt::entity m_selectedFirst = entt::null;
+    entt::entity m_selectedSecond = entt::null;
+
 public:
-    static void Render(PhysicsModule *physicsModule, PhysicsDebugRenderSystem *debugSystem);
+    void Render(ECSWorld *world, PhysicsModule *physicsModule, PhysicsDebugRenderSystem *debugSystem);
+
+private:
+    void RenderOnCreateJoint(ECSWorld *world);
+    void RenderEntityNode(ECSWorld *world, entt::entity &e, entt::entity &selected);
 };

@@ -35,6 +35,7 @@ class Engine : public Application {
     std::unique_ptr<EditorCommandHandler> m_ech;
 
     ModuleManager *mm{};
+    CoreModule *coreModule{};
     RenderingModule *renderingModule{};
     ResourceModule *resourceModule{};
     UIModule *uiModule{};
@@ -51,9 +52,9 @@ class Engine : public Application {
 
     static void FramebufferSizeCallback(GLFWwindow *window, int width, int height);
 
-    static void MouseCallback(GLFWwindow *window, double xpos, double ypos);
+    static void MouseCallback(GLFWwindow *window, double xPos, double yPos);
 
-    static void MouseButtonCallback(GLFWwindow *window, int button, int action);
+    static void MouseButtonCallback(GLFWwindow *window, int button, int action, int mods);
 
     void SetCameraControlMode(bool enabled);
 
@@ -62,8 +63,9 @@ protected:
      * @brief Initialize game engine
      * Initialize Modules and other stuff that wasn't initialized
      * in Application class
+     * @return false if a required module failed to initialize
      */
-    void OnInitialize() override;
+    bool OnInitialize() override;
 
     void OnSimulation(float deltaTime) override;
 
@@ -82,9 +84,14 @@ protected:
     bool ShouldAllowCameraControl() const override;
 
 public:
-    Engine(int w, int h, const std::string &title);
+    Engine(int w, int h, char* &title);
 
 private:
+    /// @brief Registers and initializes a module
+    /// @return the module, or nullptr if a required module failed to initialize
+    template<typename T, typename... Args>
+    T *InitModule(Args &&... args);
+
     void ProcessInput();
 
     void RegistrateCoreCommands();

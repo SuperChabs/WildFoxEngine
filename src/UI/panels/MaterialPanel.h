@@ -29,14 +29,12 @@ public:
     void Render(ECSWorld *ecs, entt::entity entity, MaterialManager *materialManager);
 
 private:
-    void AssignMaterial(ECSWorld *ecs, entt::entity entity,
-                        MaterialManager *materialManager, const std::string &name);
-
+    void AssignMaterial(ECSWorld *ecs, entt::entity entity, MaterialManager *materialManager, const std::string &name);
     void RemoveMaterial(ECSWorld *ecs, entt::entity entity);
 
     void RenderOpenMaterialDialog();
 
-    inline void Execute(const char *name, const CommandArgs &args) {
+    static void Execute(const char *name, const CommandArgs &args) {
         if (CommandManager::HasCommand(name))
             CommandManager::ExecuteCommand(name, args);
     }

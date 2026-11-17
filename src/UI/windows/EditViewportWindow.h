@@ -15,13 +15,13 @@ class EditViewportWindow : public IViewportWindow {
     int m_GizmoOperation = ImGuizmo::TRANSLATE;
 
 public:
-    void Render(ECSWorld &ecs, const entt::entity &selected, Framebuffer *framebuffer, const CameraComponent &camera,
-                const TransformComponent &transform, const CameraOrientationComponent &orientation);
+    void Render(ECSWorld &ecs, const entt::entity &selected, Framebuffer *framebuffer, const c_Camera &camera,
+                const c_Transform &transform, const c_CameraOrientation &orientation);
 
     void SetGizmoOperation(int op) { m_GizmoOperation = op; }
 
 private:
-    static void UpdateTransformFromMatrix(TransformComponent &tc, const glm::mat4 &matrix);
+    static void UpdateTransformFromMatrix(c_Transform &tc, const glm::mat4 &matrix);
 
     void ProcessInput();
 };

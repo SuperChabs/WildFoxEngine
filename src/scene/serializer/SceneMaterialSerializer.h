@@ -9,7 +9,7 @@ using json = nlohmann::json;
 
 class SceneMaterialSerializer {
 public:
-    json Serialize(MaterialManager *materialManager);
+    static json Serialize(const MaterialManager *materialManager);
 
     void Deserialize(MaterialManager *materialManager, const json &data);
 };

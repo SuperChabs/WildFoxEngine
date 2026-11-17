@@ -6,20 +6,16 @@ SceneModule::SceneModule(ECSWorld *world)
     : ecs(world) {
 }
 
-bool SceneModule::Initialize() {
+bool SceneModule::OnInitialize() {
     try {
         m_Serializer = std::make_unique<SceneSerializer>(ecs);
         m_SceneManager = std::make_unique<SceneManager>(ecs);
 
         Logger::Log(LogLevel::INFO, "SceneModule initialized");
 
-        m_isInitialized = true;
-
         return true;
     } catch (const std::exception &e) {
         Logger::Log(LogLevel::ERROR, "SceneModule initialization failed: " + std::string(e.what()));
-
-        m_isInitialized = false;
 
         return false;
     }
@@ -35,10 +31,6 @@ void SceneModule::Shutdown() {
 
 const char *SceneModule::GetName() const {
     return "Scene";
-}
-
-int SceneModule::GetPriority() const {
-    return 90;
 }
 
 bool SceneModule::IsRequired() const {

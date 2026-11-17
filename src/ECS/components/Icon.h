@@ -2,15 +2,15 @@
 
 #include <string>
 
-struct IconComponent {
+struct c_Icon {
     std::string iconTexturePath;
     unsigned int textureID = 0;
     float scale = 0.5f;
     bool billboardMode = true;
 
-    IconComponent() = default;
+    c_Icon() = default;
 
-    IconComponent(const std::string &path, float s = 0.5f)
+    c_Icon(const std::string &path, float s = 0.5f)
         : iconTexturePath(path), scale(s) {
     }
 };

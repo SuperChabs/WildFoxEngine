@@ -30,35 +30,22 @@ class SceneSerializer {
 public:
     explicit SceneSerializer(ECSWorld *w);
 
-    bool SaveScene(const std::string &filename, MaterialManager *materialManager);
-
-    bool SaveScene(const std::string &filename, MaterialManager *materialManager, bool pretty);
-
+    bool SaveScene(const std::string &filename, MaterialManager *materialManager, bool pretty = true);
     bool LoadScene(const std::string &filename, MaterialManager *materialManager, ModelManager *modelManager);
+    void DeleteScene(const std::string &filename) const;
 
-    bool DeleteScene(const std::string &filename);
+    std::vector<std::string> GetAvailableScenes() const { return fileHandler.GetAvailableScenes(); }
+    std::string GetSavesDirectory() const { return fileHandler.GetSavesDirectory(); }
 
-    std::vector<std::string> GetAvailableScenes();
-
-    std::string GetSavesDirectory() const;
-
-    void SetSavesDirectory(const std::string &directory);
+    void SetSavesDirectory(const std::string &directory) { fileHandler.SetSavesDirectory(directory); }
 
 private:
-    void SerializeEntities(json &sceneData);
-
-    void SerializeHierarchyParent(ECSWorld *w, entt::entity entity, json &entityData);
-
-    bool WriteSceneToFile(const std::string &filename, const json &sceneData, bool pretty);
+    static void SerializeHierarchyParent(ECSWorld *w, entt::entity entity, json &entityData);
 
     int DeserializeEntities(const json &sceneData, ModelManager *modelManager, MaterialManager *materialManager,
                             std::unordered_map<uint64_t, entt::entity> &createdEntities);
 
     void SetupHierarchies(const json &sceneData, std::unordered_map<uint64_t, entt::entity> &createdEntities);
 
-    void ApplyColors(const json &sceneData, std::unordered_map<uint64_t, entt::entity> &createdEntities);
-
     bool IsModelChild(ECSWorld *w, entt::entity entity);
 };
-
-SceneSerializer GetSceneSerializer();

@@ -2,7 +2,7 @@
 #include <string>
 #include "core/logging/Logger.h"
 
-bool ResourceModule::Initialize() {
+bool ResourceModule::OnInitialize() {
     Logger::Log(LogLevel::INFO, "Creating resource managers...");
 
     try {
@@ -21,14 +21,10 @@ bool ResourceModule::Initialize() {
         modelManager->SetMaterialManager(materialManager.get());
         Logger::Log(LogLevel::DEBUG, "  ModelManager created");
 
-        m_isInitialized = true;
-
         return true;
     } catch (const std::exception &e) {
         Logger::Log(LogLevel::ERROR,
                     "Exception creating resource managers: " + std::string(e.what()));
-
-        m_isInitialized = false;
 
         return false;
     }
@@ -55,10 +51,6 @@ void ResourceModule::Shutdown() {
 
 const char *ResourceModule::GetName() const {
     return "Resource";
-}
-
-int ResourceModule::GetPriority() const {
-    return 20;
 }
 
 bool ResourceModule::IsRequired() const {

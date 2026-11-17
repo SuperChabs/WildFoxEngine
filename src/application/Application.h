@@ -14,7 +14,6 @@
 /// @date 2026-01-28
 
 constexpr float FIXED_DT = 1.0f / 60.0f;
-static float accumulator = 0.0f;
 
 /**
  * @class Application
@@ -30,10 +29,11 @@ class Application {
     std::unique_ptr<ModuleManager> moduleManager;
     CoreModule *m_coreModule;
 
-    ConsoleLogger console;
-    FileLogger file;
+    ConsoleLogger m_console;
+    FileLogger m_file;
 
-    bool isRunning;
+    bool m_isRunning;
+    float m_accumulator = 0.0f;
 
 protected:
     /**
@@ -42,9 +42,10 @@ protected:
      * @param width Window width in pixels
      * @param height Window height in pixels
      */
-    Application(int width, int height, const std::string &title);
+    Application(int width, int height, char* &title);
 
-    virtual void OnInitialize() {}
+    /// @return false if a required part of the engine failed to initialize
+    virtual bool OnInitialize() { return true; }
     virtual void OnUpdate(float deltaTime) {}
     virtual void OnRender() {}
     virtual void OnSimulation(float deltaTime) {}
@@ -52,12 +53,14 @@ protected:
 
     virtual bool ShouldAllowCameraControl() const { return true; }
 
+    [[nodiscard]] CoreModule *GetCoreModule() const { return m_coreModule; }
+
 public:
     /**
      * @brief Destructor
      * Releases all resources used by the application
      */
-    virtual ~Application();
+    virtual ~Application() = default;
 
     Application(const Application &) = delete;
 

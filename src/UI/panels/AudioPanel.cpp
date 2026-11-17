@@ -3,8 +3,8 @@
 #include <cstdio>
 
 void AudioPanel::Render(ECSWorld *ecs, entt::entity entity) {
-    bool hasSource = ecs->HasComponent<AudioSourceComponent>(entity);
-    bool hasListener = ecs->HasComponent<AudioListenerComponent>(entity);
+    bool hasSource = ecs->HasComponent<c_AudioSource>(entity);
+    bool hasListener = ecs->HasComponent<c_AudioListener>(entity);
     if (!hasSource && !hasListener) return;
 
     if (!ImGui::CollapsingHeader("Audio"))
@@ -18,7 +18,7 @@ void AudioPanel::Render(ECSWorld *ecs, entt::entity entity) {
 }
 
 void AudioPanel::RenderSource(ECSWorld *ecs, entt::entity entity) {
-    auto &audio = ecs->GetComponent<AudioSourceComponent>(entity);
+    auto &audio = ecs->GetComponent<c_AudioSource>(entity);
 
     ImGui::Text("Audio Source");
     ImGui::Separator();

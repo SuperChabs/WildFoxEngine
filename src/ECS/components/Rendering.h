@@ -7,46 +7,31 @@
 #include "scene/Mesh.h"
 #include "resource/material/Material.h"
 
-struct MeshComponent {
+struct c_Mesh {
     std::shared_ptr<Mesh> mesh;
 
-    MeshComponent() = default;
+    c_Mesh() = default;
 
-    explicit MeshComponent(Mesh *m) : mesh(m) {
-    }
-
-    explicit MeshComponent(std::shared_ptr<Mesh> m) : mesh(std::move(m)) {
+    explicit c_Mesh(std::shared_ptr<Mesh> m) : mesh(std::move(m)) {
     }
 };
 
-struct MaterialComponent {
+struct c_Material {
     std::shared_ptr<Material> material;
     glm::vec2 tiling = {1.0f, 1.0f};
 
-    MaterialComponent() = default;
+    c_Material() = default;
 
-    explicit MaterialComponent(std::shared_ptr<Material> mat) : material(std::move(mat)) {
+    explicit c_Material(std::shared_ptr<Material> mat) : material(std::move(mat)) {
     }
 };
 
-struct ColorComponent {
-    glm::vec3 color{1.0f};
-
-    ColorComponent() = default;
-
-    explicit ColorComponent(const glm::vec3 &col) : color(col) {
-    }
-
-    ColorComponent(const float r, const float g, const float b) : color(r, g, b) {
-    }
-};
-
-struct VisibilityComponent {
+struct c_Visibility {
     bool isActive = true;
     bool visible = true;
 
-    VisibilityComponent() = default;
+    c_Visibility() = default;
 
-    explicit VisibilityComponent(const bool active) : isActive(active) {
+    explicit c_Visibility(const bool active) : isActive(active) {
     }
 };

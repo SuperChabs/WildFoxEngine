@@ -64,8 +64,8 @@ void Renderer::BeginFrame() {
     context->Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Renderer::Render(CameraComponent &camera, TransformComponent &transform,
-                      CameraOrientationComponent &orientation, int width, int height) {
+void Renderer::Render(c_Camera &camera, c_Transform &transform,
+                      c_CameraOrientation &orientation, int width, int height) {
     if (!initialized || !pipeline) return;
     pipeline->Execute(camera, transform, orientation, width, height);
 }

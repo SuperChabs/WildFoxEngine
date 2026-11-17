@@ -14,8 +14,8 @@
 
 inline void DispatchTrigger(ECSWorld *ecs, const std::string &fnDecl, entt::entity a, entt::entity b) {
     auto tryCall = [&](entt::entity self, entt::entity other) {
-        if (!ecs->HasComponent<ScriptComponent>(self)) return;
-        auto &script = ecs->GetComponent<ScriptComponent>(self);
+        if (!ecs->HasComponent<c_Script>(self)) return;
+        auto &script = ecs->GetComponent<c_Script>(self);
         if (!script.loaded || !script.ctx || !script.module) return;
 
         asIScriptFunction *fn = script.module->GetFunctionByDecl(fnDecl.c_str());

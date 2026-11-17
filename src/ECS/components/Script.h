@@ -5,7 +5,7 @@
 #include <angelscript.h>
 #include <scriptbuilder.h>
 
-struct ScriptComponent {
+struct c_Script {
     std::string scriptPath;
 
     asIScriptModule *module = nullptr;

@@ -6,15 +6,15 @@
 
 class InputControllerSystem {
 public:
-    static void Update(CameraComponent &camera, TransformComponent &trans,
-                CameraOrientationComponent &orientation, Input &input, float deltaTime, bool isEnabled);
+    static void Update(c_Camera &camera, c_Transform &trans,
+                c_CameraOrientation &orientation, Input &input, float deltaTime, bool isEnabled);
 
 private:
-    static void ProcessKeyboard(const Input &input, TransformComponent &transform,
-                                const CameraOrientationComponent &orientation, float speed, float deltaTime);
+    static void ProcessKeyboard(const Input &input, c_Transform &transform,
+                                const c_CameraOrientation &orientation, float speed, float deltaTime);
 
-    static void ProcessMouse(Input &input, CameraOrientationComponent &orientation,
+    static void ProcessMouse(Input &input, c_CameraOrientation &orientation,
                              float sensitivity);
 
-    static void ProcessScroll(Input &input, CameraComponent &camera);
+    static void ProcessScroll(Input &input, c_Camera &camera);
 };

@@ -5,7 +5,7 @@
 #include "scripting/ASState.h"
 
 void ScriptSystem::Update(ECSWorld &ecs, const float deltaTime) {
-    ecs.Each<ScriptComponent>([&](const entt::entity e, ScriptComponent &script) {
+    ecs.Each<c_Script>([&](const entt::entity e, c_Script &script) {
         if (script.failed || !script.active)
             return;
 
@@ -19,7 +19,7 @@ void ScriptSystem::Update(ECSWorld &ecs, const float deltaTime) {
 }
 
 void ScriptSystem::Start(ECSWorld &ecs) {
-    ecs.Each<ScriptComponent>([&](entt::entity e, ScriptComponent &script) {
+    ecs.Each<c_Script>([&](entt::entity e, c_Script &script) {
         if (script.failed || !script.active || !script.loaded)
             return;
 
@@ -28,7 +28,7 @@ void ScriptSystem::Start(ECSWorld &ecs) {
 }
 
 void ScriptSystem::Stop(ECSWorld &ecs) {
-    ecs.Each<ScriptComponent>([&](entt::entity e, ScriptComponent &script) {
+    ecs.Each<c_Script>([&](entt::entity e, c_Script &script) {
         if (script.failed || !script.loaded)
             return;
 
@@ -36,7 +36,7 @@ void ScriptSystem::Stop(ECSWorld &ecs) {
     });
 }
 
-void ScriptSystem::LoadScript(entt::entity e, ScriptComponent &script) {
+void ScriptSystem::LoadScript(entt::entity e, c_Script &script) {
     if (!std::filesystem::exists(script.scriptPath)) {
         Logger::Log(LogLevel::ERROR, "Script not found: " + script.scriptPath);
         script.failed = true;
@@ -86,7 +86,7 @@ void ScriptSystem::LoadScript(entt::entity e, ScriptComponent &script) {
     CallFunction(script, script.fnOnStart);
 }
 
-void ScriptSystem::CallUpdate(ScriptComponent &script, const float deltaTime) {
+void ScriptSystem::CallUpdate(c_Script &script, const float deltaTime) {
     if (!script.fnOnUpdate || !script.ctx)
         return;
 
@@ -101,7 +101,7 @@ void ScriptSystem::CallUpdate(ScriptComponent &script, const float deltaTime) {
     }
 }
 
-void ScriptSystem::CallFunction(ScriptComponent &script, asIScriptFunction *fn) {
+void ScriptSystem::CallFunction(c_Script &script, asIScriptFunction *fn) {
     if (!fn || !script.ctx)
         return;
 

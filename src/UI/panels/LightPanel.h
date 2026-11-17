@@ -14,17 +14,17 @@ public:
     void Render(ECSWorld *ecs, entt::entity entity);
 
 private:
-    void RenderLightType(LightComponent &light);
+    void RenderLightType(c_Light &light);
 
-    void RenderLightSettings(LightComponent &light);
+    void RenderLightSettings(c_Light &light);
 
-    void RenderLightDirection(LightComponent &light);
+    void RenderLightDirection(c_Light &light);
 
-    void RenderLightIntensity(LightComponent &light);
+    void RenderLightIntensity(c_Light &light);
 
-    void RenderLightColors(LightComponent &light);
+    void RenderLightColors(c_Light &light);
 
-    void RenderLightAttenuation(LightComponent &light);
+    void RenderLightAttenuation(c_Light &light);
 
-    void RenderSpotLightCone(LightComponent &light);
+    void RenderSpotLightCone(c_Light &light);
 };

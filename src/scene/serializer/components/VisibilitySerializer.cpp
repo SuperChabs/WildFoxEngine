@@ -1,10 +1,10 @@
 #include "VisibilitySerializer.h"
 
 json VisibilitySerializer::Serialize(ECSWorld *world, entt::entity entity) {
-    if (!world->HasComponent<VisibilityComponent>(entity))
+    if (!world->HasComponent<c_Visibility>(entity))
         return json::object();
 
-    auto &vis = world->GetComponent<VisibilityComponent>(entity);
+    auto &vis = world->GetComponent<c_Visibility>(entity);
     return json{
         {"isActive", vis.isActive},
         {"visible", vis.visible}
@@ -12,7 +12,7 @@ json VisibilitySerializer::Serialize(ECSWorld *world, entt::entity entity) {
 }
 
 entt::entity VisibilitySerializer::Deserialize(DeserializeContext &dcx, entt::entity entity, const json &data) {
-    auto &visComp = dcx.world->AddComponent<VisibilityComponent>(entity);
+    auto &visComp = dcx.world->AddComponent<c_Visibility>(entity);
     visComp.isActive = data.value("isActive", true);
     visComp.visible = data.value("visible", true);
 
@@ -20,5 +20,5 @@ entt::entity VisibilitySerializer::Deserialize(DeserializeContext &dcx, entt::en
 }
 
 bool VisibilitySerializer::CanSerialize(ECSWorld *world, entt::entity entity) const {
-    return world->HasComponent<VisibilityComponent>(entity);
+    return world->HasComponent<c_Visibility>(entity);
 }

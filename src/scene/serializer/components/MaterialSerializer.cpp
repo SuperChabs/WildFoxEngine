@@ -4,7 +4,7 @@
 #include "core/logging/Logger.h"
 
 bool MaterialSerializer::CanSerialize(ECSWorld *world, entt::entity entity) const {
-    return world->HasComponent<MaterialComponent>(entity);
+    return world->HasComponent<c_Material>(entity);
 }
 
 json MaterialSerializer::Serialize(ECSWorld *world, entt::entity entity) {
@@ -13,7 +13,7 @@ json MaterialSerializer::Serialize(ECSWorld *world, entt::entity entity) {
     if (!CanSerialize(world, entity))
         return data;
 
-    auto &material = world->GetComponent<MaterialComponent>(entity);
+    auto &material = world->GetComponent<c_Material>(entity);
     if (material.material) {
         data["name"] = material.material->GetName();
     }
@@ -43,18 +43,18 @@ entt::entity MaterialSerializer::Deserialize(DeserializeContext &dcx, entt::enti
 
 void MaterialSerializer::ApplyMaterial(ECSWorld *ecs, entt::entity entity, const std::shared_ptr<Material> &material,
                                        const json &data) {
-    if (ecs->HasComponent<MeshComponent>(entity)) {
-        auto &matComp = ecs->AddComponent<MaterialComponent>(entity, material);
+    if (ecs->HasComponent<c_Mesh>(entity)) {
+        auto &matComp = ecs->AddComponent<c_Material>(entity, material);
         if (data.contains("tiling")) {
             matComp.tiling.x = data["tiling"]["x"];
             matComp.tiling.y = data["tiling"]["y"];
         }
     }
 
-    if (!ecs->HasComponent<HierarchyComponent>(entity))
+    if (!ecs->HasComponent<c_Hierarchy>(entity))
         return;
 
-    auto &hier = ecs->GetComponent<HierarchyComponent>(entity);
+    auto &hier = ecs->GetComponent<c_Hierarchy>(entity);
     for (entt::entity child: hier.children)
         ApplyMaterial(ecs, child, material, data);
 }

@@ -5,8 +5,8 @@
 void MaterialPanel::Render(ECSWorld *ecs, entt::entity entity, MaterialManager *materialManager) {
     if (!ImGui::CollapsingHeader("Material")) return;
 
-    if (ecs->HasComponent<MaterialComponent>(entity)) {
-        auto &matComp = ecs->GetComponent<MaterialComponent>(entity);
+    if (ecs->HasComponent<c_Material>(entity)) {
+        auto &matComp = ecs->GetComponent<c_Material>(entity);
         ImGui::BulletText("Current: %s",
                           matComp.material ? matComp.material->GetName().c_str() : "None");
         ImGui::Separator();
@@ -26,7 +26,7 @@ void MaterialPanel::Render(ECSWorld *ecs, entt::entity entity, MaterialManager *
         ImGui::EndCombo();
     }
 
-    ImGui::DragFloat2("Tiling", &ecs->GetComponent<MaterialComponent>(entity).tiling[0]);
+    ImGui::DragFloat2("Tiling", &ecs->GetComponent<c_Material>(entity).tiling[0]);
 
     if (ImGui::Button("Remove Material", ImVec2(-1, 0)))
         RemoveMaterial(ecs, entity);
@@ -41,23 +41,20 @@ void MaterialPanel::AssignMaterial(ECSWorld *ecs, entt::entity entity,
                                    MaterialManager *materialManager, const std::string &name) {
     auto material = materialManager->GetMaterial(name);
 
-    if (ecs->HasComponent<MaterialComponent>(entity)) {
-        auto &matComp = ecs->GetComponent<MaterialComponent>(entity);
+    if (ecs->HasComponent<c_Material>(entity)) {
+        auto &matComp = ecs->GetComponent<c_Material>(entity);
         matComp.material = material;
     } else {
-        ecs->AddComponent<MaterialComponent>(entity, material);
+        ecs->AddComponent<c_Material>(entity, material);
     }
-
-    if (ecs->HasComponent<ColorComponent>(entity))
-        ecs->RemoveComponent<ColorComponent>(entity);
 
     Logger::Log(LogLevel::INFO, LogCategory::RENDERING,
                 "Material '" + name + "' assigned to entity");
 }
 
 void MaterialPanel::RemoveMaterial(ECSWorld *ecs, entt::entity entity) {
-    if (ecs->HasComponent<MaterialComponent>(entity)) {
-        ecs->RemoveComponent<MaterialComponent>(entity);
+    if (ecs->HasComponent<c_Material>(entity)) {
+        ecs->RemoveComponent<c_Material>(entity);
         Logger::Log(LogLevel::INFO, LogCategory::RENDERING,
                     "Material removed from entity");
     }

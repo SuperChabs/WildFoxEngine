@@ -1,10 +1,10 @@
 #include <scene/serializer/components/CameraSerializer.h>
 
 json CameraSerializer::Serialize(ECSWorld *world, entt::entity entity) {
-    if (!world->HasComponent<CameraComponent>(entity))
+    if (!world->HasComponent<c_Camera>(entity))
         return json::object();
 
-    auto &cam = world->GetComponent<CameraComponent>(entity);
+    auto &cam = world->GetComponent<c_Camera>(entity);
     json camData{
         {"fov", cam.fov},
         {"nearPlane", cam.nearPlane},
@@ -15,8 +15,8 @@ json CameraSerializer::Serialize(ECSWorld *world, entt::entity entity) {
         {"isActive", cam.isActive}
     };
 
-    if (world->HasComponent<CameraOrientationComponent>(entity)) {
-        auto &orient = world->GetComponent<CameraOrientationComponent>(entity);
+    if (world->HasComponent<c_CameraOrientation>(entity)) {
+        auto &orient = world->GetComponent<c_CameraOrientation>(entity);
         camData["orientation"] = {
             {"yaw", orient.yaw},
             {"pitch", orient.pitch}
@@ -27,7 +27,7 @@ json CameraSerializer::Serialize(ECSWorld *world, entt::entity entity) {
 }
 
 entt::entity CameraSerializer::Deserialize(DeserializeContext &dcx, entt::entity entity, const json &data) {
-    auto &camComp = dcx.world->AddComponent<CameraComponent>(entity);
+    auto &camComp = dcx.world->AddComponent<c_Camera>(entity);
     camComp.fov = data.value("fov", 55.0f);
     camComp.nearPlane = data.value("nearPlane", 0.1f);
     camComp.farPlane = data.value("farPlane", 1000.0f);
@@ -38,7 +38,7 @@ entt::entity CameraSerializer::Deserialize(DeserializeContext &dcx, entt::entity
 
     if (data.contains("orientation")) {
         auto &orient = data["orientation"];
-        auto &orientComp = dcx.world->AddComponent<CameraOrientationComponent>(entity);
+        auto &orientComp = dcx.world->AddComponent<c_CameraOrientation>(entity);
         orientComp.yaw = orient.value("yaw", -95.0f);
         orientComp.pitch = orient.value("pitch", 0.0f);
     }
@@ -47,5 +47,5 @@ entt::entity CameraSerializer::Deserialize(DeserializeContext &dcx, entt::entity
 }
 
 bool CameraSerializer::CanSerialize(ECSWorld *world, entt::entity entity) const {
-    return world->HasComponent<CameraComponent>(entity);
+    return world->HasComponent<c_Camera>(entity);
 }

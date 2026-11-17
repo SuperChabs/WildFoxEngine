@@ -3,10 +3,10 @@
 #include "scene/Light.h"
 
 void LightPanel::Render(ECSWorld *ecs, entt::entity entity) {
-    if (!ecs->HasComponent<LightComponent>(entity)) return;
+    if (!ecs->HasComponent<c_Light>(entity)) return;
     if (!ImGui::CollapsingHeader("Light", ImGuiTreeNodeFlags_DefaultOpen)) return;
 
-    auto &light = ecs->GetComponent<LightComponent>(entity);
+    auto &light = ecs->GetComponent<c_Light>(entity);
 
     RenderLightType(light);
 
@@ -33,7 +33,7 @@ void LightPanel::Render(ECSWorld *ecs, entt::entity entity) {
         RenderSpotLightCone(light);
 }
 
-void LightPanel::RenderLightType(LightComponent &light) {
+void LightPanel::RenderLightType(c_Light &light) {
     const char *lightTypes[] = {"Directional", "Point", "Spot"};
     int currentType = static_cast<int>(light.type);
 
@@ -66,13 +66,13 @@ void LightPanel::RenderLightType(LightComponent &light) {
     }
 }
 
-void LightPanel::RenderLightSettings(LightComponent &light) {
+void LightPanel::RenderLightSettings(c_Light &light) {
     ImGui::Checkbox("Active##Light", &light.isActive);
     ImGui::SameLine();
     ImGui::Checkbox("Cast Shadows", &light.castShadows);
 }
 
-void LightPanel::RenderLightDirection(LightComponent &light) {
+void LightPanel::RenderLightDirection(c_Light &light) {
     ImGui::Text("Direction");
     ImGui::DragFloat3("##Direction", &light.direction[0], 0.1f, -1.0f, 1.0f);
 
@@ -84,7 +84,7 @@ void LightPanel::RenderLightDirection(LightComponent &light) {
     ImGui::Spacing();
 }
 
-void LightPanel::RenderLightIntensity(LightComponent &light) {
+void LightPanel::RenderLightIntensity(c_Light &light) {
     ImGui::Text("Intensity");
     ImGui::DragFloat("##Intensity", &light.intensity, 0.01f, 0.0f, 10.0f);
 
@@ -93,7 +93,7 @@ void LightPanel::RenderLightIntensity(LightComponent &light) {
     ImGui::Spacing();
 }
 
-void LightPanel::RenderLightColors(LightComponent &light) {
+void LightPanel::RenderLightColors(c_Light &light) {
     ImGui::Text("Ambient Color");
     float ambient[3] = {light.ambient.x, light.ambient.y, light.ambient.z};
     if (ImGui::ColorEdit3("##Ambient", ambient))
@@ -118,7 +118,7 @@ void LightPanel::RenderLightColors(LightComponent &light) {
     ImGui::Spacing();
 }
 
-void LightPanel::RenderLightAttenuation(LightComponent &light) {
+void LightPanel::RenderLightAttenuation(c_Light &light) {
     ImGui::Text("Attenuation");
 
     ImGui::Text("Constant");
@@ -138,7 +138,7 @@ void LightPanel::RenderLightAttenuation(LightComponent &light) {
     ImGui::Spacing();
 }
 
-void LightPanel::RenderSpotLightCone(LightComponent &light) {
+void LightPanel::RenderSpotLightCone(c_Light &light) {
     ImGui::Text("Spot Cone");
 
     ImGui::Text("Inner Cutoff (degrees)");

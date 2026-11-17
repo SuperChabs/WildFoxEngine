@@ -10,3 +10,4 @@
 #include "Rendering.h"
 #include "Script.h"
 #include "Transform.h"
+#include "Joint.h"

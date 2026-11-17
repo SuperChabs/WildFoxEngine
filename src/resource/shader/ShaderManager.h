@@ -25,7 +25,7 @@ class ShaderManager {
     ShaderConfigLoader scl;
     ShaderSource source;
 
-    std::unordered_map<std::string, std::unique_ptr<ShaderObj> > shaders;
+    std::unordered_map<std::string, std::unique_ptr<ShaderObj>> shaders;
 
     std::string runtimePath = "../assets/shaders/";
     std::string sourcePath = "../assets/shaders/";
@@ -38,32 +38,22 @@ public:
     ~ShaderManager();
 
     void Load();
-
     bool Reload(const std::string &name);
-
     void ReloadAll();
-
     void UnLoad(const std::string &name);
 
     void Bind(const std::string &name);
-
     void Unbind();
 
     void ClearAll();
 
-    void SetBool(const std::string &shaderName, const std::string &variableName, bool v) const;
-
-    void SetInt(const std::string &shaderName, const std::string &variableName, int v) const;
-
+    void SetBool(const std::string &shaderName,  const std::string &variableName, bool  v) const;
+    void SetInt(const std::string &shaderName,   const std::string &variableName, int   v) const;
     void SetFloat(const std::string &shaderName, const std::string &variableName, float v) const;
-
-    void SetVec2(const std::string &shaderName, const std::string &variableName, const glm::vec2 &v) const;
-
-    void SetVec3(const std::string &shaderName, const std::string &variableName, const glm::vec3 &v) const;
-
-    void SetVec4(const std::string &shaderName, const std::string &variableName, const glm::vec4 &v) const;
-
-    void SetMat4(const std::string &shaderName, const std::string &variableName, const glm::mat4 &m) const;
+    void SetVec2(const std::string &shaderName,  const std::string &variableName, const glm::vec2 &v) const;
+    void SetVec3(const std::string &shaderName,  const std::string &variableName, const glm::vec3 &v) const;
+    void SetVec4(const std::string &shaderName,  const std::string &variableName, const glm::vec4 &v) const;
+    void SetMat4(const std::string &shaderName,  const std::string &variableName, const glm::mat4 &m) const;
 
     ShaderObj *GetShader(const std::string &name) const;
 
@@ -71,9 +61,7 @@ public:
 
     size_t GetCount();
 
-
-    const std::unordered_map<std::string, std::unique_ptr<ShaderObj> > &GetShaderMap() const;
-
+    const std::unordered_map<std::string, std::unique_ptr<ShaderObj>> &GetShaderMap() const;
 
     bool IsShaderValid(const std::string &name) const;
 };

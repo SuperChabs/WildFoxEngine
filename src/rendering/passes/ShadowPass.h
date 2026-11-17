@@ -68,7 +68,7 @@ private:
 
     glm::mat4 BuildLightSpaceMatrix(const glm::vec3 &lightDir) const;
 
-    glm::mat4 BuildSpotLightMatrix(const LightComponent &light);
+    glm::mat4 BuildSpotLightMatrix(const c_Light &light);
 
-    static std::vector<glm::mat4> BuildPointSpaceMatrices(const LightComponent &light);
+    static std::vector<glm::mat4> BuildPointSpaceMatrices(const c_Light &light);
 };

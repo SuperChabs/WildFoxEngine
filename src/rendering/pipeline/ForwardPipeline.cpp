@@ -16,8 +16,7 @@ void ForwardPipeline::Initialize() {
     Logger::Log(LogLevel::INFO, "Initializing Forward Rendering Pipeline");
 
     // --- SkyboxPass ---
-    auto skyboxPass = std::make_unique<SkyboxPass>(
-        context, shaderManager, skyboxVAO, cubemapTexture);
+    auto skyboxPass = std::make_unique<SkyboxPass>(context, shaderManager, skyboxVAO, cubemapTexture);
     AddPass(std::move(skyboxPass));
     Logger::Log(LogLevel::DEBUG, "SkyboxPass created");
 
@@ -44,8 +43,8 @@ void ForwardPipeline::Initialize() {
                 std::to_string(GetPassCount()) + " passes");
 }
 
-void ForwardPipeline::Execute(CameraComponent &camera, TransformComponent &transform,
-                              CameraOrientationComponent &orientation, int width, int height) {
+void ForwardPipeline::Execute(c_Camera &camera, c_Transform &transform,
+                              c_CameraOrientation &orientation, int width, int height) {
     float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
     glm::mat4 projection = camera.GetProjectionMatrix(aspectRatio);
     glm::mat4 view = orientation.GetViewMatrix(transform.position);

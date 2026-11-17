@@ -62,7 +62,7 @@ void AudioSystem::PlayOneShot(const std::string &path, float volume, float pitch
 
 void AudioSystem::SyncLiseners(ECSWorld *ecs) {
     bool listenerFound = false;
-    ecs->Each<AudioListenerComponent, TransformComponent>([&](entt::entity, const TransformComponent &transform) {
+    ecs->Each<c_AudioListener, c_Transform>([&](entt::entity, const c_Transform &transform) {
         if (!listenerFound) {
             SetListenerTransform(transform);
             listenerFound = true;
@@ -70,16 +70,16 @@ void AudioSystem::SyncLiseners(ECSWorld *ecs) {
     });
 
     if (!listenerFound) {
-        constexpr TransformComponent defaultTransform;
+        constexpr c_Transform defaultTransform;
         SetListenerTransform(defaultTransform);
     }
 }
 
 void AudioSystem::SyncSources(ECSWorld *ecs) {
-    ecs->Each<AudioSourceComponent>([&](const entt::entity entity, AudioSourceComponent &audio) {
-        const TransformComponent *transform = nullptr;
-        if (ecs->HasComponent<TransformComponent>(entity))
-            transform = &ecs->GetComponent<TransformComponent>(entity);
+    ecs->Each<c_AudioSource>([&](const entt::entity entity, c_AudioSource &audio) {
+        const c_Transform *transform = nullptr;
+        if (ecs->HasComponent<c_Transform>(entity))
+            transform = &ecs->GetComponent<c_Transform>(entity);
 
         if (audio.path.empty())
             return;

@@ -125,26 +125,16 @@ public:
           firstMouse(true), mouseDeltaX(0.0f), mouseDeltaY(0.0f) {
     }
 
-    bool IsKeyPressed(Key key) const {
-        const bool pressed = glfwGetKey(window, static_cast<int>(key)) == GLFW_PRESS;
-
-        return pressed;
+    bool IsKeyDown(Key key) const {
+        return glfwGetKey(window, static_cast<int>(key)) == GLFW_PRESS;
     }
 
     bool IsKeyReleased(Key key) const {
-        const bool released = glfwGetKey(window, static_cast<int>(key)) == GLFW_RELEASE;
-
-        return released;
-    }
-
-    bool IsKeyDown(Key key) const {
-        const bool down = glfwGetKey(window, static_cast<int>(key)) == GLFW_KEY_DOWN;
-
-        return down;
+        return glfwGetKey(window, static_cast<int>(key)) == GLFW_RELEASE;
     }
 
     bool IsKeyJustPressed(const Key key) const {
-        const bool currentState = IsKeyPressed(key);
+        const bool currentState = IsKeyDown(key);
         bool previousState = keyStates[key];
 
         if (keyStates.contains(key))
@@ -155,18 +145,18 @@ public:
         return currentState && !previousState;
     }
 
-    void UpdateMousePosition(const double xpos, const double ypos) {
+    void UpdateMousePosition(const double xPos, const double yPos) {
         if (firstMouse) {
-            lastMouseX = xpos;
-            lastMouseY = ypos;
+            lastMouseX = xPos;
+            lastMouseY = yPos;
             firstMouse = false;
         }
 
-        mouseDeltaX = xpos - lastMouseX;
-        mouseDeltaY = lastMouseY - ypos;
+        mouseDeltaX = xPos - lastMouseX;
+        mouseDeltaY = lastMouseY - yPos;
 
-        lastMouseX = xpos;
-        lastMouseY = ypos;
+        lastMouseX = xPos;
+        lastMouseY = yPos;
     }
 
     glm::vec2 GetMouseDelta() const {
@@ -189,8 +179,8 @@ public:
         scrollOffsetX = 0.0f;
     }
 
-    static void ScrollCallback(const double xoffset, const double yoffset) {
-        scrollOffsetX += xoffset;
-        scrollOffsetY += yoffset;
+    static void ScrollCallback(GLFWwindow */*window*/, const double xOffset, const double yOffset) {
+        scrollOffsetX += xOffset;
+        scrollOffsetY += yOffset;
     }
 };

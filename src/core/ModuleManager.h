@@ -1,39 +1,37 @@
 #pragma once
 
-#include <string>
-#include <map>
 #include <memory>
+#include <typeindex>
+#include <unordered_map>
 #include <vector>
 
 #include "core/IModule.h"
 
 class ModuleManager {
-    std::vector<std::unique_ptr<IModule> > modules;
-    std::map<std::string, IModule *> moduleMap;
+    std::vector<IModule*> modules;
+    std::unordered_map<std::type_index, IModule *> moduleMap;
 
 public:
+    ~ModuleManager();
+
     template<typename T, typename... Args>
     T *RegisterModule(Args &&... args) {
-        auto module = std::make_unique<T>(std::forward<Args>(args)...);
-        T *ptr = module.get();
-        moduleMap[module->GetName()] = ptr;
-        modules.push_back(std::move(module));
+        T *ptr  = new T(std::forward<Args>(args)...);
+        moduleMap[typeid(T)] = ptr;
+        modules.push_back(ptr);
         return ptr;
     }
 
-    void InitializeAll();
-
     void UpdateAll(float deltaTime) const;
 
+    /// @brief Shuts modules down in reverse registration order
     void ShutdownAll() const;
 
     template<typename T>
-    T *GetModule(const std::string &name) {
-        auto it = moduleMap.find(name);
+    T *GetModule() const {
+        const auto it = moduleMap.find(typeid(T));
         if (it != moduleMap.end())
-            return dynamic_cast<T *>(it->second);
+            return static_cast<T *>(it->second);
         return nullptr;
     }
-
-    bool IsModuleActive(const std::string &name) const;
 };

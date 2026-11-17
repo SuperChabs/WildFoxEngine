@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include "core/logging/Logger.h"
 
-json SceneMaterialSerializer::Serialize(MaterialManager *materialManager) {
+json SceneMaterialSerializer::Serialize(const MaterialManager *materialManager) {
     json sceneData = json::array();
     auto materials = materialManager->GetMaterialsMap();
 
@@ -49,10 +49,10 @@ void SceneMaterialSerializer::Deserialize(MaterialManager *materialManager, cons
                 glm::vec3 color = {matData["color"][0], matData["color"][1], matData["color"][2]};
                 materialManager->CreateColorMaterial(name, color);
             } else if (type == "texture") {
-                std::string diffusePath = "";
-                std::string normalPath = "";
-                std::string specularPath = "";
-                std::string heightPath = "";
+                std::string diffusePath;
+                std::string normalPath;
+                std::string specularPath;
+                std::string heightPath;
 
                 for (auto &tex: matData["textures"]) {
                     if (tex["type"] == "texture_diffuse")

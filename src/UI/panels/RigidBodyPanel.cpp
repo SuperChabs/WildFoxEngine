@@ -2,11 +2,11 @@
 #include <glm/glm.hpp>
 
 void RigidBodyPanel::Render(ECSWorld *ecs, entt::entity entity) {
-    if (!ecs->HasComponent<RigidBodyComponent>(entity)) return;
+    if (!ecs->HasComponent<c_RigidBody>(entity)) return;
     if (!ImGui::CollapsingHeader("Rigid Body", ImGuiTreeNodeFlags_DefaultOpen)) return;
 
-    auto &rb = ecs->GetComponent<RigidBodyComponent>(entity);
-    auto &t = ecs->GetComponent<TransformComponent>(entity);
+    auto &rb = ecs->GetComponent<c_RigidBody>(entity);
+    auto &t = ecs->GetComponent<c_Transform>(entity);
 
     RenderMass(rb);
 
@@ -49,7 +49,7 @@ void RigidBodyPanel::Render(ECSWorld *ecs, entt::entity entity) {
     RenderAccumulators(rb);
 }
 
-void RigidBodyPanel::RenderMass(RigidBodyComponent &rb) {
+void RigidBodyPanel::RenderMass(c_RigidBody &rb) {
     ImGui::Text("Mass");
 
     float mass = (rb.m_invMass > 0.0f) ? (1.0f / rb.m_invMass) : 0.0f;
@@ -70,7 +70,7 @@ void RigidBodyPanel::RenderMass(RigidBodyComponent &rb) {
     }
 }
 
-void RigidBodyPanel::RenderVelocity(RigidBodyComponent &rb) {
+void RigidBodyPanel::RenderVelocity(c_RigidBody &rb) {
     ImGui::Text("Linear Velocity");
     ImGui::DragFloat3("##Velocity", &rb.m_linearVelocity[0], 0.01f);
 
@@ -83,7 +83,7 @@ void RigidBodyPanel::RenderVelocity(RigidBodyComponent &rb) {
         rb.m_linearVelocity = glm::vec3(0.0f);
 }
 
-void RigidBodyPanel::RenderAngularVelocity(RigidBodyComponent &rb) {
+void RigidBodyPanel::RenderAngularVelocity(c_RigidBody &rb) {
     ImGui::Text("Angular Velocity");
     ImGui::DragFloat3("##AngularVelocity", &rb.m_angularVelocity[0], 0.01f);
 
@@ -93,12 +93,12 @@ void RigidBodyPanel::RenderAngularVelocity(RigidBodyComponent &rb) {
         rb.m_angularVelocity = glm::vec3(0.0f);
 }
 
-void RigidBodyPanel::RenderInertia(RigidBodyComponent &rb) {
+void RigidBodyPanel::RenderInertia(c_RigidBody &rb) {
 //     ImGui::Text("Inertia Tensor (diagonal)");
 //     ImGui::DragFloat3("##Inertia", &rb.inertia[0], 0.01f, 0.001f, 1000.0f);
 }
 
-void RigidBodyPanel::RenderAccumulators(RigidBodyComponent &rb) {
+void RigidBodyPanel::RenderAccumulators(c_RigidBody &rb) {
     ImGui::Text("Accumulated Force");
     ImGui::Text("  X: %.4f  Y: %.4f  Z: %.4f",
                 rb.m_forceAccum.x, rb.m_forceAccum.y, rb.m_forceAccum.z);

@@ -36,8 +36,8 @@ void PhysicsDebugRenderSystem::Update(ECSWorld &ecs, ShaderManager &shaderManage
     shaderManager.SetMat4(shaderName, "projection", projection);
     shaderManager.SetFloat(shaderName, "pointSize", pointPx);
 
-    ecs.Each<TransformComponent, ColliderComponent>(
-        [&](entt::entity, const TransformComponent &t, const ColliderComponent &c) {
+    ecs.Each<c_Transform, c_Collider>(
+        [&](entt::entity, const c_Transform &t, const c_Collider &c) {
             DebugMesh mesh;
 
             if (std::holds_alternative<Sphere>(c.shape))
@@ -139,7 +139,7 @@ std::vector<glm::vec3> PhysicsDebugRenderSystem::BuildLines(const AABB &aabb, co
     glm::vec3 mn = aabb.min + pos;
     glm::vec3 mx = aabb.max + pos;
 
-    glm::vec3 v[8] =
+    const glm::vec3 v[8] =
     {
         {mn.x, mn.y, mn.z},
         {mx.x, mn.y, mn.z},
@@ -218,7 +218,8 @@ void PhysicsDebugRenderSystem::BuildHullMesh(const ConvexHull &hull, const glm::
     std::map<std::pair<int, int>, EdgeInfo> edges;
 
     for (const Tri &t : hull.m_tris) {
-        const glm::vec3 &a = world[t.a], &b = world[t.b], &c = world[t.c];
+        constexpr float shift = 0.001f;
+        const glm::vec3 &a = world[t.a] + shift, &b = world[t.b] + shift, &c = world[t.c] + shift;
 
         mesh.tris.push_back(a);
         mesh.tris.push_back(b);

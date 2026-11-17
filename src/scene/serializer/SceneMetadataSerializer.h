@@ -9,16 +9,13 @@
 using json = nlohmann::json;
 
 class SceneMetadataSerializer {
-private:
     SceneFileHandler &fileHandler;
 
 public:
     explicit SceneMetadataSerializer(SceneFileHandler &handler);
 
-    json SerializeMetadata(ECSWorld *world, const std::string &sceneName, entt::entity mainCamera = entt::null) const;
+    json SerializeMetadata(ECSWorld *world, const std::string &sceneName, entt::entity mainCamera = entt::null);
 
-    static void DeserializeMetadata(
-        const json &data,
-        const std::unordered_map<uint64_t, entt::entity> &createdEntities,
+    static void DeserializeMetadata(const json &data, const std::unordered_map<uint64_t, entt::entity> &createdEntities,
         ECSWorld *world);
 };

@@ -1,10 +1,10 @@
 #include "IconPanel.h"
 
 void IconPanel::Render(ECSWorld *ecs, entt::entity entity) {
-    if (!ecs->HasComponent<IconComponent>(entity)) return;
+    if (!ecs->HasComponent<c_Icon>(entity)) return;
     if (!ImGui::CollapsingHeader("Icon Settings")) return;
 
-    auto &icon = ecs->GetComponent<IconComponent>(entity);
+    auto &icon = ecs->GetComponent<c_Icon>(entity);
 
     ImGui::Text("Icon Texture Path:");
     ImGui::TextWrapped("%s", icon.iconTexturePath.c_str());

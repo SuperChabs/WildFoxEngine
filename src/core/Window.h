@@ -12,10 +12,11 @@ class Window {
     GLFWwindow *window;
     int width;
     int height;
-    std::string title;
+    char* title;
+    bool vsync = true;
 
 public:
-    Window(int width, int height, std::string title);
+    Window(int width, int height, char* title);
 
     ~Window();
 
@@ -48,4 +49,6 @@ public:
     void SetMouseButtonCallback(GLFWmousebuttonfun callback) const;
     void SetCursorMode(int mode) const;
     void SetSize(int w, int h);
+    void SetVSync(bool enabled);
+    [[nodiscard]] bool IsVSync() const;
 };

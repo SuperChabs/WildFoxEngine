@@ -2,9 +2,9 @@
 #include <string>
 
 void TagPanel::Render(ECSWorld *ecs, entt::entity entity) {
-    if (!ecs->HasComponent<TagComponent>(entity)) return;
+    if (!ecs->HasComponent<c_Tag>(entity)) return;
 
-    auto &tag = ecs->GetComponent<TagComponent>(entity);
+    auto &tag = ecs->GetComponent<c_Tag>(entity);
 
     char buffer[256];
     strncpy(buffer, tag.name.c_str(), sizeof(buffer));
@@ -19,8 +19,8 @@ void TagPanel::Render(ECSWorld *ecs, entt::entity entity) {
 
     ImGui::Spacing();
 
-    if (ecs->HasComponent<VisibilityComponent>(entity)) {
-        auto &vis = ecs->GetComponent<VisibilityComponent>(entity);
+    if (ecs->HasComponent<c_Visibility>(entity)) {
+        auto &vis = ecs->GetComponent<c_Visibility>(entity);
         ImGui::Checkbox("Active", &vis.isActive);
     }
 }

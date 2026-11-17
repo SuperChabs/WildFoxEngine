@@ -11,10 +11,10 @@ RenderingModule::RenderingModule(GLFWwindow *win, ECSWorld *ecs, ModuleManager *
     if (!ecsWorld)
         Logger::Log(LogLevel::ERROR, "RenderingModule: ecsWorld is null!");
 
-    resourceModule = mm->GetModule<ResourceModule>("Resource");
+    resourceModule = mm->GetModule<ResourceModule>();
 }
 
-bool RenderingModule::Initialize() {
+bool RenderingModule::OnInitialize() {
     Logger::Log(LogLevel::INFO, "=== Initializing RenderingModule ===");
 
     if (!InitializeOpenGL()) {
@@ -45,7 +45,6 @@ bool RenderingModule::Initialize() {
         return false;
     }
 
-    m_isInitialized = true;
     Logger::Log(LogLevel::INFO, "RenderingModule initialized successfully");
     Logger::Log(LogLevel::INFO, "======================================");
 
@@ -71,10 +70,6 @@ void RenderingModule::Shutdown() {
 
 const char *RenderingModule::GetName() const {
     return "Rendering";
-}
-
-int RenderingModule::GetPriority() const {
-    return 30;
 }
 
 bool RenderingModule::IsRequired() const {

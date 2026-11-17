@@ -3,8 +3,8 @@
 #include <ImGuizmo.h>
 #include <glm/glm.hpp>
 
-void InputControllerSystem::Update(CameraComponent &camera, TransformComponent &trans,
-        CameraOrientationComponent &orientation, Input &input, const float deltaTime, const bool isEnabled) {
+void InputControllerSystem::Update(c_Camera &camera, c_Transform &trans,
+        c_CameraOrientation &orientation, Input &input, const float deltaTime, const bool isEnabled) {
     if (!isEnabled) return;
 
     ProcessKeyboard(input, trans, orientation, camera.movementSpeed, deltaTime);
@@ -12,33 +12,33 @@ void InputControllerSystem::Update(CameraComponent &camera, TransformComponent &
     ProcessScroll(input, camera);
 }
 
-void InputControllerSystem::ProcessKeyboard(const Input &input, TransformComponent &transform,
-        const CameraOrientationComponent &orientation, const float speed, const float deltaTime) {
+void InputControllerSystem::ProcessKeyboard(const Input &input, c_Transform &transform,
+        const c_CameraOrientation &orientation, const float speed, const float deltaTime) {
     const float velocity = speed * deltaTime;
 
     const glm::vec3 front = orientation.GetFront();
     const glm::vec3 right = orientation.GetRight();
 
-    if (input.IsKeyPressed(Key::KEY_W)) {
+    if (input.IsKeyDown(Key::KEY_W)) {
         const glm::vec3 flatFront = glm::normalize(glm::vec3(front.x, 0.0f, front.z));
         transform.position += flatFront * velocity;
     }
-    if (input.IsKeyPressed(Key::KEY_S)) {
+    if (input.IsKeyDown(Key::KEY_S)) {
         const glm::vec3 flatFront = glm::normalize(glm::vec3(front.x, 0.0f, front.z));
         transform.position -= flatFront * velocity;
     }
-    if (input.IsKeyPressed(Key::KEY_A))
+    if (input.IsKeyDown(Key::KEY_A))
         transform.position -= right * velocity;
-    if (input.IsKeyPressed(Key::KEY_D))
+    if (input.IsKeyDown(Key::KEY_D))
         transform.position += right * velocity;
 
-    if (input.IsKeyPressed(Key::KEY_SPACE))
+    if (input.IsKeyDown(Key::KEY_SPACE))
         transform.position.y += velocity;
-    if (input.IsKeyPressed(Key::KEY_LEFT_SHIFT))
+    if (input.IsKeyDown(Key::KEY_LEFT_SHIFT))
         transform.position.y -= velocity;
 }
 
-void InputControllerSystem::ProcessMouse(Input &input, CameraOrientationComponent &orientation, const float sensitivity) {
+void InputControllerSystem::ProcessMouse(Input &input, c_CameraOrientation &orientation, const float sensitivity) {
     // If ImGui/ImGuizmo are using the mouse, don't update camera orientation
     if (ImGuizmo::IsUsing() || ImGui::GetIO().WantCaptureMouse) {
         input.ResetMouseDelta();
@@ -62,7 +62,7 @@ void InputControllerSystem::ProcessMouse(Input &input, CameraOrientationComponen
         orientation.yaw = 0.0f;
 }
 
-void InputControllerSystem::ProcessScroll(Input &input, CameraComponent &camera) {
+void InputControllerSystem::ProcessScroll(Input &input, c_Camera &camera) {
     if (const double scrollOffset = Input::GetScrollOffset(); scrollOffset != 0.0f) {
         camera.fov -= static_cast<float>(scrollOffset);
 

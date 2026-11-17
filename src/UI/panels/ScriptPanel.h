@@ -22,7 +22,7 @@ public:
 private:
     void AttachScript(ECSWorld *ecs, entt::entity entity, const std::string &path);
 
-    void UpdateScript(ScriptComponent &script, const std::string &newPath);
+    void UpdateScript(c_Script &script, const std::string &newPath);
 
-    void RemoveScript(ECSWorld *ecs, entt::entity entity, ScriptComponent &script);
+    void RemoveScript(ECSWorld *ecs, entt::entity entity, c_Script &script);
 };

@@ -28,16 +28,16 @@ void ShadowPass::Execute(const glm::mat4 &, const glm::mat4 &) {
     m_ShadowMapIndices.clear();
     m_PointShadowMapIndices.clear();
 
-    std::vector<LightComponent> shadowLights;
-    std::vector<LightComponent> pointShadowLights;
+    std::vector<c_Light> shadowLights;
+    std::vector<c_Light> pointShadowLights;
     std::vector<int> globalLightIndices;
 
     auto renderSceneDepth = [&](const std::string &shaderName) {
-        m_World->Each<TransformComponent, MeshComponent, VisibilityComponent>(
+        m_World->Each<c_Transform, c_Mesh, c_Visibility>(
             [&](entt::entity entity,
-                TransformComponent &transform,
-                MeshComponent &meshComp,
-                VisibilityComponent &vis) {
+                c_Transform &transform,
+                c_Mesh &meshComp,
+                c_Visibility &vis) {
                 if (!vis.isActive || !vis.visible || !meshComp.mesh)
                     return;
 
@@ -48,8 +48,8 @@ void ShadowPass::Execute(const glm::mat4 &, const glm::mat4 &) {
         );
     };
 
-    m_World->Each<LightComponent, TransformComponent>(
-        [&](entt::entity e, LightComponent &light, TransformComponent) {
+    m_World->Each<c_Light, c_Transform>(
+        [&](entt::entity e, c_Light &light, c_Transform) {
             if (!light.isActive)
                 return;
 
@@ -269,7 +269,7 @@ glm::mat4 ShadowPass::BuildLightSpaceMatrix(const glm::vec3 &lightDir) const {
     return lightProjection * lightView;
 }
 
-glm::mat4 ShadowPass::BuildSpotLightMatrix(const LightComponent &light) {
+glm::mat4 ShadowPass::BuildSpotLightMatrix(const c_Light &light) {
     float fov = glm::radians(light.outerCutoff) * 2.0f;
 
     glm::mat4 proj = glm::perspective(
@@ -294,7 +294,7 @@ glm::mat4 ShadowPass::BuildSpotLightMatrix(const LightComponent &light) {
     return proj * view;
 }
 
-std::vector<glm::mat4> ShadowPass::BuildPointSpaceMatrices(const LightComponent &light) {
+std::vector<glm::mat4> ShadowPass::BuildPointSpaceMatrices(const c_Light &light) {
     float far = std::max(light.radius, 100.0f);
     glm::mat4 proj = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, far);
     glm::vec3 pos = light.position;

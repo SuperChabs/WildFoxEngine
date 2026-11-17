@@ -117,21 +117,21 @@ inline void RegisterTransformComponent(asIScriptEngine *engine) {
     r = engine->RegisterObjectProperty(
         "Transform",
         "vec3 position",
-        asOFFSET(TransformComponent, position)
+        asOFFSET(c_Transform, position)
     );
     AS_CHECK(r, "Transform.position");
 
     r = engine->RegisterObjectProperty(
         "Transform",
         "vec3 scale",
-        asOFFSET(TransformComponent, scale)
+        asOFFSET(c_Transform, scale)
     );
     AS_CHECK(r, "Transform.scale");
 
     r = engine->RegisterObjectProperty(
         "Transform",
         "vec3 rotation",
-        asOFFSET(TransformComponent, eulerHint)
+        asOFFSET(c_Transform, eulerHint)
     );
     AS_CHECK(r, "Transform.rotation");
 }
@@ -148,7 +148,7 @@ inline void RegisterTagComponent(asIScriptEngine *engine) {
     r = engine->RegisterObjectProperty(
         "TagComponent",
         "string name",
-        asOFFSET(TagComponent, name));
+        asOFFSET(c_Tag, name));
     AS_CHECK(r, "TagComponent.name");
 }
 
@@ -164,7 +164,7 @@ inline void RegisterVisibilityComponent(asIScriptEngine *engine) {
     r = engine->RegisterObjectProperty(
         "VisibilityComponent",
         "bool isActive",
-        asOFFSET(VisibilityComponent, isActive));
+        asOFFSET(c_Visibility, isActive));
     AS_CHECK(r, "VisibilityComponent.isActive");
 }
 

@@ -3,7 +3,7 @@
 #include "ECS/components/Components.h"
 
 struct EditorCamera {
-    CameraComponent camera;
-    CameraOrientationComponent orientation;
-    TransformComponent transform;
+    c_Camera camera;
+    c_CameraOrientation orientation;
+    c_Transform transform;
 };

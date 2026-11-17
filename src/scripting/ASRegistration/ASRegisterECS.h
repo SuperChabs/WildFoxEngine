@@ -12,10 +12,10 @@
 #include "ECS/components/Components.h"
 #include "EntityDefinition.h"
 
-inline TransformComponent *GetTransform(ECSWorld *ecs, entt::entity e) {
-    if (!ecs->HasComponent<TransformComponent>(e))
+inline c_Transform *GetTransform(ECSWorld *ecs, entt::entity e) {
+    if (!ecs->HasComponent<c_Transform>(e))
         return nullptr;
-    return &ecs->GetComponent<TransformComponent>(e);
+    return &ecs->GetComponent<c_Transform>(e);
 }
 
 inline bool IsValid(ECSWorld *ecs, entt::entity e) {
@@ -28,7 +28,7 @@ inline void DestroyEntity(ECSWorld *ecs, entt::entity e) {
 
 inline entt::entity GetEntityByName(ECSWorld *ecs, const std::string &name) {
     entt::entity result = entt::null;
-    ecs->Each<TagComponent>([&](entt::entity e, TagComponent &tag) {
+    ecs->Each<c_Tag>([&](entt::entity e, c_Tag &tag) {
         if (tag.name == name)
             result = e;
     });
@@ -40,9 +40,9 @@ inline void CreateEntity(ECSWorld &ecs, const EntityDefinition &def) {
 
     for (const auto &comp: def.components)
         std::visit(
-            [&](const auto &comp) {
-                using T = std::decay_t<decltype(comp)>;
-                ecs.AddComponent<T>(entity, comp);
+            [&](const auto &c) {
+                using T = std::decay_t<decltype(c)>;
+                ecs.AddComponent<T>(entity, c);
             },
             comp
         );
@@ -60,7 +60,7 @@ inline void RegisterECS(asIScriptEngine *engine, ECSWorld *ecs) {
 
     r = engine->RegisterGlobalFunction(
         "Transform@ GetTransform(uint64 e)",
-        asFUNCTIONPR(GetTransform, (ECSWorld *, entt::entity), TransformComponent *),
+        asFUNCTIONPR(GetTransform, (ECSWorld *, entt::entity), c_Transform *),
         asCALL_CDECL_OBJFIRST, ecs
     );
     AS_CHECK(r, "GetTransform");
@@ -69,8 +69,7 @@ inline void RegisterECS(asIScriptEngine *engine, ECSWorld *ecs) {
                 "uint64 GetEntityByName(const string &in name)",
                 asFUNCTIONPR(GetEntityByName, (ECSWorld *, const std::string &), entt::entity),
             asCALL_CDECL_OBJFIRST, ecs
-    )
-    ;
+    );
     AS_CHECK(r, "GetEntityByName");
 
     r = engine->RegisterGlobalFunction(
@@ -80,11 +79,11 @@ inline void RegisterECS(asIScriptEngine *engine, ECSWorld *ecs) {
     );
     AS_CHECK(r, "IsValidEntity");
 
-    r = engine->RegisterGlobalFunction(
-                "void CreateEntity(const EntityDefinition &in)",
-                asFUNCTIONPR(CreateEntity, (ECSWorld &, const EntityDefinition &), void),
-            asCALL_CDECL_OBJFIRST, ecs
-    )
-    ;
-    AS_CHECK(r, "CreateEntity");
+    // TODO: fix
+    // r = engine->RegisterGlobalFunction(
+    //     "void CreateEntity(const EntityDefinition &in)",
+    //     asFUNCTIONPR(CreateEntity, (ECSWorld &, const EntityDefinition &), void),
+    //     asCALL_CDECL_OBJFIRST, ecs
+    // );
+    // AS_CHECK(r, "CreateEntity");
 }

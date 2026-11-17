@@ -4,6 +4,11 @@
 
 std::unordered_map<std::string, CommandFn> CommandManager::commands;
 
+void LogCommandArgError(const std::string &command, const size_t index) {
+    Logger::Log(LogLevel::ERROR, "Command '" + command + "': argument " + std::to_string(index) +
+                                 " is missing or has a wrong type");
+}
+
 void CommandManager::RegisterCommand(const std::string &name, CommandFn fn) {
     if (commands.contains(name)) {
         Logger::Log(LogLevel::WARNING, LogCategory::CORE, "Command '" + name + "' already exists");

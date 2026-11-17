@@ -1,10 +1,10 @@
 #include "LightSerializer.h"
 
 json LightSerializer::Serialize(ECSWorld *world, entt::entity entity) {
-    if (!world->HasComponent<LightComponent>(entity))
+    if (!world->HasComponent<c_Light>(entity))
         return json::object();
 
-    auto &light = world->GetComponent<LightComponent>(entity);
+    auto &light = world->GetComponent<c_Light>(entity);
     return json{
         {"type", static_cast<int>(light.type)},
         {"position", {light.position.x, light.position.y, light.position.z}},
@@ -26,7 +26,7 @@ json LightSerializer::Serialize(ECSWorld *world, entt::entity entity) {
 
 entt::entity LightSerializer::Deserialize(DeserializeContext &dcx, entt::entity entity, const json &data) {
     LightType type = static_cast<LightType>(data.value("type", 0));
-    auto &lightComp = dcx.world->AddComponent<LightComponent>(entity, type);
+    auto &lightComp = dcx.world->AddComponent<c_Light>(entity, type);
 
     if (data.contains("position"))
         lightComp.position = {data["position"][0], data["position"][1], data["position"][2]};
@@ -39,13 +39,13 @@ entt::entity LightSerializer::Deserialize(DeserializeContext &dcx, entt::entity 
     if (data.contains("specular"))
         lightComp.specular = {data["specular"][0], data["specular"][1], data["specular"][2]};
 
-    lightComp.intensity = data.value("intensity", 1.0f);
-    lightComp.isActive = data.value("isActive", true);
+    lightComp.intensity   = data.value("intensity", 1.0f);
+    lightComp.isActive    = data.value("isActive", true);
     lightComp.castShadows = data.value("castShadows", true);
-    lightComp.constant = data.value("constant", 1.0f);
-    lightComp.linear = data.value("linear", 0.09f);
-    lightComp.quadratic = data.value("quadratic", 0.032f);
-    lightComp.radius = data.value("radius", 50.0f);
+    lightComp.constant    = data.value("constant", 1.0f);
+    lightComp.linear      = data.value("linear", 0.09f);
+    lightComp.quadratic   = data.value("quadratic", 0.032f);
+    lightComp.radius      = data.value("radius", 50.0f);
     lightComp.innerCutoff = data.value("innerCutoff", 12.5f);
     lightComp.outerCutoff = data.value("outerCutoff", 17.5f);
 
@@ -53,5 +53,5 @@ entt::entity LightSerializer::Deserialize(DeserializeContext &dcx, entt::entity 
 }
 
 bool LightSerializer::CanSerialize(ECSWorld *world, entt::entity entity) const {
-    return world->HasComponent<LightComponent>(entity);
+    return world->HasComponent<c_Light>(entity);
 }

@@ -17,7 +17,7 @@ class ResourceModule : public IModule {
 public:
     ResourceModule() = default;
 
-    bool Initialize() override;
+    bool OnInitialize() override;
 
     void Update(float deltaTime) override;
 
@@ -26,8 +26,6 @@ public:
     /// @name IModule interface
     /// @{
     const char *GetName() const override;
-
-    int GetPriority() const override;
 
     bool IsRequired() const override;
 

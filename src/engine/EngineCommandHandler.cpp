@@ -8,10 +8,10 @@
 
 EditorCommandHandler::EditorCommandHandler(ModuleManager *mm)
     : m_moduleManger(mm) {
-    m_sceneModule = m_moduleManger->GetModule<SceneModule>("Scene");
-    m_ecsModule = m_moduleManger->GetModule<ECSModule>("ECS");
-    m_resModule = m_moduleManger->GetModule<ResourceModule>("Resource");
-    m_uiModule = m_moduleManger->GetModule<UIModule>("UI");
+    m_sceneModule = m_moduleManger->GetModule<SceneModule>();
+    m_ecsModule = m_moduleManger->GetModule<ECSModule>();
+    m_resModule = m_moduleManger->GetModule<ResourceModule>();
+    m_uiModule = m_moduleManger->GetModule<UIModule>();
 }
 
 void EditorCommandHandler::RegisterAllCommands() {
@@ -24,15 +24,15 @@ void EditorCommandHandler::RegisterAllCommands() {
 void EditorCommandHandler::RegisterObjectCommands() const {
     CommandManager::RegisterCommand("onCreateAABBHitbox",
         [this](const CommandArgs &) {
-            auto entity = m_ecsModule->GetECS()->CreateEntity("AABB Hitbox");
+            const auto entity = m_ecsModule->GetECS()->CreateEntity("AABB Hitbox");
 
-            m_ecsModule->GetECS()->AddComponent<TransformComponent>(entity,
+            m_ecsModule->GetECS()->AddComponent<c_Transform>(entity,
                 glm::vec3(0), glm::vec3(0), glm::vec3(1));
 
             // m_ecsModule->GetECS()->AddComponent<ColliderComponent>(entity,
             //     AABB{glm::vec3(-0.5f), glm::vec3(0.5f)});
 
-            RigidBodyComponent rb =
+            c_RigidBody rb =
             {
                 .m_invMass = 0.0f,
                 .m_linearVelocity = glm::vec3(0.0f),
@@ -41,7 +41,7 @@ void EditorCommandHandler::RegisterObjectCommands() const {
                 .m_torqueAccum = glm::vec3(0.0f)
             };
 
-            m_ecsModule->GetECS()->AddComponent<RigidBodyComponent>(entity, rb);
+            m_ecsModule->GetECS()->AddComponent<c_RigidBody>(entity, rb);
 
             Logger::Log(LogLevel::INFO, "AABB hitbox entity created");
         });
@@ -140,10 +140,10 @@ void EditorCommandHandler::RegisterObjectCommands() const {
     CommandManager::RegisterCommand("onCreateCamera", [this](const CommandArgs &) {
         auto *ecs = m_ecsModule->GetECS();
         const auto newCam = ecs->CreateCamera("Camera", false);
+        const auto view = ecs->GetRegistry().view < c_Camera > ();
 
-        if (const auto view = ecs->GetRegistry().view < CameraComponent > (); view.size() == 1) {
-            ecs->GetComponent<CameraComponent>(newCam).isMainCamera = true;
-        }
+        if (view.size() == 1)
+            ecs->GetComponent<c_Camera>(newCam).isMainCamera = true;
 
         Logger::Log(LogLevel::INFO, "New camera created and assigned as main if needed");
     });
@@ -152,40 +152,40 @@ void EditorCommandHandler::RegisterObjectCommands() const {
 void EditorCommandHandler::RegisterLightCommands() const {
     CommandManager::RegisterCommand("onCreateDirectionalLight",
         [this](const CommandArgs &) {
-            const auto entity = m_ecsModule->GetECS()->CreateEntity("Directional Light");
-            m_ecsModule->GetECS()->AddComponent<TransformComponent>(entity,
-                glm::vec3(0, 10, 0), glm::vec3(45, 0, 0), glm::vec3(1));
-            m_ecsModule->GetECS()->AddComponent<LightComponent>(
-                entity, LightType::DIRECTIONAL);
-            m_ecsModule->GetECS()->AddComponent<VisibilityComponent>(entity, true);
-            m_ecsModule->GetECS()->AddComponent<IconComponent>(entity,
-                "assets/textures/icons/light_directional.png", 0.3f);
+            const auto &ecs = m_ecsModule->GetECS();
+
+            const auto entity = ecs->CreateEntity("Directional Light");
+            ecs->AddComponent<c_Transform>(entity, glm::vec3(0, 10, 0), glm::vec3(45, 0, 0), glm::vec3(1));
+            ecs->AddComponent<c_Light>(entity, LightType::DIRECTIONAL);
+            ecs->AddComponent<c_Visibility>(entity, true);
+            ecs->AddComponent<c_Icon>(entity, "assets/textures/icons/light_directional.png", 0.3f);
+
             Logger::Log(LogLevel::INFO, "Directional light created with icon");
         });
 
     CommandManager::RegisterCommand("onCreatePointLight",
         [this](const CommandArgs &) {
-            const auto entity = m_ecsModule->GetECS()->CreateEntity("Point Light");
-            m_ecsModule->GetECS()->AddComponent<TransformComponent>(entity,
-                glm::vec3(0, 5, 0), glm::vec3(0), glm::vec3(1));
-            m_ecsModule->GetECS()->AddComponent<LightComponent>(
-                entity, LightType::POINT);
-            m_ecsModule->GetECS()->AddComponent<VisibilityComponent>(entity, true);
-            m_ecsModule->GetECS()->AddComponent<IconComponent>(entity,
-                "assets/textures/icons/light_point.png", 0.4f);
+            const auto &ecs = m_ecsModule->GetECS();
+
+            const auto entity = ecs->CreateEntity("Point Light");
+            ecs->AddComponent<c_Transform>(entity, glm::vec3(0, 5, 0), glm::vec3(0), glm::vec3(1));
+            ecs->AddComponent<c_Light>(entity, LightType::POINT);
+            ecs->AddComponent<c_Visibility>(entity, true);
+            ecs->AddComponent<c_Icon>(entity, "assets/textures/icons/light_point.png", 0.4f);
+
             Logger::Log(LogLevel::INFO, "Point light created with icon");
         });
 
     CommandManager::RegisterCommand("onCreateSpotLight",
         [this](const CommandArgs &) {
-            const auto entity = m_ecsModule->GetECS()->CreateEntity("Spot Light");
-            m_ecsModule->GetECS()->AddComponent<TransformComponent>(entity,
-                glm::vec3(0, 5, 0), glm::vec3(45, 0, 0), glm::vec3(1));
-            m_ecsModule->GetECS()->AddComponent<
-                LightComponent>(entity, LightType::SPOT);
-            m_ecsModule->GetECS()->AddComponent<VisibilityComponent>(entity, true);
-            m_ecsModule->GetECS()->AddComponent<IconComponent>(entity,
-                "assets/textures/icons/light_spot.png", 0.35f);
+            const auto &ecs = m_ecsModule->GetECS();
+
+            const auto entity = ecs->CreateEntity("Spot Light");
+            ecs->AddComponent<c_Transform>(entity, glm::vec3(0, 5, 0), glm::vec3(45, 0, 0), glm::vec3(1));
+            ecs->AddComponent<c_Light>(entity, LightType::SPOT);
+            ecs->AddComponent<c_Visibility>(entity, true);
+            ecs->AddComponent<c_Icon>(entity, "assets/textures/icons/light_spot.png", 0.35f);
+
             Logger::Log(LogLevel::INFO, "Spot light created with icon");
         });
 }
@@ -199,16 +199,14 @@ void EditorCommandHandler::RegisterSceneCommands() const {
                 try {
                     filename = std::get<std::string>(args[0]);
                 } catch (...) {
-                    Logger::Log(LogLevel::WARNING,
-                                "Invalid filename argument, using default");
+                    Logger::Log(LogLevel::WARNING, "Invalid filename argument, using default");
                 }
             }
 
             if (filename.find(".json") == std::string::npos)
                 filename += ".json";
 
-            bool success = m_sceneModule->GetSceneSerializer()->SaveScene(
-                filename, m_resModule->GetMaterialManager());
+            bool success = m_sceneModule->GetSceneSerializer()->SaveScene( filename, m_resModule->GetMaterialManager());
 
             if (success)
                 Logger::Log(LogLevel::INFO, "Scene saved successfully: " + filename);

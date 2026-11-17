@@ -153,3 +153,11 @@ long time no see. im in 11th Grade now and it seems not so difficult as i expect
 - implemented convex hull physics  
 - auto-generation of convex hulls for 3d models
 - rewrite debug shaders for physics for convex hulls  
+
+### v0.8
+##### 17.11.2026
+- more cool physics  
+- scripts are working as thought
+- and ofc some bug fixes (i forgot which one)
+- better module system
+- full refractor od physics code and structure

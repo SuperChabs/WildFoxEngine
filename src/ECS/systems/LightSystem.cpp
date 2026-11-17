@@ -13,8 +13,8 @@ void LightSystem::Update(ECSWorld &world, ShaderManager &shaderManager, const st
     int lightIndex = 0;
     constexpr int maxLights = 8;
 
-    world.Each<LightComponent, TransformComponent>(
-        [&](const entt::entity entity, LightComponent &light, const TransformComponent &transform) {
+    world.Each<c_Light, c_Transform>(
+        [&](const entt::entity entity, c_Light &light, const c_Transform &transform) {
             if (!light.isActive || lightIndex >= maxLights)
                 return;
 

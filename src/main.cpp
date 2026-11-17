@@ -2,7 +2,9 @@
 #include "core/logging/Logger.h"
 
 int main() {
-    Engine e(1640, 800, "Allusion");
+    char* title = "WildFox Engine";
+
+    Engine e(1640, 800, title);
 
     if (!e.Initialize()) {
         Logger::Log(LogLevel::ERROR, "Failed to initialize game");

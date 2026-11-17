@@ -1,31 +1,34 @@
 #pragma once
 
 #include <string>
-#include <cstdint>
 #include <utility>
 
-struct TagComponent {
+struct c_Tag {
     std::string name;
 
-    TagComponent() = default;
+    c_Tag() = default;
 
-    explicit TagComponent(std::string n) : name(std::move(n)) {
+    explicit c_Tag(std::string n) : name(std::move(n)) {
     }
 };
 
-struct IDComponent {
+struct c_ID {
     uint64_t id;
 
-    IDComponent() = default;
+    c_ID() = default;
 
-    explicit IDComponent(const uint64_t i) : id(i) {
+    explicit c_ID(const uint64_t i) : id(i) {
     }
 };
 
-struct ModelComponent {
+/// @brief Tag: the entity survives ECSWorld::Clear() (scene load / new scene)
+struct c_Persistent {
+};
+
+struct c_Model {
     std::string filePath;
 
-    ModelComponent() = default;
+    c_Model() = default;
 
-    explicit ModelComponent(std::string path) : filePath(std::move(path)) {}
+    explicit c_Model(std::string path) : filePath(std::move(path)) {}
 };

@@ -3,12 +3,12 @@
 json MeshSerializer::Serialize(ECSWorld *world, entt::entity entity) {
     json meshData;
 
-    if (world->HasComponent<ModelComponent>(entity)) {
-        auto &m = world->GetComponent<ModelComponent>(entity);
+    if (world->HasComponent<c_Model>(entity)) {
+        auto &m = world->GetComponent<c_Model>(entity);
         meshData["type"] = "model";
         meshData["path"] = m.filePath;
-        if (world->HasComponent<TagComponent>(entity)) {
-            meshData["_name"] = world->GetComponent<TagComponent>(entity).name;
+        if (world->HasComponent<c_Tag>(entity)) {
+            meshData["_name"] = world->GetComponent<c_Tag>(entity).name;
         }
         return meshData;
     }
@@ -34,10 +34,10 @@ entt::entity MeshSerializer::Deserialize(DeserializeContext &dcx, entt::entity e
 
         std::string originalName = data.value("_name", "");
         if (!originalName.empty()) {
-            if (dcx.world->HasComponent<TagComponent>(modelRoot)) {
-                dcx.world->GetComponent<TagComponent>(modelRoot).name = originalName;
+            if (dcx.world->HasComponent<c_Tag>(modelRoot)) {
+                dcx.world->GetComponent<c_Tag>(modelRoot).name = originalName;
             } else {
-                dcx.world->AddComponent<TagComponent>(modelRoot, originalName);
+                dcx.world->AddComponent<c_Tag>(modelRoot, originalName);
             }
         }
 
@@ -50,6 +50,6 @@ entt::entity MeshSerializer::Deserialize(DeserializeContext &dcx, entt::entity e
 }
 
 bool MeshSerializer::CanSerialize(ECSWorld *world, entt::entity entity) const {
-    return world->HasComponent<MeshComponent>(entity) ||
-           world->HasComponent<ModelComponent>(entity);
+    return world->HasComponent<c_Mesh>(entity) ||
+           world->HasComponent<c_Model>(entity);
 }

@@ -3,7 +3,7 @@
 #include <AL/al.h>
 #include <string>
 
-struct AudioSourceComponent {
+struct c_AudioSource {
     std::string path;
     float volume = 1.0f;
     float pitch = 1.0f;
@@ -15,6 +15,6 @@ struct AudioSourceComponent {
     bool _playing = false;
 };
 
-struct AudioListenerComponent {
-    AudioListenerComponent() = default;
+struct c_AudioListener {
+    c_AudioListener() = default;
 };

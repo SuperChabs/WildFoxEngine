@@ -7,11 +7,11 @@
 void RenderSystem::Update(ECSWorld &world, ShaderManager &shaderManager, const std::string &name) {
     shaderManager.Bind(name);
 
-    world.Each<MeshComponent, MaterialComponent, VisibilityComponent>(
+    world.Each<c_Mesh, c_Material, c_Visibility>(
         [&](const entt::entity entity,
-            const MeshComponent &meshComp,
-            const MaterialComponent &matComp,
-            const VisibilityComponent &vis) {
+            const c_Mesh &meshComp,
+            const c_Material &matComp,
+            const c_Visibility &vis) {
             if (!vis.isActive || !vis.visible) return;
 
             const glm::mat4 modelMatrix = world.GetGlobalTransform(entity);
@@ -19,16 +19,9 @@ void RenderSystem::Update(ECSWorld &world, ShaderManager &shaderManager, const s
 
             if (matComp.material) {
                 if (meshComp.mesh) {
-                    shaderManager.SetVec2(name, "tiling", world.GetComponent<MaterialComponent>(entity).tiling);
+                    shaderManager.SetVec2(name, "tiling", world.GetComponent<c_Material>(entity).tiling);
                     meshComp.mesh->Draw(shaderManager, name, matComp.material);
                 }
-            } else if (world.HasComponent<ColorComponent>(entity)) {
-                const auto &color = world.GetComponent<ColorComponent>(entity);
-                if (meshComp.mesh)
-                    meshComp.mesh->SetColor(color.color);
-
-                if (meshComp.mesh)
-                    meshComp.mesh->Draw(shaderManager, name);
             } else {
                 if (meshComp.mesh)
                     meshComp.mesh->Draw(shaderManager, name);

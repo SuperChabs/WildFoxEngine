@@ -1,10 +1,10 @@
 #include "AudioSourceSerializer.h"
 
 json AudioSourceSerializer::Serialize(ECSWorld *world, entt::entity entity) {
-    if (!world->HasComponent<AudioSourceComponent>(entity))
+    if (!world->HasComponent<c_AudioSource>(entity))
         return json::object();
 
-    auto &audio = world->GetComponent<AudioSourceComponent>(entity);
+    auto &audio = world->GetComponent<c_AudioSource>(entity);
     return json{
         {"path", audio.path},
         {"volume", audio.volume},
@@ -16,7 +16,7 @@ json AudioSourceSerializer::Serialize(ECSWorld *world, entt::entity entity) {
 }
 
 entt::entity AudioSourceSerializer::Deserialize(DeserializeContext &dcx, entt::entity entity, const json &data) {
-    auto &audio = dcx.world->AddComponent<AudioSourceComponent>(entity);
+    auto &audio = dcx.world->AddComponent<c_AudioSource>(entity);
     audio.path = data.value("path", "");
     audio.volume = data.value("volume", 1.0f);
     audio.pitch = data.value("pitch", 1.0f);
@@ -28,5 +28,5 @@ entt::entity AudioSourceSerializer::Deserialize(DeserializeContext &dcx, entt::e
 }
 
 bool AudioSourceSerializer::CanSerialize(ECSWorld *world, entt::entity entity) const {
-    return world->HasComponent<AudioSourceComponent>(entity);
+    return world->HasComponent<c_AudioSource>(entity);
 }

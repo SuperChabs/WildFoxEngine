@@ -1,4 +1,6 @@
 #include "SerializerRegistry.h"
+
+#include "components/JointSerializer.h"
 #include "core/logging/Logger.h"
 
 SerializerRegistry::SerializerRegistry() {
@@ -57,14 +59,6 @@ entt::entity SerializerRegistry::DeserializeAllComponents(DeserializeContext ctx
     return entity;
 }
 
-std::vector<std::string> SerializerRegistry::GetSerializerNames() const {
-    std::vector<std::string> names;
-    for (auto &[name, _]: serializers) {
-        names.push_back(name);
-    }
-    return names;
-}
-
 void SerializerRegistry::RegisterDefaultSerializers() {
     RegisterSerializer<TransformSerializer>("transform");
     RegisterSerializer<MeshSerializer>("mesh");
@@ -78,5 +72,6 @@ void SerializerRegistry::RegisterDefaultSerializers() {
     RegisterSerializer<IconSerializer>("icon");
     RegisterSerializer<RigidBodySerializer>("rigidBody");
     RegisterSerializer<ColliderSerializer>("collider");
+    RegisterSerializer<JointSerializer>("joint");
     //RegisterSerializer<HierarchySerializer>("hierarchy");
 }

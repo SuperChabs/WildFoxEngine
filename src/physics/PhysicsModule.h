@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "core/IModule.h"
-#include "Physics.h"
+#include "core/Physics.h"
 #include "ECS/World.h"
 
 class PhysicsModule : public IModule {
@@ -14,10 +14,13 @@ class PhysicsModule : public IModule {
     bool m_stepOnce = false;
     int m_substeps = 1;
 
+    float m_accumulatedTime = 0.0f;
+    static constexpr float FIXED_DT = 1.0f / 60.0f;
+
 public:
     explicit PhysicsModule(ECSWorld *ecs);
 
-    bool Initialize() override;
+    bool OnInitialize() override;
 
     void Update(float deltaTime) override;
 
@@ -26,7 +29,6 @@ public:
     /// @name IModule interface
     /// @{
     [[nodiscard]] const char *GetName() const override { return "Physics"; }
-    [[nodiscard]] int GetPriority() const override { return 80; }
     [[nodiscard]] bool IsRequired() const override { return true; }
     /// @}
 
@@ -34,7 +36,7 @@ public:
 
     void SetPaused(bool paused) { m_paused = paused; }
     [[nodiscard]] bool IsPaused() const { return m_paused; }
-    void RequestStep() { m_stepOnce = true; }
+    void RequestStep() { m_stepOnce = !m_stepOnce; }
 
     void SetSubsteps(int n) { m_substeps = std::max(1, n); }
     [[nodiscard]] int GetSubsteps() const { return m_substeps; }

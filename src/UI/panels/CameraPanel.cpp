@@ -1,10 +1,10 @@
 #include "CameraPanel.h"
 
 void CameraPanel::Render(ECSWorld *ecs, entt::entity entity) {
-    if (!ecs->HasComponent<CameraComponent>(entity)) return;
+    if (!ecs->HasComponent<c_Camera>(entity)) return;
     if (!ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen)) return;
 
-    auto &camera = ecs->GetComponent<CameraComponent>(entity);
+    auto &camera = ecs->GetComponent<c_Camera>(entity);
 
     ImGui::Checkbox("Is Main Camera", &camera.isMainCamera);
 
@@ -25,8 +25,8 @@ void CameraPanel::Render(ECSWorld *ecs, entt::entity entity) {
     ImGui::DragFloat("Speed##camera", &camera.movementSpeed, 0.1f, 0.1f, 50.0f);
     ImGui::SliderFloat("Sensitivity##camera", &camera.mouseSensitivity, 0.01f, 1.0f);
 
-    if (ecs->HasComponent<CameraOrientationComponent>(entity)) {
-        auto &orientation = ecs->GetComponent<CameraOrientationComponent>(entity);
+    if (ecs->HasComponent<c_CameraOrientation>(entity)) {
+        auto &orientation = ecs->GetComponent<c_CameraOrientation>(entity);
 
         ImGui::Spacing();
         ImGui::Separator();

@@ -17,11 +17,9 @@ public:
     static ImGuiManager &Instance();
 
     bool Initialize(GLFWwindow *window);
-
     void Shutdown();
 
     void BeginFrame(bool cameraControl);
-
     void EndFrame();
 
     void RedFoxTheme();

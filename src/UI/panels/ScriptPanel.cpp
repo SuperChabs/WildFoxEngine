@@ -4,8 +4,8 @@
 void ScriptPanel::Render(ECSWorld *ecs, entt::entity entity) {
     if (!ImGui::CollapsingHeader("Script")) return;
 
-    if (ecs->HasComponent<ScriptComponent>(entity)) {
-        auto &script = ecs->GetComponent<ScriptComponent>(entity);
+    if (ecs->HasComponent<c_Script>(entity)) {
+        auto &script = ecs->GetComponent<c_Script>(entity);
 
         ImGui::Text("Script:");
         ImGui::TextWrapped("%s", script.scriptPath.c_str());
@@ -56,7 +56,7 @@ void ScriptPanel::Render(ECSWorld *ecs, entt::entity entity) {
 }
 
 void ScriptPanel::AttachScript(ECSWorld *ecs, entt::entity entity, const std::string &path) {
-    auto &script = ecs->AddComponent<ScriptComponent>(entity);
+    auto &script = ecs->AddComponent<c_Script>(entity);
     script.scriptPath = path;
     script.loaded = false;
     script.failed = false;
@@ -64,7 +64,7 @@ void ScriptPanel::AttachScript(ECSWorld *ecs, entt::entity entity, const std::st
     Logger::Log(LogLevel::INFO, "Script attached: " + path);
 }
 
-void ScriptPanel::UpdateScript(ScriptComponent &script, const std::string &newPath) {
+void ScriptPanel::UpdateScript(c_Script &script, const std::string &newPath) {
     if (script.ctx) {
         script.ctx->Release();
         script.ctx = nullptr;
@@ -85,7 +85,7 @@ void ScriptPanel::UpdateScript(ScriptComponent &script, const std::string &newPa
     Logger::Log(LogLevel::INFO, "Script path updated: " + newPath);
 }
 
-void ScriptPanel::RemoveScript(ECSWorld *ecs, entt::entity entity, ScriptComponent &script) {
-    ecs->RemoveComponent<ScriptComponent>(entity);
+void ScriptPanel::RemoveScript(ECSWorld *ecs, entt::entity entity, c_Script &script) {
+    ecs->RemoveComponent<c_Script>(entity);
     Logger::Log(LogLevel::INFO, "Script removed");
 }

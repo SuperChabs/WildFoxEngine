@@ -6,9 +6,9 @@
 #include "ECS/components/Components.h"
 
 using ComponentDefinition = std::variant<
-    TagComponent,
-    TransformComponent,
-    VisibilityComponent
+    c_Tag,
+    c_Transform,
+    c_Visibility
 >;
 
 struct EntityDefinition {

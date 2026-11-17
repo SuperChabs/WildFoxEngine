@@ -8,18 +8,16 @@
 
 ScriptModule::ScriptModule(ModuleManager *mm, const std::string &scriptPath)
     : m_moduleManager(mm) {
-    m_mainScript = std::make_unique<MainScript>(scriptPath);
     m_scriptSystem = std::make_unique<ScriptSystem>();
-    m_levelScript = std::make_unique<LevelScript>();
 }
 
-bool ScriptModule::Initialize() {
+bool ScriptModule::OnInitialize() {
     try {
         Logger::Log(LogLevel::INFO, "Initializing AngelScript...");
 
         try {
-            InitAS(m_moduleManager->GetModule<ECSModule>("ECS")->GetECS(),
-                   m_moduleManager->GetModule<CoreModule>("Core")->GetInput(), nullptr);
+            InitAS(m_moduleManager->GetModule<ECSModule>()->GetECS(),
+                   m_moduleManager->GetModule<CoreModule>()->GetInput(), nullptr);
             Logger::Log(LogLevel::INFO, "AngelScript initialized successfully");
         } catch (const std::exception &e) {
             Logger::Log(LogLevel::ERROR, "Failed to initialize AngelScript: " + std::string(e.what()));
@@ -28,20 +26,8 @@ bool ScriptModule::Initialize() {
         }
 
 
-        if (!m_mainScript) {
-            Logger::Log(LogLevel::ERROR, "Failed to initialize MainScript");
-            return false;
-        }
-        m_mainScript->Start();
-
-        if (!m_levelScript) {
-            Logger::Log(LogLevel::ERROR, "Failed to initialize LevelScript");
-            return false;
-        }
-
         Logger::Log(LogLevel::INFO, "Initialized ScriptModule successfully");
 
-        m_isInitialized = true;
         return true;
     } catch (std::exception &e) {
         Logger::Log(LogLevel::ERROR, "Exception creating ui module: " + std::string(e.what()));
@@ -49,13 +35,9 @@ bool ScriptModule::Initialize() {
     }
 }
 
-void ScriptModule::Update(float deltaTime) {
-    m_mainScript->Update(deltaTime);
-    m_scriptSystem->Update(*m_moduleManager->GetModule<ECSModule>("ECS")->GetECS(), deltaTime);
-    m_levelScript->Update(deltaTime);
+void ScriptModule::Update(const float deltaTime) {
+    ScriptSystem::Update(*m_moduleManager->GetModule<ECSModule>()->GetECS(), deltaTime);
 }
 
 void ScriptModule::Shutdown() {
-    m_mainScript->Stop();
-    m_levelScript->Stop();
 }

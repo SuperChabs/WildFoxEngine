@@ -2,20 +2,16 @@
 #include <string>
 #include "core/logging/Logger.h"
 
-bool ECSModule::Initialize() {
+bool ECSModule::OnInitialize() {
     try {
         ecsWorld = std::make_unique<ECSWorld>();
 
         Logger::Log(LogLevel::INFO, "Successfully initialized ECS module");
 
-        m_isInitialized = true;
-
         return true;
     } catch (std::exception &e) {
         Logger::Log(LogLevel::ERROR,
                     "Exception creating ecs module: " + std::string(e.what()));
-
-        m_isInitialized = false;
 
         return false;
     }
@@ -30,10 +26,6 @@ void ECSModule::Shutdown() {
 
 const char *ECSModule::GetName() const {
     return "ECS";
-}
-
-int ECSModule::GetPriority() const {
-    return 10;
 }
 
 bool ECSModule::IsRequired() const {

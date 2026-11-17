@@ -3,11 +3,11 @@
 #include <unordered_set>
 #include <entt/entt.hpp>
 
-struct HierarchyComponent {
+struct c_Hierarchy {
     entt::entity parent = entt::null;
     std::unordered_set<entt::entity> children;
 
-    HierarchyComponent() = default;
+    c_Hierarchy() = default;
 
     bool HasParent() const { return parent != entt::null; }
     bool HasChildren() const { return !children.empty(); }
