@@ -8,9 +8,9 @@ namespace math {
         int N; // columns
         VecN *rows;
 
-        MatMN() : M(0), N(0) {}
+        MatMN() : M(0), N(0), rows(nullptr) {}
         MatMN(int M, int N);
-        MatMN(const MatMN &rhs) { *this = rhs; }
+        MatMN(const MatMN &rhs) : M(0), N(0), rows(nullptr) { *this = rhs; }
         ~MatMN() { delete[] rows; }
 
         const MatMN &operator=(const MatMN &rhs);

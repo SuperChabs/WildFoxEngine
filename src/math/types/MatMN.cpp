@@ -11,6 +11,10 @@ MatMN::MatMN(const int _M, const int _N) {
 }
 
 const MatMN & MatMN::operator=(const MatMN &rhs) {
+    if (this == &rhs)
+        return *this;
+
+    delete[] rows;
     M = rhs.M;
     N = rhs.N;
     rows = new VecN[M];

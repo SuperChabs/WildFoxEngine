@@ -5,14 +5,16 @@
 
 class Constraint {
 public:
-    BodyInfo *m_bodyA;
-    BodyInfo *m_bodyB;
+    BodyInfo *m_bodyA = nullptr;
+    BodyInfo *m_bodyB = nullptr;
 
-    glm::vec3 m_anchorA; // the anchor location in bodyA's space
-    glm::vec3 m_axisA;   // the axis direction in bodyA's space
+    glm::vec3 m_anchorA{0.0f};           // the anchor location in bodyA's space
+    glm::vec3 m_axisA{1.0f, 0.0f, 0.0f}; // the axis direction in bodyA's space
 
-    glm::vec3 m_anchorB; // the anchor location in bodyB's space
-    glm::vec3 m_axisB;   // the axis direction in bodyB's space
+    glm::vec3 m_anchorB{0.0f};           // the anchor location in bodyB's space
+    glm::vec3 m_axisB{1.0f, 0.0f, 0.0f}; // the axis direction in bodyB's space
+
+    glm::quat m_q0 = glm::identity<glm::quat>(); // the initial relative quaternion q1^-1 * q2
 
     virtual ~Constraint() = default;
 

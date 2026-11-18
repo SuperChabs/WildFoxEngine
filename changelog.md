@@ -161,3 +161,7 @@ long time no see. im in 11th Grade now and it seems not so difficult as i expect
 - and ofc some bug fixes (i forgot which one)
 - better module system
 - full refractor od physics code and structure
+
+### v0.8.1
+##### 18.11.2026
+- add new types of constraints

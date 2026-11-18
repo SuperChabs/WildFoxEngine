@@ -1,10 +1,10 @@
-#include "EditViewportWindow.h"
+#include "EditorViewportWindow.h"
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
 
-void EditViewportWindow::Render(ECSWorld &ecs, const entt::entity &selected, Framebuffer *framebuffer,
-    const c_Camera &camera, const c_Transform &transform, const c_CameraOrientation &orientation) {
+void EditorViewportWindow::Render(ECSWorld &ecs, const entt::entity &selected, Framebuffer *framebuffer,
+    const c_Camera &camera, c_Transform &transform, c_CameraOrientation &orientation) {
     if (!isOpen) return;
 
     ImGui::SetNextWindowSize({800, 650}, ImGuiCond_FirstUseEver);
@@ -48,8 +48,9 @@ void EditViewportWindow::Render(ECSWorld &ecs, const entt::entity &selected, Fra
             glm::mat4 cameraView = orientation.GetViewMatrix(transform.position);
             glm::mat4 cameraProj = camera.GetProjectionMatrix(aspect);
 
-            if (isFocused)
+            if (isFocused || isHovered) {
                 ProcessInput();
+            }
 
             auto &tc = ecs.GetComponent<c_Transform>(selected);
             glm::mat4 trans = tc.GetModelMatrix();
@@ -71,6 +72,25 @@ void EditViewportWindow::Render(ECSWorld &ecs, const entt::entity &selected, Fra
                 }
             }
         }
+
+        ImGuizmo::SetDrawlist();
+        ImGuizmo::SetRect(viewportPos.x, viewportPos.y, viewportSize.x, viewportSize.y);
+
+        glm::mat4 view = orientation.GetViewMatrix(transform.position);
+        glm::mat4 before = view;
+
+        constexpr float gizmoSize = 128.0f;
+        constexpr float pivotDistance = 16.0f;
+
+        ImGuizmo::ViewManipulate(glm::value_ptr(view), pivotDistance,
+            ImVec2(viewportPos.x + viewportSize.x - gizmoSize, viewportPos.y),
+            ImVec2(gizmoSize, gizmoSize), 0x10101010);
+
+        if (view != before) {
+            SetFromViewMatrix(transform, orientation, view);
+            FocusOnEntity(ecs, selected, transform, orientation);
+        }
+
     } else {
         ImGui::Text("Framebuffer error");
     }
@@ -79,15 +99,41 @@ void EditViewportWindow::Render(ECSWorld &ecs, const entt::entity &selected, Fra
     ImGui::PopStyleVar();
 }
 
-void EditViewportWindow::UpdateTransformFromMatrix(c_Transform &tc, const glm::mat4 &matrix) {
+void EditorViewportWindow::UpdateTransformFromMatrix(c_Transform &tc, const glm::mat4 &matrix) {
     glm::vec3 skew;
     glm::vec4 perspective;
     glm::decompose(matrix, tc.scale, tc.rotation, tc.position, skew, perspective);
     tc.rotation = glm::normalize(tc.rotation);
 }
 
-void EditViewportWindow::ProcessInput() {
-    if (ImGui::IsKeyPressed(ImGuiKey_R)) m_GizmoOperation = ImGuizmo::ROTATE;
-    if (ImGui::IsKeyPressed(ImGuiKey_S)) m_GizmoOperation = ImGuizmo::SCALE;
-    if (ImGui::IsKeyPressed(ImGuiKey_T)) m_GizmoOperation = ImGuizmo::TRANSLATE;
+void EditorViewportWindow::SetFromViewMatrix(c_Transform& t, c_CameraOrientation& o, const glm::mat4& view)
+{
+    glm::mat4 inv = glm::inverse(view);
+
+    t.position = glm::vec3(inv[3]);
+    const glm::vec3 forward = glm::normalize(-glm::vec3(inv[2]));
+
+    o.yaw   = glm::degrees(std::atan2(forward.z, forward.x));
+    o.pitch = glm::clamp(glm::degrees(std::asin(forward.y)), -89.0f, 89.0f);
+}
+
+void EditorViewportWindow::FocusOnEntity(ECSWorld &ecs, entt::entity target, c_Transform &camTransform,
+        const c_CameraOrientation &orientation) {
+    if (target == entt::null || !ecs.IsValid(target) || !ecs.HasComponent<c_Transform>(target))
+        return;
+
+    auto& tc = ecs.GetComponent<c_Transform>(target);
+
+    glm::vec3 center = glm::vec3(tc.GetModelMatrix()[3]);
+
+    float radius   = glm::max(tc.scale.x, glm::max(tc.scale.y, tc.scale.z));
+    float distance = glm::max(radius * 3.0f, 3.0f);
+
+    camTransform.position = center - orientation.GetFront() * distance;
+}
+
+void EditorViewportWindow::ProcessInput() {
+    if (ImGui::IsKeyPressed(ImGuiKey_R) && !ImGui::GetIO().WantTextInput) m_GizmoOperation = ImGuizmo::ROTATE;
+    if (ImGui::IsKeyPressed(ImGuiKey_S) && !ImGui::GetIO().WantTextInput) m_GizmoOperation = ImGuizmo::SCALE;
+    if (ImGui::IsKeyPressed(ImGuiKey_T) && !ImGui::GetIO().WantTextInput) m_GizmoOperation = ImGuizmo::TRANSLATE;
 }

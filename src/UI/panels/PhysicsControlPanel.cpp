@@ -54,94 +54,106 @@ void PhysicsControlPanel::Render(ECSWorld *world, PhysicsModule *physicsModule, 
         ImGui::Checkbox("Draw Colliders", &debugSystem->m_enabled);
 
     // --- Joint ---
-    if (ImGui::Button("Create Joint"))
+    if (ImGui::Button("Create Joint")) {
         m_showOpenJointDialog = true;
+        ImGui::OpenPopup("NewJoint");
+    }
 
     RenderOnCreateJoint(world);
 }
 
 void PhysicsControlPanel::RenderOnCreateJoint(ECSWorld *world) {
-    if (!m_showOpenJointDialog) return;
+    if (!ImGui::BeginPopupModal("NewJoint", &m_showOpenJointDialog, ImGuiWindowFlags_AlwaysAutoResize))
+        return;
 
-    ImGui::OpenPopup("NewJoint");
+    std::vector<entt::entity> roots;
+    world->Each<c_RigidBody, c_Collider>(
+        [&](const entt::entity e, c_RigidBody &, c_Collider &) {
+            if (world->HasComponent<c_Hierarchy>(e))
+                if (world->GetComponent<c_Hierarchy>(e).HasParent())
+                    return;
 
-    if (ImGui::BeginPopupModal("NewJoint", &m_showOpenJointDialog, ImGuiWindowFlags_AlwaysAutoResize)) {
-        std::vector<entt::entity> roots;
-        world->Each<c_RigidBody, c_Collider>(
-            [&](const entt::entity e, c_RigidBody &, c_Collider &) {
-                if (world->HasComponent<c_Hierarchy>(e))
-                    if (world->GetComponent<c_Hierarchy>(e).HasParent())
-                        return;
-
-                roots.push_back(e);
-            }
-        );
-
-        ImGui::Text("First Entity");
-        if (ImGui::Button("Select..##first"))
-            ImGui::OpenPopup("Select1");
-        if (ImGui::BeginPopup("Select1")) {
-            ImGui::SeparatorText("Entities");
-            for (auto e: roots)
-                RenderEntityNode(world, e, m_selectedFirst);
-            ImGui::EndPopup();
+            roots.push_back(e);
         }
+    );
 
-        ImGui::Text("Second Entity");
-        if (ImGui::Button("Select..##second"))
-            ImGui::OpenPopup("Select2");
-        if (ImGui::BeginPopup("Select2")) {
-            ImGui::SeparatorText("Entities");
-            for (auto e: roots)
-                RenderEntityNode(world, e, m_selectedSecond);
+    ImGui::Text("Type");
+    if (ImGui::Button(kJointTypeNames[(int)m_selectedType]))
+        ImGui::OpenPopup("Select1");
+    if (ImGui::BeginPopup("Select1")) {
+        ImGui::SeparatorText("Type");
 
-            ImGui::EndPopup();
-        }
-
-        const bool valid = m_selectedFirst  != entt::null &&
-                           m_selectedSecond != entt::null &&
-                           m_selectedFirst  != m_selectedSecond;
-
-        ImGui::BeginDisabled(!valid);
-        if (ImGui::Button("Apply")) {
-
-            BodyInfo a{
-              &world->GetComponent<c_RigidBody>(m_selectedFirst),
-              &world->GetComponent<c_Transform>(m_selectedFirst),
-              &world->GetComponent<c_Collider>(m_selectedFirst)
-            };
-            BodyInfo b{
-              &world->GetComponent<c_RigidBody>(m_selectedSecond),
-              &world->GetComponent<c_Transform>(m_selectedSecond),
-              &world->GetComponent<c_Collider>(m_selectedSecond)
-            };
-
-            const glm::vec3 worldAnchor = a.transform->position;
-
-            c_Joint j;
-            j.bodyA = m_selectedFirst;
-            j.bodyB = m_selectedSecond;
-            j.localAnchorA = BodyTransform::WorldSpaceToBodySpace(a, worldAnchor);
-            j.localAnchorB = BodyTransform::WorldSpaceToBodySpace(b, worldAnchor);
-
-            const auto newJoint = world->CreateEntity("joint");
-            world->AddComponent<c_Joint>(newJoint, j);
-
-            m_selectedFirst = entt::null;
-            m_selectedSecond = entt::null;
-
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::EndDisabled();
-
-        ImGui::SameLine();
-        if (ImGui::Button("Cancel")) {
-            m_showOpenJointDialog = false;
-            ImGui::CloseCurrentPopup();
-        }
+        RenderJointTypePopUp();
 
         ImGui::EndPopup();
     }
+
+    ImGui::Text("First Entity");
+    if (ImGui::Button("Select..##first"))
+        ImGui::OpenPopup("Select2");
+    if (ImGui::BeginPopup("Select2")) {
+        ImGui::SeparatorText("Entities");
+        for (auto e: roots)
+            RenderEntityNode(world, e, m_selectedFirst);
+        ImGui::EndPopup();
+    }
+
+    ImGui::Text("Second Entity");
+    if (ImGui::Button("Select..##second"))
+        ImGui::OpenPopup("Select3");
+    if (ImGui::BeginPopup("Select3")) {
+        ImGui::SeparatorText("Entities");
+        for (auto e: roots)
+            RenderEntityNode(world, e, m_selectedSecond);
+
+        ImGui::EndPopup();
+    }
+
+    const bool valid = m_selectedFirst  != entt::null &&
+                       m_selectedSecond != entt::null &&
+                       m_selectedFirst  != m_selectedSecond;
+
+    ImGui::BeginDisabled(!valid);
+    if (ImGui::Button("Apply")) {
+
+        BodyInfo a{
+          &world->GetComponent<c_RigidBody>(m_selectedFirst),
+          &world->GetComponent<c_Transform>(m_selectedFirst),
+          &world->GetComponent<c_Collider>(m_selectedFirst)
+        };
+        BodyInfo b{
+          &world->GetComponent<c_RigidBody>(m_selectedSecond),
+          &world->GetComponent<c_Transform>(m_selectedSecond),
+          &world->GetComponent<c_Collider>(m_selectedSecond)
+        };
+
+        const glm::vec3 worldAnchor = a.transform->position;
+
+        c_Joint j;
+        j.type = m_selectedType;
+        j.bodyA = m_selectedFirst;
+        j.bodyB = m_selectedSecond;
+        j.localAnchorA = BodyTransform::WorldSpaceToBodySpace(a, worldAnchor);
+        j.localAnchorB = BodyTransform::WorldSpaceToBodySpace(b, worldAnchor);
+
+        const auto newJoint = world->CreateEntity("joint");
+        world->AddComponent<c_Joint>(newJoint, j);
+
+        m_selectedFirst = entt::null;
+        m_selectedSecond = entt::null;
+
+        m_showOpenJointDialog = false;
+        ImGui::CloseCurrentPopup();
+    }
+    ImGui::EndDisabled();
+
+    ImGui::SameLine();
+    if (ImGui::Button("Cancel")) {
+        m_showOpenJointDialog = false;
+        ImGui::CloseCurrentPopup();
+    }
+
+    ImGui::EndPopup();
 }
 
 void PhysicsControlPanel::RenderEntityNode(ECSWorld *world, entt::entity &e, entt::entity &selected) {
@@ -149,20 +161,30 @@ void PhysicsControlPanel::RenderEntityNode(ECSWorld *world, entt::entity &e, ent
     const bool hasChildren = world->HasComponent<c_Hierarchy>(e) && world->GetComponent<c_Hierarchy>(e).HasChildren();
 
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
-
-    if (!hasChildren)
-        flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-    if (m_selectedFirst == e)
-        flags |= ImGuiTreeNodeFlags_Selected;
+    if (!hasChildren) flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+    if (selected == e) flags |= ImGuiTreeNodeFlags_Selected;
 
     const bool open = ImGui::TreeNodeEx((void *) (intptr_t) e, flags, "%s", tag.name.c_str());
 
-    if (ImGui::IsItemClicked())
+    if (ImGui::IsItemClicked()) {
         selected = e;
+        ImGui::CloseCurrentPopup();
+    }
 
     if (open && hasChildren) {
         for (entt::entity child : world->GetComponent<c_Hierarchy>(e).children)
             RenderEntityNode(world, child, selected);
         ImGui::TreePop();
+    }
+}
+
+void PhysicsControlPanel::RenderJointTypePopUp() {
+    for (int i = 0; i <= (int)JointType::HINGE_LIMITED; i++) {
+        const bool selected = ((int)m_selectedType == i);
+        if (ImGui::Selectable(kJointTypeNames[i], selected))
+            m_selectedType = (JointType)i;
+
+        if (selected)
+            ImGui::SetItemDefaultFocus();
     }
 }

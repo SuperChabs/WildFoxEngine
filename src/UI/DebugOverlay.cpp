@@ -14,7 +14,7 @@ DebugOverlay::DebugOverlay() {
     gameFramebuffer = std::make_unique<Framebuffer>(1, 1);
 }
 
-void DebugOverlay::Render(ECSWorld *ecs, MaterialManager *materialManager, SceneSerializer *ss, const EditorCamera &editorCamera,
+void DebugOverlay::Render(ECSWorld *ecs, MaterialManager *materialManager, SceneSerializer *ss, EditorCamera &editorCamera,
         PhysicsModule *physicsModule, PhysicsDebugRenderSystem *physicsDebug) {
     if (!visible || !ecs) return;
 
@@ -64,8 +64,8 @@ void DebugOverlay::Render(ECSWorld *ecs, MaterialManager *materialManager, Scene
         physicsControlPanel.Render(ecs, physicsModule, physicsDebug);
     ImGui::End();
 
-    editorViewportWindow.Render(*ecs, m_selected, editorFramebuffer.get(), editorCamera.camera,
-                                editorCamera.transform, editorCamera.orientation);
+    editorViewportWindow.Render(*ecs, m_selected, editorFramebuffer.get(), editorCamera.camera, editorCamera.transform,
+        editorCamera.orientation);
 
     gameViewportWindow.Render(gameFramebuffer.get());
 
@@ -135,11 +135,11 @@ void DebugOverlay::RenderSceneTab(SceneSerializer *ss) {
             m_selectedScene = i;
 
         if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
-            Execute("onLoadScene", m_availableScenes[i].c_str());
+            Execute("onLoadScene", m_availableScenes[i]);
 
         if (ImGui::BeginPopupContextItem()) {
             if (ImGui::MenuItem("Delete Scene"))
-                sceneToDelete = m_availableScenes[i].c_str();
+                sceneToDelete = m_availableScenes[i];
             ImGui::EndPopup();
         }
     }
@@ -287,7 +287,7 @@ void DebugOverlay::RenderInspectorTab(ECSWorld *ecs, MaterialManager *materialMa
     if (ecs->HasComponent<c_Icon>(m_selected))
         iconPanel.Render(ecs, m_selected);
     if (ecs->HasComponent<c_RigidBody>(m_selected))
-        rigidPanel.Render(ecs, m_selected);
+        RigidBodyPanel::Render(ecs, m_selected);
     if (ecs->HasComponent<c_Collider>(m_selected))
         colliderPanel.Render(ecs, m_selected);
 
@@ -390,9 +390,6 @@ void DebugOverlay::RenderUpperMenuTab() {
     if (ImGui::MenuItem("Camera"))
         Execute("onCreateCamera");
 
-    if (ImGui::MenuItem("AABB hitbox"))
-        Execute("onCreateAABBHitbox");
-
     if (ImGui::MenuItem("Open Model"))
         m_showOpenModelDialog = true;
 
@@ -469,7 +466,7 @@ void DebugOverlay::RenderPrefabsDialog() {
         return result;
     };
 
-    constexpr size_t prefixLength = sizeof(PrefabPrefix) - 3;
+    const size_t prefixLength = strlen(PrefabPrefix) - 3;
 
     std::vector<std::string> prefabs;
 

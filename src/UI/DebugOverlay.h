@@ -25,7 +25,7 @@
 #include "UI/panels/ColliderPanel.h"
 #include "UI/panels/PhysicsControlPanel.h"
 
-#include "UI/windows/EditViewportWindow.h"
+#include "UI/windows/EditorViewportWindow.h"
 #include "UI/windows/GameViewportWindow.h"
 
 class DebugOverlay {
@@ -53,7 +53,7 @@ class DebugOverlay {
     ColliderPanel colliderPanel;
     PhysicsControlPanel physicsControlPanel;
 
-    EditViewportWindow editorViewportWindow;
+    EditorViewportWindow editorViewportWindow;
     GameViewportWindow gameViewportWindow;
 
     std::unique_ptr<Framebuffer> editorFramebuffer;
@@ -74,24 +74,24 @@ public:
 
     DebugOverlay();
 
-    void Render(ECSWorld *ecs, MaterialManager *materialManager, SceneSerializer *ss, const EditorCamera &editorCamera,
+    void Render(ECSWorld *ecs, MaterialManager *materialManager, SceneSerializer *ss, EditorCamera &editorCamera,
         PhysicsModule *physicsModule, PhysicsDebugRenderSystem *physicsDebug);
 
-    [[nodiscard]] ImVec2 GetEditorViewportSize() const { return editorViewportWindow.GetViewportSize(); }
-    [[nodiscard]] ImVec2 GetEditorViewportPose() const { return editorViewportWindow.GetViewportPos(); }
-    [[nodiscard]] bool IsEditorViewportHovered() const { return editorViewportWindow.IsHovered(); }
-    [[nodiscard]] bool IsEditorViewportFocused() const { return editorViewportWindow.IsFocused(); }
+    [[nodiscard]] ImVec2 GetGraphicsViewportSize() const { return editorViewportWindow.GetViewportSize(); }
+    [[nodiscard]] ImVec2 GetGraphicsViewportPose() const { return editorViewportWindow.GetViewportPos(); }
+    [[nodiscard]] bool IsGraphicsViewportHovered() const { return editorViewportWindow.IsHovered(); }
+    [[nodiscard]] bool IsGraphicsViewportFocused() const { return editorViewportWindow.IsFocused(); }
 
     [[nodiscard]] ImVec2 GetGameViewportSize() const { return gameViewportWindow.GetViewportSize(); }
-    [[nodiscard]] ImVec2 GetGameViewportPos() const { return gameViewportWindow.GetViewportPos(); }
+    [[nodiscard]] ImVec2 GetGameViewportPos()  const { return gameViewportWindow.GetViewportPos(); }
     [[nodiscard]] bool IsGameViewportHovered() const { return gameViewportWindow.IsHovered(); }
     [[nodiscard]] bool IsGameViewportFocused() const { return gameViewportWindow.IsFocused(); }
 
     [[nodiscard]] Framebuffer *GetEditorFramebuffer() const { return editorFramebuffer.get(); }
-    [[nodiscard]] Framebuffer *GetGameFramebuffer() const { return gameFramebuffer.get(); }
+    [[nodiscard]] Framebuffer *GetGameFramebuffer()   const { return gameFramebuffer.get(); }
 
-    [[nodiscard]] EditViewportWindow *GetEditViewportWindow() { return &editorViewportWindow; }
-    [[nodiscard]] GameViewportWindow *GetGameViewportWindow() { return &gameViewportWindow; }
+    [[nodiscard]] EditorViewportWindow *GetEditorViewportWindow() { return &editorViewportWindow; }
+    [[nodiscard]] GameViewportWindow *GetGameViewportWindow()     { return &gameViewportWindow; }
 
 private:
     void RenderSceneTab(SceneSerializer *ss);
@@ -103,7 +103,7 @@ private:
     void RenderPrefabsDialog();
     void RefreshAvailableScenes(SceneSerializer &ss);
 
-    std::vector<std::string> GetAvailableObjects();
+    static std::vector<std::string> GetAvailableObjects();
 
     static void Execute(const char *name, const CommandArgs &args) {
         if (CommandManager::HasCommand(name))

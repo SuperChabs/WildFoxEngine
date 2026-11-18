@@ -33,6 +33,13 @@ void GatherStage::Execute(StepContext &ctx) {
         auto b = lookup.find(j.bodyB);
         if (a == lookup.end() || b == lookup.end()) return;
 
-        ctx.constraints.emplace_back(CreateConstraint(j, *a->second, *b->second));
+        // remember the relative orientation the joint was created in
+        if (!j.q0Initialized) {
+            j.q0 = glm::inverse(a->second->transform->rotation) * b->second->transform->rotation;
+            j.q0Initialized = true;
+        }
+
+        if (auto constraint = CreateConstraint(j, *a->second, *b->second))
+            ctx.constraints.emplace_back(std::move(constraint));
     });
 }

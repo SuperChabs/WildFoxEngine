@@ -172,8 +172,8 @@ void Engine::OnRender() {
     auto *debugOverlay = uiModule->GetDebugOverlay();
 
     Framebuffer *sceneFB = debugOverlay->GetEditorFramebuffer();
-    const ImVec2 sceneViewportSize = debugOverlay->GetEditorViewportSize();
-    if (debugOverlay->GetEditViewportWindow()->IsOpen()) {
+    const ImVec2 sceneViewportSize = debugOverlay->GetGraphicsViewportSize();
+    if (debugOverlay->GetEditorViewportWindow()->IsOpen()) {
         sceneFB->Bind();
 
         renderer->BeginFrame();
@@ -208,6 +208,7 @@ void Engine::OnRender() {
 
         sceneFB->Unbind();
     }
+
 
     Framebuffer *gameFB = debugOverlay->GetGameFramebuffer();
     const ImVec2 gameViewportSize = debugOverlay->GetGameViewportSize();

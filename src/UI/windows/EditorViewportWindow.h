@@ -11,17 +11,20 @@
 #include "ECS/components/Components.h"
 #include "IViewportWindow.h"
 
-class EditViewportWindow : public IViewportWindow {
+class EditorViewportWindow : public IViewportWindow {
     int m_GizmoOperation = ImGuizmo::TRANSLATE;
 
 public:
     void Render(ECSWorld &ecs, const entt::entity &selected, Framebuffer *framebuffer, const c_Camera &camera,
-                const c_Transform &transform, const c_CameraOrientation &orientation);
+                c_Transform &transform, c_CameraOrientation &orientation);
 
     void SetGizmoOperation(int op) { m_GizmoOperation = op; }
 
 private:
     static void UpdateTransformFromMatrix(c_Transform &tc, const glm::mat4 &matrix);
+    static void SetFromViewMatrix(c_Transform& t, c_CameraOrientation& o, const glm::mat4& view);
+    static void FocusOnEntity(ECSWorld& ecs, entt::entity target, c_Transform& camTransform,
+        const c_CameraOrientation& orientation);
 
     void ProcessInput();
 };
