@@ -28,6 +28,8 @@
 #include "UI/windows/EditorViewportWindow.h"
 #include "UI/windows/GameViewportWindow.h"
 
+#include "Editor.h"
+
 class DebugOverlay {
     entt::entity m_selected = entt::null;
 
@@ -66,6 +68,8 @@ class DebugOverlay {
     bool m_scenesLoaded = false;
 
     std::string m_pendingDeleteScene;
+
+    CodeEditor editor;
 
     constexpr static auto PrefabPrefix = "PrFb_";
 

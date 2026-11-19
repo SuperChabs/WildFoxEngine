@@ -165,3 +165,8 @@ long time no see. im in 11th Grade now and it seems not so difficult as i expect
 ### v0.8.1
 ##### 18.11.2026
 - add new types of constraints
+
+### v0.9
+##### 19.11.2026
+- add ImGuiColorTextEdit (goossens fork) and LSP framework to the project  
+- implemented text editor for scripts and shaders files

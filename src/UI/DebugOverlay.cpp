@@ -73,6 +73,8 @@ void DebugOverlay::Render(ECSWorld *ecs, MaterialManager *materialManager, Scene
     RenderPrefabsDialog();
 
     ImGui::End();
+
+    editor.Render();
 }
 
 void DebugOverlay::RenderSceneTab(SceneSerializer *ss) {
@@ -395,6 +397,9 @@ void DebugOverlay::RenderUpperMenuTab() {
 
     if (ImGui::MenuItem("Prefabs"))
         m_showOpenPrefabsDialog = true;
+
+    if (ImGui::MenuItem("Script Editor"))
+        editor.Show();
 }
 
 void DebugOverlay::RenderOpenModelDialog() {

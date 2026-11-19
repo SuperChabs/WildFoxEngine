@@ -15,6 +15,8 @@ if(CCACHE_PROGRAM)
     set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
 endif()
 
+include(FetchContent)
+
 # Default to Release when no build type is given (physics is much slower in Debug)
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
@@ -71,6 +73,55 @@ add_library(imguizmo STATIC ${IMGUIZMO_SOURCES})
 
 target_include_directories(imguizmo PUBLIC ${IMGUIZMO_DIR})
 target_link_libraries(imguizmo PUBLIC imgui)
+
+# ========== ImGuiColorTextEdit =====
+set(IMGUI_TEXTEDIT_DIR ${CMAKE_SOURCE_DIR}/vendor/imguitexteditor)
+set(IMGUI_TEXTEDIT_SOURCES
+        ${IMGUI_TEXTEDIT_DIR}/TextDiff.cpp
+        ${IMGUI_TEXTEDIT_DIR}/TextEditor.cpp
+        ${IMGUI_TEXTEDIT_DIR}/extras/LspBridge.cpp
+        ${IMGUI_TEXTEDIT_DIR}/extras/TrieAutoComplete.cpp
+)
+add_library(imguiTextEdit STATIC ${IMGUI_TEXTEDIT_SOURCES})
+
+target_include_directories(imguiTextEdit PUBLIC ${IMGUI_TEXTEDIT_DIR})
+target_link_libraries(imguiTextEdit PUBLIC imgui lsp)
+
+# ========== LSP ====================
+FetchContent_Declare(
+        lsp
+        GIT_REPOSITORY https://github.com/leon-bckl/lsp-framework.git
+        GIT_TAG master
+)
+
+set(LSP_INSTALL OFF CACHE BOOL "" FORCE)
+
+FetchContent_MakeAvailable(lsp)
+
+# ========== ImGuiFileSelector / ImGuiToastr ==========
+# SOURCE_SUBDIR points nowhere so only sources are fetched, no add_subdirectory
+FetchContent_Declare(
+        imguifileselector
+        GIT_REPOSITORY https://github.com/goossens/ImGuiFileSelector.git
+        GIT_TAG v1.93.0
+        SOURCE_SUBDIR _none
+)
+FetchContent_Declare(
+        imguitoastr
+        GIT_REPOSITORY https://github.com/goossens/ImGuiToastr.git
+        GIT_TAG v1.93.0
+        SOURCE_SUBDIR _none
+)
+FetchContent_MakeAvailable(imguifileselector imguitoastr)
+
+add_library(imguiFileSelector STATIC ${imguifileselector_SOURCE_DIR}/FileSelector.cpp)
+target_include_directories(imguiFileSelector PUBLIC ${imguifileselector_SOURCE_DIR})
+target_link_libraries(imguiFileSelector PUBLIC imgui)
+target_compile_definitions(imguiFileSelector PRIVATE IMGUI_DEFINE_MATH_OPERATORS)
+
+add_library(imguiToastr STATIC ${imguitoastr_SOURCE_DIR}/Toastr.cpp)
+target_include_directories(imguiToastr PUBLIC ${imguitoastr_SOURCE_DIR})
+target_link_libraries(imguiToastr PUBLIC imgui)
 
 # ========== Magic_enum =============
 add_library(magic_enum INTERFACE)
@@ -186,6 +237,9 @@ target_link_libraries(${PROJECT_NAME}
         assimp
         imgui
         imguizmo
+        imguiTextEdit
+        imguiFileSelector
+        imguiToastr
         magic_enum
         EnTT::EnTT
         angelscript
@@ -194,6 +248,7 @@ target_link_libraries(${PROJECT_NAME}
         OpenAL::OpenAL
         sndfile
         json
+        lsp
 )
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE

@@ -14,7 +14,7 @@ void _SetEntity(uint64 e)
 
 void OnStart()
 {
-    targetEntity = GetEntityByName("Player");
+    targetEntity = GetEntityByName("player");
 }
 
 void OnUpdate(float deltaTime)
@@ -41,6 +41,21 @@ void OnUpdate(float deltaTime)
     
     if (lookAtTarget)
     {
-        vec3 dirToTarget = targetPos - cameraTrans.position;
+        vec3 dir = targetPos - cameraTrans.position;
+        float len = sqrt(dir.x * dir.x + dir.y * dir.y + dir.z * dir.z);
+
+        if (len > 0.0001f)
+        {
+            dir.x /= len;
+            dir.y /= len;
+            dir.z /= len;
+
+            float yaw   = atan2(dir.z, dir.x) * RAD2DEG;
+            float pitch = asin(dir.y) * RAD2DEG;
+
+            cameraTrans.rotation.x = pitch;
+            cameraTrans.rotation.y = yaw;
+            cameraTrans.rotation.z = 0.0f;
+        }
     }
 }
