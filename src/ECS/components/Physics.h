@@ -5,6 +5,7 @@
 
 #include "physics/geometry/Bounds.h"
 #include "physics/geometry/shapes/convex/ConvexStruct.h"
+#include "physics/queries/RayStruct.h"
 
 struct BaseShape {
     glm::vec3 m_centerOfMass = {0.0f, 0.0f, 0.0f};
@@ -46,7 +47,6 @@ struct c_Collider {
     [[nodiscard]] float FastestLinearSpeed(const glm::vec3 &angularVelocity, const glm::vec3 &dir) const;
     bool GenerateConvexHull(const std::vector<glm::vec3> &points, int maxVerts = 256);
     glm::vec3 GetCenterOfMass();
-
 };
 
 struct c_RigidBody {

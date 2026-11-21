@@ -7,6 +7,9 @@
 #include "extras/LspBridge.h"
 #include "extras/TrieAutoComplete.h"
 
+#define TEXTEDITOR_EXCLUDE_ANGELSCRIPT
+#define TEXTEDITOR_EXCLUDE_GLSL
+#define TEXTEDITOR_EXCLUDE_JSON
 
 class CodeEditor {
     // properties
@@ -78,7 +81,7 @@ public:
     void TryToQuit();
     bool IsDone() const { return done; }
 
-    void setDebugInformation(std::function<std::string()> callback) { getBackendDebugInformation = callback; }
+    void SetDebugInformation(const std::function<std::string()> &callback) { getBackendDebugInformation = callback; }
 
 private:
     // private functions

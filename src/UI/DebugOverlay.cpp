@@ -398,6 +398,9 @@ void DebugOverlay::RenderUpperMenuTab() {
     if (ImGui::MenuItem("Prefabs"))
         m_showOpenPrefabsDialog = true;
 
+    if (ImGui::MenuItem("HitBox"))
+        Execute("onCreateBoxHitbox");
+
     if (ImGui::MenuItem("Script Editor"))
         editor.Show();
 }

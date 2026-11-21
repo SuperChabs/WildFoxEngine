@@ -1,12 +1,13 @@
 #include "MaterialPanel.h"
 
+#include "FileSelector.h"
 #include "core/logging/Logger.h"
 
 void MaterialPanel::Render(ECSWorld *ecs, entt::entity entity, MaterialManager *materialManager) {
     if (!ImGui::CollapsingHeader("Material")) return;
 
     if (ecs->HasComponent<c_Material>(entity)) {
-        auto &matComp = ecs->GetComponent<c_Material>(entity);
+        const auto &matComp = ecs->GetComponent<c_Material>(entity);
         ImGui::BulletText("Current: %s",
                           matComp.material ? matComp.material->GetName().c_str() : "None");
         ImGui::Separator();
@@ -65,69 +66,53 @@ void MaterialPanel::RenderOpenMaterialDialog() {
 
     ImGui::OpenPopup("NewMaterial");
 
-    if (ImGui::BeginPopupModal(
-        "NewMaterial",
-        &m_showOpenMaterialDialog,
-        ImGuiWindowFlags_AlwaysAutoResize)) {
-        ImGui::Text("Name:");
-        ImGui::InputTextWithHint(
-            "##name",
-            "material",
+    if (!ImGui::BeginPopupModal("NewMaterial", &m_showOpenMaterialDialog, ImGuiWindowFlags_AlwaysAutoResize)) return;
+
+
+    ImGui::Text("Name:");
+    ImGui::InputTextWithHint("##name", "material", m_name, sizeof(m_name));
+
+    RenderOpenFileDialog("Diffuse Map##diff", m_diffusePath);
+    RenderOpenFileDialog("Specular Map##spec", m_specularPath);
+    RenderOpenFileDialog("Normal Map##norm", m_normalPath);
+    RenderOpenFileDialog("Height Map##heig", m_heightPath);
+
+    ImGui::Spacing();
+
+    if (ImGui::Button("Open")) {
+        if (std::string(m_name).empty())
+            return;
+
+        Execute("onCreateMaterial", {
             m_name,
-            sizeof(m_name));
-
-        ImGui::Text("Diff path:");
-        ImGui::InputTextWithHint(
-            "##diffpath",
-            "/home/user/texture.png",
             m_diffusePath,
-            sizeof(m_diffusePath));
-
-        ImGui::Text("Spec path:");
-        ImGui::InputTextWithHint(
-            "##specpath",
-            "/home/user/texture.png",
             m_specularPath,
-            sizeof(m_specularPath));
-
-        ImGui::Text("Norm path:");
-        ImGui::InputTextWithHint(
-            "##normpath",
-            "/home/user/texture.png",
             m_normalPath,
-            sizeof(m_normalPath));
+            m_heightPath
+        });
 
-        ImGui::Text("Height path:");
-        ImGui::InputTextWithHint(
-            "##heightpath",
-            "/home/user/texture.png",
-            m_heightPath,
-            sizeof(m_heightPath));
-
-        ImGui::Spacing();
-
-        if (ImGui::Button("Open")) {
-            Execute("onCreateMaterial",
-                    {
-                        m_name,
-                        m_diffusePath,
-                        m_specularPath,
-                        m_normalPath,
-                        m_heightPath
-                    }
-            );
-
-            m_showOpenMaterialDialog = false;
-            ImGui::CloseCurrentPopup();
-        }
-
-        ImGui::SameLine();
-
-        if (ImGui::Button("Cancel")) {
-            m_showOpenMaterialDialog = false;
-            ImGui::CloseCurrentPopup();
-        }
-
-        ImGui::EndPopup();
+        m_showOpenMaterialDialog = false;
+        ImGui::CloseCurrentPopup();
     }
+
+    ImGui::SameLine();
+
+    if (ImGui::Button("Cancel")) {
+        m_showOpenMaterialDialog = false;
+        ImGui::CloseCurrentPopup();
+    }
+
+    ImGui::EndPopup();
+}
+
+void MaterialPanel::RenderOpenFileDialog(const std::string &name, std::string &path) {
+    auto &dialog = FileSelector::Instance();
+
+    if (ImGui::Button(name.c_str())) {
+        dialog.OpenFile();
+    }
+
+    if (dialog.Render())
+        if (dialog.SelectedOpenFile())
+            path = dialog.GetSelectedPath();
 }

@@ -1,4 +1,6 @@
 #include "ScriptPanel.h"
+
+#include "FileSelector.h"
 #include "core/logging/Logger.h"
 
 void ScriptPanel::Render(ECSWorld *ecs, entt::entity entity) {
@@ -24,7 +26,14 @@ void ScriptPanel::Render(ECSWorld *ecs, entt::entity entity) {
         ImGui::Separator();
         ImGui::Spacing();
 
-        ImGui::InputText("##ScriptPath", scriptPathBuffer, sizeof(scriptPathBuffer));
+        auto &dialog = FileSelector::Instance();
+
+        if (ImGui::Button("Load Script", ImVec2(-1, 0)))
+            dialog.OpenFile();
+
+        if (dialog.Render())
+            if (dialog.SelectedOpenFile())
+                script.scriptPath = dialog.GetSelectedPath();
 
         if (ImGui::Button("Update Script", ImVec2(-1, 0))) {
             if (scriptPathBuffer[0]) {

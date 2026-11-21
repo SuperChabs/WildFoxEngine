@@ -1,7 +1,6 @@
 #pragma once
 
 #include "IPhysicsStage.h"
-#include "physics/core/PhysicsContext.h"
 
 class PhysicsPipeline {
     std::vector<std::unique_ptr<IPhysicsStage>> stages;

@@ -25,6 +25,14 @@ inline float FuncATan2(float x, float y) {
     return std::atan2(x, y);
 }
 
+inline float FuncASin(float x) {
+    return std::asin(x);
+}
+
+inline float FuncACos(float x) {
+    return std::acos(x);
+}
+
 inline float FuncAbs(float x) {
     return std::abs(x);
 }
@@ -55,6 +63,18 @@ inline void RegisterMath(asIScriptEngine *engine) {
         asFUNCTION(FuncATan2),
         asCALL_CDECL);
     AS_CHECK(r, "atan2");
+
+    r = engine->RegisterGlobalFunction(
+        "float asin(float x)",
+        asFUNCTION(FuncASin),
+        asCALL_CDECL);
+    AS_CHECK(r, "asin");
+
+    r = engine->RegisterGlobalFunction(
+        "float acos(float x)",
+        asFUNCTION(FuncACos),
+        asCALL_CDECL);
+    AS_CHECK(r, "acos");
 
     r = engine->RegisterGlobalFunction(
         "float abs(float x)",

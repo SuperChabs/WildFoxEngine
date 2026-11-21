@@ -4,6 +4,8 @@
 #include "physics/collision/narrowphase/NarrowPhase.h"
 
 void CollisionStage::Execute(StepContext &ctx) {
+    ctx.triggers.clear();
+
     // BroadPhase -----------------------------------------------------------------------------------------
 
     BroadPhase::BroadPhase(ctx.bodies, ctx.pairs, static_cast<int>(ctx.bodies.size()), ctx.dt);
@@ -11,19 +13,24 @@ void CollisionStage::Execute(StepContext &ctx) {
     // NarrowPhase ----------------------------------------------------------------------------------------
 
     ctx.manifolds.RemoveExpired();
-    for (const auto [fst, snd] : ctx.pairs) {
+    for (const auto &[fst, snd] : ctx.pairs) {
 
         if (fst->rigidBody->m_invMass == 0.0f && snd->rigidBody->m_invMass == 0.0f) continue;
 
         ContactInfo contact{};
         if (NarrowPhase::Intersect(*fst, *snd, contact, ctx.dt)) {
-            if (0.0f == contact.timeOfImpact)
-                // static contact
-                ctx.manifolds.AddContact(contact);
+            if (fst->collider->isTrigger || snd->collider->isTrigger) {
+                ctx.triggers.push_back({fst->id, snd->id});
+            }
             else {
-                // ballistic contact
-                ctx.contacts.push_back(contact);
-                ctx.numContacts++;
+                if (0.0f == contact.timeOfImpact)
+                    // static contact
+                        ctx.manifolds.AddContact(contact);
+                else {
+                    // ballistic contact
+                    ctx.contacts.push_back(contact);
+                    ctx.numContacts++;
+                }
             }
         }
     }

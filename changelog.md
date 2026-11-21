@@ -170,3 +170,8 @@ long time no see. im in 11th Grade now and it seems not so difficult as i expect
 ##### 19.11.2026
 - add ImGuiColorTextEdit (goossens fork) and LSP framework to the project  
 - implemented text editor for scripts and shaders files
+
+### v0.9.1
+##### 21.11.2026
+- add RayCast to engine
+- implement ray cast to ui for picking objects

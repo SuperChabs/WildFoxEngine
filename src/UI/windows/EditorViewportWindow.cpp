@@ -3,7 +3,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
 
-void EditorViewportWindow::Render(ECSWorld &ecs, const entt::entity &selected, Framebuffer *framebuffer,
+#include "UI/EditorPicking.h"
+
+void EditorViewportWindow::Render(ECSWorld &ecs, entt::entity &selected, Framebuffer *framebuffer,
     const c_Camera &camera, c_Transform &transform, c_CameraOrientation &orientation) {
     if (!isOpen) return;
 
@@ -38,6 +40,7 @@ void EditorViewportWindow::Render(ECSWorld &ecs, const entt::entity &selected, F
             {0, 1},
             {1, 0}
         );
+        const bool imageHovered = ImGui::IsItemHovered();
 
         if (selected != entt::null && ecs.IsValid(selected) && ecs.HasComponent<c_Transform>(selected)) {
             ImGuizmo::SetOrthographic(false);
@@ -91,6 +94,13 @@ void EditorViewportWindow::Render(ECSWorld &ecs, const entt::entity &selected, F
             FocusOnEntity(ecs, selected, transform, orientation);
         }
 
+        if (imageHovered) {
+            const ImVec2 cubeMin(viewportPos.x + viewportSize.x - gizmoSize, viewportPos.y);
+            const ImVec2 cubeMax(cubeMin.x + gizmoSize, cubeMin.y + gizmoSize);
+            HandlePicking(ecs, selected, before, camera.GetProjectionMatrix(size.x / size.y), camera.farPlane,
+                          cubeMin, cubeMax);
+        }
+
     } else {
         ImGui::Text("Framebuffer error");
     }
@@ -136,4 +146,23 @@ void EditorViewportWindow::ProcessInput() {
     if (ImGui::IsKeyPressed(ImGuiKey_R) && !ImGui::GetIO().WantTextInput) m_GizmoOperation = ImGuizmo::ROTATE;
     if (ImGui::IsKeyPressed(ImGuiKey_S) && !ImGui::GetIO().WantTextInput) m_GizmoOperation = ImGuizmo::SCALE;
     if (ImGui::IsKeyPressed(ImGuiKey_T) && !ImGui::GetIO().WantTextInput) m_GizmoOperation = ImGuizmo::TRANSLATE;
+}
+
+void EditorViewportWindow::HandlePicking(ECSWorld &ecs, entt::entity &selected, const glm::mat4 &view,
+        const glm::mat4 &proj, float farPlane, ImVec2 viewCubeMin, ImVec2 viewCubeMax) const {
+    if (!ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+        return;
+
+    // clicks that belong to the gizmos must not change the selection
+    if (ImGuizmo::IsUsingAny() || ImGuizmo::IsViewManipulateHovered())
+        return;
+    if (selected != entt::null && ImGuizmo::IsOver())
+        return;
+    if (ImGui::IsMouseHoveringRect(viewCubeMin, viewCubeMax))
+        return;
+
+    const Ray ray = EditorPicking::ScreenToRay(ImGui::GetMousePos(), viewportPos, viewportSize, view, proj);
+    const RayCastHit hit = EditorPicking::Pick(ecs, ray, farPlane);
+
+    selected = hit.entity != entt::null ? EditorPicking::ResolveSelectable(ecs, hit.entity) : entt::null;
 }

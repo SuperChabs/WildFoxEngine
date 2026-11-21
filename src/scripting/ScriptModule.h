@@ -12,7 +12,7 @@ class ScriptModule : public IModule {
     ModuleManager *m_moduleManager;
 
 public:
-    ScriptModule(ModuleManager *mm, const std::string &scriptPath = "../assets/scripts/main.as");
+    ScriptModule(ModuleManager *mm, const std::string &scriptPath = "../assets/scripts/templates/template.as");
 
     bool OnInitialize() override;
 
@@ -20,8 +20,8 @@ public:
 
     void Shutdown() override;
 
-    const char *GetName() const override { return "ScriptModule"; }
-    bool IsRequired() const override { return true; }
+    [[nodiscard]] const char *GetName() const override { return "ScriptModule"; }
+    [[nodiscard]] bool IsRequired() const override { return true; }
 
-    ScriptSystem *GetScriptSystem() const { return m_scriptSystem.get(); }
+    [[nodiscard]] ScriptSystem *GetScriptSystem() const { return m_scriptSystem.get(); }
 };

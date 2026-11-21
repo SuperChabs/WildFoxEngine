@@ -20,4 +20,11 @@ namespace math {
         mag = glm::sqrt(mag);
         return mag;
     }
+
+    inline glm::vec3 ScreenToWorldPoint(const glm::vec2 &screenPos, const glm::mat4 &view, const glm::mat4 &projection,
+                                        const glm::vec4 &viewport) {
+        glm::vec3 win(screenPos.x, viewport.w - screenPos.y, 0.0);
+        glm::vec3 point = glm::unProject(win, view, projection, viewport);
+        return point;
+    }
 }

@@ -263,7 +263,7 @@ void CodeEditor::RenderMenuBar() {
             ImGui::EndMenu();
         }
 
-        		if (ImGui::BeginMenu("View")) {
+        if (ImGui::BeginMenu("View")) {
 			if (ImGui::MenuItem("Reset Zoom", " " SHORTCUT "0")) { resetFontSize(); }
 			if (ImGui::MenuItem("Zoom In", " " SHORTCUT "+")) { increaseFontSize(); }
 			if (ImGui::MenuItem("Zoom Out", " " SHORTCUT "-")) { decreaseFontSize(); }

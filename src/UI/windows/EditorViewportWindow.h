@@ -15,7 +15,7 @@ class EditorViewportWindow : public IViewportWindow {
     int m_GizmoOperation = ImGuizmo::TRANSLATE;
 
 public:
-    void Render(ECSWorld &ecs, const entt::entity &selected, Framebuffer *framebuffer, const c_Camera &camera,
+    void Render(ECSWorld &ecs, entt::entity &selected, Framebuffer *framebuffer, const c_Camera &camera,
                 c_Transform &transform, c_CameraOrientation &orientation);
 
     void SetGizmoOperation(int op) { m_GizmoOperation = op; }
@@ -27,4 +27,6 @@ private:
         const c_CameraOrientation& orientation);
 
     void ProcessInput();
+    void HandlePicking(ECSWorld &ecs, entt::entity &selected, const glm::mat4 &view, const glm::mat4 &proj,
+                       float farPlane, ImVec2 viewCubeMin, ImVec2 viewCubeMax) const;
 };

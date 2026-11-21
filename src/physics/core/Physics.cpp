@@ -7,6 +7,7 @@ Physics::Physics(ECSWorld &world) : m_world(world) {
     m_pipeline.AddStage<ApplyForcesStage>();
     m_pipeline.AddStage<CollisionStage>();
     m_pipeline.AddStage<SolveStage>();
+    m_pipeline.AddStage<TriggerStage>();
 }
 
 void Physics::Simulate(const float dt) {

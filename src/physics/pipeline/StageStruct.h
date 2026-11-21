@@ -15,17 +15,19 @@ struct StepContext {
     std::vector<BodyInfo> bodies;
     std::vector<CollisionPair> pairs;
     std::vector<ContactInfo> contacts;
-    std::vector<std::unique_ptr<Constraint>> constraints;
     std::vector<ConstraintPenetration> constraintPenetrations;
+    std::vector<TriggerPair> triggers;
+
+    std::vector<std::unique_ptr<Constraint>> constraints;
+
     ManifoldCollector manifolds;
-    //std::vector<TriggerPair> triggers;
 
     void Clear() {
         pairs.clear();
         contacts.clear();
         constraints.clear();
         constraintPenetrations.clear();
+        triggers.clear();
         numContacts = 0;
-        // triggers.clear();
     }
 };

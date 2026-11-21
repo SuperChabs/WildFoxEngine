@@ -168,9 +168,32 @@ inline void RegisterVisibilityComponent(asIScriptEngine *engine) {
     AS_CHECK(r, "VisibilityComponent.isActive");
 }
 
+inline void RegisterCameraOrientationComponent(asIScriptEngine *engine) {
+    int r;
+
+    r = engine->RegisterObjectType(
+        "CameraOrientation",
+        0,
+        asOBJ_REF | asOBJ_NOCOUNT);
+    AS_CHECK(r, "CameraOrientation type");
+
+    r = engine->RegisterObjectProperty(
+        "CameraOrientation",
+        "float yaw",
+        asOFFSET(c_CameraOrientation, yaw));
+    AS_CHECK(r, "CameraOrientation.yaw");
+
+    r = engine->RegisterObjectProperty(
+        "CameraOrientation",
+        "float pitch",
+        asOFFSET(c_CameraOrientation, pitch));
+    AS_CHECK(r, "CameraOrientation.pitch");
+}
+
 inline void RegisterTypes(asIScriptEngine *engine) {
     RegisterVec3(engine);
     RegisterTransformComponent(engine);
+    RegisterCameraOrientationComponent(engine);
     RegisterTagComponent(engine);
     RegisterVisibilityComponent(engine);
 }

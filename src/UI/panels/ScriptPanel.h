@@ -20,9 +20,9 @@ public:
     void Render(ECSWorld *ecs, entt::entity entity);
 
 private:
-    void AttachScript(ECSWorld *ecs, entt::entity entity, const std::string &path);
+    static void AttachScript(ECSWorld *ecs, entt::entity entity, const std::string &path);
 
-    void UpdateScript(c_Script &script, const std::string &newPath);
+    static void UpdateScript(c_Script &script, const std::string &newPath);
 
-    void RemoveScript(ECSWorld *ecs, entt::entity entity, c_Script &script);
+    static void RemoveScript(ECSWorld *ecs, entt::entity entity, c_Script &script);
 };

@@ -9,11 +9,14 @@ struct BodyInfo {
     c_Transform *transform;
     c_Collider  *collider;
 
+    entt::entity id = entt::null;
+
     BodyInfo &operator=(const BodyInfo &b) {
         if (this != &b) {
             rigidBody = b.rigidBody;
             transform = b.transform;
             collider = b.collider;
+            id = b.id;
         }
 
         return *this;
@@ -43,4 +46,14 @@ struct PseudoBody {
 struct CollisionPair {
     BodyInfo *bodyA;
     BodyInfo *bodyB;
+};
+
+// stored by entity id, because BodyInfo pointers are invalidated when GatherStage rebuilds ctx.bodies
+struct TriggerPair {
+    entt::entity a;
+    entt::entity b;
+
+    bool operator==(const TriggerPair &t) const {
+        return (a == t.a && b == t.b) || (a == t.b && b == t.a);
+    }
 };

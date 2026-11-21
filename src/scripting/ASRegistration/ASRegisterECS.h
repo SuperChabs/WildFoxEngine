@@ -18,6 +18,12 @@ inline c_Transform *GetTransform(ECSWorld *ecs, entt::entity e) {
     return &ecs->GetComponent<c_Transform>(e);
 }
 
+inline c_CameraOrientation *GetCameraOrientation(ECSWorld *ecs, entt::entity e) {
+    if (!ecs->HasComponent<c_CameraOrientation>(e))
+        return nullptr;
+    return &ecs->GetComponent<c_CameraOrientation>(e);
+}
+
 inline bool IsValid(ECSWorld *ecs, entt::entity e) {
     return ecs->IsValid(e);
 }
@@ -64,6 +70,13 @@ inline void RegisterECS(asIScriptEngine *engine, ECSWorld *ecs) {
         asCALL_CDECL_OBJFIRST, ecs
     );
     AS_CHECK(r, "GetTransform");
+
+    r = engine->RegisterGlobalFunction(
+        "CameraOrientation@ GetCameraOrientation(uint64 e)",
+        asFUNCTIONPR(GetCameraOrientation, (ECSWorld *, entt::entity), c_CameraOrientation *),
+        asCALL_CDECL_OBJFIRST, ecs
+    );
+    AS_CHECK(r, "GetCameraOrientation");
 
     r = engine->RegisterGlobalFunction(
                 "uint64 GetEntityByName(const string &in name)",

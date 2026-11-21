@@ -2,8 +2,6 @@
 
 asIScriptEngine *ASState::engine = nullptr;
 
-// --- split_headers: auto-generated ---
-
 ASState::ASState() {
     engine = nullptr;
 }

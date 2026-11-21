@@ -7,8 +7,8 @@ void GatherStage::Execute(StepContext &ctx) {
 
     std::vector<BodyInfo> current;
     m_world.Each<c_RigidBody, c_Collider, c_Transform>(
-    [&](const entt::entity, c_RigidBody &r, c_Collider &c, c_Transform &t) {
-        current.push_back(BodyInfo{&r, &t, &c});
+    [&](const entt::entity e, c_RigidBody &r, c_Collider &c, c_Transform &t) {
+        current.push_back(BodyInfo{&r, &t, &c, e});
     });
 
     const bool changed = current.size() != ctx.bodies.size() ||

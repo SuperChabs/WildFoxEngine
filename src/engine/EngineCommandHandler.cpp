@@ -22,28 +22,42 @@ void EditorCommandHandler::RegisterAllCommands() {
 }
 
 void EditorCommandHandler::RegisterObjectCommands() const {
-    CommandManager::RegisterCommand("onCreateAABBHitbox",
+    CommandManager::RegisterCommand("onCreateBoxHitbox",
         [this](const CommandArgs &) {
-            const auto entity = m_ecsModule->GetECS()->CreateEntity("AABB Hitbox");
+            auto *ecs = m_ecsModule->GetECS();
+            const auto entity = ecs->CreateEntity("Box Hitbox");
 
-            m_ecsModule->GetECS()->AddComponent<c_Transform>(entity,
+            ecs->AddComponent<c_Transform>(entity,
                 glm::vec3(0), glm::vec3(0), glm::vec3(1));
 
-            // m_ecsModule->GetECS()->AddComponent<ColliderComponent>(entity,
-            //     AABB{glm::vec3(-0.5f), glm::vec3(0.5f)});
-
-            c_RigidBody rb =
-            {
-                .m_invMass = 0.0f,
-                .m_linearVelocity = glm::vec3(0.0f),
-                .m_angularVelocity = glm::vec3(0.0f),
-                .m_forceAccum = glm::vec3(0.0f),
-                .m_torqueAccum = glm::vec3(0.0f)
+            const std::vector<glm::vec3> cubeVertices = {
+                {-0.5f, -0.5f, -0.5f},
+                { 0.5f, -0.5f, -0.5f},
+                { 0.5f,  0.5f, -0.5f},
+                {-0.5f,  0.5f, -0.5f},
+                {-0.5f, -0.5f,  0.5f},
+                { 0.5f, -0.5f,  0.5f},
+                { 0.5f,  0.5f,  0.5f},
+                {-0.5f,  0.5f,  0.5f}
             };
 
-            m_ecsModule->GetECS()->AddComponent<c_RigidBody>(entity, rb);
+            c_Collider collider;
+            collider.shape = ConvexHull{};
+            collider.isTrigger = true;
 
-            Logger::Log(LogLevel::INFO, "AABB hitbox entity created");
+            if (!collider.GenerateConvexHull(cubeVertices, static_cast<int>(cubeVertices.size()))) {
+                Logger::Log(LogLevel::ERROR, "Failed to generate convex hull for box hitbox");
+                ecs->DestroyEntity(entity);
+                return;
+            }
+
+            ecs->AddComponent<c_Collider>(entity, collider);
+
+            c_RigidBody rb;
+            rb.m_invMass = 0.0f;
+            ecs->AddComponent<c_RigidBody>(entity, rb);
+
+            Logger::Log(LogLevel::INFO, "Convex box hitbox entity created");
         });
 
     CommandManager::RegisterCommand("onCreateCube",
