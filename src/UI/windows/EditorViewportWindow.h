@@ -10,15 +10,19 @@
 #include "ECS/World.h"
 #include "ECS/components/Components.h"
 #include "IViewportWindow.h"
+#include "UI/UICameraController.h"
+
+struct EditorCamera;
 
 class EditorViewportWindow : public IViewportWindow {
     int m_GizmoOperation = ImGuizmo::TRANSLATE;
 
 public:
-    void Render(ECSWorld &ecs, entt::entity &selected, Framebuffer *framebuffer, const c_Camera &camera,
-                c_Transform &transform, c_CameraOrientation &orientation);
 
-    void SetGizmoOperation(int op) { m_GizmoOperation = op; }
+    void Render(ECSWorld &ecs, entt::entity &selected, Framebuffer *framebuffer, EditorCamera *editorCamera);
+
+    ImGuizmo::OPERATION GetGizmoOperation() { return static_cast<ImGuizmo::OPERATION>(m_GizmoOperation); }
+    void SetGizmoOperation(const int op) { m_GizmoOperation = op; }
 
 private:
     static void UpdateTransformFromMatrix(c_Transform &tc, const glm::mat4 &matrix);

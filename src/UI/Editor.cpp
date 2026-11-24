@@ -187,12 +187,21 @@ void CodeEditor::OpenFile(const std::filesystem::path &path) {
     }
 }
 
+/*
+ * @brief Save current text file.
+ * Writes the editor contents to the file specified by "filename".
+ * @throws std::exception File operation error.
+ */
 void CodeEditor::SaveFile() {
     try {
+    	// @brief Remove trailing whitespaces before saving.
         editor.StripTrailingWhitespaces();
+
         std::ofstream stream(filename.c_str());
         stream << editor.GetText();
         stream.close();
+
+    	// @brief Store the current undo index as the saved version.
         version = editor.GetUndoIndex();
     }
     catch (std::exception &e) {

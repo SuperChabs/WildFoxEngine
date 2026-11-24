@@ -41,17 +41,8 @@ inline entt::entity GetEntityByName(ECSWorld *ecs, const std::string &name) {
     return result;
 }
 
-inline void CreateEntity(ECSWorld &ecs, const EntityDefinition &def) {
-    auto entity = ecs.CreateEntity(def.name);
-
-    for (const auto &comp: def.components)
-        std::visit(
-            [&](const auto &c) {
-                using T = std::decay_t<decltype(c)>;
-                ecs.AddComponent<T>(entity, c);
-            },
-            comp
-        );
+inline void CreateEntity(ECSWorld *ecs, const std::string &name) {
+    auto entity = ecs->CreateEntity(name);
 }
 
 inline void RegisterECS(asIScriptEngine *engine, ECSWorld *ecs) {
@@ -92,11 +83,10 @@ inline void RegisterECS(asIScriptEngine *engine, ECSWorld *ecs) {
     );
     AS_CHECK(r, "IsValidEntity");
 
-    // TODO: fix
-    // r = engine->RegisterGlobalFunction(
-    //     "void CreateEntity(const EntityDefinition &in)",
-    //     asFUNCTIONPR(CreateEntity, (ECSWorld &, const EntityDefinition &), void),
-    //     asCALL_CDECL_OBJFIRST, ecs
-    // );
-    // AS_CHECK(r, "CreateEntity");
+    r = engine->RegisterGlobalFunction(
+        "void CreateEntity(const string &in)",
+        asFUNCTIONPR(CreateEntity, (ECSWorld *, const std::string &), void),
+        asCALL_CDECL_OBJFIRST, ecs
+    );
+    AS_CHECK(r, "CreateEntity");
 }

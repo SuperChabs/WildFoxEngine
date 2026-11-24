@@ -1,8 +1,19 @@
 #include "ScriptSystem.h"
+
 #include <string>
 #include <filesystem>
+
 #include "core/logging/Logger.h"
 #include "scripting/ASState.h"
+
+void ScriptSystem::Start(ECSWorld &ecs) {
+    ecs.Each<c_Script>([&](entt::entity, c_Script &script) {
+        if (script.failed || !script.active || !script.loaded)
+            return;
+
+        CallFunction(script, script.fnOnStart);
+    });
+}
 
 void ScriptSystem::Update(ECSWorld &ecs, const float deltaTime) {
     ecs.Each<c_Script>([&](const entt::entity e, c_Script &script) {
@@ -14,16 +25,43 @@ void ScriptSystem::Update(ECSWorld &ecs, const float deltaTime) {
             return;
         }
 
-        CallUpdate(script, deltaTime);
+        if (!script.fnOnUpdate || !script.ctx)
+            return;
+
+        script.ctx->Prepare(script.fnOnUpdate);
+        script.ctx->SetArgFloat(0, deltaTime);
+
+        if (script.ctx->Execute() == asEXECUTION_EXCEPTION) {
+            Logger::Log(LogLevel::ERROR,
+                        "Script exception in OnUpdate: " +
+                        std::string(script.ctx->GetExceptionString()));
+            script.failed = true;
+        }
     });
 }
 
-void ScriptSystem::Start(ECSWorld &ecs) {
-    ecs.Each<c_Script>([&](entt::entity e, c_Script &script) {
-        if (script.failed || !script.active || !script.loaded)
+void ScriptSystem::FixedUpdate(ECSWorld &ecs, float deltaTime) {
+    ecs.Each<c_Script>([&](const entt::entity e, c_Script &script) {
+        if (script.failed || !script.active)
             return;
 
-        CallFunction(script, script.fnOnStart);
+        if (!script.loaded) {
+            LoadScript(e, script);
+            return;
+        }
+
+        if (!script.fnOnFixedUpdate || !script.ctx)
+            return;
+
+        script.ctx->Prepare(script.fnOnFixedUpdate);
+        script.ctx->SetArgFloat(0, deltaTime);
+
+        if (script.ctx->Execute() == asEXECUTION_EXCEPTION) {
+            Logger::Log(LogLevel::ERROR,
+                        "Script exception in OnFixedUpdate: " +
+                        std::string(script.ctx->GetExceptionString()));
+            script.failed = true;
+        }
     });
 }
 
@@ -33,6 +71,15 @@ void ScriptSystem::Stop(ECSWorld &ecs) {
             return;
 
         CallFunction(script, script.fnOnStop);
+    });
+}
+
+void ScriptSystem::Destroy(ECSWorld &ecs) {
+    ecs.Each<c_Script>([&](entt::entity e, c_Script &script) {
+        if (script.failed || !script.loaded)
+            return;
+
+        CallFunction(script, script.fnOnDestroy);
     });
 }
 
@@ -68,9 +115,11 @@ void ScriptSystem::LoadScript(entt::entity e, c_Script &script) {
 
     script.module = engine->GetModule(moduleName.c_str());
 
-    script.fnOnStart = script.module->GetFunctionByDecl("void OnStart()");
-    script.fnOnUpdate = script.module->GetFunctionByDecl("void OnUpdate(float)");
-    script.fnOnStop = script.module->GetFunctionByDecl("void OnStop()");
+    script.fnOnStart       = script.module->GetFunctionByDecl("void OnStart()");
+    script.fnOnUpdate      = script.module->GetFunctionByDecl("void OnUpdate(float)");
+    script.fnOnFixedUpdate = script.module->GetFunctionByDecl("void OnFixedUpdate(float)");
+    script.fnOnStop        = script.module->GetFunctionByDecl("void OnStop()");
+    script.fnOnDestroy     = script.module->GetFunctionByDecl("void OnDestroy()");
 
     script.ctx = engine->CreateContext();
 
@@ -84,21 +133,6 @@ void ScriptSystem::LoadScript(entt::entity e, c_Script &script) {
     Logger::Log(LogLevel::INFO, "Script loaded: " + script.scriptPath);
 
     CallFunction(script, script.fnOnStart);
-}
-
-void ScriptSystem::CallUpdate(c_Script &script, const float deltaTime) {
-    if (!script.fnOnUpdate || !script.ctx)
-        return;
-
-    script.ctx->Prepare(script.fnOnUpdate);
-    script.ctx->SetArgFloat(0, deltaTime);
-
-    if (script.ctx->Execute() == asEXECUTION_EXCEPTION) {
-        Logger::Log(LogLevel::ERROR,
-                    "Script exception in OnUpdate: " +
-                    std::string(script.ctx->GetExceptionString()));
-        script.failed = true;
-    }
 }
 
 void ScriptSystem::CallFunction(c_Script &script, asIScriptFunction *fn) {

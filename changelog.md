@@ -175,3 +175,9 @@ long time no see. im in 11th Grade now and it seems not so difficult as i expect
 ##### 21.11.2026
 - add RayCast to engine
 - implement ray cast to ui for picking objects
+
+### v0.9.2
+##### 24.11.2026
+- refractor Engine class
+- refractor UI module
+- add blender like camera control

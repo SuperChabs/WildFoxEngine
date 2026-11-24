@@ -19,7 +19,7 @@ public:
     bool Initialize(GLFWwindow *window);
     void Shutdown();
 
-    void BeginFrame(bool cameraControl);
+    void BeginFrame();
     void EndFrame();
 
     void RedFoxTheme();

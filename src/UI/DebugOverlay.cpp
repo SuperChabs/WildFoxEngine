@@ -15,7 +15,7 @@ DebugOverlay::DebugOverlay() {
 }
 
 void DebugOverlay::Render(ECSWorld *ecs, MaterialManager *materialManager, SceneSerializer *ss, EditorCamera &editorCamera,
-        PhysicsModule *physicsModule, PhysicsDebugRenderSystem *physicsDebug) {
+                          PhysicsModule *physicsModule, PhysicsDebugRenderSystem *physicsDebug) {
     if (!visible || !ecs) return;
 
     ImGuiViewport *viewport = ImGui::GetMainViewport();
@@ -64,8 +64,7 @@ void DebugOverlay::Render(ECSWorld *ecs, MaterialManager *materialManager, Scene
         physicsControlPanel.Render(ecs, physicsModule, physicsDebug);
     ImGui::End();
 
-    editorViewportWindow.Render(*ecs, m_selected, editorFramebuffer.get(), editorCamera.camera, editorCamera.transform,
-        editorCamera.orientation);
+    editorViewportWindow.Render(*ecs, m_selected, editorFramebuffer.get(), &editorCamera);
 
     gameViewportWindow.Render(gameFramebuffer.get());
 

@@ -11,7 +11,7 @@
 #include "core/CommandManager.h"
 #include "scene/serializer/SceneSerializer.h"
 #include "rendering/core/Framebuffer.h"
-#include "engine/EditorCamera.h"
+#include "UI/EditorCamera.h"
 
 #include "UI/panels/TagPanel.h"
 #include "UI/panels/TransformPanel.h"

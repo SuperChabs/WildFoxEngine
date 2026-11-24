@@ -3,11 +3,16 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
 
+#include "UI/EditorCamera.h"
 #include "UI/EditorPicking.h"
 
 void EditorViewportWindow::Render(ECSWorld &ecs, entt::entity &selected, Framebuffer *framebuffer,
-    const c_Camera &camera, c_Transform &transform, c_CameraOrientation &orientation) {
+                                  EditorCamera *editorCamera) {
     if (!isOpen) return;
+
+    auto &orientation = editorCamera->orientation;
+    auto &transform   = editorCamera->transform;
+    auto &camera      = editorCamera->camera;
 
     ImGui::SetNextWindowSize({800, 650}, ImGuiCond_FirstUseEver);
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {0, 0});
@@ -62,7 +67,7 @@ void EditorViewportWindow::Render(ECSWorld &ecs, entt::entity &selected, Framebu
                 glm::value_ptr(cameraView),
                 glm::value_ptr(cameraProj),
                 static_cast<ImGuizmo::OPERATION>(m_GizmoOperation),
-                ImGuizmo::WORLD,
+                ImGuizmo::LOCAL,
                 glm::value_ptr(trans)
             );
 

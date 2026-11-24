@@ -12,6 +12,9 @@ class ModuleManager {
     std::unordered_map<std::type_index, IModule *> moduleMap;
 
 public:
+    ModuleManager() = default;
+    ModuleManager(const ModuleManager&) = delete;
+    ModuleManager& operator=(const ModuleManager&) = delete;
     ~ModuleManager();
 
     template<typename T, typename... Args>
@@ -22,10 +25,10 @@ public:
         return ptr;
     }
 
-    void UpdateAll(float deltaTime) const;
+    void UpdateAll(float deltaTime);
 
     /// @brief Shuts modules down in reverse registration order
-    void ShutdownAll() const;
+    void ShutdownAll();
 
     template<typename T>
     T *GetModule() const {

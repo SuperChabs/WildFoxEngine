@@ -9,11 +9,14 @@ struct c_Script {
     std::string scriptPath;
 
     asIScriptModule *module = nullptr;
-    asIScriptContext *ctx = nullptr;
+    asIScriptContext *ctx   = nullptr;
 
-    asIScriptFunction *fnOnStart = nullptr;
-    asIScriptFunction *fnOnUpdate = nullptr;
-    asIScriptFunction *fnOnStop = nullptr;
+    // life cycle functions
+    asIScriptFunction *fnOnStart       = nullptr;
+    asIScriptFunction *fnOnUpdate      = nullptr;
+    asIScriptFunction *fnOnFixedUpdate = nullptr;
+    asIScriptFunction *fnOnStop        = nullptr;
+    asIScriptFunction *fnOnDestroy     = nullptr;
 
     bool loaded = false;
     bool failed = false;

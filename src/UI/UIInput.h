@@ -14,5 +14,5 @@ class UIInput {
 public:
     void SetHoveredZone(HoveredZone zone) { hoveredZone = zone; }
     void ResetZone() { hoveredZone = HoveredZone::None; }
-    HoveredZone GetHoveredZone() const { return hoveredZone; }
+    [[nodiscard]] HoveredZone GetHoveredZone() const { return hoveredZone; }
 };

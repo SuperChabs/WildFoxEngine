@@ -1,12 +1,10 @@
 #pragma once
 
-#include <string>
 #include <memory>
 
 #include <entt/entt.hpp>
 #include <GLFW/glfw3.h>
 
-#include "EditorCamera.h"
 #include "EngineCommandHandler.h"
 #include "application/Application.h"
 #include "ECS/systems/Systems.h"
@@ -27,36 +25,26 @@
  * 
  */
 class Engine : public Application {
-    std::unique_ptr<InputControllerSystem> inputControllerSystem;
-    std::unique_ptr<PhysicsDebugRenderSystem> physicsDebugSystem;
-
     //std::unique_ptr<AudioSystem> audioSystem;
 
     std::unique_ptr<EditorCommandHandler> m_ech;
 
-    ModuleManager *mm{};
-    CoreModule *coreModule{};
-    RenderingModule *renderingModule{};
-    ResourceModule *resourceModule{};
-    UIModule *uiModule{};
-    ECSModule *ecsModule{};
-    ScriptModule *m_scriptModule{};
-    SceneModule *sceneModule{};
-    PhysicsModule *m_physicsModule{};
+    ModuleManager   *mm{};
 
-    bool cameraControlEnabled{};
-    bool showUI{};
+    CoreModule      *m_coreModule{};
+    RenderingModule *m_renderingModule{};
+    ResourceModule  *m_resourceModule{};
+    UIModule        *m_uiModule{};
+    ECSModule       *m_ecsModule{};
+    ScriptModule    *m_scriptModule{};
+    SceneModule     *m_sceneModule{};
+    PhysicsModule   *m_physicsModule{};
 
     entt::entity gameCam = entt::null;
-    EditorCamera editorCam;
 
     static void FramebufferSizeCallback(GLFWwindow *window, int width, int height);
-
     static void MouseCallback(GLFWwindow *window, double xPos, double yPos);
-
-    static void MouseButtonCallback(GLFWwindow *window, int button, int action, int mods);
-
-    void SetCameraControlMode(bool enabled);
+    // static void MouseButtonCallback(GLFWwindow *window, int button, int action, int mods);
 
 protected:
     /**

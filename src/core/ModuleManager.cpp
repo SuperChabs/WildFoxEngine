@@ -3,19 +3,19 @@
 #include <ranges>
 
 ModuleManager::~ModuleManager() {
-    for (auto &module: std::views::reverse(modules)) {
+    for (const auto &module: std::views::reverse(modules)) {
         delete module;
     }
     modules.clear();
 }
 
-void ModuleManager::UpdateAll(float deltaTime) const {
-    for (auto &module: modules)
+void ModuleManager::UpdateAll(const float deltaTime) {
+    for (const auto &module: modules)
         if (module->IsInitialized() && module->IsShouldUpdate())
             module->Update(deltaTime);
 }
 
-void ModuleManager::ShutdownAll() const {
-    for (auto &module: std::views::reverse(modules))
+void ModuleManager::ShutdownAll() {
+    for (const auto &module: std::views::reverse(modules))
         module->Shutdown();
 }

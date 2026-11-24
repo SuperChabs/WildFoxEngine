@@ -50,6 +50,7 @@ set(IMGUI_SOURCES
         ${IMGUI_DIR}/imgui_widgets.cpp
         ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
         ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+        ${IMGUI_DIR}/misc/cpp/imgui_stdlib.cpp
 )
 set(IMGUI_INCLUDE_DIRS
         ${IMGUI_DIR}
