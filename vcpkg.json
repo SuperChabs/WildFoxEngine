@@ -1,0 +1,26 @@
+{
+  "name": "wildfox-engine",
+  "version": "0.1.0",
+  "dependencies": [
+    "openal-soft",
+    "glfw3",
+    "glm",
+    "assimp",
+    "libsndfile",
+    "entt",
+    "nlohmann-json",
+    "magic-enum",
+    "angelscript",
+    "glad",
+    "stb",
+    {
+      "name": "imgui",
+      "features": [
+        "glfw-binding",
+        "opengl3-binding",
+        "docking-experimental"
+      ]
+    },
+    "imguizmo"
+  ]
+}
