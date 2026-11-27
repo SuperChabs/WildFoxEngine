@@ -1,7 +1,7 @@
 #include "ScriptPanel.h"
 
 #include <imgui.h>
-#include <misc/cpp/imgui_stdlib.h>
+#include <imgui_stdlib.h>
 
 #include "FileSelector.h"
 #include "core/logging/Logger.h"
@@ -36,8 +36,8 @@ void ScriptPanel::Render(ECSWorld *ecs, entt::entity entity) {
 
         if (dialog.Render())
             if (dialog.SelectedOpenFile()) {
-                script.scriptPath = dialog.GetSelectedPath();
-                scriptPathBuffer = dialog.GetSelectedPath();
+                script.scriptPath = dialog.GetSelectedPath().generic_string();
+                scriptPathBuffer = dialog.GetSelectedPath().generic_string();
             }
 
         ImGui::SameLine();

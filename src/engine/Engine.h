@@ -72,7 +72,7 @@ protected:
     bool ShouldAllowCameraControl() const override;
 
 public:
-    Engine(int w, int h, char* &title);
+    Engine(int w, int h, const char* title);
 
 private:
     /// @brief Registers and initializes a module

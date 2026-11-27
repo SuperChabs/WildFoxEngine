@@ -2,7 +2,7 @@
 #include "core/logging/Logger.h"
 
 int main() {
-    char* title = "WildFox Engine";
+    const char* title = "WildFox Engine";
 
     Engine e(1640, 800, title);
 

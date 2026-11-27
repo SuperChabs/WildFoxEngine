@@ -12,11 +12,11 @@ class Window {
     GLFWwindow *window;
     int width;
     int height;
-    char* title;
+    const char* title;
     bool vsync = true;
 
 public:
-    Window(int width, int height, char* title);
+    Window(int width, int height, const char* title);
 
     ~Window();
 

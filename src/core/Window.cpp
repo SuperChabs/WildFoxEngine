@@ -3,7 +3,7 @@
 #include <utility>
 #include "core/logging/Logger.h"
 
-Window::Window(const int width, const int height, char* title)
+Window::Window(const int width, const int height, const char* title)
     : window(nullptr), width(width), height(height), title(title) {
 }
 

@@ -15,10 +15,10 @@ class CoreModule : public IModule {
 
     int m_width;
     int m_height;
-    char* m_title;
+    const char* m_title;
 
 public:
-    CoreModule(int width, int height, char* title);
+    CoreModule(int width, int height, const char* title);
 
     bool OnInitialize() override;
 

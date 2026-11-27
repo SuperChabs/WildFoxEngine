@@ -120,7 +120,7 @@ private:
     }
 
     static void Execute(const char *name) {
-        constexpr CommandArgs args;
+        const CommandArgs args;
         Execute(name, args);
     }
 
