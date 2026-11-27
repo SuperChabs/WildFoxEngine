@@ -2,33 +2,32 @@
 
 #include <string>
 
-#include <glm/glm.hpp>
-
-#include "rendering/core/GLContext.h"
 #include "resource/shader/ShaderManager.h"
+#include "PassContext.h"
 
 class RenderPass {
 protected:
-    std::string name;
-    GLContext *context;
-    ShaderManager *shaderManager;
+    std::string m_name;
+    ShaderManager *m_shaderManager;
 
-    bool enabled = true;
+    bool m_enabled = true;
 
 public:
-    RenderPass(const std::string &n, GLContext *ctx, ShaderManager *sm);
+    RenderPass(const std::string &n, ShaderManager *sm) : m_name(n), m_shaderManager(sm) {}
 
-    virtual ~RenderPass();
+    virtual ~RenderPass() = default;
 
     virtual void Setup() = 0;
-
-    virtual void Execute(const glm::mat4 &view, const glm::mat4 &projection) = 0;
-
+    virtual void Execute(FrameContext &ctx) = 0;
     virtual void Cleanup() = 0;
 
-    void SetEnabled(bool e);
+    static void BindTarget(GLuint fbo, int width, int height) {
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        glViewport(0, 0, width, height);
+    }
 
-    bool IsEnabled() const;
+    void SetEnabled(bool e) { m_enabled = e; }
 
-    const std::string &GetName() const;
+    [[nodiscard]] bool IsEnabled() const { return m_enabled; }
+    [[nodiscard]] const std::string &GetName() const { return m_name; }
 };

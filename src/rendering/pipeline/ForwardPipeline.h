@@ -1,10 +1,5 @@
 #pragma once
 
-#include <string>
-#include <memory>
-#include <vector>
-
-#include <entt/entt.hpp>
 #include <glad/glad.h>
 
 #include "rendering/pipeline/RenderPipeline.h"
@@ -16,21 +11,11 @@
 #include "ECS/components/Components.h"
 
 class ForwardPipeline : public RenderPipeline {
-    ECSWorld *world;
-    GLuint skyboxVAO;
-    GLuint cubemapTexture;
-
-    ShadowPass *m_ShadowPassPtr = nullptr;
-    GeometryPass *m_GeometryPassPtr = nullptr;
+    ECSWorld *m_world;
+    GLuint m_skyboxVAO;
+    GLuint m_cubeMapTexture;
 
 public:
-    ForwardPipeline(GLContext *ctx, ShaderManager *sm, ECSWorld *w,
-                    GLuint skyVAO, GLuint cubemap);
-
+    ForwardPipeline(GLContext *ctx, ShaderManager *sm, ECSWorld *w, GLuint skyVAO, GLuint cubeMap);
     void Initialize() override;
-
-    void Execute(c_Camera &camera, c_Transform &transform,
-                 c_CameraOrientation &orientation, int width, int height) override;
-
-    ShadowPass *GetShadowPass() const;
 };

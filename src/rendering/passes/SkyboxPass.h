@@ -8,19 +8,13 @@
 #include "resource/shader/ShaderManager.h"
 
 class SkyboxPass : public RenderPass {
-private:
-    GLuint skyboxVAO = 0;
-    GLuint cubemapTexture = 0;
+    GLuint m_skyboxVAO = 0;
+    GLuint m_cubeMapTexture = 0;
 
 public:
-    SkyboxPass(GLContext *ctx, ShaderManager *sm, GLuint vao, GLuint cubemap);
-
+    SkyboxPass(ShaderManager *sm, GLuint vao, GLuint cubeMap);
 
     void Setup() override;
-
-
-    void Execute(const glm::mat4 &view, const glm::mat4 &projection) override;
-
-
+    void Execute(FrameContext &ctx) override;
     void Cleanup() override;
 };

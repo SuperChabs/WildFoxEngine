@@ -9,11 +9,9 @@
 
 class UIPass : public RenderPass {
 public:
-    UIPass(GLContext *ctx, ShaderManager *sm);
+    UIPass( ShaderManager *sm);
 
     void Setup() override;
-
-    void Execute(const glm::mat4 &view, const glm::mat4 &projection) override;
-
+    void Execute(FrameContext &ctx) override;
     void Cleanup() override;
 };

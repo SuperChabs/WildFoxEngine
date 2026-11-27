@@ -2,35 +2,37 @@
 #include <string>
 #include "core/CommandManager.h"
 
-UIPass::UIPass(GLContext *ctx, ShaderManager *sm)
-    : RenderPass("UIPass", ctx, sm) {
+UIPass::UIPass( ShaderManager *sm)
+    : RenderPass("UIPass", sm) {
 }
 
 void UIPass::Setup() {
-    context->SetDepthTest(true);
-    context->SetDepthFunc(GL_LESS);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
     glDepthMask(GL_FALSE);
-    context->SetBlend(true);
+    glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void UIPass::Execute(const glm::mat4 &view, const glm::mat4 &projection) {
-    if (!enabled) return;
+void UIPass::Execute(FrameContext &ctx) {
+    if (!m_enabled) return;
 
     Setup();
 
-    CommandManager::ExecuteCommand("Renderer_RenderUI",
-                                   {
-                                       view,
-                                       projection,
-                                       std::string("icon")
-                                   });
+    BindTarget(ctx.sceneFBO, ctx.width, ctx.height);
+
+    std::string shaderName = "icon";
+
+    m_shaderManager->Bind(shaderName);
+    m_shaderManager->SetMat4(shaderName, "projection", ctx.projection);
+    m_shaderManager->SetMat4(shaderName, "view", ctx.view);
+    m_shaderManager->Unbind();
 
     Cleanup();
 }
 
 void UIPass::Cleanup() {
     glDepthMask(GL_TRUE);
-    context->SetDepthTest(true);
-    context->SetBlend(false);
+    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
 }

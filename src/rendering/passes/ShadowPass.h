@@ -6,7 +6,6 @@
 #include <glad/glad.h>
 
 #include "rendering/passes/RenderPass.h"
-#include "rendering/core/GLContext.h"
 #include "resource/shader/ShaderManager.h"
 #include "ECS/World.h"
 #include "ECS/components/Components.h"
@@ -28,47 +27,34 @@ class ShadowPass : public RenderPass {
     std::unordered_map<entt::entity, int> m_ShadowMapIndices;
     std::unordered_map<entt::entity, int> m_PointShadowMapIndices;
 
-    float m_OrthoSize = 30.0f;
-    float m_NearPlane = 1.0f;
-    float m_FarPlane = 100.0f;
+    float m_OrthoSize      = 30.0f;
+    float m_NearPlane      = 1.0f;
+    float m_FarPlane       = 100.0f;
+    float m_shadowDistance = 80.0f;
+    float m_casterMargin   = 50.0f;
 
 public:
-    ShadowPass(GLContext *ctx, ShaderManager *sm, ECSWorld *world);
-
+    ShadowPass(ShaderManager *sm, ECSWorld *world);
     ~ShadowPass() override;
 
     void Setup() override;
-
-    void Execute(const glm::mat4 &, const glm::mat4 &) override;
-
+    void Execute(FrameContext &ctx) override;
     void Cleanup() override;
 
-    GLuint GetShadowMapArray() const;
-
-    GLuint GetCubeShadowMapArray() const;
-
-    const std::vector<glm::mat4> &GetLightMatrices() const;
-
-    const std::unordered_map<entt::entity, int> &GetShadowMapIndices() const;
-
-    const std::unordered_map<entt::entity, int> &GetPointShadowMapIndices() const;
-
-    int GetShadowMapSize() const;
+    int GetShadowMapSize() const { return m_ShadowMapSize; }
 
     void SetShadowMapSize(int size);
-
-    void SetOrthoSize(float size);
-
-    void SetFarPlane(float farP);
+    void SetOrthoSize(const float size) { m_OrthoSize = size; }
+    void SetFarPlane(const float farP)  { m_FarPlane = farP; }
 
 private:
     void InitializeShadowMap(int count);
-
     void InitializeCubeShadowMap(int count);
 
-    glm::mat4 BuildLightSpaceMatrix(const glm::vec3 &lightDir) const;
+    static std::array<glm::vec3, 8> GetFrustumCornersWS(const glm::mat4 &view, const glm::mat4 &projection,
+        float sliceNear, float sliceFar);
 
-    glm::mat4 BuildSpotLightMatrix(const c_Light &light);
-
+    glm::mat4 BuildLightSpaceMatrix(const glm::vec3 &lightDir, const std::array<glm::vec3, 8> &corners) const;
+    static glm::mat4 BuildSpotLightMatrix(const c_Light &light);
     static std::vector<glm::mat4> BuildPointSpaceMatrices(const c_Light &light);
 };

@@ -9,15 +9,17 @@
 #include "rendering/passes/RenderPass.h"
 #include "rendering/core/GLContext.h"
 #include "resource/shader/ShaderManager.h"
-#include "ECS/World.h"
 #include "ECS/components/Components.h"
+#include "rendering/core/Framebuffer.h"
 
 class RenderPipeline {
 protected:
     std::string name;
-    std::vector<std::unique_ptr<RenderPass> > passes;
+    std::vector<std::unique_ptr<RenderPass>> passes;
     GLContext *context;
     ShaderManager *shaderManager;
+
+    std::unique_ptr<Framebuffer> m_sceneFBO;
 
 public:
     RenderPipeline(const std::string &n, GLContext *ctx, ShaderManager *sm);
@@ -26,14 +28,10 @@ public:
 
     virtual void Initialize() = 0;
 
-    virtual void Execute(c_Camera &camera, c_Transform &transform,
-                         c_CameraOrientation &orientation, int width, int height);
-
+    void Execute(c_Camera &camera, c_Transform &transform, c_CameraOrientation &orientation, int width, int height);
     void AddPass(std::unique_ptr<RenderPass> pass);
 
     RenderPass *GetPass(const std::string &passName);
-
     const std::string &GetName() const;
-
     size_t GetPassCount() const;
 };

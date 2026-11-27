@@ -16,12 +16,11 @@ public:
     ~Framebuffer();
 
     void Bind();
-
     void Unbind();
-
     void Resize(int newWidth, int newHeight);
 
     unsigned int GetTextureID() const;
+    unsigned int GetID() const { return FBO; }
 
     int GetWidth() const;
 

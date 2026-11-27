@@ -23,8 +23,6 @@ class Renderer {
     std::unique_ptr<GLContext> context;
     std::unique_ptr<RenderPipeline> pipeline;
 
-    std::unique_ptr<RenderSystem> renderSystem;
-    std::unique_ptr<LightSystem> lightSystem;
     std::unique_ptr<IconRenderSystem> m_icon;
 
     ShaderManager *shaderManager;
@@ -59,9 +57,7 @@ public:
     void Shutdown();
 
     void SetClearColor(const glm::vec4 &color);
-
     void SetWireframe(bool enable);
-
     void SetEnableShadows(bool enable);
 
     GLContext *GetContext();
@@ -84,6 +80,4 @@ private:
     void ApplySettings();
 
     void LogStats() const;
-
-    void RegisterRenderCommands();
 };

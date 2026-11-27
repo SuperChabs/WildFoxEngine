@@ -90,3 +90,18 @@ CMakeFiles/
 log/
 .idea
 saves/
+
+# CMake / CLion build directories (any cmake-build-* variant)
+cmake-build-*/
+out/
+CMakeUserPresets.json
+compile_commands.json
+
+# Local third-party checkouts (dependencies are fetched by CMake FetchContent)
+vendor/
+
+# Python virtual environment
+.venv/
+
+# ImGui runtime layout (per-user)
+imgui.ini

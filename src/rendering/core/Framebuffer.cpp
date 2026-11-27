@@ -114,8 +114,6 @@ void Framebuffer::Resize(int newWidth, int newHeight) {
     Invalidate();
 }
 
-// --- split_headers: auto-generated ---
-
 unsigned int Framebuffer::GetTextureID() const {
     return textureID;
 }

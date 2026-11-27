@@ -9,4 +9,8 @@ struct EditorCamera {
 
     glm::vec3 pivot{0.0f, 0.0f, 0.0f};
     float distance = 10.0f;
+
+    EditorCamera() {
+        camera.isMainCamera = true;
+    }
 };

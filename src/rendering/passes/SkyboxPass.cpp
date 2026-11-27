@@ -1,37 +1,38 @@
 #include "SkyboxPass.h"
 
-SkyboxPass::SkyboxPass(GLContext *ctx, ShaderManager *sm, GLuint vao, GLuint cubemap)
-    : RenderPass("SkyboxPass", ctx, sm)
-      , skyboxVAO(vao)
-      , cubemapTexture(cubemap) {
+SkyboxPass::SkyboxPass(ShaderManager *sm, GLuint vao, GLuint cubeMap)
+    : RenderPass("SkyboxPass", sm), m_skyboxVAO(vao), m_cubeMapTexture(cubeMap) {
 }
 
 void SkyboxPass::Setup() {
     glDepthMask(GL_FALSE);
-    context->SetDepthFunc(GL_LEQUAL);
+    glDepthFunc(GL_LEQUAL);
 
-    shaderManager->Bind("skybox");
+    m_shaderManager->Bind("skybox");
 }
 
-void SkyboxPass::Execute(const glm::mat4 &view, const glm::mat4 &projection) {
-    if (!enabled) return;
+void SkyboxPass::Execute(FrameContext &ctx) {
+    if (!m_enabled) return;
 
     Setup();
 
-    glm::mat4 skyboxView = glm::mat4(glm::mat3(view));
-    shaderManager->SetMat4("skybox", "view", skyboxView);
-    shaderManager->SetMat4("skybox", "projection", projection);
+    BindTarget(ctx.sceneFBO, ctx.width, ctx.height);
 
-    context->BindVAO(skyboxVAO);
-    context->BindTexture2D(cubemapTexture, 0);
-    context->DrawArrays(GL_TRIANGLES, 0, 36);
-    context->UnbindVAO();
+    const auto skyboxView = glm::mat4(glm::mat3(ctx.view));
+    m_shaderManager->SetMat4("skybox", "view", skyboxView);
+    m_shaderManager->SetMat4("skybox", "projection", ctx.projection);
+
+    glBindVertexArray(m_skyboxVAO);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_cubeMapTexture);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glBindVertexArray(0);
 
     Cleanup();
 }
 
 void SkyboxPass::Cleanup() {
     glDepthMask(GL_TRUE);
-    context->SetDepthFunc(GL_LESS);
-    shaderManager->Unbind();
+    glDepthFunc(GL_LESS);
+    m_shaderManager->Unbind();
 }

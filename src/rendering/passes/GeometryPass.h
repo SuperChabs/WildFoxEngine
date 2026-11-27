@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <variant>
 
 #include <glm/glm.hpp>
 #include <glad/glad.h>
@@ -10,34 +9,22 @@
 #include "ECS/World.h"
 #include "rendering/core/GLContext.h"
 #include "resource/shader/ShaderManager.h"
-#include "core/logging/Logger.h"
 
 class GeometryPass : public RenderPass {
     ECSWorld *world;
-
-    std::vector<glm::mat4> m_LightSpaceMatrices;
-    std::unordered_map<entt::entity, int> m_ShadowMapIndices;
-    GLuint m_shadowMapArray;
-    GLuint m_CubeShadowMapArray;
-    std::unordered_map<entt::entity, int> m_CubeShadowMapIndices;
 
     static constexpr int SHADOW_MAP_TEXTURE_SLOT = 6;
     static constexpr int CUBE_SHADOW_MAP_TEXTURE_SLOT = 4;
 
 public:
-    GeometryPass(GLContext *ctx, ShaderManager *sm, ECSWorld *w);
-
-    void SetShadowData(const std::vector<glm::mat4> &lightSpaceMatrices, GLuint shadowMapArray,
-                       const std::unordered_map<entt::entity, int> &shadowMapIndices = {},
-                       GLuint shadowCubeMapArray = 0,
-                       const std::unordered_map<entt::entity, int> &CubeShadowMapIndices = {});
+    GeometryPass(ShaderManager *sm, ECSWorld *w);
 
     void Setup() override;
 
-    void Execute(const glm::mat4 &view, const glm::mat4 &projection) override;
+    void Execute(FrameContext &ctx) override;
 
     void Cleanup() override;
 
 private:
-    void CleanupShadowBinding();
+    static void CleanupShadowBinding();
 };

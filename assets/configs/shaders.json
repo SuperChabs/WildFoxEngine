@@ -30,6 +30,11 @@
             "vertex": "vertex/shadowCubeMapDepth.vsh",
             "geometry": "geometry/shadowCubeMapDepth.gsh",
             "fragment": "fragment/shadowCubeMapDepth.fsh"
+        },
+        {
+            "name": "post_dither",
+            "vertex": "vertex/fullscreen.vsh",
+            "fragment": "fragment/post_dither.fsh"
         }
     ]
 }

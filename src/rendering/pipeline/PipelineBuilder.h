@@ -19,7 +19,6 @@ enum class PipelineType {
 };
 
 class PipelineBuilder {
-private:
     GLContext *context = nullptr;
     ShaderManager *shaderManager = nullptr;
     ECSWorld *world = nullptr;
@@ -64,9 +63,8 @@ public:
         Logger::Log(LogLevel::DEBUG, "  - skyboxVAO: " + std::to_string(skyboxVAO));
         Logger::Log(LogLevel::DEBUG, "  - cubemapTexture: " + std::to_string(cubemapTexture));
 
-        if (!context || !shaderManager || !world) {
-            Logger::Log(LogLevel::ERROR,
-                        "PipelineBuilder: Missing required components");
+        if (!shaderManager || !world) {
+            Logger::Log(LogLevel::ERROR, "PipelineBuilder: Missing required components");
             return nullptr;
         }
 
@@ -81,20 +79,17 @@ public:
                 break;
 
             case PipelineType::DEFERRED:
-                Logger::Log(LogLevel::WARNING,
-                            "Deferred pipeline not implemented yet");
+                Logger::Log(LogLevel::WARNING, "Deferred pipeline not implemented yet");
                 return nullptr;
 
             case PipelineType::CUSTOM:
-                Logger::Log(LogLevel::WARNING,
-                            "Custom pipeline requires manual setup");
+                Logger::Log(LogLevel::WARNING, "Custom pipeline requires manual setup");
                 return nullptr;
         }
 
         if (pipeline) {
             pipeline->Initialize();
-            Logger::Log(LogLevel::INFO,
-                        "Pipeline built successfully: " + pipeline->GetName());
+            Logger::Log(LogLevel::INFO, "Pipeline built successfully: " + pipeline->GetName());
         }
 
         return pipeline;
