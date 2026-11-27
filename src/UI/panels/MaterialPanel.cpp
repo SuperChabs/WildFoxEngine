@@ -114,5 +114,5 @@ void MaterialPanel::RenderOpenFileDialog(const std::string &name, std::string &p
 
     if (dialog.Render())
         if (dialog.SelectedOpenFile())
-            path = dialog.GetSelectedPath();
+            path = dialog.GetSelectedPath().generic_string();
 }

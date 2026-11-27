@@ -2,7 +2,7 @@
 
 #include "core/logging/Logger.h"
 
-Application::Application(int width, int height, char* &title)
+Application::Application(int width, int height, const char* title)
     : m_isRunning(false) {
     moduleManager = std::make_unique<ModuleManager>();
 

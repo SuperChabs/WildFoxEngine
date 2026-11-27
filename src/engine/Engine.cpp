@@ -168,7 +168,7 @@ bool Engine::ShouldAllowCameraControl() const {
     return true;
 }
 
-Engine::Engine(const int w, const int h, char* &title)
+Engine::Engine(const int w, const int h, const char* title)
     : Application(w, h, title) {
 }
 

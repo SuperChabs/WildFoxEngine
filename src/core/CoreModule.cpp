@@ -6,7 +6,7 @@
 
 #include "core/logging/Logger.h"
 
-CoreModule::CoreModule(const int width, const int height, char* title)
+CoreModule::CoreModule(const int width, const int height, const char* title)
     : m_width(width), m_height(height), m_title(title) {
 }
 

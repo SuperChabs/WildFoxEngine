@@ -464,7 +464,7 @@ void DebugOverlay::RenderPrefabsDialog() {
         for (int i = 0; i < prefabName.size(); i++) {
             const char c = prefabName[i];
 
-            if ( i > 0 && std::isupper(static_cast<u_char>(c)) && std::islower(static_cast<unsigned char>(prefabName[i - 1])))
+            if ( i > 0 && std::isupper(static_cast<unsigned char>(c)) && std::islower(static_cast<unsigned char>(prefabName[i - 1])))
                 result += ' ';
 
             result += c;

@@ -42,7 +42,7 @@ protected:
      * @param width Window width in pixels
      * @param height Window height in pixels
      */
-    Application(int width, int height, char* &title);
+    Application(int width, int height, const char* title);
 
     /// @return false if a required part of the engine failed to initialize
     virtual bool OnInitialize() { return true; }
