@@ -105,3 +105,9 @@ vendor/
 
 # ImGui runtime layout (per-user)
 imgui.ini
+
+# assets
+assets/objects/
+assets/textures/
+assets/sounds/
+assets/scripts/
