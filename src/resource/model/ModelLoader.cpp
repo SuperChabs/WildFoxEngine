@@ -76,30 +76,25 @@ std::pair<Model *, entt::entity> LoadModelFromFile(std::string &path, MaterialMa
     );
     model->SetRootNode(rootNode);
 
-    auto children = world->GetChildren(rootEntity);
-    if (children.size() == 1) {
-        auto it = children.begin();
-        entt::entity meshEntity = *it;
+    if (world || rootEntity != entt::null){
+        const auto &rootHierarchy = world->GetComponent<c_Hierarchy>(rootEntity); // hi, RootTool
+        if (rootHierarchy.firstChild == rootHierarchy.lastChild && rootHierarchy.firstChild != entt::null) {
+            const entt::entity meshEntity = rootHierarchy.firstChild;
 
-        auto &modelComp = world->GetComponent<c_Model>(rootEntity);
-        world->AddComponent<c_Model>(meshEntity, modelComp.filePath);
+            auto &modelComp = world->GetComponent<c_Model>(rootEntity);
+            auto filePath = modelComp.filePath;
+            world->AddComponent<c_Model>(meshEntity, path);
 
-        // auto& tag = world->GetComponent<TagComponent>(meshEntity);
-        // tag.name = model->GetName();
+            // auto& tag = world->GetComponent<TagComponent>(meshEntity);
+            // tag.name = model->GetName();
 
-        world->ClearParent(meshEntity);
-        world->DestroyEntity(rootEntity);
-        rootEntity = meshEntity;
+            world->ClearParent(meshEntity);
+            world->DestroyEntity(rootEntity);
+            rootEntity = meshEntity;
+        }
     }
 
-    Logger::Log(LogLevel::INFO,
-                "Model loaded: " + path + " (" +
-                std::to_string(model->GetMeshCount()) + " meshes)");
-
-    if (rootEntity != entt::null) {
-        children = world->GetChildren(rootEntity);
-        Logger::Log(LogLevel::INFO, "Root entity has " + std::to_string(children.size()) + " children");
-    }
+    Logger::Log(LogLevel::INFO, "Model loaded: " + path + " (" + std::to_string(model->GetMeshCount()) + " meshes)");
 
     loadedTexturesCache.clear();
 
@@ -133,7 +128,7 @@ std::shared_ptr<ModelNode> ProcessNode(aiNode *node, const aiScene *scene, Model
             isBaseShape
         );
 
-        int meshIndex = model->GetMeshCount();
+        int meshIndex = static_cast<int>(model->GetMeshCount());
         model->AddMesh(processedMesh);
         modelNode->meshIndices.push_back(meshIndex);
 
@@ -327,7 +322,7 @@ std::vector<Texture> LoadMaterialTextures(
         bool skip = false;
         unsigned int textureID = 0;
 
-        if (loadedTexturesCache.find(cacheKey) != loadedTexturesCache.end()) {
+        if (loadedTexturesCache.contains(cacheKey)) {
             textureID = loadedTexturesCache[cacheKey];
             skip = true;
             Logger::Log(LogLevel::DEBUG,
@@ -375,8 +370,8 @@ unsigned int TextureFromFile(const char *path, const std::string &directory, con
             data = stbi_load_from_memory(reinterpret_cast<unsigned char *>(aiTex->pcData), aiTex->mWidth, &height,
                                          &width, &nrComponents, 0);
         } else {
-            width = aiTex->mWidth;
-            height = aiTex->mHeight;
+            width = static_cast<int>(aiTex->mWidth);
+            height = static_cast<int>(aiTex->mHeight);
             nrComponents = 4;
             data = reinterpret_cast<unsigned char *>(aiTex->pcData);
             freeData = false;

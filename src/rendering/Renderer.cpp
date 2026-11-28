@@ -102,10 +102,6 @@ void Renderer::Shutdown() {
     Logger::Log(LogLevel::INFO, "Renderer shutdown");
 }
 
-void Renderer::SetClearColor(const glm::vec4 &color) {
-    config.clearColor = color;
-}
-
 void Renderer::SetWireframe(bool enable) {
     config.enableWireframe = enable;
     glPolygonMode(GL_FRONT_AND_BACK, enable ? GL_LINE : GL_FILL);
@@ -121,38 +117,6 @@ void Renderer::SetEnableShadows(bool enable) {
     Logger::Log(LogLevel::INFO, std::string("Shadows ") + (enable ? "enabled" : "disabled"));
 }
 
-GLContext *Renderer::GetContext() {
-    return context.get();
-}
-
-RenderPipeline *Renderer::GetPipeline() {
-    return pipeline.get();
-}
-
-const RenderStats &Renderer::GetStats() const {
-    return stats;
-}
-
-RendererConfig &Renderer::GetConfig() {
-    return config;
-}
-
-ECSWorld *Renderer::GetWorld() {
-    return world;
-}
-
-ShaderManager *Renderer::GetShaderManager() {
-    return shaderManager;
-}
-
-IconRenderSystem *Renderer::GetIcon() {
-    return m_icon.get();
-}
-
-bool Renderer::IsInitialized() const {
-    return initialized;
-}
-
 void Renderer::ApplySettings() {
     if (config.enableDepthTest) context->SetDepthTest(true);
     if (config.enableCullFace) context->SetCullFace(true);
@@ -161,9 +125,9 @@ void Renderer::ApplySettings() {
 }
 
 void Renderer::LogStats() const {
-    Logger::Log(LogLevel::DEBUG,
-                "FPS: " + std::to_string(static_cast<int>(stats.fps)) +
-                " | Frame: " + std::to_string(stats.frameTime) + "ms" +
-                " | Draws: " + std::to_string(stats.drawCalls) +
-                " | Tris: " + std::to_string(stats.triangleCount));
+    // Logger::Log(LogLevel::DEBUG,
+    //             "FPS: " + std::to_string(static_cast<int>(stats.fps)) +
+    //             " | Frame: " + std::to_string(stats.frameTime) + "ms" +
+    //             " | Draws: " + std::to_string(stats.drawCalls) +
+    //             " | Tris: " + std::to_string(stats.triangleCount));
 }

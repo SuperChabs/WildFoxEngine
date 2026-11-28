@@ -93,7 +93,9 @@ void ScriptSystem::LoadScript(entt::entity e, c_Script &script) {
     asIScriptEngine *engine = ASState::Get();
 
     CScriptBuilder builder;
-    std::string moduleName = script.scriptPath;
+    // one module per entity: StartNewModule discards an existing module with the same name,
+    // which would destroy the globals of every other entity running this script
+    std::string moduleName = script.scriptPath + "#" + std::to_string(entt::to_integral(e));
 
     if (builder.StartNewModule(engine, moduleName.c_str()) < 0) {
         Logger::Log(LogLevel::ERROR, "Failed to start module: " + moduleName);

@@ -31,8 +31,7 @@ namespace {
                 }
             }
 
-            for (const entt::entity child : ecs->GetChildren(current))
-                collect(child);
+            ecs->ForEachChild(current, [&](const entt::entity child) { collect(child); });
         };
 
         collect(root);

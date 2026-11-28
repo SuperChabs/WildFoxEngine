@@ -17,8 +17,9 @@ struct c_ID {
 
     c_ID() = default;
 
-    explicit c_ID(const uint64_t i) : id(i) {
-    }
+    explicit c_ID(const uint64_t i) : id(i) {}
+
+    bool operator!=(const c_ID &other) const { return id != other.id; }
 };
 
 /// @brief Tag: the entity survives ECSWorld::Clear() (scene load / new scene)

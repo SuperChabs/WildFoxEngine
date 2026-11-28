@@ -172,8 +172,10 @@ void PhysicsControlPanel::RenderEntityNode(ECSWorld *world, entt::entity &e, ent
     }
 
     if (open && hasChildren) {
-        for (entt::entity child : world->GetComponent<c_Hierarchy>(e).children)
+        world->ForEachChild(e, [&](entt::entity child) {
             RenderEntityNode(world, child, selected);
+        });
+
         ImGui::TreePop();
     }
 }

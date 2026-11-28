@@ -1,16 +1,24 @@
 #pragma once
 
-#include <unordered_set>
 #include <entt/entt.hpp>
 
 struct c_Hierarchy {
     entt::entity parent = entt::null;
-    std::unordered_set<entt::entity> children;
+
+    entt::entity firstChild = entt::null;
+    entt::entity lastChild  = entt::null;
+
+    entt::entity prevSibling = entt::null;
+    entt::entity nextSibling = entt::null;
 
     c_Hierarchy() = default;
 
-    bool HasParent() const { return parent != entt::null; }
-    bool HasChildren() const { return !children.empty(); }
-    void AddChild(entt::entity child) { children.insert(child); }
-    void RemoveChild(entt::entity child) { children.erase(child); }
+    void Clear() {
+        parent = entt::null;
+        prevSibling = entt::null;
+        nextSibling = entt::null;
+    }
+
+    bool HasParent()   const { return parent != entt::null; }
+    bool HasChildren() const { return firstChild != entt::null; }
 };

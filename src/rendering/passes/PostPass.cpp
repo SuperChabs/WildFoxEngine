@@ -17,7 +17,7 @@ static glm::vec3 Hex(const unsigned int rgb) {
     return glm::vec3((rgb >> 16) & 0xFF, (rgb >> 8) & 0xFF, rgb & 0xFF) / 255.0f;
 }
 
-PostPass::PostPass(ShaderManager *sm) : RenderPass("PostPass", sm), m_settings(MakePreset(DitherStyle::PS1)) {
+PostPass::PostPass(ShaderManager *sm) : RenderPass("PostPass", sm), m_settings(MakePreset(DitherStyle::Retro16)) {
     glGenVertexArrays(1, &m_emptyVAO);
 }
 

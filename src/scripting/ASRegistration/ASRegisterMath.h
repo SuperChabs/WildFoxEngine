@@ -47,7 +47,10 @@ namespace MathFuncs {
 template<typename V>
 class VecFuncs {
 public:
-    static V Normalize(const V& v) { return glm::normalize(v); }
+    static V Normalize(const V& v) {
+        float l = glm::length(v);
+        return l > 0.0f ? v / l : V(0.0f);
+    }
     static float Length(const V& v) { return glm::length(v); }
     static float LengthSquared(const V& v) { return glm::dot(v, v); }
     static float Distance(const V& v1, const V& v2) { return glm::distance(v1, v2); }

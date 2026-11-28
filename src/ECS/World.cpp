@@ -25,21 +25,51 @@ void ECSWorld::DestroyEntity(const entt::entity entity) {
     if (!IsValid(entity))
         return;
 
-    if (HasComponent<c_Hierarchy>(entity))
-        for (const auto children = GetComponent<c_Hierarchy>(entity).children; auto &child: children)
-            DestroyEntity(child);
+    while (HasComponent<c_Hierarchy>(entity)) {
+        const auto child = GetComponent<c_Hierarchy>(entity).firstChild;
+
+        if (child == entt::null) break;
+
+        if (!IsValid(child)) {
+            Logger::Log(LogLevel::ERROR, "Invalid child entity detected!");
+            break;
+        }
+
+        DestroyEntity(child);
+    }
 
     if (HasComponent<c_Hierarchy>(entity))
-        if (const auto &hc = GetComponent<c_Hierarchy>(entity); hc.HasParent()
-            && IsValid(hc.parent) && HasComponent<c_Hierarchy>(hc.parent))
-            GetComponent<c_Hierarchy>(hc.parent).RemoveChild(entity);
+        Detach(entity);
 
     if (registry.valid(entity))
         registry.destroy(entity);
 }
 
-bool ECSWorld::IsValid(const entt::entity entity) const {
-    return registry.valid(entity);
+void ECSWorld::Detach(const entt::entity child) {
+    auto &childHierarchy = GetComponent<c_Hierarchy>(child);
+
+    if (childHierarchy.parent != entt::null) {
+        auto &parentHierarchy = GetComponent<c_Hierarchy>(childHierarchy.parent);
+
+        const auto prevSibling = childHierarchy.prevSibling;
+        const auto nextSibling = childHierarchy.nextSibling;
+
+        if (prevSibling != entt::null) {
+            auto &prevHierarchy = GetComponent<c_Hierarchy>(prevSibling);
+            prevHierarchy.nextSibling = nextSibling;
+        }
+        else
+            parentHierarchy.firstChild = nextSibling;
+
+        if (nextSibling != entt::null) {
+            auto &nextHierarchy = GetComponent<c_Hierarchy>(nextSibling);
+            nextHierarchy.prevSibling = prevSibling;
+        }
+        else
+            parentHierarchy.lastChild = prevSibling;
+    }
+
+    childHierarchy.Clear();
 }
 
 void ECSWorld::Clear() {
@@ -56,17 +86,6 @@ void ECSWorld::Clear() {
         DestroyEntity(entity);
 
     nextID = 1;
-}
-
-size_t ECSWorld::GetEntityCount() const {
-    return registry.storage<entt::entity>()->size();
-}
-
-std::unordered_set<entt::entity> ECSWorld::GetChildren(entt::entity entity) {
-    if (!IsValid(entity) || !HasComponent<c_Hierarchy>(entity))
-        return {};
-
-    return GetComponent<c_Hierarchy>(entity).children;
 }
 
 entt::entity ECSWorld::GetParent(entt::entity entity) {
@@ -97,38 +116,52 @@ glm::mat4 ECSWorld::GetGlobalTransform(entt::entity entity, int depth) {
     return localTransform;
 }
 
-void ECSWorld::SetParent(const entt::entity child, const entt::entity parent) {
-    if (!IsValid(child) || !IsValid(parent))
-        return;
+void ECSWorld::SetParent(const entt::entity child, const entt::entity newParent) {
+    if (!IsValid(newParent) || !IsValid(child)) return;
+
+    entt::entity temp = newParent;
+    while (temp != entt::null) {
+        if (!HasComponent<c_Hierarchy>(temp)) break;
+
+        if (child == temp) return;
+
+        temp = GetComponent<c_Hierarchy>(temp).parent;
+    }
+
+    if (!HasComponent<c_Hierarchy>(newParent))
+        AddComponent<c_Hierarchy>(newParent);
 
     if (!HasComponent<c_Hierarchy>(child))
         AddComponent<c_Hierarchy>(child);
 
-    if (!HasComponent<c_Hierarchy>(parent))
-        AddComponent<c_Hierarchy>(parent);
+    Detach(child);
 
-    auto &childHierarchy = GetComponent<c_Hierarchy>(child);
-    auto &parentHierarchy = GetComponent<c_Hierarchy>(parent);
+    auto &parentHierarchy = GetComponent<c_Hierarchy>(newParent);
+    auto &childHierarchy  = GetComponent<c_Hierarchy>(child);
+    if (parentHierarchy.lastChild != entt::null) {
+        const auto oldLast  = parentHierarchy.lastChild;
+        auto &prevHierarchy = GetComponent<c_Hierarchy>(parentHierarchy.lastChild);
 
-    if (childHierarchy.HasParent()) {
-        auto &oldParentHierarchy = GetComponent<c_Hierarchy>(childHierarchy.parent);
-        oldParentHierarchy.RemoveChild(child);
+        prevHierarchy.nextSibling  = child;
+        childHierarchy.prevSibling = oldLast;
+        parentHierarchy.lastChild  = child;
+    }
+    else {
+
+        parentHierarchy.firstChild = child;
+        parentHierarchy.lastChild = child;
     }
 
-    childHierarchy.parent = parent;
-    parentHierarchy.AddChild(child);
-
-    Logger::Log(LogLevel::DEBUG, "Set parent relationship");
+    childHierarchy.parent = newParent;
 }
 
-void ECSWorld::ClearParent(entt::entity child) {
+void ECSWorld::ClearParent(const entt::entity child) {
     if (!IsValid(child) || !HasComponent<c_Hierarchy>(child))
         return;
 
-    if (auto &childHierarchy = GetComponent<c_Hierarchy>(child); childHierarchy.HasParent()) {
-        auto &parentHierarchy = GetComponent<c_Hierarchy>(childHierarchy.parent);
-        parentHierarchy.RemoveChild(child);
-        childHierarchy.parent = entt::null;
+    auto &childHierarchy = GetComponent<c_Hierarchy>(child);
+    if (childHierarchy.HasParent()) {
+        Detach(child);
     }
 }
 
@@ -146,8 +179,4 @@ entt::entity ECSWorld::CreateCamera(const std::string &name, bool setAsMain) {
 
     Logger::Log(LogLevel::INFO, "Camera entity created: " + name);
     return entity;
-}
-
-entt::registry &ECSWorld::GetRegistry() {
-    return registry;
 }

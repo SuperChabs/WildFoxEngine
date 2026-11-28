@@ -181,6 +181,7 @@ void DebugOverlay::RenderHierarchyTab(ECSWorld *ecs) {
     ImGui::Separator();
 
     entt::entity toDelete = entt::null;
+    std::pair<entt::entity, entt::entity> toAdopt = std::make_pair(entt::null, entt::null);
     std::vector<entt::entity> roots;
     static bool sortAlphabetically = false;
 
@@ -208,16 +209,21 @@ void DebugOverlay::RenderHierarchyTab(ECSWorld *ecs) {
     }
 
     for (auto e: roots) {
-        RenderEntityNode(e, ecs, toDelete);
+        RenderEntityNode(e, ecs, toDelete, toAdopt);
     }
 
     if (toDelete != entt::null) {
         if (m_selected == toDelete) m_selected = entt::null;
-        else ecs->DestroyEntity(toDelete);
+        ecs->DestroyEntity(toDelete);
+    }
+
+    if (toAdopt.first != entt::null && toAdopt.second != entt::null) {
+        ecs->SetParent(toAdopt.first, toAdopt.second);
     }
 }
 
-void DebugOverlay::RenderEntityNode(entt::entity e, ECSWorld *ecs, entt::entity &toDelete) {
+void DebugOverlay::RenderEntityNode(entt::entity e, ECSWorld *ecs, entt::entity &toDelete,
+        std::pair<entt::entity, entt::entity> &parentChild) {
     if (!ecs->IsValid(e)) return;
 
     const auto &tag = ecs->GetComponent<c_Tag>(e);
@@ -233,6 +239,23 @@ void DebugOverlay::RenderEntityNode(entt::entity e, ECSWorld *ecs, entt::entity 
 
     bool open = ImGui::TreeNodeEx((void *) (intptr_t) e, flags, "%s", tag.name.c_str());
 
+    if (ImGui::BeginDragDropSource()) {
+        ImGui::SetDragDropPayload("ENTITY_NODE", &e, sizeof(entt::entity));
+
+        ImGui::Text("%s", tag.name.c_str());
+        ImGui::EndDragDropSource();
+    }
+
+    if (ImGui::BeginDragDropTarget()) {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ENTITY_NODE")) {
+            const entt::entity dragged = *(entt::entity *)payload->Data;
+
+            parentChild = {dragged, e};
+        }
+
+        ImGui::EndDragDropTarget();
+    }
+
     if (ImGui::IsItemClicked())
         m_selected = e;
 
@@ -243,8 +266,10 @@ void DebugOverlay::RenderEntityNode(entt::entity e, ECSWorld *ecs, entt::entity 
     }
 
     if (open && hasChildren) {
-        for (const auto child: ecs->GetComponent<c_Hierarchy>(e).children)
-            RenderEntityNode(child, ecs, toDelete);
+        ecs->ForEachChild(e, [&](const entt::entity child) {
+            RenderEntityNode(child, ecs, toDelete, parentChild);
+        });
+
         ImGui::TreePop();
     }
 }

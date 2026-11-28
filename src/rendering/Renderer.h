@@ -46,35 +46,21 @@ public:
     ~Renderer();
 
     bool Initialize(GLuint skyboxVAO, GLuint cubemapTexture);
-
-    void BeginFrame();
-
-    void Render(c_Camera &camera, c_Transform &transform,
-                c_CameraOrientation &orientation, int width, int height);
-
-    void EndFrame();
-
     void Shutdown();
 
-    void SetClearColor(const glm::vec4 &color);
+    void BeginFrame();
+    void Render(c_Camera &camera, c_Transform &transform, c_CameraOrientation &orientation, int width, int height);
+    void EndFrame();
+
+    void SetClearColor(const glm::vec4 &color) { config.clearColor = color; }
     void SetWireframe(bool enable);
     void SetEnableShadows(bool enable);
 
-    GLContext *GetContext();
+    [[nodiscard]] const RenderStats &GetStats()  const { return stats; }
+    [[nodiscard]] RendererConfig     GetConfig() const { return config; }
+    [[nodiscard]] IconRenderSystem  *GetIcon()   const { return m_icon.get(); }
 
-    RenderPipeline *GetPipeline();
-
-    const RenderStats &GetStats() const;
-
-    RendererConfig &GetConfig();
-
-    ECSWorld *GetWorld();
-
-    ShaderManager *GetShaderManager();
-
-    IconRenderSystem *GetIcon();
-
-    bool IsInitialized() const;
+    [[nodiscard]] bool IsInitialized() const { return initialized; }
 
 private:
     void ApplySettings();

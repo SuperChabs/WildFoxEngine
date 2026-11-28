@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include <glad/glad.h>
+
 #include "resource/shader/ShaderManager.h"
 #include "PassContext.h"
 

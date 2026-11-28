@@ -54,7 +54,6 @@ void MaterialSerializer::ApplyMaterial(ECSWorld *ecs, entt::entity entity, const
     if (!ecs->HasComponent<c_Hierarchy>(entity))
         return;
 
-    auto &hier = ecs->GetComponent<c_Hierarchy>(entity);
-    for (entt::entity child: hier.children)
-        ApplyMaterial(ecs, child, material, data);
+    ecs->ForEachChild(entity, [&](entt::entity child) { ApplyMaterial(ecs, child, material, data); });
+
 }

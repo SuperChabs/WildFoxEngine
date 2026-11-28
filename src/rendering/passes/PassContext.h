@@ -4,8 +4,7 @@
 #include <vector>
 
 #include <glm/glm.hpp>
-
-#include "glad/glad.h"
+#include <entt/entt.hpp>
 
 struct ShadowOutputs {
     std::vector<glm::mat4> *lightMatrices = nullptr;

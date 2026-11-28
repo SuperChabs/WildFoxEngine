@@ -100,7 +100,8 @@ public:
 private:
     void RenderSceneTab(SceneSerializer *ss);
     void RenderHierarchyTab(ECSWorld *ecs);
-    void RenderEntityNode(entt::entity e, ECSWorld *ecs, entt::entity &toDelete);
+    void RenderEntityNode(entt::entity e, ECSWorld *ecs, entt::entity &toDelete,
+        std::pair<entt::entity, entt::entity> &parentChild);
     void RenderInspectorTab(ECSWorld *ecs, MaterialManager *materialManager);
     void RenderUpperMenuTab();
     void RenderOpenModelDialog();

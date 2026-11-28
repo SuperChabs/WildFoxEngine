@@ -5,6 +5,9 @@
 #include <entt/entt.hpp>
 #include <glm/glm.hpp>
 
+#include "components/Hierarchy.h"
+#include "core/logging/Logger.h"
+
 
 class ECSWorld {
     entt::registry registry;
@@ -55,24 +58,36 @@ public:
         registry.view<Components...>().each(std::forward<Func>(func));
     }
 
+    template<typename Func>
+    void ForEachChild(const entt::entity entity, Func &&func) {
+        if (!IsValid(entity))
+            return;
+
+        auto current = GetComponent<c_Hierarchy>(entity).firstChild;
+        while (current != entt::null) {
+            const auto next = GetComponent<c_Hierarchy>(current).nextSibling;
+
+            func(current);
+
+            current = next;
+        }
+    }
+
     /// @brief Destroys every entity except those tagged with c_Persistent
     void Clear();
 
-    void SetParent(entt::entity child, entt::entity parent);
-
+    void SetParent(entt::entity child, entt::entity newParent);
     void ClearParent(entt::entity child);
 
     entt::entity CreateCamera(const std::string &name = "Camera", bool setAsMain = false);
 
     glm::mat4 GetGlobalTransform(entt::entity entity, int depth = 0);
-
     entt::entity GetParent(entt::entity entity);
+    entt::registry &GetRegistry() { return registry; }
 
-    std::unordered_set<entt::entity> GetChildren(entt::entity entity);
+    [[nodiscard]] size_t GetEntityCount() const { return registry.storage<entt::entity>()->size(); }
+    [[nodiscard]] bool IsValid(const entt::entity entity) const { return registry.valid(entity); }
 
-    entt::registry &GetRegistry();
-
-    [[nodiscard]] size_t GetEntityCount() const;
-
-    [[nodiscard]] bool IsValid(entt::entity entity) const;
+private:
+    void Detach(entt::entity child);
 };

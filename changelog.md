@@ -187,3 +187,10 @@ long time no see. im in 11th Grade now and it seems not so difficult as i expect
 - refractor renderer forward pipeline
 - add post-processing
 - add some cool post process shader
+
+### v0.9.4
+##### 28.11.2026
+- some clean up in class `Renderer`
+- rewrite hierarchy component
+- add `ForEachChild` method to `ECSWorld` class
+- update child-parent relationship interaction in `ModelLoder` and UI
